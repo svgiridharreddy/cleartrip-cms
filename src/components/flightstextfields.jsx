@@ -53,27 +53,46 @@ class FlightsTextFields extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPageType: "",
+      currentPageType: this.props.currentPageType,
       currentDomain: "",
       currentLanguage: ""
     };
   }
-  handleChange = event => {
-    debugger;
-    this.setState({ [event.target.name]: event.target.value });
-  };
+ 
 
   render() {
-    const { classes } = this.props;
+    const { classes, currentPageType,handlePagetypeChange,currentDomain,handleDomainChange} = this.props;
     return (
       <form className={classes.container} noValidate autoComplete="off">
         <FormControl className={classes.formControl}>
           <InputLabel shrink htmlFor="age-Label-placeholder">
-            Domain
+            Page Type
           </InputLabel>
           <Select
-            value={this.state.currentDomain}
-            onChange={this.handleChange}
+            value={currentPageType}
+            onChange={handlePagetypeChange}
+            input={<Input name="age" id="age-label-placeholder" />}
+            displayEmpty
+            name="currentPageType"
+            className={classes.selectEmpty}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {pageTypes.map(option=>
+              <MenuItem key={option} value={option}> {option}</MenuItem>
+            )}
+          </Select>
+          <FormHelperText>Label + placeholder</FormHelperText>
+
+        </FormControl>
+         <FormControl className={classes.formControl}>
+          <InputLabel shrink htmlFor="age-Label-placeholder">
+            Domains
+          </InputLabel>
+          <Select
+            value={currentDomain}
+            onChange={handleDomainChange}
             input={<Input name="age" id="age-label-placeholder" />}
             displayEmpty
             name="currentDomain"
@@ -82,12 +101,13 @@ class FlightsTextFields extends Component {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"IN"}>India</MenuItem>
-            <MenuItem value={"AE"}>UAE</MenuItem>
-            <MenuItem value={"SA"}>Saudi Arabia</MenuItem>
-            <MenuItem value={"KW"}>Kwait</MenuItem>
+            {Object.keys(domains).map(option => {
+              return(
+                <MenuItem key={option} value={option}>{option}</MenuItem>)
+            })}
           </Select>
           <FormHelperText>Label + placeholder</FormHelperText>
+
         </FormControl>
       </form>
     );

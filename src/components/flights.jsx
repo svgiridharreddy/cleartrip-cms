@@ -10,49 +10,27 @@ import React from "react";
 import FlightsTextFields from "./flightstextfields";
 class Flights extends React.Component {
   state = {
-    page_type: "flight-booking",
-    subtypes: [
-      "booking-overview",
-      "booking-route",
-      "pnr-status",
-      "web-checkin"
-    ],
-    defaultType: "booking-overview",
-    languages: { en: "Eglish", ar: "Arabic" },
-    domains: {
-      IN: "India",
-      AE: "United Arab Emirates",
-      SA: "Saudi Arabia",
-      KW: "Kuwait",
-      OM: "Oman",
-      QA: "Qatar",
-      BH: "Bahrain"
-    }
+    currentPageType: "",
+    currentDomain: ''
   };
-
+  handlePagetypeChange = e => {
+    debugger
+    this.setState({currentPageType: e.target.value})
+  }
+  handleDomainChange = e => {
+    this.setState({currentDomain: e.target.value})
+  }
+  
   render() {
-    const {
-      page_type,
-      subtypes,
-      defaultType,
-      title,
-      description,
-      keywords,
-      h1Title,
-      content
-    } = this.state;
+      
     return (
       <div>
         <h1>Cleartrip Flights</h1>
         <FlightsTextFields
-          page_type={page_type}
-          subtypes={subtypes}
-          defaultType={defaultType}
-          title={title}
-          description={description}
-          h1Title={h1Title}
-          content={content}
-          keywords={keywords}
+          currentPageType = {this.state.currentPageType}
+          currentDomain= {this.state.currentDomain}
+          handlePagetypeChange={this.handlePagetypeChange}
+          handleDomainChange={this.handleDomainChange}
         />
       </div>
     );
