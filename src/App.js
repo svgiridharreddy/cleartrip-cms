@@ -1,26 +1,30 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+// import NavBar from "./components/navbar";
+import {
+  BrowserRouter as Router,
+  NavLink,
+  Link,
+  Switch
+} from "react-router-dom";
+import Route from "react-router-dom/Route";
+import Layout from "./components/layout";
+import Flights from "./components/flights";
+import Hotels from "./components/hotels";
+
+import "typeface-roboto";
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Router>
+        <Layout>
+          <Switch>
+            <Route exact path="/flights" component={Flights} />
+            <Route exact path="/hotels" component={Hotels} />
+          </Switch>
+        </Layout>
+      </Router>
     );
   }
 }
