@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import Route from "react-router-dom/Route";
 import Layout from "./components/layout";
-import Flights from "./components/flights";
+import Flights from "./components/Flights/flights";
 
 import "typeface-roboto";
 
