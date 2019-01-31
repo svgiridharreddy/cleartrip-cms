@@ -57,7 +57,11 @@ class Flights extends Component {
       currentDomain: "",
       currentLanguage: "",
       currentSubtype: "",
-      categoryType: ""
+      categoryType: "",
+      title: "",
+      description: "",
+      content: "",
+      h1Tag: ""
     };
   }
 
@@ -77,8 +81,21 @@ class Flights extends Component {
     this.setState({ categoryType: e.target.value });
   };
 
+  handleTitleChange = e => {
+    this.setState({ title: e.target.value });
+  };
+  handleDescriptionChange = e => {
+    this.setState({ description: e.target.value });
+  };
+  handleContentChange = e => {
+    this.setState({ content: e.target.value });
+  };
+  handleH1TagChange = e => {
+    this.setState({ h1Tag: e.target.value });
+  };
   handleFormSubmit = e => {
     const flightValues = this.state;
+    debugger;
   };
 
   render() {
@@ -88,7 +105,11 @@ class Flights extends Component {
       currentDomain,
       currentLanguage,
       categoryType,
-      currentSubtype
+      currentSubtype,
+      title,
+      description,
+      content,
+      h1Tag
     } = this.state;
     let category, fields;
     if (currentPageType === "flight-booking") {
@@ -100,6 +121,14 @@ class Flights extends Component {
           classes={classes}
           name="flight-booking"
           handleChangeCategory={this.handleChangeCategory}
+          title={title}
+          description={description}
+          content={content}
+          h1Tag={h1Tag}
+          handleTitleChange={this.handleTitleChange}
+          handleDescriptionChange={this.handleDescriptionChange}
+          handleContentChange={this.handleContentChange}
+          handleH1TagChange={this.handleH1TagChange}
         />
       );
     } else if (currentPageType === "flight-schedule") {
@@ -205,7 +234,11 @@ class Flights extends Component {
           currentSubtype={this.state.currentSubtype}
           handleCurrentSubtype={this.state.handleCurrentSubtype}
         /> */}
-          <Button variant={"raised"} onClick={this.handleFormSubmit}>
+          <Button
+            variant={"raised"}
+            className={classes.formControl}
+            onClick={this.handleFormSubmit}
+          >
             Submit
           </Button>
         </form>

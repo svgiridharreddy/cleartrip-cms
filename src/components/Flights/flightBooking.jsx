@@ -13,13 +13,15 @@ class FlightBookingFields extends Component {
     super(props);
     this.state = {
       currentSubtype: this.props.currentSubtype,
-      categoryType: this.props.categoryType
+      categoryType: this.props.categoryType,
+      title: this.props.title,
+      description: this.props.description,
+      content: this.props.content,
+      h1Tag: this.props.h1Tag
     };
-    debugger;
   }
 
   componentWillReceiveProps(nextProps) {
-    debugger;
     this.setState({
       currentSubtype: nextProps.currentSubtype,
       categoryType: nextProps.categoryType
@@ -28,9 +30,21 @@ class FlightBookingFields extends Component {
 
   render() {
     let subTypeField, category, overviewFields, fields;
-    const { classes, handleCurrentSubtype, handleChangeCategory } = this.props;
+    const {
+      classes,
+      handleCurrentSubtype,
+      handleChangeCategory,
+      title,
+      description,
+      keywords,
+      content,
+      handleTitleChange,
+      handleDescriptionChange,
+      handleKeywordChange,
+      handleH1TagChange,
+      handleContentChange
+    } = this.props;
     const { currentSubtype, categoryType } = this.state;
-    debugger;
 
     subTypeField = (
       <FormControl className={classes.formControl}>
@@ -128,32 +142,86 @@ class FlightBookingFields extends Component {
     fields = (
       <div>
         <TextField
+          id="outlined-name"
           label="Title"
-          name="title"
-          value=""
-          placeholder="Enter title"
+          className={classes.textField}
+          value={title}
+          onChange={handleTitleChange}
+          margin="normal"
+          variant="outlined"
         />
         <TextField
+          id="outlined-name"
           label="Description"
-          name="description"
-          value=""
-          placeholder="Enter description"
+          className={classes.textField}
+          value={description}
+          onChange={handleDescriptionChange}
+          margin="normal"
+          variant="outlined"
         />
+        <TextField
+          id="outlined-textarea"
+          label="Keywords"
+          placeholder="MultiLine keywords"
+          multiline
+          className={classes.textField}
+          value={keywords}
+          onChange={handleKeywordChange}
+          margin="normal"
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-name"
+          label="H1 Title"
+          className={classes.textField}
+          value={this.props.h1Tag}
+          onChange={handleH1TagChange}
+          margin="normal"
+          variant="outlined"
+          placeholder="Enter H1 Title"
+        />
+
+        <TextField
+          id="outlined-textarea"
+          label="Content"
+          placeholder="Enter content"
+          multiline
+          className={classes.textField}
+          value={content}
+          onChange={handleContentChange}
+          margin="normal"
+          variant="outlined"
+        />
+
         {categoryType === "uniq" && currentSubtype !== "index" ? (
           <TextField
-            label="Airline name"
-            name="airline name"
-            value=""
-            placeholder="Enter airline name"
+            id="outlined-airline-name"
+            label="Airline Name"
+            className={classes.textField}
+            value={"Jet Airways"}
+            margin="normal"
+            variant="outlined"
           />
         ) : null}
-        {categoryType === "uniq" && currentSubtype !== "index" ? (
-          <TextField
-            label="Airline name"
-            name="airline name"
-            value=""
-            placeholder="Enter airline name"
-          />
+        {categoryType === "uniq" && currentSubtype === "airline-routes" ? (
+          <div>
+            <TextField
+              id="outlined-airline-name"
+              label="Source City"
+              className={classes.textField}
+              value={"Bangalore"}
+              margin="normal"
+              variant="outlined"
+            />
+            <TextField
+              id="outlined-airline-name"
+              label="Source City"
+              className={classes.textField}
+              value={"Chennai"}
+              margin="normal"
+              variant="outlined"
+            />
+          </div>
         ) : null}
       </div>
     );
