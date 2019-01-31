@@ -11,26 +11,37 @@ import FlightsTextFields from "./flightstextfields";
 class Flights extends React.Component {
   state = {
     currentPageType: "",
-    currentDomain: ''
+    currentDomain: "",
+    currentLanguage: ""
   };
   handlePagetypeChange = e => {
-    debugger
-    this.setState({currentPageType: e.target.value})
-  }
+    this.setState({ currentPageType: e.target.value });
+  };
   handleDomainChange = e => {
-    this.setState({currentDomain: e.target.value})
-  }
-  
+    this.setState({ currentDomain: e.target.value });
+  };
+
+  handleLanguageChange = e => {
+    this.setState({ currentLanguage: e.target.value });
+  };
+
+  handleFormSubmit = () => {
+    const flightValues = this.state;
+  };
+
   render() {
-      
+    debugger;
     return (
       <div>
         <h1>Cleartrip Flights</h1>
         <FlightsTextFields
-          currentPageType = {this.state.currentPageType}
-          currentDomain= {this.state.currentDomain}
+          currentPageType={this.state.currentPageType}
+          currentDomain={this.state.currentDomain}
+          currentLanguage={this.state.currentLanguage}
           handlePagetypeChange={this.handlePagetypeChange}
           handleDomainChange={this.handleDomainChange}
+          handleLanguageChange={this.handleLanguageChange}
+          handleFormSubmit={this.handleFormSubmit}
         />
       </div>
     );

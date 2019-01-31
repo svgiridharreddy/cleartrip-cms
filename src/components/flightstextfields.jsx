@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -37,7 +38,7 @@ const styles = theme => ({
   }
 });
 const pageTypes = ["flight-booking", "flight-schedule", "flight-tickets"];
-const languages = { en: "Eglish", ar: "Arabic" };
+const languages = ["English", "Arabic"];
 const domains = {
   IN: "India",
   AE: "United Arab Emirates",
@@ -54,46 +55,46 @@ class FlightsTextFields extends Component {
     super(props);
     this.state = {
       currentPageType: this.props.currentPageType,
-      currentDomain: "",
-      currentLanguage: ""
+      currentDomain: this.props.currentDomain,
+      currentLanguage: this.props.currentLanguage,
+      currentSubtype: ""
     };
   }
- 
-
+  getFormData = formprops => {
+    debugger;
+  };
   render() {
-    const { classes, currentPageType,handlePagetypeChange,currentDomain,handleDomainChange} = this.props;
+    const {
+      classes,
+      currentPageType,
+      handlePagetypeChange,
+      currentDomain,
+      handleDomainChange,
+      currentLanguage,
+      handleLanguageChange
+    } = this.props;
+    debugger;
     return (
-      <form className={classes.container} noValidate autoComplete="off">
+      <form
+        className={classes.container}
+        noValidate
+        autoComplete="off"
+        action="/"
+        method="POST"
+        onSubmit={e => {
+          e.preventDefault();
+          alert("Submitted form!");
+          this.props.getFlightDetails();
+        }}
+      >
         <FormControl className={classes.formControl}>
-          <InputLabel shrink htmlFor="age-Label-placeholder">
-            Page Type
-          </InputLabel>
-          <Select
-            value={currentPageType}
-            onChange={handlePagetypeChange}
-            input={<Input name="age" id="age-label-placeholder" />}
-            displayEmpty
-            name="currentPageType"
-            className={classes.selectEmpty}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {pageTypes.map(option=>
-              <MenuItem key={option} value={option}> {option}</MenuItem>
-            )}
-          </Select>
-          <FormHelperText>Label + placeholder</FormHelperText>
-
-        </FormControl>
-         <FormControl className={classes.formControl}>
-          <InputLabel shrink htmlFor="age-Label-placeholder">
+          <InputLabel shrink htmlFor="domains-Label-placeholder">
             Domains
           </InputLabel>
           <Select
             value={currentDomain}
             onChange={handleDomainChange}
-            input={<Input name="age" id="age-label-placeholder" />}
+            input={<Input name="domain" id="domain-label-placeholder" />}
             displayEmpty
             name="currentDomain"
             className={classes.selectEmpty}
@@ -101,13 +102,61 @@ class FlightsTextFields extends Component {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {Object.keys(domains).map(option => {
-              return(
-                <MenuItem key={option} value={option}>{option}</MenuItem>)
-            })}
+            {Object.keys(domains).map(option => (
+              <MenuItem key={option} value={domains[option]}>
+                {domains[option]}
+              </MenuItem>
+            ))}
           </Select>
-          <FormHelperText>Label + placeholder</FormHelperText>
-
+          <FormHelperText />
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink htmlFor="language-Label-placeholder">
+            Language
+          </InputLabel>
+          <Select
+            value={currentLanguage}
+            onChange={handleLanguageChange}
+            input={<Input name="language" id="language-label-placeholder" />}
+            displayEmpty
+            name="currentLanguage"
+            className={classes.selectEmpty}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {languages.map(option => (
+              <MenuItem key={option} value={option}>
+                {" "}
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>Select Language</FormHelperText>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink htmlFor="pageType-Label-placeholder">
+            Page Type
+          </InputLabel>
+          <Select
+            value={currentPageType}
+            onChange={handlePagetypeChange}
+            input={<Input name="pageType" id="pageType-label-placeholder" />}
+            displayEmpty
+            name="currentPageType"
+            className={classes.selectEmpty}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {pageTypes.map(option => (
+              <MenuItem key={option} value={option}>
+                {" "}
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>Select Page Type</FormHelperText>
         </FormControl>
       </form>
     );
