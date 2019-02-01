@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 
 import Route from "react-router-dom/Route";
-import Flights from "./flights";
+import Flights from "../components/Flights/flights";
 // import "../stylesheets/navbar.css";
 
 class NavBar extends Component {
