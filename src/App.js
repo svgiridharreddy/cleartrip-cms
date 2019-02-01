@@ -1,16 +1,12 @@
 import React, { Component } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 // import NavBar from "./components/navbar";
-import {
-  BrowserRouter as Router,
-  NavLink,
-  Link,
-  Switch
-} from "react-router-dom";
-import Route from "react-router-dom/Route";
+import { BrowserRouter as Router, Switch, Route, Link, NavLink } from "react-router-dom";
+
+import Index from './components/hotels/index.jsx';
 import Layout from "./components/layout";
 import Flights from "./components/flights";
-import Hotels from "./components/hotels";
 
 import "typeface-roboto";
 
@@ -20,8 +16,8 @@ class App extends Component {
       <Router>
         <Layout>
           <Switch>
-            <Route exact path="/flights" component={Flights} />
-            <Route exact path="/hotels" component={Hotels} />
+            <Route exact path="/flights" component={ Flights } />
+            <Route exact path="/hotels" component={ Index } />
           </Switch>
         </Layout>
       </Router>
