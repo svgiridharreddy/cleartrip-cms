@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 // import NavBar from "./components/navbar";
-import {
-  BrowserRouter as Router,
-  NavLink,
-  Link,
-  Switch
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Route from "react-router-dom/Route";
 import Layout from "./components/layout";
 import Flights from "./components/Flights/flights";

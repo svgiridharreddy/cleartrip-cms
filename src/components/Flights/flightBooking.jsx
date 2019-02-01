@@ -29,7 +29,14 @@ class FlightBookingFields extends Component {
   }
 
   render() {
-    let subTypeField, category, overviewFields, fields;
+    let subTypeField, category, fields;
+    const subtypeOptions = {
+      "airline-routes": "Airline Routes",
+      overview: "Overview",
+      "pnr-status": "PNR Status",
+      "web-checkin": "Web Checkin",
+      index: "Index"
+    };
     const {
       classes,
       handleCurrentSubtype,
@@ -60,23 +67,13 @@ class FlightBookingFields extends Component {
           className={classes.selectEmpty}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>Select Options</em>
           </MenuItem>
-          <MenuItem value="airline-routes">
-            <em>Airline Routes</em>
-          </MenuItem>
-          <MenuItem value="overview">
-            <em>Overview</em>
-          </MenuItem>
-          <MenuItem value="pnr-status">
-            <em>PNR Status</em>
-          </MenuItem>
-          <MenuItem value="web-checkin">
-            <em>Web Checkin </em>
-          </MenuItem>
-          <MenuItem value="index">
-            <em>Index </em>
-          </MenuItem>
+          {Object.keys(subtypeOptions).map(option => (
+            <MenuItem key={option} value={option}>
+              {subtypeOptions[option]}
+            </MenuItem>
+          ))}
         </Select>
         <FormHelperText />
       </FormControl>

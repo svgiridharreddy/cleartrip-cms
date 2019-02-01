@@ -44,7 +44,6 @@ const domains = {
   QA: "Qatar",
   BH: "Bahrain"
 };
-const types = ["common", "unique"];
 
 class Flights extends Component {
   constructor(props) {
@@ -95,7 +94,33 @@ class Flights extends Component {
   };
   handleFormSubmit = e => {
     const flightValues = this.state;
-    debugger;
+    let postData = JSON.stringify({
+      flights_data: {
+        domain: flightValues["currentDomain"],
+        language: flightValues["language"],
+        page_ype: flightValues["currentPageType"],
+        page_subtype: flightValues["currentSubtype"],
+        category: flightValues["categoryType"],
+        title: flightValues["title"],
+        description: flightValues["description"],
+        content: flightValues["content"],
+        h1_title: flightValues["h1Tag"]
+      }
+    });
+
+    fetch("http://localhost:3000/flights", {
+      method: "POST",
+      data: postData,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(fruit => {
+        this.addNewFruit(fruit);
+      });
   };
 
   render() {
@@ -111,7 +136,7 @@ class Flights extends Component {
       content,
       h1Tag
     } = this.state;
-    let category, fields;
+    let fields;
     if (currentPageType === "flight-booking") {
       fields = (
         <FlightBookingFields
@@ -146,18 +171,7 @@ class Flights extends Component {
     return (
       <div>
         <h1>Cleartrip Flights</h1>
-        <form
-          className={classes.container}
-          noValidate
-          autoComplete="off"
-          action="/"
-          method="POST"
-          onSubmit={e => {
-            e.preventDefault();
-            alert("Submitted form!");
-            this.props.getFlightDetails();
-          }}
-        >
+        <form className={classes.container} noValidate autoComplete="off">
           <FormControl className={classes.formControl}>
             <InputLabel shrink htmlFor="domains-Label-placeholder">
               Domains
@@ -171,7 +185,7 @@ class Flights extends Component {
               className={classes.selectEmpty}
             >
               <MenuItem value="">
-                <em>None</em>
+                <em>Select Options</em>
               </MenuItem>
               {Object.keys(domains).map(option => (
                 <MenuItem key={option} value={domains[option]}>
@@ -194,7 +208,7 @@ class Flights extends Component {
               className={classes.selectEmpty}
             >
               <MenuItem value="">
-                <em>None</em>
+                <em>Select Options</em>
               </MenuItem>
               {languages.map(option => (
                 <MenuItem key={option} value={option}>
@@ -218,7 +232,7 @@ class Flights extends Component {
               className={classes.selectEmpty}
             >
               <MenuItem value="">
-                <em>None</em>
+                <em>Select Options</em>
               </MenuItem>
               {pageTypes.map(option => (
                 <MenuItem key={option} value={option}>
@@ -235,7 +249,7 @@ class Flights extends Component {
           handleCurrentSubtype={this.state.handleCurrentSubtype}
         /> */}
           <Button
-            variant={"raised"}
+            variant={"contained"}
             className={classes.formControl}
             onClick={this.handleFormSubmit}
           >

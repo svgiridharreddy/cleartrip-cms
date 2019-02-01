@@ -13,7 +13,7 @@ class FlightScheduleFields extends Component {
     this.state = {};
   }
   render() {
-    let subTypeField, category;
+    let subTypeField;
     const { classes } = this.props;
     debugger;
 
