@@ -32,6 +32,7 @@ function SimpleTable(props) {
   return (
     <div>
       {Object.keys(response).map((key, index) => (
+        // { response[key]!="" ?
         <Paper key={index} className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
@@ -39,12 +40,16 @@ function SimpleTable(props) {
                 <TableCell align="center">Domain</TableCell>
                 <TableCell align="center">URL</TableCell>
                 <TableCell align="center">Language</TableCell>
-                <TableCell align="center">Title</TableCell>
-                <TableCell align="center">Description</TableCell>
-                <TableCell align="center">KeyWords</TableCell>
-                <TableCell align="center">OG Title</TableCell>
-                <TableCell align="center">OG description</TableCell>
-                <TableCell align="center">Content </TableCell>
+                 {key=="bookingOverview" ? 
+                  (<TableCell align="center">Airline Name</TableCell>) 
+                  : null }
+                   {key=="scheduleRoute" ? 
+                  (<TableCell align="center">Source</TableCell>) 
+                  : null }
+                   {key=="scheduleRoute" ? 
+                  (<TableCell align="center">Destination</TableCell>) 
+                  : null }
+
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
@@ -54,12 +59,17 @@ function SimpleTable(props) {
                   <TableCell align="center">{row.domain}</TableCell>
                   <TableCell align="center">{row.url}</TableCell>
                   <TableCell align="center">{row.language}</TableCell>
-                  <TableCell align="center">{row.title}</TableCell>
-                  <TableCell align="center">{row.description}</TableCell>
-                  <TableCell align="center">{row.keywords}</TableCell>
-                  <TableCell align="center">{row.og_title}</TableCell>
-                  <TableCell align="center">{row.og_description}</TableCell>
-                  <TableCell align="center">{row.content}</TableCell>
+                  {row.page_type=="flight-booking" ? 
+                  (<TableCell align="center">{row.airline_name}</TableCell>) 
+                  : null }
+                   {(row.page_type=="flight-schedule" && row.page_subtype=="routes") ? 
+                  (<TableCell align="center">{row.source}</TableCell>) 
+                  : null }
+                   {(row.page_type=="flight-schedule" && row.page_subtype=="routes")? 
+                  (<TableCell align="center">{row.destination}</TableCell>) 
+                  : null }
+
+
                   <TableCell align="center">
                     <EditIcon
                       onClick={() => {
@@ -77,6 +87,7 @@ function SimpleTable(props) {
             </TableBody>
           </Table>
         </Paper>
+        // : null }
       ))}
     </div>
   );
