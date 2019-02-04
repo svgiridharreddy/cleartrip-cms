@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
+import {
+  withStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core/styles";
+import axios from "axios";
+import { Redirect } from "react-router-dom";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
@@ -10,6 +16,9 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import FlightBookingFields from "./flightBooking";
 import FlightScheduleFields from "./flightSchedule";
+import FlightsLandingPage from "./flightsLandingPage";
+import green from "@material-ui/core/colors/green";
+
 const styles = theme => ({
   container: {
     display: "flex",
@@ -31,6 +40,14 @@ const styles = theme => ({
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2
+  }
+});
+const theme = createMuiTheme({
+  palette: {
+    primary: green
+  },
+  typography: {
+    useNextVariants: true
   }
 });
 const pageTypes = ["flight-booking", "flight-schedule", "flight-tickets"];
@@ -59,8 +76,13 @@ class Flights extends Component {
       categoryType: "",
       title: "",
       description: "",
+      keywords: "",
       content: "",
-      h1Tag: ""
+      h1Tag: "",
+      airlineName: "",
+      depCityName: "",
+      arrCityName: "",
+      isHomePage: false
     };
   }
 
@@ -86,41 +108,72 @@ class Flights extends Component {
   handleDescriptionChange = e => {
     this.setState({ description: e.target.value });
   };
+  handleKeywordsChange = e => {
+    this.setState({ keywords: e.target.value });
+  };
   handleContentChange = e => {
     this.setState({ content: e.target.value });
   };
   handleH1TagChange = e => {
     this.setState({ h1Tag: e.target.value });
   };
+  handleAirlineName = e => {
+    this.setState({ airlineName: e.target.value });
+  };
+  handleDepCityName = e => {
+    this.setState({ depCityName: e.target.value });
+  };
+  handleArrCityName = e => {
+    this.setState({ arrCityName: e.target.value });
+  };
   handleFormSubmit = e => {
     const flightValues = this.state;
-    let postData = JSON.stringify({
+    let postData = {
       flights_data: {
         domain: flightValues["currentDomain"],
-        language: flightValues["language"],
-        page_ype: flightValues["currentPageType"],
+        language: flightValues["currentLanguage"],
+        page_type: flightValues["currentPageType"],
         page_subtype: flightValues["currentSubtype"],
         category: flightValues["categoryType"],
         title: flightValues["title"],
         description: flightValues["description"],
+        keywords: flightValues["keywords"],
         content: flightValues["content"],
-        h1_title: flightValues["h1Tag"]
+        h1_title: flightValues["h1Tag"],
+        airline_name: flightValues["airlineName"],
+        dep_city_name: flightValues["depCityName"],
+        arr_city_name: flightValues["arrCityName"]
       }
-    });
+    };
 
-    fetch("http://localhost:3000/flights", {
-      method: "POST",
+    var self = this;
+    axios({
+      method: "post",
+      url: "http://localhost:3000/flights",
       data: postData,
-      headers: {
-        "Content-Type": "application/json"
-      }
+      config: { headers: { "Content-Type": "multipart/form-data" } }
     })
-      .then(response => {
-        return response.json();
+      .then(function(response) {
+        //handle success
+        console.log(response);
+        self.setState({ isHomePage: true });
       })
-      .then(fruit => {
-        this.addNewFruit(fruit);
+      .catch(function(response) {
+        self.setState({ isHomePage: false });
       });
+    // fetch("http://localhost:3000/flights", {
+    //   method: "POST",
+    //   body: postData,
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // })
+    //   .then(response => {
+    //     return response.json();
+    //   })
+    //   .then(fruit => {
+    //     this.addNewFruit(fruit);
+    //   });
   };
 
   render() {
@@ -133,10 +186,17 @@ class Flights extends Component {
       currentSubtype,
       title,
       description,
+      keywords,
       content,
-      h1Tag
+      h1Tag,
+      airlineName,
+      depCityName,
+      arrCityName
     } = this.state;
     let fields;
+    if (this.state.isHomePage) {
+      return <Redirect to="/flights/home" />;
+    }
     if (currentPageType === "flight-booking") {
       fields = (
         <FlightBookingFields
@@ -148,12 +208,20 @@ class Flights extends Component {
           handleChangeCategory={this.handleChangeCategory}
           title={title}
           description={description}
+          keywords={keywords}
           content={content}
           h1Tag={h1Tag}
+          airlineName={airlineName}
+          depCityName={depCityName}
+          arrCityName={arrCityName}
           handleTitleChange={this.handleTitleChange}
           handleDescriptionChange={this.handleDescriptionChange}
+          handleKeywordsChange={this.handleKeywordsChange}
           handleContentChange={this.handleContentChange}
           handleH1TagChange={this.handleH1TagChange}
+          handleAirlineName={this.handleAirlineName}
+          handleDepCityName={this.handleDepCityName}
+          handleArrCityName={this.handleArrCityName}
         />
       );
     } else if (currentPageType === "flight-schedule") {
@@ -188,7 +256,7 @@ class Flights extends Component {
                 <em>Select Options</em>
               </MenuItem>
               {Object.keys(domains).map(option => (
-                <MenuItem key={option} value={domains[option]}>
+                <MenuItem key={option} value={option}>
                   {domains[option]}
                 </MenuItem>
               ))}
@@ -248,13 +316,16 @@ class Flights extends Component {
           currentSubtype={this.state.currentSubtype}
           handleCurrentSubtype={this.state.handleCurrentSubtype}
         /> */}
-          <Button
-            variant={"contained"}
-            className={classes.formControl}
-            onClick={this.handleFormSubmit}
-          >
-            Submit
-          </Button>
+          <MuiThemeProvider theme={theme}>
+            <Button
+              variant={"contained"}
+              color="primary"
+              className={classes.margin}
+              onClick={this.handleFormSubmit}
+            >
+              Submit
+            </Button>
+          </MuiThemeProvider>
         </form>
       </div>
     );

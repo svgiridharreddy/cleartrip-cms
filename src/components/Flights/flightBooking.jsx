@@ -17,7 +17,11 @@ class FlightBookingFields extends Component {
       title: this.props.title,
       description: this.props.description,
       content: this.props.content,
-      h1Tag: this.props.h1Tag
+      h1Tag: this.props.h1Tag,
+      keywords: this.props.keywords,
+      airlinName: this.props.airlineName,
+      depCityName: this.props.depCityName,
+      arrCityName: this.props.arrCityName
     };
   }
 
@@ -45,11 +49,18 @@ class FlightBookingFields extends Component {
       description,
       keywords,
       content,
+      h1Tag,
       handleTitleChange,
       handleDescriptionChange,
-      handleKeywordChange,
+      handleKeywordsChange,
       handleH1TagChange,
-      handleContentChange
+      handleContentChange,
+      airlineName,
+      depCityName,
+      arrCityName,
+      handleAirlineName,
+      handleDepCityName,
+      handleArrCityName
     } = this.props;
     const { currentSubtype, categoryType } = this.state;
 
@@ -163,7 +174,7 @@ class FlightBookingFields extends Component {
           multiline
           className={classes.textField}
           value={keywords}
-          onChange={handleKeywordChange}
+          onChange={handleKeywordsChange}
           margin="normal"
           variant="outlined"
         />
@@ -171,13 +182,12 @@ class FlightBookingFields extends Component {
           id="outlined-name"
           label="H1 Title"
           className={classes.textField}
-          value={this.props.h1Tag}
+          value={h1Tag}
           onChange={handleH1TagChange}
           margin="normal"
           variant="outlined"
           placeholder="Enter H1 Title"
         />
-
         <TextField
           id="outlined-textarea"
           label="Content"
@@ -189,13 +199,13 @@ class FlightBookingFields extends Component {
           margin="normal"
           variant="outlined"
         />
-
         {categoryType === "uniq" && currentSubtype !== "index" ? (
           <TextField
             id="outlined-airline-name"
             label="Airline Name"
             className={classes.textField}
-            value={"Jet Airways"}
+            value={airlineName}
+            onChange={handleAirlineName}
             margin="normal"
             variant="outlined"
           />
@@ -203,18 +213,20 @@ class FlightBookingFields extends Component {
         {categoryType === "uniq" && currentSubtype === "airline-routes" ? (
           <div>
             <TextField
-              id="outlined-airline-name"
+              id="outlined-dep-city-name"
               label="Source City"
               className={classes.textField}
-              value={"Bangalore"}
+              value={depCityName}
+              onChange={handleDepCityName}
               margin="normal"
               variant="outlined"
             />
             <TextField
-              id="outlined-airline-name"
-              label="Source City"
+              id="outlined-arr-city-name"
+              label="Destination City"
               className={classes.textField}
-              value={"Chennai"}
+              value={arrCityName}
+              onChange={handleArrCityName}
               margin="normal"
               variant="outlined"
             />
@@ -222,7 +234,6 @@ class FlightBookingFields extends Component {
         ) : null}
       </div>
     );
-
     return (
       <div>
         {subTypeField}
