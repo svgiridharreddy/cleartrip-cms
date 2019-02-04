@@ -5,221 +5,55 @@ import PropTypes from "prop-types";
 import SimpleTable from "./simpleTable";
 import { Redirect } from "react-router-dom";
 
-var response = {
-  flightBooking: [
-    {
-      id: 1,
-      title: "bookgin title",
-      description: "booking description",
-      content: "schedule content"
-    },
-    {
-      id: 2,
-      title: "bookgin title",
-      description: "booking description",
-      content: "schedule content"
-    },
-    {
-      id: 3,
-      title: "bookgin title",
-      description: "booking description",
-      content: "schedule content"
-    }
-  ],
-  flightSchedule: [
-    {
-      id: 1,
-      title: "schedule title",
-      description: "schedule description",
-      content: "schedule content"
-    },
-    {
-      id: 2,
-      title: "schedule title",
-      description: "schedule description",
-      content: "schedule content"
-    },
-    {
-      id: 3,
-      title: "schedule title",
-      description: "schedule description",
-      content: "schedule content"
-    }
-  ],
-  flightTickets: [
-    {
-      id: 1,
-      title: "tickets title",
-      description: "tickets description",
-      content: "tickets content"
-    }
-  ],
-  common: {
-    flightBooking: [
-      {
-        title: "common title",
-        description: "common description",
-        content: "common content",
-        pageType: "common page type"
-      },
-      {
-        title: "common title",
-        description: "common description",
-        content: "common content",
-        pageType: "common page type"
-      }
-    ],
-    flightScheduling: [
-      {
-        title: "common title",
-        description: "common description",
-        content: "common content",
-        pageType: "common page type"
-      },
-      {
-        title: "common title",
-        description: "common description",
-        content: "common content",
-        pageType: "common page type"
-      }
-    ]
-  }
-};
-
-// const common = {
-//   flightBooking: [
-//     {
-//       title: "common title",
-//       description: "common description",
-//       content: "common content",
-//       pageType: "common page type"
-//     },
-//     {
-//       title: "common title",
-//       description: "common description",
-//       content: "common content",
-//       pageType: "common page type"
-//     }
-//   ],
-//   flightScheduling: [
-//     {
-//       title: "common title",
-//       description: "common description",
-//       content: "common content",
-//       pageType: "common page type"
-//     },
-//     {
-//       title: "common title",
-//       description: "common description",
-//       content: "common content",
-//       pageType: "common page type"
-//     }
-//   ]
-// };
-
 class FlightsLandingPage extends Component {
-  state = {
-    response: {
-      flightBooking: [
-        {
-          id: 1,
-          title: "bookgin title",
-          description: "booking description",
-          content: "schedule content"
-        },
-        {
-          id: 2,
-          title: "bookgin title",
-          description: "booking description",
-          content: "schedule content"
-        },
-        {
-          id: 3,
-          title: "bookgin title",
-          description: "booking description",
-          content: "schedule content"
-        }
-      ],
-      flightSchedule: [
-        {
-          id: 1,
-          title: "schedule title",
-          description: "schedule description",
-          content: "schedule content"
-        },
-        {
-          id: 2,
-          title: "schedule title",
-          description: "schedule description",
-          content: "schedule content"
-        },
-        {
-          id: 3,
-          title: "schedule title",
-          description: "schedule description",
-          content: "schedule content"
-        }
-      ],
-      flightTickets: [
-        {
-          id: 1,
-          title: "tickets title",
-          description: "tickets description",
-          content: "tickets content"
-        }
-      ],
-      common: {
-        flightBooking: [
-          {
-            title: "common title",
-            description: "common description",
-            content: "common content",
-            pageType: "common page type"
-          },
-          {
-            title: "common title",
-            description: "common description",
-            content: "common content",
-            pageType: "common page type"
-          }
-        ],
-        flightScheduling: [
-          {
-            title: "common title",
-            description: "common description",
-            content: "common content",
-            pageType: "common page type"
-          },
-          {
-            title: "common title",
-            description: "common description",
-            content: "common content",
-            pageType: "common page type"
-          }
-        ]
-      }
-    }
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      result: {
+        bookingOverview: [],
+        airlineRoutes: []
+      },
+      renderTables: false
+    };
+  }
 
-  // componentWillMount() {
-  //   var self = this;
-  //   axios({
-  //     method: "get",
-  //     url: "http://localhost:3000/fetch_details",
-  //     config: { headers: { "Content-Type": "multipart/form-data" } }
-  //   })
-  //     .then(function(response) {
-  //       //handle success
-  //       console.log(response);
-  //       self.setState({ isHomePage: true });
-  //     })
-  //     .catch(function(response) {
-  //       self.setState({ isHomePage: false });
-  //     });
-  // }
+  componentWillMount() {
+    let { result } = this.state;
 
-  handleDelete = e => {
-    debugger;
+    axios({
+      method: "get",
+      url: "http://localhost:3000/fetch_details",
+      config: { headers: { "Content-Type": "multipart/form-data" } }
+    })
+      .then(response => {
+        //handle success
+        result.bookingOverview = response.data.FlightBookingOverview;
+        result.airlineRoutes = response.data.FlightBookingRoute;
+        this.setState({ result, renderTables: true });
+      })
+      .catch(response => {
+        this.setState({ renderTables: false });
+      });
+  }
+
+  handleEdit = (index, key, row, type) => {};
+
+  handleDelete = (index, key, id) => {
+    var url = "http://localhost:3000/delete_data";
+    axios
+      .delete(url, {
+        data: { id: id, type: key }
+      })
+      .then(response => {
+        const result = { ...this.state.result };
+        const values = result[key];
+        if (index !== -1) {
+          values.splice(index, 1);
+          result[key] = values;
+          this.setState({ result });
+        }
+      })
+      .catch(error => console.log(error));
   };
   handleAdd = () => {
     window.location.href = "/flights";
@@ -232,7 +66,13 @@ class FlightsLandingPage extends Component {
         <Button variant={"contained"} onClick={this.handleAdd}>
           Add
         </Button>
-        <SimpleTable response={response} handleDelete={this.handleDelete} />
+        {this.state.renderTables ? (
+          <SimpleTable
+            response={this.state.result}
+            handleDelete={this.handleDelete.bind(this)}
+            handleEdit={this.handleEdit.bind(this)}
+          />
+        ) : null}
       </div>
     );
   }

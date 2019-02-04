@@ -26,140 +26,58 @@ const styles = theme => ({
   }
 });
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-  id += 1;
-  return { id, name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9)
-];
-
 function SimpleTable(props) {
-  getInitialState = () => {};
-
   const { classes, response } = props;
+
   return (
     <div>
-      <h2>Templatized</h2>
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">description</TableCell>
-              <TableCell align="center">Content </TableCell>
-              <TableCell align="center">Action</TableCell>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">description</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {response.flightBooking.map(row => (
-              <TableRow key={row.id}>
-                <TableCell align="center">{row.title}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center">{row.content}</TableCell>
-                <TableCell align="center">{row.title}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-
-                <TableCell align="center">
-                  <EditIcon /> <DeleteIcon />
-                </TableCell>
+      {Object.keys(response).map((key, index) => (
+        <Paper key={index} className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Domain</TableCell>
+                <TableCell align="center">URL</TableCell>
+                <TableCell align="center">Language</TableCell>
+                <TableCell align="center">Title</TableCell>
+                <TableCell align="center">Description</TableCell>
+                <TableCell align="center">KeyWords</TableCell>
+                <TableCell align="center">OG Title</TableCell>
+                <TableCell align="center">OG description</TableCell>
+                <TableCell align="center">Content </TableCell>
+                <TableCell align="center">Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-      <h2>Unique Flight Booking</h2>
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">description</TableCell>
-              <TableCell align="center">Content </TableCell>
-              <TableCell align="center">Action</TableCell>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">description</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {response.flightBooking.map(row => (
-              <TableRow key={row.id}>
-                <TableCell align="center">{row.title}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center">{row.content}</TableCell>
-                <TableCell align="center">{row.title}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center">
-                  <EditIcon />{" "}
-                  <DeleteIcon onClick={props.handleDelete(row.id)} />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-      <h2>Unique Flight Schedule</h2>
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">description</TableCell>
-              <TableCell align="center">Content </TableCell>
-              <TableCell align="center">Action</TableCell>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">description</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {response.flightSchedule.map(row => (
-              <TableRow key={row.id}>
-                <TableCell align="center">{row.title}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center">{row.content}</TableCell>
-                <TableCell align="center">{row.title}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center">
-                  <EditIcon /> <DeleteIcon />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-      <h2>Unique Flight Tickets</h2>
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">description</TableCell>
-              <TableCell align="center">Content </TableCell>
-              <TableCell align="center">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {response.flightBooking.map(row => (
-              <TableRow key={row.id}>
-                <TableCell align="center">{row.title}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center">{row.content}</TableCell>
-                <TableCell align="center">
-                  <EditIcon /> <DeleteIcon />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
+            </TableHead>
+            <TableBody>
+              {response[key].map((row, idx) => (
+                <TableRow key={row.id}>
+                  <TableCell align="center">{row.domain}</TableCell>
+                  <TableCell align="center">{row.url}</TableCell>
+                  <TableCell align="center">{row.language}</TableCell>
+                  <TableCell align="center">{row.title}</TableCell>
+                  <TableCell align="center">{row.description}</TableCell>
+                  <TableCell align="center">{row.keywords}</TableCell>
+                  <TableCell align="center">{row.og_title}</TableCell>
+                  <TableCell align="center">{row.og_description}</TableCell>
+                  <TableCell align="center">{row.content}</TableCell>
+                  <TableCell align="center">
+                    <EditIcon
+                      onClick={() => {
+                        props.handleEdit(idx, key, row.id);
+                      }}
+                    />{" "}
+                    <DeleteIcon
+                      onClick={() => {
+                        props.handleDelete(idx, key, row.id);
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      ))}
     </div>
   );
 }

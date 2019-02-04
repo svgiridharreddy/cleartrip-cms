@@ -10,14 +10,10 @@ import React, { Component } from "react";
 
 class Index extends Component {
   constructor() {
-    super()
+    super();
   }
   render() {
-    return (
-      <div>
-        
-      </div>
-    );
+    return <div />;
   }
 }
 
