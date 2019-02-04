@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
-// import NavBar from "./components/navbar";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
-import Route from "react-router-dom/Route";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import Index from './components/hotels/index.jsx';
 import Layout from "./components/layout";
 import Flights from "./components/Flights/flights";
 import FlightsLandingPage from "./components/Flights/flightsLandingPage";
@@ -15,9 +16,14 @@ class App extends Component {
       <Router>
         <Layout>
           <Switch>
+
             <Route exact path="/" component={FlightsLandingPage} />
             <Route exact path="/flights" component={Flights} />
             <Route path="/flights/home" component={FlightsLandingPage} />
+
+             />
+            <Route exact path="/hotels" component={ Index } />
+
           </Switch>
         </Layout>
       </Router>
