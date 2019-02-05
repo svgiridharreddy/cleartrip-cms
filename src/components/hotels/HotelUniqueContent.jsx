@@ -1,38 +1,65 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+
+const API_URL = 'http://localhost:3000'
 
 class HotelUniqueContent extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { domain_url: '',
-						content_type: 'Uniq',
+						content_type: 'Unique Data',
 						country_name: '',
 						canonical_tag: '',
 						meta_title: '',
 						meta_description: '',
 						meta_keywords:'',
 						top_content: '',
-						bottom_contnet: '',
-						faq: ''
+						bottom_content: '',
+						faq: '',
+						message: ''
 					 };
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
-	onChange(e) {
+
+	handleChange(e) {
 		this.setState({
 			[e.target.name]: e.target.value
 		});
 	}
 	handleSubmit(event) {
 		event.preventDefault();
-
-		// const data = new FormData(event.target);
-		fetch('/api/domainurlwise-data',{
-			method: 'POST',
-			body: data
-		});
+		const data = this.state
+		axios.post(`${API_URL}/hotels/content-section-data`, data)
+		.then(({ data }) => {
+				this.setState({
+					message: data.message // MusicGraph returns an object named data, 
+					// as does axios. So... data.data                             
+				})
+				setTimeout(function(){
+					this.setState({
+						domain_url: '',
+						content_type: 'Unique Data',
+						country_name: '',
+						canonical_tag: '',
+						meta_title: '',
+						meta_description: '',
+						meta_keywords:'',
+						top_content: '',
+						bottom_content: '',
+						faq: '',
+						message: ''
+					})
+				}.bind(this),2000)
+		})
+		.catch(function (error) {
+	    console.log(error);
+	  });
 	}
 	render() {
 		return(
 				<div style={{marginTop: 10}}>
+					{ this.state.message }
 	                <h3>Add new data </h3>
 	                <form onSubmit={this.handleSubmit}>
 	                	<label>
@@ -40,7 +67,11 @@ class HotelUniqueContent extends Component {
 	                		<input type="text" name="domain_url" onChange={this.handleChange} />
 	                	</label>
 	                	<label>
-	                		CountryName:
+	                		Content Section: 
+	                		<input name="content_type" value={ this.state.content_type } />
+	                	</label>
+	                	<label>
+	                		Country Name:
 	                		<input type="text" name="country_name" onChange={this.handleChange} />
 	                	</label>
 	                    <label>
@@ -61,11 +92,11 @@ class HotelUniqueContent extends Component {
                         </label>
                         <label>
                         	Top Content: 
-                        	<textarea name="top_contnet" onChange={this.handleChange} />
+                        	<textarea name="top_content" onChange={this.handleChange} />
                         </label>
 	                    <label>
 	                        Bottom Content: 
-	                        <textarea name="bottom_contnet" onChange={this.handleChange} />
+	                        <textarea name="bottom_content" onChange={this.handleChange} />
 	                    </label>
 	                    <div className="form-group">
 	                        <label>FAQ: </label>
