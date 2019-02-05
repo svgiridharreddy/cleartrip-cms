@@ -89,7 +89,54 @@ class Flights extends Component {
   }
 
   handleChangeField = (e, fieldName) => {
+    debugger
+    if (fieldName==="categoryType")
+    {
+    this.setState({ [fieldName]: e.target.value,
+      title: "",
+      description: "",
+      keywords: "",
+      content: "",
+      h1Tag: "",
+      airlineName: "",
+      depCityName: "",
+      arrCityName: ""
+    });
+  }
+  else if (fieldName==="currentPageType")
+    {
+    this.setState({ [fieldName]: e.target.value,
+      title: "",
+      description: "",
+      currentSubType: "",
+      categoryType: "",
+      keywords: "",
+      content: "",
+      h1Tag: "",
+      airlineName: "",
+      depCityName: "",
+      arrCityName: ""
+    });
+  }
+  else if (fieldName==="currentSubType")
+    {
+    this.setState({ [fieldName]: e.target.value,
+      title: "",
+      description: "",
+      categoryType: "",
+      keywords: "",
+      content: "",
+      h1Tag: "",
+      airlineName: "",
+      depCityName: "",
+      arrCityName: ""
+    });
+  }
+
+  else
+  {
     this.setState({ [fieldName]: e.target.value });
+  }
   };
   handleFormSubmit = e => {
     const flightValues = this.state;
@@ -249,7 +296,7 @@ class Flights extends Component {
               Language
             </InputLabel>
             <Select
-              value={currentLanguage === "en" ? "English" : "Arabic"}
+              value={ currentLanguage }
               onChange={e => this.handleChangeField(e, "currentLanguage")}
               input={<Input name="language" id="language-label-placeholder" />}
               displayEmpty
@@ -264,6 +311,7 @@ class Flights extends Component {
                   {" "}
                   {option}
                 </MenuItem>
+            
               ))}
             </Select>
             <FormHelperText>Select Language</FormHelperText>
