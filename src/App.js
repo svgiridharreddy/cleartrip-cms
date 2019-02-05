@@ -7,6 +7,7 @@ import Index from './components/hotels/index.jsx';
 import Layout from "./components/layout";
 import Flights from "./components/Flights/flights";
 import FlightsLandingPage from "./components/Flights/flightsLandingPage";
+import BannerLanding from "./components/banner/BannerLanding";
 
 import "typeface-roboto";
 
@@ -20,6 +21,7 @@ class App extends Component {
             <Route exact path="/" component={FlightsLandingPage} />
             <Route exact path="/flights" component={Flights} />
             <Route path="/flights/home" component={FlightsLandingPage} />
+            <Route path="/banners" component={BannerLanding} />
 
              />
             <Route exact path="/hotels" component={ Index } />
