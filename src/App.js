@@ -27,7 +27,7 @@ class App extends Component {
             <Route exact path="/hotels" component = { Index } />
             <Route exact path="/hotels/addUniqueData" component = { HotelUniqueContent } />
             <Route exact path="/hotels/addCommonData" component = { HotelCommonContent } />
-            
+
             <Route path="/banners" component={BannerLanding} />
           </Switch>
         </Layout>
