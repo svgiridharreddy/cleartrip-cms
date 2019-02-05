@@ -132,6 +132,10 @@ class Flights extends Component {
       arrCityName: ""
     });
   }
+  else if ( fieldName==="currentDomain" && e.target.value==="IN")
+  {
+   this.setState({ [fieldName]: e.target.value, currentLanguage: "IN" });
+  }
 
   else
   {
@@ -140,6 +144,7 @@ class Flights extends Component {
   };
   handleFormSubmit = e => {
     const flightValues = this.state;
+    debugger
     let postData = {
       flights_data: {
         domain: flightValues["currentDomain"],
@@ -189,6 +194,7 @@ class Flights extends Component {
   };
   onRecieveProps = () => {
     var { flight } = this.props.location.state;
+    debugger
     this.setState({
       currentPageType: flight.page_type,
       currentDomain: flight.domain,
@@ -197,7 +203,7 @@ class Flights extends Component {
       categoryType: "uniq",
       title: flight.title,
       description: flight.description,
-      keywords: flight.keywords,
+      keywords: flight.keyword,
       content: flight.content,
       h1Tag: flight.heading,
       airlineName: flight.airline_name
@@ -267,7 +273,7 @@ class Flights extends Component {
     return (
       <div>
         <h1>Cleartrip Flights</h1>
-        <form className={classes.container} noValidate autoComplete="off">
+        <form className={classes.container} autoComplete="off" >
           <FormControl className={classes.formControl}>
             <InputLabel shrink htmlFor="domains-Label-placeholder">
               Domains
@@ -306,10 +312,11 @@ class Flights extends Component {
               <MenuItem value="">
                 <em>Select Options</em>
               </MenuItem>
-              {languages.map(option => (
-                <MenuItem key={option} value={option}>
-                  {" "}
-                  {option}
+              {this.state.currentDomain!="IN" ?
+                <MenuItem key="ar" value="ar">Arabic
+                </MenuItem>
+                :null }
+                 <MenuItem key="en" value="en">English
                 </MenuItem>
             
               ))}

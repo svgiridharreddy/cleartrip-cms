@@ -74,6 +74,7 @@ class FlightBookingFields extends Component {
           displayEmpty
           name="currentSubType"
           className={classes.selectEmpty}
+          required
         >
           <MenuItem value="">
             <em>Select Options</em>
@@ -101,6 +102,7 @@ class FlightBookingFields extends Component {
             displayEmpty
             name="categoryType"
             className={classes.selectEmpty}
+            required
           >
             <MenuItem value="">
               <em>Select Option</em>
@@ -128,6 +130,7 @@ class FlightBookingFields extends Component {
             displayEmpty
             name="categoryType"
             className={classes.selectEmpty}
+            required
           >
             <MenuItem value="">
               <em>Select Option</em>
@@ -157,6 +160,7 @@ class FlightBookingFields extends Component {
           name="title"
           margin="normal"
           variant="outlined"
+          required
         />
         <TextField
           id="outlined-name"
@@ -167,6 +171,7 @@ class FlightBookingFields extends Component {
           name="description"
           margin="normal"
           variant="outlined"
+          required
         />
         <TextField
           id="outlined-textarea"
@@ -179,6 +184,7 @@ class FlightBookingFields extends Component {
           name="keywords"
           margin="normal"
           variant="outlined"
+          required
         />
         <TextField
           id="outlined-name"
@@ -190,6 +196,7 @@ class FlightBookingFields extends Component {
           margin="normal"
           variant="outlined"
           placeholder="Enter H1 Title"
+          required
         />
         <TextField
           id="outlined-textarea"
@@ -202,6 +209,7 @@ class FlightBookingFields extends Component {
           name="content"
           margin="normal"
           variant="outlined"
+          required
         />
         {categoryType === "uniq" && currentSubType !== "index" ? (
           <TextField
@@ -213,6 +221,7 @@ class FlightBookingFields extends Component {
             name="airlineName"
             margin="normal"
             variant="outlined"
+            required
           />
         ) : null}
         {categoryType === "uniq" && currentSubType === "airline-routes" ? (
@@ -226,6 +235,7 @@ class FlightBookingFields extends Component {
               name="depCityName"
               margin="normal"
               variant="outlined"
+              required
             />
             <TextField
               id="outlined-arr-city-name"
@@ -236,6 +246,7 @@ class FlightBookingFields extends Component {
               name="arrCityName"
               margin="normal"
               variant="outlined"
+              required
             />
           </div>
         ) : null}
