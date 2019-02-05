@@ -71,9 +71,9 @@ class Layout extends React.Component {
             <ListItem button key={"Trains"} component={Link} to="/trains">
               <ListItemText primary={"Trains"} />
             </ListItem>
-            <ListItem button key={"Banners"}>
+            {/*<ListItem button key={"Banners"} component={Link} to="/banners">
               <ListItemText primary={"Banners"} />
-            </ListItem>
+            </ListItem>*/}
           </List>
         </div>
       </div>

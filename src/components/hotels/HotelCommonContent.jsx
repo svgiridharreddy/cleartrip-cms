@@ -45,11 +45,11 @@ class HotelCommonContent extends Component {
           	</label>
           	<label>
           		Page Type:
-          		<select multiple={true} value={ this.state.page_type }>
+          		<select multiple={true} value={ this.state.page_type } />
           	</label>
           	<label>
           		Domain Type:
-          		<select multiple={true} value={ this.state.domain_name }>
+          		<select multiple={true} value={ this.state.domain_name } />
           	</label>
           	<label>
           		Country Name:
@@ -83,7 +83,7 @@ class HotelCommonContent extends Component {
             	Templatized FAQ: 
               <textarea name="faq" onChange={this.handleChange} />
             </label>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Submit" />
           </form>
       </div>
 			)
