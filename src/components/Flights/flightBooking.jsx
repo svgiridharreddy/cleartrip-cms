@@ -12,7 +12,7 @@ class FlightBookingFields extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentSubtype: this.props.currentSubtype,
+      currentSubType: this.props.currentSubType,
       categoryType: this.props.categoryType,
       title: this.props.title,
       description: this.props.description,
@@ -27,8 +27,15 @@ class FlightBookingFields extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      currentSubtype: nextProps.currentSubtype,
-      categoryType: nextProps.categoryType
+      currentSubType: nextProps.currentSubType,
+      categoryType: nextProps.categoryType,
+      title: nextProps.title,
+      description: nextProps.description,
+      keywords: nextProps.keywords,
+      h1Tag: nextProps.h1Tag,
+      airlinName: nextProps.airlineName,
+      depCityName: nextProps.depCityName,
+      arrCityName: nextProps.arrCityName
     });
   }
 
@@ -43,26 +50,17 @@ class FlightBookingFields extends Component {
     };
     const {
       classes,
-      handleCurrentSubtype,
-      handleChangeCategory,
       title,
       description,
       keywords,
       content,
       h1Tag,
-      handleTitleChange,
-      handleDescriptionChange,
-      handleKeywordsChange,
-      handleH1TagChange,
-      handleContentChange,
       airlineName,
       depCityName,
       arrCityName,
-      handleAirlineName,
-      handleDepCityName,
-      handleArrCityName
+      currentSubType,
+      categoryType
     } = this.props;
-    const { currentSubtype, categoryType } = this.state;
 
     subTypeField = (
       <FormControl className={classes.formControl}>
@@ -70,9 +68,9 @@ class FlightBookingFields extends Component {
           Sub PageType
         </InputLabel>
         <Select
-          value={currentSubtype}
-          onChange={handleCurrentSubtype}
-          input={<Input name="subtype" id="subtype-label-placeholder" />}
+          value={currentSubType}
+          onChange={e => this.props.handleChangeField(e, "currentSubType")}
+          input={<Input name="currentSubType" id="subtype-label-placeholder" />}
           displayEmpty
           name="currentSubType"
           className={classes.selectEmpty}
@@ -90,7 +88,7 @@ class FlightBookingFields extends Component {
       </FormControl>
     );
 
-    if (currentSubtype === "index") {
+    if (currentSubType === "index") {
       category = (
         <FormControl className={classes.formControl}>
           <InputLabel shrink htmlFor="subPageType-Label-placeholder">
@@ -98,10 +96,10 @@ class FlightBookingFields extends Component {
           </InputLabel>
           <Select
             value={categoryType}
-            onChange={handleChangeCategory}
+            onChange={e => this.props.handleChangeField(e, "categoryType")}
             input={<Input name="subtype" id="subtype-label-placeholder" />}
             displayEmpty
-            name="category"
+            name="categoryType"
             className={classes.selectEmpty}
           >
             <MenuItem value="">
@@ -117,7 +115,7 @@ class FlightBookingFields extends Component {
           <FormHelperText />
         </FormControl>
       );
-    } else if (currentSubtype !== "index" && currentSubtype !== "") {
+    } else if (currentSubType !== "index" && currentSubType !== "") {
       category = (
         <FormControl className={classes.formControl}>
           <InputLabel shrink htmlFor="subPageType-Label-placeholder">
@@ -125,10 +123,10 @@ class FlightBookingFields extends Component {
           </InputLabel>
           <Select
             value={categoryType}
-            onChange={handleChangeCategory}
+            onChange={e => this.props.handleChangeField(e, "categoryType")}
             input={<Input name="subtype" id="subtype-label-placeholder" />}
             displayEmpty
-            name="category"
+            name="categoryType"
             className={classes.selectEmpty}
           >
             <MenuItem value="">
@@ -154,7 +152,9 @@ class FlightBookingFields extends Component {
           label="Title"
           className={classes.textField}
           value={title}
-          onChange={handleTitleChange}
+          // onChange={handleTitleChange}
+          onChange={e => this.props.handleChangeField(e, "title")}
+          name="title"
           margin="normal"
           variant="outlined"
         />
@@ -163,7 +163,8 @@ class FlightBookingFields extends Component {
           label="Description"
           className={classes.textField}
           value={description}
-          onChange={handleDescriptionChange}
+          onChange={e => this.props.handleChangeField(e, "description")}
+          name="description"
           margin="normal"
           variant="outlined"
         />
@@ -174,7 +175,8 @@ class FlightBookingFields extends Component {
           multiline
           className={classes.textField}
           value={keywords}
-          onChange={handleKeywordsChange}
+          onChange={e => this.props.handleChangeField(e, "keywords")}
+          name="keywords"
           margin="normal"
           variant="outlined"
         />
@@ -183,7 +185,8 @@ class FlightBookingFields extends Component {
           label="H1 Title"
           className={classes.textField}
           value={h1Tag}
-          onChange={handleH1TagChange}
+          onChange={e => this.props.handleChangeField(e, "h1Tag")}
+          name="h1Tag"
           margin="normal"
           variant="outlined"
           placeholder="Enter H1 Title"
@@ -195,29 +198,32 @@ class FlightBookingFields extends Component {
           multiline
           className={classes.textField}
           value={content}
-          onChange={handleContentChange}
+          onChange={e => this.props.handleChangeField(e, "content")}
+          name="content"
           margin="normal"
           variant="outlined"
         />
-        {categoryType === "uniq" && currentSubtype !== "index" ? (
+        {categoryType === "uniq" && currentSubType !== "index" ? (
           <TextField
             id="outlined-airline-name"
             label="Airline Name"
             className={classes.textField}
             value={airlineName}
-            onChange={handleAirlineName}
+            onChange={e => this.props.handleChangeField(e, "airlineName")}
+            name="airlineName"
             margin="normal"
             variant="outlined"
           />
         ) : null}
-        {categoryType === "uniq" && currentSubtype === "airline-routes" ? (
+        {categoryType === "uniq" && currentSubType === "airline-routes" ? (
           <div>
             <TextField
               id="outlined-dep-city-name"
               label="Source City"
               className={classes.textField}
               value={depCityName}
-              onChange={handleDepCityName}
+              onChange={e => this.props.handleChangeField(e, "depCityName")}
+              name="depCityName"
               margin="normal"
               variant="outlined"
             />
@@ -226,7 +232,8 @@ class FlightBookingFields extends Component {
               label="Destination City"
               className={classes.textField}
               value={arrCityName}
-              onChange={handleArrCityName}
+              onChange={e => this.props.handleChangeField(e, "arrCityName")}
+              name="arrCityName"
               margin="normal"
               variant="outlined"
             />
@@ -238,7 +245,7 @@ class FlightBookingFields extends Component {
       <div>
         {subTypeField}
         {category}
-        {currentSubtype !== "" ? fields : null}
+        {currentSubType !== "" ? fields : null}
       </div>
     );
   }

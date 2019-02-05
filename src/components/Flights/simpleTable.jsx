@@ -9,7 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-
+import { Link } from "react-router-dom";
 const styles = theme => ({
   root: {
     width: "100%",
@@ -28,10 +28,9 @@ const styles = theme => ({
 
 function SimpleTable(props) {
   const { classes, response } = props;
-
   return (
     <div>
-      {Object.keys(response).map((key, index) => (
+      {Object.keys(response).map((key, index) => ((
         // { response[key]!="" ?
         <Paper key={index} className={classes.root}>
           <Table className={classes.table}>
@@ -40,15 +39,15 @@ function SimpleTable(props) {
                 <TableCell align="center">Domain</TableCell>
                 <TableCell align="center">URL</TableCell>
                 <TableCell align="center">Language</TableCell>
-                 {key=="bookingOverview" ? 
-                  (<TableCell align="center">Airline Name</TableCell>) 
-                  : null }
-                   {key=="scheduleRoute" ? 
-                  (<TableCell align="center">Source</TableCell>) 
-                  : null }
-                   {key=="scheduleRoute" ? 
-                  (<TableCell align="center">Destination</TableCell>) 
-                  : null }
+                {key == "bookingOverview" ? (
+                  <TableCell align="center">Airline Name</TableCell>
+                ) : null}
+                {key == "scheduleRoute" ? (
+                  <TableCell align="center">Source</TableCell>
+                ) : null}
+                {key == "scheduleRoute" ? (
+                  <TableCell align="center">Destination</TableCell>
+                ) : null}
 
                 <TableCell align="center">Action</TableCell>
               </TableRow>
@@ -59,23 +58,22 @@ function SimpleTable(props) {
                   <TableCell align="center">{row.domain}</TableCell>
                   <TableCell align="center">{row.url}</TableCell>
                   <TableCell align="center">{row.language}</TableCell>
-                  {row.page_type=="flight-booking" ? 
-                  (<TableCell align="center">{row.airline_name}</TableCell>) 
-                  : null }
-                   {(row.page_type=="flight-schedule" && row.page_subtype=="routes") ? 
-                  (<TableCell align="center">{row.source}</TableCell>) 
-                  : null }
-                   {(row.page_type=="flight-schedule" && row.page_subtype=="routes")? 
-                  (<TableCell align="center">{row.destination}</TableCell>) 
-                  : null }
-
+                  {row.page_type == "flight-booking" ? (
+                    <TableCell align="center">{row.airline_name}</TableCell>
+                  ) : null}
+                  {row.page_type == "flight-schedule" &&
+                  row.page_subtype == "routes" ? (
+                    <TableCell align="center">{row.source}</TableCell>
+                  ) : null}
+                  {row.page_type == "flight-schedule" &&
+                  row.page_subtype == "routes" ? (
+                    <TableCell align="center">{row.destination}</TableCell>
+                  ) : null}
 
                   <TableCell align="center">
-                    <EditIcon
-                      onClick={() => {
-                        props.handleEdit(idx, key, row.id);
-                      }}
-                    />{" "}
+                    <Link to={{ pathname: "/flights", state: { flight: row } }}>
+                      <EditIcon />
+                    </Link>{" "}
                     <DeleteIcon
                       onClick={() => {
                         props.handleDelete(idx, key, row.id);
@@ -86,9 +84,9 @@ function SimpleTable(props) {
               ))}
             </TableBody>
           </Table>
-        </Paper>
+        </Paper> /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/
         // : null }
-      ))}
+      ) /*: null }*/))}
     </div>
   );
 }

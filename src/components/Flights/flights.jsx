@@ -68,10 +68,11 @@ class Flights extends Component {
       // currentPageType: this.props.currentPageType,
       // currentDomain: this.props.currentDomain,
       // currentLanguage: this.props.currentLanguage,
+
       currentPageType: "",
       currentDomain: "",
       currentLanguage: "",
-      currentSubtype: "",
+      currentSubType: "",
       categoryType: "",
       title: "",
       description: "",
@@ -81,49 +82,14 @@ class Flights extends Component {
       airlineName: "",
       depCityName: "",
       arrCityName: "",
-      isHomePage: false
+
+      isHomePage: false,
+      flight: {}
     };
   }
 
-  handleDomainChange = e => {
-    this.setState({ currentDomain: e.target.value });
-  };
-  handleLanguageChange = e => {
-    this.setState({ currentLanguage: e.target.value });
-  };
-  handlePagetypeChange = e => {
-    this.setState({ currentPageType: e.target.value });
-  };
-  handleCurrentSubtype = e => {
-    this.setState({ currentSubtype: e.target.value, categoryType: "" });
-  };
-  handleChangeCategory = e => {
-    this.setState({ categoryType: e.target.value });
-  };
-
-  handleTitleChange = e => {
-    this.setState({ title: e.target.value });
-  };
-  handleDescriptionChange = e => {
-    this.setState({ description: e.target.value });
-  };
-  handleKeywordsChange = e => {
-    this.setState({ keywords: e.target.value });
-  };
-  handleContentChange = e => {
-    this.setState({ content: e.target.value });
-  };
-  handleH1TagChange = e => {
-    this.setState({ h1Tag: e.target.value });
-  };
-  handleAirlineName = e => {
-    this.setState({ airlineName: e.target.value });
-  };
-  handleDepCityName = e => {
-    this.setState({ depCityName: e.target.value });
-  };
-  handleArrCityName = e => {
-    this.setState({ arrCityName: e.target.value });
+  handleChangeField = (e, fieldName) => {
+    this.setState({ [fieldName]: e.target.value });
   };
   handleFormSubmit = e => {
     const flightValues = this.state;
@@ -174,15 +140,37 @@ class Flights extends Component {
     //     this.addNewFruit(fruit);
     //   });
   };
+  onRecieveProps = () => {
+    var { flight } = this.props.location.state;
+    this.setState({
+      currentPageType: flight.page_type,
+      currentDomain: flight.domain,
+      currentLanguage: flight.language,
+      currentSubType: flight.page_subtype,
+      categoryType: "uniq",
+      title: flight.title,
+      description: flight.description,
+      keywords: flight.keywords,
+      content: flight.content,
+      h1Tag: flight.heading,
+      airlineName: flight.airline_name
+    });
+  };
+  componentWillMount() {
+    if (this.props.location.state !== undefined) {
+      this.onRecieveProps();
+    }
+  }
 
   render() {
     const { classes } = this.props;
+
     const {
       currentPageType,
       currentDomain,
       currentLanguage,
       categoryType,
-      currentSubtype,
+      currentSubType,
       title,
       description,
       keywords,
@@ -192,6 +180,7 @@ class Flights extends Component {
       depCityName,
       arrCityName
     } = this.state;
+    debugger;
     let fields;
     if (this.state.isHomePage) {
       return <Redirect to="/flights/home" />;
@@ -199,12 +188,13 @@ class Flights extends Component {
     if (currentPageType === "flight-booking") {
       fields = (
         <FlightBookingFields
-          handleCurrentSubtype={this.handleCurrentSubtype}
-          currentSubtype={currentSubtype}
+          currentSubType={currentSubType}
           categoryType={categoryType}
           classes={classes}
           name="flight-booking"
-          handleChangeCategory={this.handleChangeCategory}
+          handleChangeField={(e, fieldName) =>
+            this.handleChangeField(e, fieldName)
+          }
           title={title}
           description={description}
           keywords={keywords}
@@ -213,14 +203,6 @@ class Flights extends Component {
           airlineName={airlineName}
           depCityName={depCityName}
           arrCityName={arrCityName}
-          handleTitleChange={this.handleTitleChange}
-          handleDescriptionChange={this.handleDescriptionChange}
-          handleKeywordsChange={this.handleKeywordsChange}
-          handleContentChange={this.handleContentChange}
-          handleH1TagChange={this.handleH1TagChange}
-          handleAirlineName={this.handleAirlineName}
-          handleDepCityName={this.handleDepCityName}
-          handleArrCityName={this.handleArrCityName}
         />
       );
     } else if (currentPageType === "flight-schedule") {
@@ -245,7 +227,7 @@ class Flights extends Component {
             </InputLabel>
             <Select
               value={currentDomain}
-              onChange={this.handleDomainChange}
+              onChange={e => this.handleChangeField(e, "currentDomain")}
               input={<Input name="domain" id="domain-label-placeholder" />}
               displayEmpty
               name="currentDomain"
@@ -267,8 +249,8 @@ class Flights extends Component {
               Language
             </InputLabel>
             <Select
-              value={currentLanguage}
-              onChange={this.handleLanguageChange}
+              value={currentLanguage === "en" ? "English" : "Arabic"}
+              onChange={e => this.handleChangeField(e, "currentLanguage")}
               input={<Input name="language" id="language-label-placeholder" />}
               displayEmpty
               name="currentLanguage"
@@ -292,7 +274,7 @@ class Flights extends Component {
             </InputLabel>
             <Select
               value={currentPageType}
-              onChange={this.handlePagetypeChange}
+              onChange={e => this.handleChangeField(e, "currentPageType")}
               input={<Input name="pageType" id="pageType-label-placeholder" />}
               displayEmpty
               name="currentPageType"

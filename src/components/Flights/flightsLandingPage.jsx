@@ -11,8 +11,7 @@ class FlightsLandingPage extends Component {
     this.state = {
       result: {
         bookingOverview: [],
-        airlineRoutes: [],
-        scheduleRoute: []
+        airlineRoutes: []
       },
       renderTables: false
     };
@@ -23,14 +22,13 @@ class FlightsLandingPage extends Component {
 
     axios({
       method: "get",
-      url: "http://localhost:3001/fetch_details",
+      url: "http://localhost:3000/fetch_details",
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
         //handle success
         result.bookingOverview = response.data.FlightBookingOverview;
         result.airlineRoutes = response.data.FlightBookingRoute;
-        result.scheduleRoute = response.data.FlightScheduleRoute;
         this.setState({ result, renderTables: true });
       })
       .catch(response => {
@@ -38,10 +36,8 @@ class FlightsLandingPage extends Component {
       });
   }
 
-  handleEdit = (index, key, row, type) => {};
-
   handleDelete = (index, key, id) => {
-    var url = "http://localhost:3001/delete_data";
+    var url = "http://localhost:3000/delete_data";
     axios
       .delete(url, {
         data: { id: id, type: key }
@@ -72,7 +68,6 @@ class FlightsLandingPage extends Component {
           <SimpleTable
             response={this.state.result}
             handleDelete={this.handleDelete.bind(this)}
-            handleEdit={this.handleEdit.bind(this)}
           />
         ) : null}
       </div>
