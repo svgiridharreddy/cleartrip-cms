@@ -21,7 +21,7 @@ class App extends Component {
             <Route exact path="/" component={FlightsLandingPage} />
             <Route exact path="/flights" component={Flights} />
             <Route path="/flights/home" component={FlightsLandingPage} />
-            <Route path="/banners" component={BannerLanding} />
+            // <Route path="/banners" component={BannerLanding} />
 
              />
             <Route exact path="/hotels" component={ Index } />
