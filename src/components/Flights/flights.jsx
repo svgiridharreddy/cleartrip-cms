@@ -16,7 +16,6 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import FlightBookingFields from "./flightBooking";
 import FlightScheduleFields from "./flightSchedule";
-import FlightsLandingPage from "./flightsLandingPage";
 import green from "@material-ui/core/colors/green";
 
 const styles = theme => ({
