@@ -7,6 +7,13 @@ import Select from "@material-ui/core/Select";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
+import "froala-editor/js/froala_editor.pkgd.min.js";
+
+// Require Editor CSS files.
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+import "font-awesome/css/font-awesome.css";
+import FroalaEditor from "react-froala-wysiwyg";
 
 class FlightBookingFields extends Component {
   constructor(props) {
@@ -191,11 +198,13 @@ class FlightBookingFields extends Component {
           variant="outlined"
           placeholder="Enter H1 Title"
         />
+
         <TextField
           id="outlined-textarea"
           label="Content"
           placeholder="Enter content"
           multiline
+          fullWidth
           className={classes.textField}
           value={content}
           onChange={e => this.props.handleChangeField(e, "content")}

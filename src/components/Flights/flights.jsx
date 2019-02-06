@@ -17,6 +17,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FlightBookingFields from "./flightBooking";
 import FlightScheduleFields from "./flightSchedule";
 import green from "@material-ui/core/colors/green";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 const styles = theme => ({
   container: {
@@ -111,20 +112,19 @@ class Flights extends Component {
       }
     };
 
-    var self = this;
     axios({
       method: "post",
       url: "http://localhost:3000/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
-      .then(function(response) {
+      .then(response => {
         //handle success
         console.log(response);
-        self.setState({ isHomePage: true });
+        this.setState({ isHomePage: true });
       })
-      .catch(function(response) {
-        self.setState({ isHomePage: false });
+      .catch(response => {
+        this.setState({ isHomePage: false });
       });
     // fetch("http://localhost:3000/flights", {
     //   method: "POST",
@@ -150,7 +150,7 @@ class Flights extends Component {
       categoryType: "uniq",
       title: flight.title,
       description: flight.description,
-      keywords: flight.keywords,
+      keywords: flight.keyword,
       content: flight.content,
       h1Tag: flight.heading,
       airlineName: flight.airline_name
@@ -180,10 +180,22 @@ class Flights extends Component {
       depCityName,
       arrCityName
     } = this.state;
-    debugger;
     let fields;
     if (this.state.isHomePage) {
-      return <Redirect to="/flights/home" />;
+      return (
+        <Redirect
+          exact
+          to={{
+            pathname: "/",
+            state: {
+              domain: currentDomain,
+              pageType: currentPageType,
+              subType: currentSubType,
+              language: currentLanguage
+            }
+          }}
+        />
+      );
     }
     if (currentPageType === "flight-booking") {
       fields = (
@@ -245,11 +257,12 @@ class Flights extends Component {
             <FormHelperText />
           </FormControl>
           <FormControl className={classes.formControl}>
-            <InputLabel shrink htmlFor="language-Label-placeholder">
+            <InputLabel shrink htmlFor="language-Label-placeholder" required>
               Language
             </InputLabel>
             <Select
-              value={currentLanguage === "en" ? "English" : "Arabic"}
+              required
+              value={currentLanguage}
               onChange={e => this.handleChangeField(e, "currentLanguage")}
               input={<Input name="language" id="language-label-placeholder" />}
               displayEmpty
@@ -259,11 +272,14 @@ class Flights extends Component {
               <MenuItem value="">
                 <em>Select Options</em>
               </MenuItem>
-              {languages.map(option => (
-                <MenuItem key={option} value={option}>
-                  {" "}
-                  {option}
+              {this.state.currentDomain != "IN" ? (
+                <MenuItem key="ar" value="ar">
+                  Arabic
                 </MenuItem>
+              ) : null}
+              <MenuItem key="en" value="en">
+                English
+              </MenuItem>
               ))}
             </Select>
             <FormHelperText>Select Language</FormHelperText>

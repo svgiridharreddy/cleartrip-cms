@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { Link } from "react-router-dom";
+
 const styles = theme => ({
   root: {
     width: "100%",
@@ -25,58 +26,101 @@ const styles = theme => ({
     fontSize: 32
   }
 });
+let id = 0;
+function createData(name, calories, fat, carbs, protein) {
+  id += 1;
+  return { id, name, calories, fat, carbs, protein };
+}
 
-function SimpleTable(props) {
-  const { classes, response } = props;
-  return (
-    <div>
-      {Object.keys(response).map((key, index) => ((
-        // { response[key]!="" ?
-        <Paper key={index} className={classes.root}>
+const rows = [
+  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  createData("Eclair", 262, 16.0, 24, 6.0),
+  createData("Cupcake", 305, 3.7, 67, 4.3),
+  createData("Gingerbread", 356, 16.0, 49, 3.9)
+];
+
+class SimpleTable extends Component {
+  state = {
+    pageType: this.props.pageType,
+    subType: this.props.subType,
+    domain: this.props.domain,
+    language: this.props.language
+  };
+  constructor(props) {
+    super(props);
+  }
+  componentWillReceiveProps = nextProps => {
+    this.setState({
+      pageType: nextProps.pageType,
+      subType: nextProps.subType,
+      domain: nextProps.domain,
+      language: nextProps.language
+    });
+  };
+
+  render() {
+    const { classes, response, pageType, subType } = this.props;
+    const SimpleFields = () => {
+      if (pageType === "flight-booking") {
+        switch (subType) {
+          case "airline-routes":
+            return (
+              <td>
+                <TableCell align="center">Airline Name</TableCell>
+                <TableCell align="center">Source</TableCell>
+                <TableCell align="center">Destination</TableCell>
+              </td>
+            );
+          default:
+            return <TableCell align="center">Airline Name</TableCell>;
+        }
+      }
+    };
+    return (
+      <div>
+        <Paper key={subType} className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
                 <TableCell align="center">Domain</TableCell>
+                <TableCell align="center">Langugage</TableCell>
+                <SimpleFields />
                 <TableCell align="center">URL</TableCell>
-                <TableCell align="center">Language</TableCell>
-                {key == "bookingOverview" ? (
-                  <TableCell align="center">Airline Name</TableCell>
-                ) : null}
-                {key == "scheduleRoute" ? (
-                  <TableCell align="center">Source</TableCell>
-                ) : null}
-                {key == "scheduleRoute" ? (
-                  <TableCell align="center">Destination</TableCell>
-                ) : null}
-
-                <TableCell align="center">Action</TableCell>
+                <TableCell align="center">Page Type</TableCell>
+                <TableCell align="center">Sub Page Type</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {response[key].map((row, idx) => (
+              {response[pageType][subType].map((row, idx) => (
                 <TableRow key={row.id}>
-                  <TableCell align="center">{row.domain}</TableCell>
-                  <TableCell align="center">{row.url}</TableCell>
+                  <TableCell component="th" align="center" scope="row">
+                    {row.domain}
+                  </TableCell>
                   <TableCell align="center">{row.language}</TableCell>
-                  {row.page_type == "flight-booking" ? (
+                  {subType === "routes" ? (
+                    <div>
+                      <TableCell align="center">{row.airline_name}</TableCell>
+                      <TableCell align="center">{row.source}</TableCell>
+                      <TableCell align="center">{row.destination}</TableCell>
+                    </div>
+                  ) : (
                     <TableCell align="center">{row.airline_name}</TableCell>
-                  ) : null}
-                  {row.page_type == "flight-schedule" &&
-                  row.page_subtype == "routes" ? (
-                    <TableCell align="center">{row.source}</TableCell>
-                  ) : null}
-                  {row.page_type == "flight-schedule" &&
-                  row.page_subtype == "routes" ? (
-                    <TableCell align="center">{row.destination}</TableCell>
-                  ) : null}
-
+                  )}
+                  <TableCell align="center">{row.url}</TableCell>
+                  <TableCell align="center">{row.page_type}</TableCell>
+                  <TableCell align="center">{row.page_subtype}</TableCell>
                   <TableCell align="center">
                     <Link to={{ pathname: "/flights", state: { flight: row } }}>
                       <EditIcon />
-                    </Link>{" "}
+                      {""}
+                    </Link>
+                  </TableCell>
+                  <TableCell align="center">
+                    {" "}
                     <DeleteIcon
                       onClick={() => {
-                        props.handleDelete(idx, key, row.id);
+                        this.props.handleDelete(idx, row.id);
                       }}
                     />
                   </TableCell>
@@ -84,11 +128,10 @@ function SimpleTable(props) {
               ))}
             </TableBody>
           </Table>
-        </Paper> /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/ /*: null }*/
-        // : null }
-      ) /*: null }*/))}
-    </div>
-  );
+        </Paper>
+      </div>
+    );
+  }
 }
 
 SimpleTable.propTypes = {
