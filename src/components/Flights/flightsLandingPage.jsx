@@ -22,7 +22,7 @@ class FlightsLandingPage extends Component {
 
     axios({
       method: "get",
-      url: "http://localhost:3001/fetch_details",
+      url: "http://localhost:3000/fetch_details",
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
@@ -37,7 +37,7 @@ class FlightsLandingPage extends Component {
   }
 
   handleDelete = (index, key, id) => {
-    var url = "http://localhost:3001/delete_data";
+    var url = "http://localhost:3000/delete_data";
     axios
       .delete(url, {
         data: { id: id, type: key }

@@ -82,14 +82,14 @@ class Flights extends Component {
       airlineName: "",
       depCityName: "",
       arrCityName: "",
-
+      cityName:"",
+      readOnly:false,
       isHomePage: false,
       flight: {}
     };
   }
 
   handleChangeField = (e, fieldName) => {
-    debugger
     if (fieldName==="categoryType")
     {
     this.setState({ [fieldName]: e.target.value,
@@ -100,7 +100,8 @@ class Flights extends Component {
       h1Tag: "",
       airlineName: "",
       depCityName: "",
-      arrCityName: ""
+      arrCityName: "",
+      cityName: ""
     });
   }
   else if (fieldName==="currentPageType")
@@ -115,7 +116,8 @@ class Flights extends Component {
       h1Tag: "",
       airlineName: "",
       depCityName: "",
-      arrCityName: ""
+      arrCityName: "",
+      cityName: ""
     });
   }
   else if (fieldName==="currentSubType")
@@ -129,7 +131,8 @@ class Flights extends Component {
       h1Tag: "",
       airlineName: "",
       depCityName: "",
-      arrCityName: ""
+      arrCityName: "",
+      cityName: ""
     });
   }
   else if ( fieldName==="currentDomain" && e.target.value==="IN")
@@ -143,8 +146,8 @@ class Flights extends Component {
   }
   };
   handleFormSubmit = e => {
+    e.preventDefault();
     const flightValues = this.state;
-    debugger
     let postData = {
       flights_data: {
         domain: flightValues["currentDomain"],
@@ -162,6 +165,7 @@ class Flights extends Component {
         arr_city_name: flightValues["arrCityName"]
       }
     };
+    console.log(postData)
 
     var self = this;
     axios({
@@ -193,8 +197,8 @@ class Flights extends Component {
     //   });
   };
   onRecieveProps = () => {
-    var { flight } = this.props.location.state;
     debugger
+    var { flight } = this.props.location.state;
     this.setState({
       currentPageType: flight.page_type,
       currentDomain: flight.domain,
@@ -206,7 +210,9 @@ class Flights extends Component {
       keywords: flight.keyword,
       content: flight.content,
       h1Tag: flight.heading,
-      airlineName: flight.airline_name
+      airlineName: flight.airline_name,
+      readOnlyValue: true
+
     });
   };
   componentWillMount() {
@@ -231,9 +237,10 @@ class Flights extends Component {
       h1Tag,
       airlineName,
       depCityName,
-      arrCityName
+      arrCityName,
+      cityName,
+      readOnlyValue
     } = this.state;
-    debugger;
     let fields;
     if (this.state.isHomePage) {
       return <Redirect to="/flights/home" />;
@@ -256,29 +263,43 @@ class Flights extends Component {
           airlineName={airlineName}
           depCityName={depCityName}
           arrCityName={arrCityName}
+          readOnlyValue={readOnlyValue}
+
         />
       );
-    } else if (currentPageType === "flight-schedule") {
+    } 
+    else if (currentPageType === "flight-schedule") {
       fields = (
         <FlightScheduleFields
-          handleCurrentSubtype={this.handleCurrentSubtype}
-          currentSubtype={this.state.currentSubtype}
-          classes={classes}
-          name="flight-schedule"
+          currentSubType={currentSubType}
           categoryType={categoryType}
-          handleChangeCategory={this.handleChangeCategory}
+          classes={classes}
+          name="flight-booking"
+          handleChangeField={(e, fieldName) =>
+            this.handleChangeField(e, fieldName)
+          }
+          title={title}
+          description={description}
+          keywords={keywords}
+          content={content}
+          h1Tag={h1Tag}
+          cityName={cityName}
+          depCityName={depCityName}
+          arrCityName={arrCityName}
+          readOnlyValue={readOnlyValue}
         />
       );
     }
     return (
       <div>
         <h1>Cleartrip Flights</h1>
-        <form className={classes.container} autoComplete="off" >
+        <form className={classes.container} autoComplete="off" onSubmit={this.handleFormSubmit.bind(this)} >
           <FormControl className={classes.formControl}>
             <InputLabel shrink htmlFor="domains-Label-placeholder">
               Domains
             </InputLabel>
             <Select
+              required
               value={currentDomain}
               onChange={e => this.handleChangeField(e, "currentDomain")}
               input={<Input name="domain" id="domain-label-placeholder" />}
@@ -298,10 +319,11 @@ class Flights extends Component {
             <FormHelperText />
           </FormControl>
           <FormControl className={classes.formControl}>
-            <InputLabel shrink htmlFor="language-Label-placeholder">
+            <InputLabel shrink htmlFor="language-Label-placeholder" required>
               Language
             </InputLabel>
             <Select
+              required
               value={ currentLanguage }
               onChange={e => this.handleChangeField(e, "currentLanguage")}
               input={<Input name="language" id="language-label-placeholder" />}
@@ -328,12 +350,14 @@ class Flights extends Component {
               Page Type
             </InputLabel>
             <Select
+              required
               value={currentPageType}
               onChange={e => this.handleChangeField(e, "currentPageType")}
               input={<Input name="pageType" id="pageType-label-placeholder" />}
               displayEmpty
               name="currentPageType"
               className={classes.selectEmpty}
+              readOnly={readOnlyValue}
             >
               <MenuItem value="">
                 <em>Select Options</em>
@@ -357,7 +381,7 @@ class Flights extends Component {
               variant={"contained"}
               color="primary"
               className={classes.margin}
-              onClick={this.handleFormSubmit}
+              type="submit"
             >
               Submit
             </Button>

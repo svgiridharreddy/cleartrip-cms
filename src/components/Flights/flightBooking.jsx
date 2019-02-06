@@ -21,7 +21,8 @@ class FlightBookingFields extends Component {
       keywords: this.props.keywords,
       airlinName: this.props.airlineName,
       depCityName: this.props.depCityName,
-      arrCityName: this.props.arrCityName
+      arrCityName: this.props.arrCityName,
+      readOnlyValue: this.props.readOnlyValue
     };
   }
 
@@ -35,7 +36,8 @@ class FlightBookingFields extends Component {
       h1Tag: nextProps.h1Tag,
       airlinName: nextProps.airlineName,
       depCityName: nextProps.depCityName,
-      arrCityName: nextProps.arrCityName
+      arrCityName: nextProps.arrCityName,
+      readOnlyValue: nextProps.readOnlyValue
     });
   }
 
@@ -59,22 +61,26 @@ class FlightBookingFields extends Component {
       depCityName,
       arrCityName,
       currentSubType,
-      categoryType
+      categoryType,
+      readOnlyValue
     } = this.props;
 
     subTypeField = (
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} >
         <InputLabel shrink htmlFor="subPageType-Label-placeholder">
           Sub PageType
         </InputLabel>
         <Select
+          // InputProps={{
+          //    readOnly: readOnly,
+          //    }}
           value={currentSubType}
           onChange={e => this.props.handleChangeField(e, "currentSubType")}
           input={<Input name="currentSubType" id="subtype-label-placeholder" />}
           displayEmpty
           name="currentSubType"
           className={classes.selectEmpty}
-          required
+          readOnly={readOnlyValue}
         >
           <MenuItem value="">
             <em>Select Options</em>
@@ -102,6 +108,7 @@ class FlightBookingFields extends Component {
             displayEmpty
             name="categoryType"
             className={classes.selectEmpty}
+            readOnly={readOnlyValue}
             required
           >
             <MenuItem value="">
@@ -130,6 +137,7 @@ class FlightBookingFields extends Component {
             displayEmpty
             name="categoryType"
             className={classes.selectEmpty}
+            readOnly={readOnlyValue}
             required
           >
             <MenuItem value="">
@@ -161,6 +169,7 @@ class FlightBookingFields extends Component {
           margin="normal"
           variant="outlined"
           required
+          title="please enter the title"
         />
         <TextField
           id="outlined-name"
@@ -209,6 +218,8 @@ class FlightBookingFields extends Component {
           name="content"
           margin="normal"
           variant="outlined"
+          fullWidth
+          multiline
           required
         />
         {categoryType === "uniq" && currentSubType !== "index" ? (
@@ -222,6 +233,7 @@ class FlightBookingFields extends Component {
             margin="normal"
             variant="outlined"
             required
+            
           />
         ) : null}
         {categoryType === "uniq" && currentSubType === "airline-routes" ? (
@@ -247,6 +259,7 @@ class FlightBookingFields extends Component {
               margin="normal"
               variant="outlined"
               required
+
             />
           </div>
         ) : null}
