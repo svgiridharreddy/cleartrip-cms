@@ -1,8 +1,11 @@
 import React,{Component} from 'react'
-import FlightBanner from './Flights/FlightBanner'
+import FlightSchedule from './Flights/FlightSchedule'
 import HotelsBanner from './Hotels/HotelsBanner'
 import CollectionBanner from './Collection/CollectionBanner'
 import TrainsBanner from './Trains/TrainsBanner'
+import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import axios from "axios";
 import './Banner.css'
 class BannerLanding extends Component{
 	constructor(props){
@@ -21,18 +24,18 @@ class BannerLanding extends Component{
 		const banner_type = this.state.banner_type
 		return(
 			<div>
-			<p> select bannaer type 
+		{/*	
 			<select  onChange={this.handleChange} >
 			<option value="Flights" name="Flights">Flights</option>
 			<option value="Hotels" name="Hotels">Hotels</option>
 			<option value="Trains" name="Trains">Trains</option>
 			<option value="Collection" name="Collection">Collection</option>
 			</select>
-			</p>
-			{banner_type === 'Trains'  || banner_type == 'Hotels' ?(banner_type === 'Trains' ? <TrainsBanner /> : <HotelsBanner />) :(banner_type === 'Collection' ? <CollectionBanner /> : <FlightBanner />)}
+			 {banner_type === 'Trains'  || banner_type == 'Hotels' ?(banner_type === 'Trains' ? <TrainsBanner /> : <HotelsBanner />) :(banner_type === 'Collection' ? <CollectionBanner /> : <FlightSchedule />)}
+		*/}
+			<FlightSchedule />
 			</div>
 			)
 	}
-
 }
 export default BannerLanding

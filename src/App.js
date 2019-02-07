@@ -10,6 +10,7 @@ import HotelCommonContent from "./components/hotels/HotelCommonContent";
 import Layout from "./components/layout";
 import Flights from "./components/Flights/flights";
 import FlightsLandingPage from "./components/Flights/flightsLandingPage";
+import Banner from "./components/banner/BannerLanding";
 
 import "typeface-roboto";
 
@@ -23,6 +24,7 @@ class App extends Component {
             <Route exact path="/flights" component={Flights} />
             <Route exact path="/flights/home" component={FlightsLandingPage} />
             <Route exact path="/hotels" component={Index} />
+            <Route exact path="/banners" component={Banner} />
             <Route
               exact
               path="/hotels/addUniqueData"
