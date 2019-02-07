@@ -6,7 +6,7 @@ import {
   createMuiTheme
 } from "@material-ui/core/styles";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
@@ -83,15 +83,40 @@ class Flights extends Component {
       airlineName: "",
       depCityName: "",
       arrCityName: "",
-
+      airlines: [],
       isHomePage: false,
-      flight: {}
+      flight: {},
+      searchValue: ""
     };
   }
 
   handleChangeField = (e, fieldName) => {
     this.setState({ [fieldName]: e.target.value });
   };
+
+  autoCompleteFields = (e, fieldName) => {
+    let target_value = e.target.value;
+    if (target_value !== "" && target_value.length >= -1) {
+      let url = "";
+      if (fieldName === "airlineName") {
+        url = "http://localhost:3000/airline_autocomplete";
+      } else {
+        url = "/city_autocomplete";
+      }
+
+      axios
+        .get(url, { params: { query_term: target_value } })
+        .then(response => {
+          this.setState({ airlines: response.data });
+          debugger;
+          console.log(response);
+        })
+        .then(response => {
+          console.log();
+        });
+    }
+  };
+
   handleFormSubmit = e => {
     const flightValues = this.state;
     let postData = {
@@ -114,19 +139,20 @@ class Flights extends Component {
 
     axios({
       method: "post",
-      url: "http://localhost:3000/flights",
+      url: "/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
         //handle success
         console.log(response);
+
         this.setState({ isHomePage: true });
       })
       .catch(response => {
         this.setState({ isHomePage: false });
       });
-    // fetch("http://localhost:3000/flights", {
+    // fetch("/flights", {
     //   method: "POST",
     //   body: postData,
     //   headers: {
@@ -206,6 +232,9 @@ class Flights extends Component {
           name="flight-booking"
           handleChangeField={(e, fieldName) =>
             this.handleChangeField(e, fieldName)
+          }
+          autoCompleteFields={(e, fieldName) =>
+            this.autoCompleteFields(e, fieldName)
           }
           title={title}
           description={description}

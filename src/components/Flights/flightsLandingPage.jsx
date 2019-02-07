@@ -84,6 +84,7 @@ class FlightsLandingPage extends Component {
     this.setState({ [fieldName]: e.target.value });
   };
   componentWillReceiveProps(nextProps) {
+    debugger;
     this.setState({
       pageType: nextProps.pageType,
       domain: nextProps.domain,
@@ -111,7 +112,7 @@ class FlightsLandingPage extends Component {
             response.data.result[pageType][subType].length > 0
           ) {
             result[pageType][subType] = response.data.result[pageType][subType];
-            this.setState({ result, renderTables: true });
+            this.setState({ result: result, renderTables: true });
           } else {
             this.setState({
               message: (
@@ -164,9 +165,40 @@ class FlightsLandingPage extends Component {
   render() {
     const { result, pageType, subType, domain, language } = this.state;
     let subTypes = [];
+    let tableFields = [];
+    let tableTitle = {
+      Domain: "domain",
+      Langugage: "language",
+      "Page Type": "page_type",
+      "Sub Page Type": "page_subtype",
+      URL: "url"
+    };
+    if (pageType === "flight-booking") {
+      subTypes = ["overview", "routes", "pnr", "web-checkin", "index"];
+      tableFields = {
+        overview: { AirlineName: "airline_name" },
+        routes: {
+          AirlineName: "airline_name",
+          source: "url",
+          destination: "url"
+        }
+      };
+    } else if (pageType === "flight-schedule") {
+      subTypes = ["routes", "from", "to", "index"];
+      tableFields = {
+        from: { "From City": "city_name", Url: "url" },
+        to: { "To City": "city_name", Url: "url" },
+        routes: { source: "source", destination: "destination" }
+      };
+    } else if (pageType === "flight-ticketss") {
+      subTypes = ["routes", "index"];
+      tableFields = {
+        routes: { source: "source", destination: "destination" }
+      };
+    }
 
     if (pageType === "flight-booking") {
-      subTypes = ["overview", "airline-routes", "pnr", "web-checkin", "index"];
+      subTypes = ["overview", "routes", "pnr", "web-checkin", "index"];
     } else if (pageType === "flight-schedule") {
       subTypes = ["routes", "from", "to", "index"];
     } else if (pageType === "flight-ticketss") {
@@ -306,6 +338,8 @@ class FlightsLandingPage extends Component {
             pageType={pageType}
             subType={subType}
             handleDelete={this.handleDelete.bind(this)}
+            tableFields={tableFields}
+            tableTitle={tableTitle}
           />
         ) : (
           this.state.message

@@ -51,6 +51,7 @@ class SimpleTable extends Component {
     super(props);
   }
   componentWillReceiveProps = nextProps => {
+    debugger;
     this.setState({
       pageType: nextProps.pageType,
       subType: nextProps.subType,
@@ -60,26 +61,73 @@ class SimpleTable extends Component {
   };
 
   render() {
-    const { classes, response, pageType, subType } = this.props;
-    const SimpleFields = () => {
-      if (pageType === "flight-booking") {
-        switch (subType) {
-          case "airline-routes":
-            return (
-              <td>
-                <TableCell align="center">Airline Name</TableCell>
-                <TableCell align="center">Source</TableCell>
-                <TableCell align="center">Destination</TableCell>
-              </td>
-            );
-          default:
-            return <TableCell align="center">Airline Name</TableCell>;
-        }
-      }
-    };
+    const {
+      classes,
+      response,
+      pageType,
+      subType,
+      tableFields,
+      tableTitle
+    } = this.props;
+    debugger;
+    var tableTitlearray = [];
+    var tableValuearray = [];
+
+    tableTitlearray = Object.keys(tableTitle);
+    var temparray = Object.keys(tableFields[subType]);
+    tableTitlearray = tableTitlearray.concat(temparray);
+    var actions = ["Edit", "Delete"];
+    tableTitlearray = tableTitlearray.concat(actions);
+    tableValuearray = Object.values(tableTitle);
+    var tempValueArray = Object.values(tableFields[subType]);
+    tableValuearray = tableValuearray.concat(tempValueArray);
+    var flight = [];
     return (
       <div>
         <Paper key={subType} className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                {tableTitlearray.map(title => (
+                  <TableCell key={title} align="center">
+                    {title}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {response[pageType][subType].map((resp, idx) => (
+                <TableRow key={resp.id}>
+                  {tableValuearray.map(a => (
+                    <TableCell key={a} align="center">
+                      {resp[a]}
+                    </TableCell>
+                  ))}
+                  <TableCell align="center">
+                    <Link
+                      to={{
+                        pathname: "/flights",
+                        state: { flight: resp }
+                      }}
+                    >
+                      <EditIcon />
+                      {""}
+                    </Link>
+                  </TableCell>
+                  <TableCell align="center">
+                    {" "}
+                    <DeleteIcon
+                      onClick={() => {
+                        this.props.handleDelete(idx, resp.id);
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        {/* <Paper key={subType} className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
@@ -128,7 +176,7 @@ class SimpleTable extends Component {
               ))}
             </TableBody>
           </Table>
-        </Paper>
+        </Paper> */}
       </div>
     );
   }

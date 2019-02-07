@@ -14,7 +14,6 @@ import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import "font-awesome/css/font-awesome.css";
 import FroalaEditor from "react-froala-wysiwyg";
-
 class FlightBookingFields extends Component {
   constructor(props) {
     super(props);
@@ -231,7 +230,7 @@ class FlightBookingFields extends Component {
               label="Source City"
               className={classes.textField}
               value={depCityName}
-              onChange={e => this.props.handleChangeField(e, "depCityName")}
+              onChange={e => this.props.autoCompleteFields(e, "depCityName")}
               name="depCityName"
               margin="normal"
               variant="outlined"
@@ -241,7 +240,7 @@ class FlightBookingFields extends Component {
               label="Destination City"
               className={classes.textField}
               value={arrCityName}
-              onChange={e => this.props.handleChangeField(e, "arrCityName")}
+              onChange={e => this.props.autoCompleteFields(e, "arrCityName")}
               name="arrCityName"
               margin="normal"
               variant="outlined"
