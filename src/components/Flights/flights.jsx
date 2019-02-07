@@ -211,6 +211,8 @@ class Flights extends Component {
       content: flight.content,
       h1Tag: flight.heading,
       airlineName: flight.airline_name,
+      depCityName: flight.source,
+      arrCityName: flight.destination,
       readOnlyValue: true
 
     });

@@ -207,7 +207,7 @@ class FlightBookingFields extends Component {
           placeholder="Enter H1 Title"
           required
         />
-        <TextField
+         <TextField
           id="outlined-textarea"
           label="Content"
           placeholder="Enter content"
@@ -219,10 +219,9 @@ class FlightBookingFields extends Component {
           margin="normal"
           variant="outlined"
           fullWidth
-          multiline
           required
         />
-        {categoryType === "uniq" && currentSubType !== "index" ? (
+         {categoryType === "uniq" && currentSubType !== "index" ? (
           <TextField
             id="outlined-airline-name"
             label="Airline Name"
@@ -263,6 +262,8 @@ class FlightBookingFields extends Component {
             />
           </div>
         ) : null}
+       
+       
       </div>
     );
     return (

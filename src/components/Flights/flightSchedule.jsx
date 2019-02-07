@@ -21,7 +21,8 @@ class FlightScheduleFields extends Component {
       keywords: this.props.keywords,
       cityName: this.props.airlineName,
       depCityName: this.props.depCityName,
-      arrCityName: this.props.arrCityName
+      arrCityName: this.props.arrCityName,
+      value: ""
     };
   }
 
@@ -47,6 +48,10 @@ class FlightScheduleFields extends Component {
       "flights-to": "Flights To",
        index: "Index"
     };
+
+    
+
+
     const {
       classes,
       title,
@@ -58,7 +63,8 @@ class FlightScheduleFields extends Component {
       depCityName,
       arrCityName,
       currentSubType,
-      categoryType
+      categoryType,
+      value
     } = this.props;
 
     subTypeField = (
@@ -142,7 +148,7 @@ class FlightScheduleFields extends Component {
             </MenuItem>
           </Select>
           <FormHelperText />
-        </FormControl>
+        </FormControl>  
       );
     } else {
     }
@@ -254,6 +260,8 @@ class FlightScheduleFields extends Component {
             />
           </div>
         ) : null}
+       
+        }
       </div>
     );
     return (

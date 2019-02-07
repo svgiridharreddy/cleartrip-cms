@@ -62,11 +62,11 @@ function SimpleTable(props) {
                     <TableCell align="center">{row.airline_name}</TableCell>
                   ) : null}
                   {row.page_type == "flight-schedule" &&
-                  row.page_subtype == "routes" ? (
+                  row.page_subtype == "schedule-routes" ? (
                     <TableCell align="center">{row.source}</TableCell>
                   ) : null}
                   {row.page_type == "flight-schedule" &&
-                  row.page_subtype == "routes" ? (
+                  row.page_subtype == "schedule-routes" ? (
                     <TableCell align="center">{row.destination}</TableCell>
                   ) : null}
 

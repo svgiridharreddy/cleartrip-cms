@@ -11,7 +11,8 @@ class FlightsLandingPage extends Component {
     this.state = {
       result: {
         bookingOverview: [],
-        airlineRoutes: []
+        // airlineRoutes: [],
+        scheduleRoute: []
       },
       renderTables: false
     };
@@ -28,7 +29,8 @@ class FlightsLandingPage extends Component {
       .then(response => {
         //handle success
         result.bookingOverview = response.data.FlightBookingOverview;
-        result.airlineRoutes = response.data.FlightBookingRoute;
+        // result.airlineRoutes = response.data.FlightBookingRoute;
+        result.scheduleRoute = response.data.FlightScheduleRoute;
         this.setState({ result, renderTables: true });
       })
       .catch(response => {
