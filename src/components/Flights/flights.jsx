@@ -83,10 +83,10 @@ class Flights extends Component {
       airlineName: "",
       depCityName: "",
       arrCityName: "",
-      airlines: [],
+      options: [],
       isHomePage: false,
       flight: {},
-      searchValue: ""
+      query: ""
     };
   }
 
@@ -94,14 +94,54 @@ class Flights extends Component {
     this.setState({ [fieldName]: e.target.value });
   };
 
+  getInfo = fieldName => {
+    let url = "";
+    if (fieldName === "airlineName") {
+      url = "http://localhost:3000/airline_autocomplete";
+    } else {
+      url = "/city_autocomplete";
+    }
+    axios
+      .get(url, { params: { query_term: this.state.query } })
+      .then(({ response }) => {
+        this.setState({
+          options: response.data
+        });
+      });
+  };
+
+  handleInputChange = (e, fieldName) => {
+    this.setState(
+      {
+        query: e.target.value
+      },
+      () => {
+        if (this.state.query && this.state.query.length > 1) {
+          if (this.state.query.length % 2 === 0) {
+            this.getInfo();
+          }
+        } else if (!this.state.query) {
+        }
+      }
+    );
+  };
+
   autoCompleteFields = (e, fieldName) => {
     let target_value = e.target.value;
+    debugger;
     if (target_value !== "" && target_value.length >= -1) {
       let url = "";
       if (fieldName === "airlineName") {
+        debugger;
+        if (target_value.length === 1) {
+          this.setState({ [fieldName]: "" });
+        } else {
+          this.setState({ [fieldName]: target_value });
+        }
+
         url = "http://localhost:3000/airline_autocomplete";
       } else {
-        url = "/city_autocomplete";
+        url = "http://localhost:3000/city_autocomplete";
       }
 
       axios
@@ -139,7 +179,7 @@ class Flights extends Component {
 
     axios({
       method: "post",
-      url: "/flights",
+      url: "http://localhost:3000/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -235,6 +275,9 @@ class Flights extends Component {
           }
           autoCompleteFields={(e, fieldName) =>
             this.autoCompleteFields(e, fieldName)
+          }
+          handleInputChange={(e, fieldName) =>
+            this.handleInputChange(e, fieldName)
           }
           title={title}
           description={description}

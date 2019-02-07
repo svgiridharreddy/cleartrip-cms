@@ -217,7 +217,7 @@ class FlightBookingFields extends Component {
             label="Airline Name"
             className={classes.textField}
             value={airlineName}
-            onChange={e => this.props.handleChangeField(e, "airlineName")}
+            onChange={e => this.props.autoCompleteFields(e, "airlineName")}
             name="airlineName"
             margin="normal"
             variant="outlined"
