@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import axios from "axios";
 import "../Banner.css";
+import FlightScheduleForm from  "./FlightScheduleForm" ;
 class FlightSchedule extends Component {
+<<<<<<< HEAD
   constructor(props) {
     super(props);
     this.state = {
@@ -334,5 +338,6 @@ class FlightSchedule extends Component {
       </div>
     );
   }
+
 }
 export default FlightSchedule;
