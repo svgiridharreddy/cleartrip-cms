@@ -67,7 +67,7 @@ class FlightBookingFields extends Component {
       currentSubType,
       categoryType
     } = this.props;
-
+    debugger;
     subTypeField = (
       <FormControl className={classes.formControl}>
         <InputLabel shrink htmlFor="subPageType-Label-placeholder">

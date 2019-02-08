@@ -132,13 +132,7 @@ class Flights extends Component {
     if (target_value !== "" && target_value.length >= -1) {
       let url = "";
       if (fieldName === "airlineName") {
-        debugger;
-        if (target_value.length === 1) {
-          this.setState({ [fieldName]: "" });
-        } else {
-          this.setState({ [fieldName]: target_value });
-        }
-
+        this.setState({ [fieldName]: target_value });
         url = "http://localhost:3000/airline_autocomplete";
       } else {
         url = "http://localhost:3000/city_autocomplete";
