@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import axios from "axios";
 import "../Banner.css";
+import FlightScheduleForm from  "./FlightScheduleForm" ;
 class FlightSchedule extends Component {
 	constructor(props) {
 		super(props);
@@ -21,7 +24,8 @@ class FlightSchedule extends Component {
 			routesHide: true,
 			sectionHide: true,
 			pageSubTypeHide: true,
-			contentTypeHide: true
+			contentTypeHide: true,
+			submitClicked: false
 		};
 		this.optReturn = this.optReturn.bind(this);
 		this.countryRtn = this.countryRtn.bind(this);
@@ -33,7 +37,6 @@ class FlightSchedule extends Component {
 		_self.setState({
 			form_data
 		});
-
 		// Flight schedule flow starting
 		if (
 			e.target.name === "page_type" &&
@@ -89,6 +92,14 @@ class FlightSchedule extends Component {
 			});
 		}
 		// Flight schedule flow ending
+
+		if (
+			form_data["country_code"] !== "" &&
+			form_data["language"] !== "" &&
+			form_data["section"] !== ""
+		) {
+			debugger;
+		}
 		if (
 			e.target.name === "page_type" &&
 			e.target.value === "flight-booking"
@@ -111,6 +122,9 @@ class FlightSchedule extends Component {
 				routesHide: true
 			});
 		}
+	}
+	submitFormData(e){
+		this.setState({submitClicked:true})
 	}
 	optReturn(optdata) {
 		return optdata.map((sub, i) => {
@@ -175,6 +189,7 @@ class FlightSchedule extends Component {
 		let contentOpt = this.optReturn(contentTypeOpt);
 		return (
 			<div>
+			{this.state.submitClicked ? <FlightScheduleForm formdata={this.state.form_data} content="<p style='text-align:left;'>testing this will work <a href='https://www.cleartrip.com/' target='_self'> Hello world</a>  asdfasdfasdf fasdfasdf djsahbldfjasdfjb&nbsp;</p><h1>hasdfasdf</h1><p>sdfaskdjfnak sad&nbsp;</p>"/> :
 				<Form>
 					<Form.Row>
 						<Form.Group as={Col}>
@@ -350,10 +365,9 @@ class FlightSchedule extends Component {
 						</Form.Group>
 					</Form.Row>
 					<ButtonToolbar>
-						<Button variant="primary">Add</Button>
+						<Button variant="primary" onClick={this.submitFormData.bind(this)}>Submit</Button>
 					</ButtonToolbar>
-				</Form>
-				{JSON.stringify(this.state.form_data)}
+				</Form>}
 			</div>
 		);
 	}
