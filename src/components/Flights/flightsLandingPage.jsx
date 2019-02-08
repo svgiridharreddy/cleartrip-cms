@@ -84,7 +84,6 @@ class FlightsLandingPage extends Component {
     this.setState({ [fieldName]: e.target.value });
   };
   componentWillReceiveProps(nextProps) {
-    debugger;
     this.setState({
       pageType: nextProps.pageType,
       domain: nextProps.domain,
