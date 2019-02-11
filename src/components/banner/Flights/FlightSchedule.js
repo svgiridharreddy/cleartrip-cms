@@ -7,7 +7,6 @@ import axios from "axios";
 import "../Banner.css";
 import FlightScheduleForm from  "./FlightScheduleForm" ;
 class FlightSchedule extends Component {
-<<<<<<< HEAD
   constructor(props) {
     super(props);
     this.state = {
