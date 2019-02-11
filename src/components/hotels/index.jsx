@@ -1,13 +1,7 @@
 import React, { Component } from "react";
+import { Form, Col } from 'react-bootstrap';
+
 import UniqueContentDataCollection from './UniqueContentDataCollection.jsx';
-// import Typography from "@material-ui/core/Typography";
-// import { withStyles } from "@material-ui/core/styles";
-// import Button from "@material-ui/core/Button";
-// import IconButton from "@material-ui/core/IconButton";
-// import { BrowserRouter as Router, NavLink } from "react-router-dom";
-// import MenuItem from "@material-ui/core/MenuItem";
-// import TextField from "@material-ui/core/TextField";
-// import Route from "react-router-dom/Route";
 
 const contentType = ["Common Data","Unique Data"]
 const domainType = { "IN": "https://www.cleartrip.com", "AE": "https://www.cleartrip.ae", "SA": "https://www.cleartrip.sa", "QA": "https://qa.cleartrip.com", "OM": "https://om.cleartrip.com", "BH": "https://bh.cleartrip.com", "KW": "https://kw.cleartrip.com"}
@@ -39,19 +33,22 @@ class Index extends Component {
       <div>
         <h1>Cleartrip Hotels</h1>
         <div className="filter">
-          <label htmlFor="contentType">
-            Content Section: 
-            <select
-              id="contentType"
-              name="contentType"
-              onChange={this.handleOnChange}
-            >
-            <option value="">Select Options</option>
-            {
-              contentType.map((content,i) => <option key={i}>{content}</option>)
-            }
-            </select>
-          </label>
+            <Form.Group as={Col} style={{width: '50%'}}>
+              <Form.Label>Content Section</Form.Label>
+              <Form.Control
+                as="select"
+                defaultValue="Content Section"
+                onChange={this.handleOnChange}
+                name="contentType"
+              >
+                <option value="">
+                  Select Content
+                </option>
+                {
+                contentType.map((content,i) => <option key={i}>{content}</option>)
+              }
+              </Form.Control>
+            </Form.Group>
           { contentFields }
         </div>
       </div>
