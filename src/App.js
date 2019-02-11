@@ -4,10 +4,10 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Index from './components/hotels/index';
-import HotelUniqueContent from './components/hotels/addHotelUniqueContent';
-import HotelCommonContent from './components/hotels/HotelCommonContent';
-import ViewUniqueHotelData from './components/hotels/viewHotelUniqueData';
-import EditUniqueContent from './components/hotels/editHotelUniqueData';
+import HotelUniqueContent from './components/hotels/unique/addHotelUniqueContent';
+import HotelCommonContent from './components/hotels/common/HotelCommonContent';
+import ViewUniqueHotelData from './components/hotels/unique/viewHotelUniqueData';
+import EditUniqueContent from './components/hotels/unique/editHotelUniqueData';
 
 import Layout from "./components/layout";
 import Flights from "./components/Flights/flights";

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Form, Col } from 'react-bootstrap';
 
-import UniqueContentDataCollection from './UniqueContentDataCollection.jsx';
+import UniqueContentDataCollection from './unique/UniqueContentDataCollection';
+import CommonContentDataCollection from './common/CommonContentDataCollection';
 
 const contentType = ["Common Data","Unique Data"]
 const domainType = { "IN": "https://www.cleartrip.com", "AE": "https://www.cleartrip.ae", "SA": "https://www.cleartrip.sa", "QA": "https://qa.cleartrip.com", "OM": "https://om.cleartrip.com", "BH": "https://bh.cleartrip.com", "KW": "https://kw.cleartrip.com"}
@@ -27,7 +28,9 @@ class Index extends Component {
         <UniqueContentDataCollection />
         )
     } else if (contentValue === "Common Data") {
-
+        contentFields = (
+          <CommonContentDataCollection />
+          )
     }
     return (
       <div>

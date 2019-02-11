@@ -90,9 +90,9 @@ class UniqueContentDataCollection extends Component {
 						<Alert variant="info">
 					    Your searched data not present, you can add data by clicking Add button here.
 					  </Alert>
-						<button onClick={this.handleAddForm}>
+						<Button onClick={this.handleAddForm}>
 							<Link to={`hotels/addUniquedata`}>Add</Link>
-						</button>
+						</Button>
 					</div>
 				)
 		}
