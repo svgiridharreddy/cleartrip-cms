@@ -8,7 +8,7 @@ import HotelUniqueContent from "./components/hotels/HotelUniqueContent";
 import HotelCommonContent from "./components/hotels/HotelCommonContent";
 
 import Layout from "./components/layout";
-import Flights from "./components/Flights/flights";
+import Flights from "./components/banner/Flights/Flights";
 import FlightsLandingPage from "./components/Flights/flightsLandingPage";
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/banner/Flights/FlightsHomePage";

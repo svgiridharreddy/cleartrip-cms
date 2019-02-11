@@ -34,9 +34,25 @@ class FlightsHomePage extends PureComponent {
       language: "",
       subType: "",
       message: "",
-      renderTables: false
+      renderTables: false,
+      form_data: {
+        country_code: "",
+        language: "",
+        page_type: "",
+        page_subtype: "",
+        section: "",
+        from_city: "",
+        to_city: "",
+        content_type: "",
+        airline_name: ""
+      },
+      routesHide: true,
+      sectionHide: true,
+      pageSubTypeHide: true,
+      contentTypeHide: true
     };
   }
+
   handleChange = (e, fieldName) => {
     this.setState({ [fieldName]: e.target.value });
   };
@@ -230,11 +246,12 @@ class FlightsHomePage extends PureComponent {
             <Button variant="info" onClick={this.handleGetInfo}>
               Get Info
             </Button>
+            <Button variant="success" onClick={this.handleAdd}>
+              Add New
+            </Button>
           </ButtonToolbar>
         </Form>
-        {/* <ButtonToolbar>
-          <Button variant="primary">Add</Button>
-        </ButtonToolbar> */}
+
         {this.state.renderTables ? (
           <FlightsTable
             domain={domain}

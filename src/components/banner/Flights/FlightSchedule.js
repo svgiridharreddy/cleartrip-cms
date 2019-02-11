@@ -5,9 +5,8 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import axios from "axios";
 import "../Banner.css";
-import FlightScheduleForm from  "./FlightScheduleForm" ;
+import FlightScheduleForm from "./FlightScheduleForm";
 class FlightSchedule extends Component {
-<<<<<<< HEAD
   constructor(props) {
     super(props);
     this.state = {
@@ -338,6 +337,5 @@ class FlightSchedule extends Component {
       </div>
     );
   }
-
 }
 export default FlightSchedule;
