@@ -125,6 +125,9 @@ class Flights extends Component {
             debugger;
             this.setState({ options_arr: response.data });
           }
+          else if (fieldName === "cityName") {
+            this.setState({ options: response.data });
+          }
         })
         .then(response => {
           console.log();
@@ -143,7 +146,8 @@ class Flights extends Component {
       this.setState({ arrCityNameSelected: p, arrCityName: p.value });
     }
     else if (fieldName === "cityName") {
-      this.setState({ cityNameSelected: p });
+      debugger
+      this.setState({ cityNameSelected: p,cityName: p.value });
     }
   };
 
@@ -165,7 +169,7 @@ class Flights extends Component {
         h1_title: flightValues["h1Tag"],
         airline_name: flightValues["airlineName"],
         city_name: flightValues["cityNameSelected"]["value"],
-        dep_city_name: flightValues["arrCityNameSelected"]["value"],
+        dep_city_name: flightValues["depCityNameSelected"]["value"],
         arr_city_name: flightValues["arrCityNameSelected"]["value"]
 
       }
