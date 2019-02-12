@@ -3,9 +3,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import Index from "./components/hotels/index";
-import HotelUniqueContent from "./components/hotels/HotelUniqueContent";
-import HotelCommonContent from "./components/hotels/HotelCommonContent";
+import Index from './components/hotels/index';
+import HotelUniqueContent from './components/hotels/unique/addHotelUniqueContent';
+import HotelCommonContent from './components/hotels/common/HotelCommonContent';
+import ViewUniqueHotelData from './components/hotels/unique/viewHotelUniqueData';
+import EditUniqueContent from './components/hotels/unique/editHotelUniqueData';
 
 import Layout from "./components/layout";
 import Flights from "./components/banner/Flights/Flights";
@@ -36,6 +38,11 @@ class App extends Component {
               path="/hotels/addCommonData"
               component={HotelCommonContent}
             />
+            <Route exact path="/hotels" component = { Index } />
+            <Route exact path="/hotels/addUniqueData" component = { HotelUniqueContent } />
+            <Route exact path="/hotels/addCommonData" component = { HotelCommonContent } />
+            <Route path="/hotels/show/uniquedata/:id" component = { ViewUniqueHotelData } />
+            <Route path="/hotels/edit/uniquedata/:id" component = { EditUniqueContent } />
           </Switch>
         </Layout>
       </Router>
