@@ -72,7 +72,7 @@ class FlightsTable extends Component {
                   >
                     <Button as="input" type="button" value="Edit" />
                   </Link>
-                  ;{" "}
+                  {" "}
                 </td>
                 <td>
                   <Button
