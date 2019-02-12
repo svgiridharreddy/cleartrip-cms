@@ -1,253 +1,298 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import TextField from "@material-ui/core/TextField";
-import "froala-editor/js/froala_editor.pkgd.min.js";
-import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
-import Select1 from "react-select";
-
-// Require Editor CSS files.
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-import "font-awesome/css/font-awesome.css";
-import FroalaEditor from "react-froala-wysiwyg";
-class FlightScheduleFields extends Component {
+import { Link } from "react-router-dom";
+import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import axios from "axios";
+import "../Banner.css";
+import FlightScheduleForm from "./FlightScheduleForm";
+class FlightSchedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentSubType: this.props.currentSubType,
-      categoryType: this.props.categoryType,
-      title: this.props.title,
-      description: this.props.description,
-      content: this.props.content,
-      h1Tag: this.props.h1Tag,
-      keywords: this.props.keywords,
-      cityName: this.props.cityName,
-      depCityName: this.props.depCityName,
-      arrCityName: this.props.arrCityName,
-      readOnlyValue: this.props.readOnlyValue,
-      selectedOption: null,
-      options: [],
-      options_dep: [],
-      options_arr: [],
-      depCityNameSelected: "",
-      arrCityNameSelected: "",
-      cityNameSelected: ""
+      form_data: {
+        country_code: "",
+        language: "",
+        page_type: "",
+        page_subtype: "",
+        section: "",
+        from_city: "",
+        to_city: "",
+        content_type: "",
+        airline_name: ""
+      },
+      routesHide: true,
+      sectionHide: true,
+      pageSubTypeHide: true,
+      contentTypeHide: true
     };
+    this.optReturn = this.optReturn.bind(this);
+    this.countryRtn = this.countryRtn.bind(this);
   }
+  handleChange(field, e) {
+    let _self = this;
+    let form_data = _self.state.form_data;
+    form_data[field] = e.target.value;
+    _self.setState({
+      form_data
+    });
+    // Flight schedule flow starting
+    if (
+      e.target.name === "page_type" &&
+      (e.target.value === "flight-schedule" ||
+        e.target.value == "flight-tickets")
+    ) {
+      let form_json = {
+        section: "",
+        to_city: "",
+        from_city: "",
+        page_subtype: "",
+        content_type: ""
+      };
+      Object.keys(form_json).map(form => (form_data[form] = ""));
+      this.setState({
+        form_data
+      });
+      this.setState({
+        sectionHide: true,
+        pageSubTypeHide: false,
+        routesHide: true,
+        contentTypeHide: true
+      });
+    }
+    if (e.target.name === "page_subtype") {
+      let form_json = {
+        section: "",
+        to_city: "",
+        from_city: "",
+        content_type: ""
+      };
+      Object.keys(form_json).map(form => (form_data[form] = ""));
+      this.setState({
+        form_data
+      });
+      this.setState({
+        sectionHide: false,
+        routesHide: true,
+        contentTypeHide: e.target.value == "routes" ? false : true
+      });
+    }
+    if (e.target.name == "content_type") {
+      let form_json = {
+        to_city: "",
+        from_city: ""
+      };
+      Object.keys(form_json).map(form => (form_data[form] = ""));
+      this.setState({
+        form_data
+      });
+      this.setState({
+        routesHide: e.target.value == "unique" ? false : true
+      });
+    }
+    // Flight schedule flow ending
 
-  componentWillReceiveProps(nextProps) {
-    debugger
-    this.setState({
-      currentSubType: nextProps.currentSubType,
-      categoryType: nextProps.categoryType,
-      title: nextProps.title,
-      description: nextProps.description,
-      keywords: nextProps.keywords,
-      h1Tag: nextProps.h1Tag,
-      cityName: nextProps.cityName,
-      depCityName: nextProps.depCityName,
-      arrCityName: nextProps.arrCityName,
-      depCityNameSelected: nextProps.depCityNameSelected,
-      arrCityNameSelected: nextProps.arrCityNameSelected
+    if (
+      form_data["country_code"] !== "" &&
+      form_data["language"] !== "" &&
+      form_data["section"] !== ""
+    ) {
+      debugger;
+    }
+    if (e.target.name === "page_type" && e.target.value === "flight-booking") {
+      let form_json = {
+        page_subtype: "",
+        section: "",
+        from_city: "",
+        to_city: "",
+        content_type: ""
+      };
+      Object.keys(form_json).map(form => (form_data[form] = ""));
+      this.setState({
+        form_data
+      });
+      this.setState({
+        bookingPage: false,
+        sectionHide: false,
+        pageSubTypeHide: false,
+        routesHide: true
+      });
+    }
+  }
+  optReturn(optdata) {
+    return optdata.map((sub, i) => {
+      return (
+        <option key={i} value={sub}>
+          {sub}
+        </option>
+      );
     });
   }
-
+  countryRtn(optData) {
+    return optData.map((country, i) => {
+      return (
+        <option key={i} value={country.code}>
+          {country.name}
+        </option>
+      );
+    });
+  }
   render() {
-    debugger;
-    let subTypeField, category, fields;
-    const subtypeOptions = {
-      "select sub page type": "select sub page type",
-      "schedule-routes": "Schedule Routes",
-      "flights-from": "Flights From",
-      "flights-to": "Flights To",
-      index: "Index"
-    };
-    const {
-      title,
-      description,
-      keywords,
-      content,
-      h1Tag,
-      cityName,
-      depCityName,
-      arrCityName,
-      currentSubType,
-      categoryType,
-      readOnlyValue,
-      selectedOption,
-      options,
-      options_dep,
-      options_arr,
-      depCityNameSelected,
-      arrCityNameSelected,
-      cityNameSelected
-    } = this.props;
-    subTypeField = (
-      <Form.Group as={Col}>
-        <Form.Label>Sub PageType</Form.Label>
-        <Form.Control
-          as="select"
-          name="currentSubType"
-          value={currentSubType}
-          onChange={e => this.props.handleChange(e, "currentSubType")}
-          required
-        >
-          {Object.keys(subtypeOptions).map(option => (
-            <option key={option} value={option}>
-              {subtypeOptions[option]}
-            </option>
-          ))}
-        </Form.Control>
-      </Form.Group>
-    );
+    let _self = this;
+    let form_data = _self.state.form_data;
 
-    if (currentSubType === "index") {
-      category = (
-        <Form.Group controlId="exampleForm.ControlSelect1">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
-            as="select"
-            value={categoryType}
-            onChange={e => this.props.handleChange(e, "categoryType")}
-            name="categoryType"
-            required
-          >
-            <option>Select Category</option>
-            <option>Domestic</option>
-            <option>International</option>
-          </Form.Control>
-        </Form.Group>
-      );
-    } else if (currentSubType !== "index" && currentSubType !== "") {
-      category = (
-        <Form.Group controlId="exampleForm.ControlSelect1">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
-            as="select"
-            value={categoryType}
-            onChange={e => this.props.handleChange(e, "categoryType")}
-            name="categoryType"
-            required
-          >
-            <option value="">Select Category</option>
-            <option value="uniq">Unique</option>
-            <option value="common">Common</option>
-          </Form.Control>
-        </Form.Group>
-      );
-    } else {
-    }
-
-    fields = (
-      <div>
-        <Form.Group className="mb-3">
-          <Form.Control
-            type="text"
-            placeholder="Search  Destination"
-            name="title"
-            placeholder="Title"
-            aria-label="Title"
-            value={title}
-            required
-            onChange={e => this.props.handleChange(e, "title")}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
-            type="text"
-            name="description"
-            placeholder="Description"
-            aria-label="Description"
-            aria-describedby="basic-addon1"
-            value={description}
-            required
-            onChange={e => this.props.handleChange(e, "description")}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
-            name="keywords"
-            type="text"
-            placeholder="Key words"
-            aria-label="key words"
-            value={keywords}
-            required
-            onChange={e => this.props.handleChange(e, "keywords")}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
-            type="text"
-            aria-label="H1 Title"
-            value={h1Tag}
-            onChange={e => this.props.handleChange(e, "h1Tag")}
-            name="h1Tag"
-            required
-            placeholder="Enter H1 Title"
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
-            type="text"
-            aria-label="H1 Title"
-            value={content}
-            onChange={e => this.props.handleChange(e, "content")}
-            name="content"
-            required
-            placeholder="Enter Content "
-          />
-        </Form.Group>
-
-        {categoryType === "uniq" && (currentSubType === "flights-from" || currentSubType === "flights-to") ? (
-          <Select1
-            value={cityNameSelected}
-            onChange={p => this.props.handleSelectedInput(p, "cityName")}
-            options={options}
-            name="cityName"
-            required
-            // onInputChange={this.handleAirlineSearch}
-            onInputChange={e => this.props.handleAutoSearch(e, "cityName")}
-          />
-        ) : null}
-        {categoryType === "uniq" && currentSubType === "schedule-routes" ? (
-          <div>
-            <Select1
-              value={depCityNameSelected}
-              onChange={p => this.props.handleSelectedInput(p, "depCityName")}
-              options={options_dep}
-              name="depCityName"
-              required
-              // onInputChange={this.handleAirlineSearch}
-              onInputChange={e => this.props.handleAutoSearch(e, "depCityName")}
-            />
-
-            <Select1
-              value={arrCityNameSelected}
-              onChange={p => this.props.handleSelectedInput(p, "arrCityName")}
-              options={options_arr}
-              name="arrCityName"
-              required
-              // onInputChange={this.handleAirlineSearch}
-              onInputChange={e => this.props.handleAutoSearch(e, "arrCityName")}
-            />
-          </div>
-        ) : null}
-      </div>
-    );
+    let country_codes = [
+      { name: "India", code: "in" },
+      { name: "Qatar", code: "qa" },
+      { name: "Arab Emirates", code: "ae" },
+      { name: "Kuwait", code: "kw" },
+      { name: "Saudi Arabia", code: "sa" },
+      { name: "Bahrain", code: "bh" },
+      { name: "Oman", code: "om" }
+    ];
+    let languages = [
+      { name: "English", code: "en" },
+      { name: "Arabic", code: "ar" },
+      { name: "Hindi", code: "hi" }
+    ];
+    let pageType = [
+      { code: "flight-schedule", name: "Flight Schedule" },
+      { code: "flight-booking", name: "Flight Booking" },
+      { code: "flight-tickets", name: "Flight Tickets" }
+    ];
+    let flightScheduleSubPages = ["index", "routes"];
+    let flightBookingSubPages = [
+      "overview",
+      "airline-route",
+      "pnr",
+      "webcheck-in",
+      "baggages",
+      "customer-support"
+    ];
+    let flightTicketSubpages = ["index", "route"];
+    let sections = ["domestic", "international"];
+    let contentTypeOpt = ["unique", "templetized"];
+    let countryOpt = this.countryRtn(country_codes);
+    let languageOpt = this.countryRtn(languages);
+    let pageTypeOpt = this.countryRtn(pageType);
+    let flightScheduleSubPagesOpt = this.optReturn(flightScheduleSubPages);
+    let flightBookingSubPagesOpt = this.optReturn(flightBookingSubPages);
+    let flightTicketSubpagesOpt = this.optReturn(flightTicketSubpages);
+    let sectionOpt = this.optReturn(sections);
+    let contentOpt = this.optReturn(contentTypeOpt);
     return (
-      <div>
-        {subTypeField}
-        {category}
-        {currentSubType !== "" ? fields : null}
+
+      <div className="top-wrapper">
+        <div className="filter-fileds">
+          <ul className="list-inline">
+            <li>
+              <label>Country</label>
+              <select onChange={this.handleChange.bind(this, "country_code")}
+                name="country_code"
+                value={form_data.country_code}>
+                 <option value="" disabled={true} selected>
+                  select country
+                </option>
+                {countryOpt}
+              </select>
+            </li>
+            <li>
+              <label>Language</label>
+              <select as="select"
+                onChange={this.handleChange.bind(this, "language")}
+                name="language"
+                value={form_data.language}>
+                <option value="" disabled={true} selected>
+                  select language
+                </option>
+                {languageOpt}
+              </select>
+            </li>
+            <li>
+              <label>Page Type</label>
+              <select as="select"
+                onChange={this.handleChange.bind(this, "page_type")}
+                name="page_type"
+                value={form_data.page_type}>
+                 <option value="" disabled={true} selected>
+                  select pagetype
+                </option>
+                {pageTypeOpt}
+              </select>
+            </li>
+            <li className={_self.state.pageSubTypeHide ? "hidden" : ""}>
+              <label>Sub Page Type</label>
+              <select as="select"
+                onChange={this.handleChange.bind(this, "page_subtype")}
+                name="page_subtype"
+                value={form_data.page_subtype}>
+                <option value="" disabled={true} selected>
+                  page subtype
+                </option>
+               {form_data.page_type == "flight-schedule" ||
+                form_data.page_type == "flight-tickets"
+                  ? form_data.page_type == "flight-schedule"
+                    ? flightScheduleSubPagesOpt
+                    : flightTicketSubpagesOpt
+                  : flightBookingSubPagesOpt}
+              </select>
+            </li>
+            <li  className={this.state.sectionHide ? "hidden" : ""}>
+              <label>Section</label>
+              <select name="section"
+                value={form_data.section}
+                onChange={this.handleChange.bind(this, "section")}>
+                <option value="" disabled={true} selected>
+                  section
+                </option>
+                {sectionOpt}
+                </select>
+            </li>
+            <li  className={
+                form_data.page_subtype == "index" || this.state.contentTypeHide
+                  ? "hidden"
+                  : ""
+              }>
+              <label>content type</label>
+              <select  name="content_type"
+                value={form_data.content_type}
+                onChange={this.handleChange.bind(this, "content_type")}>
+               <option value="" disabled={true} selected>
+                  content type
+                </option>
+                {contentOpt}
+                </select>
+            </li>
+            <div className={this.state.routesHide ? "hidden" : ""}>
+            <li>
+              <label>Departure city</label>
+             <input type="text" name="from_city"
+                placeholder="Departure city"
+                onChange={this.handleChange.bind(this, "from_city")} />
+            </li>
+             <li>
+              <label>Arrival city</label>
+             <input type="text" placeholder="Arrival city"
+                name="to_city"
+                onChange={this.handleChange.bind(this, "to_city")} />
+            </li>
+            </div>
+             <li className={
+              form_data.page_type == "flight-booking" &&
+              form_data.page_subtype == "airline-route"
+                ? ""
+                : "hidden"
+            }>
+              <label>Airline Name</label>
+             <input type="text" placeholder="Airline Name"
+                name="airline_name"
+                onChange={this.handleChange.bind(this, "airline_name")} />
+            </li>
+          </ul>
+          {JSON.stringify(this.state.form_data)}
+        </div>
       </div>
     );
   }
 }
-
-export default FlightScheduleFields;
+export default FlightSchedule;
