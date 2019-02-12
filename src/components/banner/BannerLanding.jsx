@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import FlightSchedule from './Flights/FlightSchedule'
+import LinksComponent from './Flights/LinksComponent'
 import HotelsBanner from './Hotels/HotelsBanner'
 import CollectionBanner from './Collection/CollectionBanner'
 import TrainsBanner from './Trains/TrainsBanner'
@@ -33,7 +33,8 @@ class BannerLanding extends Component{
 			</select>
 			 {banner_type === 'Trains'  || banner_type == 'Hotels' ?(banner_type === 'Trains' ? <TrainsBanner /> : <HotelsBanner />) :(banner_type === 'Collection' ? <CollectionBanner /> : <FlightSchedule />)}
 		*/}
-			<FlightSchedule />
+			{/*<FlightSchedule />*/}
+			<LinksComponent />
 			</div>
 			)
 	}
