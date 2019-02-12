@@ -115,12 +115,12 @@ class Flights extends Component {
       axios
         .get(url, { params: { query_term: target_value } })
         .then(response => {
-          debugger;
           if (fieldName === "airlineName") {
             this.setState({ options: response.data });
           } else if (fieldName === "depCityName") {
             this.setState({ options_dep: response.data });
           } else if (fieldName === "arrCityName") {
+            debugger;
             this.setState({ options_arr: response.data });
           }
         })
@@ -134,22 +134,23 @@ class Flights extends Component {
   handleSelectedInput = (p, fieldName) => {
     debugger;
     if (fieldName === "airlineName") {
-      this.setState({ selectedOption: p });
+      this.setState({ selectedOption: p, airlineName: p.value });
     } else if (fieldName === "depCityName") {
-      this.setState({ depCityNameSelected: p });
+      this.setState({ depCityNameSelected: p, depCityName: p.value });
     } else if (fieldName === "arrCityName") {
-      this.setState({ arrCityNameSelected: p });
+      this.setState({ arrCityNameSelected: p, arrCityName: p.value });
     }
   };
 
   handleFormSubmit = e => {
     const flightValues = this.state;
+    debugger;
     let postData = {
       flights_data: {
         domain: flightValues["currentDomain"],
         language: flightValues["currentLanguage"],
         page_type: flightValues["currentPageType"],
-        page_subtype: flightValues["currentSubtype"],
+        page_subtype: flightValues["currentSubType"],
         category: flightValues["categoryType"],
         title: flightValues["title"],
         description: flightValues["description"],
