@@ -42,6 +42,7 @@ class FlightScheduleFields extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    debugger
     this.setState({
       currentSubType: nextProps.currentSubType,
       categoryType: nextProps.categoryType,
@@ -51,7 +52,9 @@ class FlightScheduleFields extends Component {
       h1Tag: nextProps.h1Tag,
       cityName: nextProps.cityName,
       depCityName: nextProps.depCityName,
-      arrCityName: nextProps.arrCityName
+      arrCityName: nextProps.arrCityName,
+      depCityNameSelected: nextProps.depCityNameSelected,
+      arrCityNameSelected: nextProps.arrCityNameSelected
     });
   }
 
