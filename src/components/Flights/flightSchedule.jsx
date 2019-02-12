@@ -6,54 +6,259 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
+import TextField from "@material-ui/core/TextField";
+import "froala-editor/js/froala_editor.pkgd.min.js";
 
-class FlightScheduleFields extends Component {
+// Require Editor CSS files.
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+import "font-awesome/css/font-awesome.css";
+import FroalaEditor from "react-froala-wysiwyg";
+class FlightScheduleField extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      currentSubType: this.props.currentSubType,
+      categoryType: this.props.categoryType,
+      title: this.props.title,
+      description: this.props.description,
+      content: this.props.content,
+      h1Tag: this.props.h1Tag,
+      keywords: this.props.keywords,
+      cityName: this.props.cityName,
+      depCityName: this.props.depCityName,
+      arrCityName: this.props.arrCityName
+    };
   }
-  render() {
-    let subTypeField;
-    const { classes } = this.props;
-    debugger;
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      currentSubType: nextProps.currentSubType,
+      categoryType: nextProps.categoryType,
+      title: nextProps.title,
+      description: nextProps.description,
+      keywords: nextProps.keywords,
+      h1Tag: nextProps.h1Tag,
+      cityName: nextProps.cityName,
+      depCityName: nextProps.depCityName,
+      arrCityName: nextProps.arrCityName
+    });
+  }
+
+  render() {
+    let subTypeField, category, fields;
+    const subtypeOptions = {
+      "schedule-routes": "Schedule Routes",
+      "flights-from": "Flights From",
+      "flights-to": "Flights To",
+      index: "Index"
+    };
+    const {
+      classes,
+      title,
+      description,
+      keywords,
+      content,
+      h1Tag,
+      cityName,
+      depCityName,
+      arrCityName,
+      currentSubType,
+      categoryType
+    } = this.props;
+    debugger;
     subTypeField = (
       <FormControl className={classes.formControl}>
         <InputLabel shrink htmlFor="subPageType-Label-placeholder">
           Sub PageType
         </InputLabel>
         <Select
-          value={this.props.currentSubtype}
-          onChange={this.props.handleCurrentSubtype}
-          input={<Input name="domain" id="domain-label-placeholder" />}
+          value={currentSubType}
+          onChange={e => this.props.handleChangeField(e, "currentSubType")}
+          input={<Input name="currentSubType" id="subtype-label-placeholder" />}
           displayEmpty
-          name="currentDomain"
+          name="currentSubType"
           className={classes.selectEmpty}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>Select Options</em>
           </MenuItem>
-          <MenuItem value="schedule-routes">
-            <em>Schedule Routes</em>
-          </MenuItem>
-          <MenuItem value="from">
-            <em>From</em>
-          </MenuItem>
-          <MenuItem value="to">
-            <em>To</em>
-          </MenuItem>
-          <MenuItem value="index">
-            <em>Index </em>
-          </MenuItem>
+          {Object.keys(subtypeOptions).map(option => (
+            <MenuItem key={option} value={option}>
+              {subtypeOptions[option]}
+            </MenuItem>
+          ))}
         </Select>
         <FormHelperText />
       </FormControl>
     );
-    return <div>{subTypeField}</div>;
+
+    if (currentSubType === "index") {
+      category = (
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink htmlFor="subPageType-Label-placeholder">
+            Category
+          </InputLabel>
+          <Select
+            value={categoryType}
+            onChange={e => this.props.handleChangeField(e, "categoryType")}
+            input={<Input name="subtype" id="subtype-label-placeholder" />}
+            displayEmpty
+            name="categoryType"
+            className={classes.selectEmpty}
+          >
+            <MenuItem value="">
+              <em>Select Option</em>
+            </MenuItem>
+            <MenuItem value="common">
+              <em>International</em>
+            </MenuItem>
+            <MenuItem value="uniq">
+              <em>Domestic</em>
+            </MenuItem>
+          </Select>
+          <FormHelperText />
+        </FormControl>
+      );
+    } else if (currentSubType !== "index" && currentSubType !== "") {
+      category = (
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink htmlFor="subPageType-Label-placeholder">
+            Category
+          </InputLabel>
+          <Select
+            value={categoryType}
+            onChange={e => this.props.handleChangeField(e, "categoryType")}
+            input={<Input name="subtype" id="subtype-label-placeholder" />}
+            displayEmpty
+            name="categoryType"
+            className={classes.selectEmpty}
+          >
+            <MenuItem value="">
+              <em>Select Option</em>
+            </MenuItem>
+            <MenuItem value="common">
+              <em>Common</em>
+            </MenuItem>
+            <MenuItem value="uniq">
+              <em>Unique</em>
+            </MenuItem>
+          </Select>
+          <FormHelperText />
+        </FormControl>
+      );
+    } else {
+    }
+
+    fields = (
+      <div>
+        <TextField
+          id="outlined-name"
+          label="Title"
+          className={classes.textField}
+          value={title}
+          // onChange={handleTitleChange}
+          onChange={e => this.props.handleChangeField(e, "title")}
+          name="title"
+          margin="normal"
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-name"
+          label="Description"
+          className={classes.textField}
+          value={description}
+          onChange={e => this.props.handleChangeField(e, "description")}
+          name="description"
+          margin="normal"
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-textarea"
+          label="Keywords"
+          placeholder="MultiLine keywords"
+          multiline
+          className={classes.textField}
+          value={keywords}
+          onChange={e => this.props.handleChangeField(e, "keywords")}
+          name="keywords"
+          margin="normal"
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-name"
+          label="H1 Title"
+          className={classes.textField}
+          value={h1Tag}
+          onChange={e => this.props.handleChangeField(e, "h1Tag")}
+          name="h1Tag"
+          margin="normal"
+          variant="outlined"
+          placeholder="Enter H1 Title"
+        />
+
+        <TextField
+          id="outlined-textarea"
+          label="Content"
+          placeholder="Enter content"
+          multiline
+          fullWidth
+          className={classes.textField}
+          value={content}
+          onChange={e => this.props.handleChangeField(e, "content")}
+          name="content"
+          margin="normal"
+          variant="outlined"
+        />
+        {categoryType === "uniq" && currentSubType !== "index" ? (
+          <TextField
+            id="outlined-airline-name"
+            label="City Name"
+            className={classes.textField}
+            value={cityName}
+            onChange={e => this.props.autoCompleteFields(e, "cityName")}
+            name="airlineName"
+            margin="normal"
+            variant="outlined"
+          />
+        ) : null}
+        {categoryType === "uniq" && currentSubType === "schedule-routes" ? (
+          <div>
+            <TextField
+              id="outlined-dep-city-name"
+              label="Source City"
+              className={classes.textField}
+              value={depCityName}
+              onChange={e => this.props.autoCompleteFields(e, "depCityName")}
+              name="depCityName"
+              margin="normal"
+              variant="outlined"
+            />
+            <TextField
+              id="outlined-arr-city-name"
+              label="Destination City"
+              className={classes.textField}
+              value={arrCityName}
+              onChange={e => this.props.autoCompleteFields(e, "arrCityName")}
+              name="arrCityName"
+              margin="normal"
+              variant="outlined"
+            />
+          </div>
+        ) : null}
+      </div>
+    );
+    return (
+      <div>
+        {subTypeField}
+        {category}
+        {currentSubType !== "" ? fields : null}
+      </div>
+    );
   }
 }
 
-FlightScheduleFields.propTypes = {
+FlightScheduleField.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default FlightScheduleFields;
+export default FlightScheduleField;

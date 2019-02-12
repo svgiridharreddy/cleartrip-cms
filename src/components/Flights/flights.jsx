@@ -80,6 +80,7 @@ class Flights extends Component {
       keywords: "",
       content: "",
       h1Tag: "",
+      cityName: "",
       airlineName: "",
       depCityName: "",
       arrCityName: "",
@@ -165,6 +166,7 @@ class Flights extends Component {
         keywords: flightValues["keywords"],
         content: flightValues["content"],
         h1_title: flightValues["h1Tag"],
+        city_name: flightValues["cityName"],
         airline_name: flightValues["airlineName"],
         dep_city_name: flightValues["depCityName"],
         arr_city_name: flightValues["arrCityName"]
@@ -213,7 +215,8 @@ class Flights extends Component {
       keywords: flight.keyword,
       content: flight.content,
       h1Tag: flight.heading,
-      airlineName: flight.airline_name
+      airlineName: flight.airline_name,
+      cityName: flights.city_name
     });
   };
   componentWillMount() {
@@ -236,6 +239,7 @@ class Flights extends Component {
       keywords,
       content,
       h1Tag,
+      cityName,
       airlineName,
       depCityName,
       arrCityName
@@ -286,12 +290,27 @@ class Flights extends Component {
     } else if (currentPageType === "flight-schedule") {
       fields = (
         <FlightScheduleFields
-          handleCurrentSubtype={this.handleCurrentSubtype}
-          currentSubtype={this.state.currentSubtype}
+          currentSubType={currentSubType}
+          categoryType={categoryType}
           classes={classes}
           name="flight-schedule"
-          categoryType={categoryType}
-          handleChangeCategory={this.handleChangeCategory}
+          handleChangeField={(e, fieldName) =>
+            this.handleChangeField(e, fieldName)
+          }
+          autoCompleteFields={(e, fieldName) =>
+            this.autoCompleteFields(e, fieldName)
+          }
+          handleInputChange={(e, fieldName) =>
+            this.handleInputChange(e, fieldName)
+          }
+          title={title}
+          description={description}
+          keywords={keywords}
+          content={content}
+          h1Tag={h1Tag}
+          cityName={cityName}
+          depCityName={depCityName}
+          arrCityName={arrCityName}
         />
       );
     }

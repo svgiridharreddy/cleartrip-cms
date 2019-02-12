@@ -43,6 +43,7 @@ class Flights extends Component {
       content: "",
       h1Tag: "",
       airlineName: "",
+      cityName: "",
       depCityName: "",
       arrCityName: "",
       options: [],
@@ -54,7 +55,8 @@ class Flights extends Component {
       options_dep: [],
       options_arr: [],
       depCityNameSelected: "",
-      arrCityNameSelected: ""
+      arrCityNameSelected: "",
+      cityNameSelected: ""
     };
   }
 
@@ -115,12 +117,12 @@ class Flights extends Component {
       axios
         .get(url, { params: { query_term: target_value } })
         .then(response => {
-          debugger;
           if (fieldName === "airlineName") {
             this.setState({ options: response.data });
           } else if (fieldName === "depCityName") {
             this.setState({ options_dep: response.data });
           } else if (fieldName === "arrCityName") {
+            debugger;
             this.setState({ options_arr: response.data });
           }
         })
@@ -134,22 +136,27 @@ class Flights extends Component {
   handleSelectedInput = (p, fieldName) => {
     debugger;
     if (fieldName === "airlineName") {
-      this.setState({ selectedOption: p });
+      this.setState({ selectedOption: p, airlineName: p.value });
     } else if (fieldName === "depCityName") {
-      this.setState({ depCityNameSelected: p });
+      this.setState({ depCityNameSelected: p, depCityName: p.value });
     } else if (fieldName === "arrCityName") {
-      this.setState({ arrCityNameSelected: p });
+      this.setState({ arrCityNameSelected: p, arrCityName: p.value });
+    }
+    else if (fieldName === "cityName") {
+      this.setState({ cityNameSelected: p });
     }
   };
 
   handleFormSubmit = e => {
+    e.preventDefault();
     const flightValues = this.state;
+
     let postData = {
       flights_data: {
         domain: flightValues["currentDomain"],
         language: flightValues["currentLanguage"],
         page_type: flightValues["currentPageType"],
-        page_subtype: flightValues["currentSubtype"],
+        page_subtype: flightValues["currentSubType"],
         category: flightValues["categoryType"],
         title: flightValues["title"],
         description: flightValues["description"],
@@ -157,8 +164,10 @@ class Flights extends Component {
         content: flightValues["content"],
         h1_title: flightValues["h1Tag"],
         airline_name: flightValues["airlineName"],
-        dep_city_name: flightValues["depCityName"],
-        arr_city_name: flightValues["arrCityName"]
+        city_name: flightValues["cityNameSelected"]["value"],
+        dep_city_name: flightValues["arrCityNameSelected"]["value"],
+        arr_city_name: flightValues["arrCityNameSelected"]["value"]
+
       }
     };
 
@@ -192,6 +201,7 @@ class Flights extends Component {
       content: flight.content,
       h1Tag: flight.heading,
       airlineName: flight.airline_name,
+      cityName: flight.city_name,
       readOnlyValue: true
     });
   };
@@ -216,6 +226,7 @@ class Flights extends Component {
       content,
       h1Tag,
       airlineName,
+      cityName,
       depCityName,
       arrCityName,
       readOnlyValue
@@ -275,19 +286,43 @@ class Flights extends Component {
     } else if (currentPageType === "flight-schedule") {
       fields = (
         <FlightScheduleFields
-          handleCurrentSubtype={this.handleCurrentSubtype}
-          currentSubtype={this.state.currentSubtype}
+          currentSubType={currentSubType}
+          categoryType={categoryType}
           classes={classes}
           name="flight-schedule"
-          categoryType={categoryType}
-          handleChangeCategory={this.handleChangeCategory}
+          handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
+          autoCompleteFields={(e, fieldName) =>
+            this.autoCompleteFields(e, fieldName)
+          }
+          handleInputChange={(e, fieldName) =>
+            this.handleInputChange(e, fieldName)
+          }
+          title={title}
+          description={description}
+          keywords={keywords}
+          content={content}
+          h1Tag={h1Tag}
+          cityName={cityName}
+          depCityName={depCityName}
+          arrCityName={arrCityName}
+          readOnlyValue={readOnlyValue}
+          handleAutoSearch={(e, fieldName) =>
+            this.handleAutoSearch(e, fieldName)
+          }
+          options={this.state.options}
+          handleSelectedInput={(p, fieldName) =>
+            this.handleSelectedInput(p, fieldName)
+          }
+          options_dep={this.state.options_dep}
+          options_arr={this.state.options_arr}
+          readOnlyValue={readOnlyValue}
         />
       );
     }
     return (
       <div>
         <h1>Cleartrip Flights</h1>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit.bind(this)}>
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>Select Country</Form.Label>
@@ -331,7 +366,7 @@ class Flights extends Component {
 
           {fields}
           <ButtonToolbar>
-            <Button variant="success" onClick={this.handleFormSubmit}>
+            <Button variant="success" type="submit">
               Submit
             </Button>
           </ButtonToolbar>
