@@ -1,58 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {
-  withStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
 import axios from "axios";
 import { Redirect, Link } from "react-router-dom";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Button from "@material-ui/core/Button";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import FlightBookingFields from "./flightBooking";
-import FlightScheduleFields from "./flightSchedule";
-import green from "@material-ui/core/colors/green";
-import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import FlightBookingFields from "./FlightBooking";
+import FlightScheduleFields from "./FlightSchedule";
+import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
 
-const styles = theme => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
-  },
-  dense: {
-    marginTop: 16
-  },
-  menu: {
-    width: 200
-  },
-  formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2
-  }
-});
-const theme = createMuiTheme({
-  palette: {
-    primary: green
-  },
-  typography: {
-    useNextVariants: true
-  }
-});
-const pageTypes = ["flight-booking", "flight-schedule", "flight-tickets"];
-const languages = ["English", "Arabic"];
+const pageTypes = [
+  "Select Page Type",
+  "flight-booking",
+  "flight-schedule",
+  "flight-tickets"
+];
+const languages = ["Select Language", "English", "Arabic"];
 const domains = {
+  selectDomain: "Select Domain",
   IN: "India",
   AE: "United Arab Emirates",
   SA: "Saudi Arabia",
@@ -81,16 +43,24 @@ class Flights extends Component {
       content: "",
       h1Tag: "",
       airlineName: "",
+      cityName: "",
       depCityName: "",
       arrCityName: "",
       options: [],
       isHomePage: false,
       flight: {},
-      query: ""
+      readOnly: false,
+      selectedOption: "",
+      options: [],
+      options_dep: [],
+      options_arr: [],
+      depCityNameSelected: "",
+      arrCityNameSelected: "",
+      cityNameSelected: ""
     };
   }
 
-  handleChangeField = (e, fieldName) => {
+  handleChange = (e, fieldName) => {
     this.setState({ [fieldName]: e.target.value });
   };
 
@@ -126,39 +96,71 @@ class Flights extends Component {
     );
   };
 
-  autoCompleteFields = (e, fieldName) => {
-    let target_value = e.target.value;
-    debugger;
+  returnOptions = options => {
+    return options.map((opt, idx) => {
+      return (
+        <option key={idx} value={opt}>
+          {opt}
+        </option>
+      );
+    });
+  };
+  handleAutoSearch = (e, fieldName) => {
+    let target_value = e;
     if (target_value !== "" && target_value.length >= -1) {
       let url = "";
       if (fieldName === "airlineName") {
-        this.setState({ [fieldName]: target_value });
         url = "http://localhost:3000/airline_autocomplete";
       } else {
         url = "http://localhost:3000/city_autocomplete";
       }
-
       axios
         .get(url, { params: { query_term: target_value } })
         .then(response => {
-          this.setState({ airlines: response.data });
-          debugger;
-          console.log(response);
+          if (fieldName === "airlineName") {
+            this.setState({ options: response.data });
+          } else if (fieldName === "depCityName") {
+            this.setState({ options_dep: response.data });
+          } else if (fieldName === "arrCityName") {
+            debugger;
+            this.setState({ options_arr: response.data });
+          }
+          else if (fieldName === "cityName") {
+            this.setState({ options: response.data });
+          }
         })
         .then(response => {
           console.log();
         });
+      console.log(`Option selected:`, target_value);
+    }
+  };
+
+  handleSelectedInput = (p, fieldName) => {
+    debugger;
+    if (fieldName === "airlineName") {
+      this.setState({ selectedOption: p, airlineName: p.value });
+    } else if (fieldName === "depCityName") {
+      this.setState({ depCityNameSelected: p, depCityName: p.value });
+    } else if (fieldName === "arrCityName") {
+      this.setState({ arrCityNameSelected: p, arrCityName: p.value });
+    }
+    else if (fieldName === "cityName") {
+      debugger
+      this.setState({ cityNameSelected: p,cityName: p.value });
     }
   };
 
   handleFormSubmit = e => {
+    e.preventDefault();
     const flightValues = this.state;
+
     let postData = {
       flights_data: {
         domain: flightValues["currentDomain"],
         language: flightValues["currentLanguage"],
         page_type: flightValues["currentPageType"],
-        page_subtype: flightValues["currentSubtype"],
+        page_subtype: flightValues["currentSubType"],
         category: flightValues["categoryType"],
         title: flightValues["title"],
         description: flightValues["description"],
@@ -166,8 +168,10 @@ class Flights extends Component {
         content: flightValues["content"],
         h1_title: flightValues["h1Tag"],
         airline_name: flightValues["airlineName"],
-        dep_city_name: flightValues["depCityName"],
-        arr_city_name: flightValues["arrCityName"]
+        city_name: flightValues["cityNameSelected"]["value"],
+        dep_city_name: flightValues["depCityNameSelected"]["value"],
+        arr_city_name: flightValues["arrCityNameSelected"]["value"]
+
       }
     };
 
@@ -186,22 +190,11 @@ class Flights extends Component {
       .catch(response => {
         this.setState({ isHomePage: false });
       });
-    // fetch("/flights", {
-    //   method: "POST",
-    //   body: postData,
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // })
-    //   .then(response => {
-    //     return response.json();
-    //   })
-    //   .then(fruit => {
-    //     this.addNewFruit(fruit);
-    //   });
   };
   onRecieveProps = () => {
+
     var { flight } = this.props.location.state;
+    debugger
     this.setState({
       currentPageType: flight.page_type,
       currentDomain: flight.domain,
@@ -213,11 +206,18 @@ class Flights extends Component {
       keywords: flight.keyword,
       content: flight.content,
       h1Tag: flight.heading,
-      airlineName: flight.airline_name
+      airlineName: flight.airline_name,
+      cityName: flight.city_name,
+      depCityNameSelected: { label:flight.source, value:flight.source},
+      depCityName:flight.source,
+      arrCityNameSelected: { label:flight.destination, value:flight.destination},
+      arrCityName:flight.destination,
+      readOnlyValue: true
     });
   };
   componentWillMount() {
     if (this.props.location.state !== undefined) {
+      debugger
       this.onRecieveProps();
     }
   }
@@ -237,8 +237,12 @@ class Flights extends Component {
       content,
       h1Tag,
       airlineName,
+      cityName,
       depCityName,
-      arrCityName
+      arrCityName,
+      depCityNameSelected,
+      arrCityNameSelected,
+      readOnlyValue
     } = this.state;
     let fields;
     if (this.state.isHomePage) {
@@ -264,9 +268,7 @@ class Flights extends Component {
           categoryType={categoryType}
           classes={classes}
           name="flight-booking"
-          handleChangeField={(e, fieldName) =>
-            this.handleChangeField(e, fieldName)
-          }
+          handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
           autoCompleteFields={(e, fieldName) =>
             this.autoCompleteFields(e, fieldName)
           }
@@ -281,122 +283,112 @@ class Flights extends Component {
           airlineName={airlineName}
           depCityName={depCityName}
           arrCityName={arrCityName}
+          readOnlyValue={readOnlyValue}
+          handleAutoSearch={(e, fieldName) =>
+            this.handleAutoSearch(e, fieldName)
+          }
+          options={this.state.options}
+          handleSelectedInput={(p, fieldName) =>
+            this.handleSelectedInput(p, fieldName)
+          }
+          options_dep={this.state.options_dep}
+          options_arr={this.state.options_arr}
+          readOnlyValue={readOnlyValue}
         />
       );
     } else if (currentPageType === "flight-schedule") {
       fields = (
         <FlightScheduleFields
-          handleCurrentSubtype={this.handleCurrentSubtype}
-          currentSubtype={this.state.currentSubtype}
+          currentSubType={currentSubType}
+          categoryType={categoryType}
           classes={classes}
           name="flight-schedule"
-          categoryType={categoryType}
-          handleChangeCategory={this.handleChangeCategory}
+          handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
+          autoCompleteFields={(e, fieldName) =>
+            this.autoCompleteFields(e, fieldName)
+          }
+          handleInputChange={(e, fieldName) =>
+            this.handleInputChange(e, fieldName)
+          }
+          title={title}
+          description={description}
+          keywords={keywords}
+          content={content}
+          h1Tag={h1Tag}
+          cityName={cityName}
+          depCityName={depCityName}
+          arrCityName={arrCityName}
+          depCityNameSelected={depCityNameSelected}
+          arrCityNameSelected={arrCityNameSelected}
+          readOnlyValue={readOnlyValue}
+          handleAutoSearch={(e, fieldName) =>
+            this.handleAutoSearch(e, fieldName)
+          }
+          options={this.state.options}
+          handleSelectedInput={(p, fieldName) =>
+            this.handleSelectedInput(p, fieldName)
+          }
+          options_dep={this.state.options_dep}
+          options_arr={this.state.options_arr}
+          readOnlyValue={readOnlyValue}
         />
       );
     }
     return (
       <div>
         <h1>Cleartrip Flights</h1>
-        <form className={classes.container} noValidate autoComplete="off">
-          <FormControl className={classes.formControl}>
-            <InputLabel shrink htmlFor="domains-Label-placeholder">
-              Domains
-            </InputLabel>
-            <Select
-              value={currentDomain}
-              onChange={e => this.handleChangeField(e, "currentDomain")}
-              input={<Input name="domain" id="domain-label-placeholder" />}
-              displayEmpty
-              name="currentDomain"
-              className={classes.selectEmpty}
-            >
-              <MenuItem value="">
-                <em>Select Options</em>
-              </MenuItem>
-              {Object.keys(domains).map(option => (
-                <MenuItem key={option} value={option}>
-                  {domains[option]}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel shrink htmlFor="language-Label-placeholder" required>
-              Language
-            </InputLabel>
-            <Select
-              required
-              value={currentLanguage}
-              onChange={e => this.handleChangeField(e, "currentLanguage")}
-              input={<Input name="language" id="language-label-placeholder" />}
-              displayEmpty
-              name="currentLanguage"
-              className={classes.selectEmpty}
-            >
-              <MenuItem value="">
-                <em>Select Options</em>
-              </MenuItem>
-              {this.state.currentDomain != "IN" ? (
-                <MenuItem key="ar" value="ar">
-                  Arabic
-                </MenuItem>
-              ) : null}
-              <MenuItem key="en" value="en">
-                English
-              </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>Select Language</FormHelperText>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel shrink htmlFor="pageType-Label-placeholder">
-              Page Type
-            </InputLabel>
-            <Select
-              value={currentPageType}
-              onChange={e => this.handleChangeField(e, "currentPageType")}
-              input={<Input name="pageType" id="pageType-label-placeholder" />}
-              displayEmpty
-              name="currentPageType"
-              className={classes.selectEmpty}
-            >
-              <MenuItem value="">
-                <em>Select Options</em>
-              </MenuItem>
-              {pageTypes.map(option => (
-                <MenuItem key={option} value={option}>
-                  {" "}
-                  {option}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>Select Page Type</FormHelperText>
-          </FormControl>
+        <Form onSubmit={this.handleFormSubmit.bind(this)}>
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Label>Select Country</Form.Label>
+              <Form.Control
+                as="select"
+                onChange={e => this.handleChange(e, "currentDomain")}
+                name="currentDomain"
+                value={currentDomain}
+              >
+                {Object.keys(domains).map(option => (
+                  <option key={option} value={option}>
+                    {domains[option]}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Label>Select language</Form.Label>
+              <Form.Control
+                as="select"
+                onChange={e => this.handleChange(e, "currentLanguage")}
+                name="currentLanguage"
+                value={currentLanguage}
+              >
+                {this.returnOptions(languages)}
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Form.Label> Page type</Form.Label>
+              <Form.Control
+                as="select"
+                onChange={e => this.handleChange(e, "currentPageType")}
+                name="pageType"
+                value={currentPageType}
+              >
+                {this.returnOptions(pageTypes)}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
           {fields}
-          {/* <FlightBooking
-          currentSubtype={this.state.currentSubtype}
-          handleCurrentSubtype={this.state.handleCurrentSubtype}
-        /> */}
-          <MuiThemeProvider theme={theme}>
-            <Button
-              variant={"contained"}
-              color="primary"
-              className={classes.margin}
-              onClick={this.handleFormSubmit}
-            >
+          <ButtonToolbar>
+            <Button variant="success" type="submit">
               Submit
             </Button>
-          </MuiThemeProvider>
-        </form>
+          </ButtonToolbar>
+        </Form>
       </div>
     );
   }
 }
 
-Flights.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(Flights);
+export default Flights;

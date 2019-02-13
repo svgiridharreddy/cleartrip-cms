@@ -11,7 +11,7 @@ import EditUniqueContent from './components/hotels/unique/editHotelUniqueData';
 
 import Layout from "./components/layout";
 import Flights from "./components/banner/Flights/Flights";
-import FlightsLandingPage from "./components/Flights/flightsLandingPage";
+// import FlightsLandingPage from "./components/Flights/flightsLandingPage";
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/banner/Flights/FlightsHomePage";
 

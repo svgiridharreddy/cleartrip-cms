@@ -34,6 +34,7 @@ class BannerLanding extends Component{
 			 {banner_type === 'Trains'  || banner_type == 'Hotels' ?(banner_type === 'Trains' ? <TrainsBanner /> : <HotelsBanner />) :(banner_type === 'Collection' ? <CollectionBanner /> : <FlightSchedule />)}
 		*/}
 			<FlightSchedule />
+			{/*<LinksComponent />*/}
 			</div>
 			)
 	}

@@ -16,7 +16,7 @@ import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import "font-awesome/css/font-awesome.css";
 import FroalaEditor from "react-froala-wysiwyg";
-class FlightBookingFields extends Component {
+class FlightScheduleFields extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +27,7 @@ class FlightBookingFields extends Component {
       content: this.props.content,
       h1Tag: this.props.h1Tag,
       keywords: this.props.keywords,
-      airlinName: this.props.airlineName,
+      cityName: this.props.cityName,
       depCityName: this.props.depCityName,
       arrCityName: this.props.arrCityName,
       readOnlyValue: this.props.readOnlyValue,
@@ -36,7 +36,8 @@ class FlightBookingFields extends Component {
       options_dep: [],
       options_arr: [],
       depCityNameSelected: "",
-      arrCityNameSelected: ""
+      arrCityNameSelected: "",
+      cityNameSelected: ""
     };
   }
 
@@ -48,14 +49,9 @@ class FlightBookingFields extends Component {
       description: nextProps.description,
       keywords: nextProps.keywords,
       h1Tag: nextProps.h1Tag,
-      airlinName: nextProps.airlineName,
+      cityName: nextProps.cityName,
       depCityName: nextProps.depCityName,
-      arrCityName: nextProps.arrCityName,
-      selectedOption: nextProps.selectedOption,
-      depCityNameSelected: nextProps.depCityNameSelected,
-      arrCityNameSelected: nextProps.arrCityNameSelected,
-      options_dep: nextProps.options_dep,
-      options_arr: nextProps.options_arr
+      arrCityName: nextProps.arrCityName
     });
   }
 
@@ -63,11 +59,10 @@ class FlightBookingFields extends Component {
     debugger;
     let subTypeField, category, fields;
     const subtypeOptions = {
-      "select subtype": "Select sub page type",
-      "airline-routes": "Airline Routes",
-      overview: "Overview",
-      "pnr-status": "PNR Status",
-      "web-checkin": "Web Checkin",
+      "select sub page type": "select sub page type",
+      "schedule-routes": "Schedule Routes",
+      "flights-from": "Flights From",
+      "flights-to": "Flights To",
       index: "Index"
     };
     const {
@@ -76,7 +71,7 @@ class FlightBookingFields extends Component {
       keywords,
       content,
       h1Tag,
-      airlineName,
+      cityName,
       depCityName,
       arrCityName,
       currentSubType,
@@ -87,9 +82,9 @@ class FlightBookingFields extends Component {
       options_dep,
       options_arr,
       depCityNameSelected,
-      arrCityNameSelected
+      arrCityNameSelected,
+      cityNameSelected
     } = this.props;
-    debugger;
     subTypeField = (
       <Form.Group as={Col}>
         <Form.Label>Sub PageType</Form.Label>
@@ -98,6 +93,7 @@ class FlightBookingFields extends Component {
           name="currentSubType"
           value={currentSubType}
           onChange={e => this.props.handleChange(e, "currentSubType")}
+          required
         >
           {Object.keys(subtypeOptions).map(option => (
             <option key={option} value={option}>
@@ -117,6 +113,7 @@ class FlightBookingFields extends Component {
             value={categoryType}
             onChange={e => this.props.handleChange(e, "categoryType")}
             name="categoryType"
+            required
           >
             <option>Select Category</option>
             <option>Domestic</option>
@@ -133,6 +130,7 @@ class FlightBookingFields extends Component {
             value={categoryType}
             onChange={e => this.props.handleChange(e, "categoryType")}
             name="categoryType"
+            required
           >
             <option value="">Select Category</option>
             <option value="uniq">Unique</option>
@@ -148,11 +146,12 @@ class FlightBookingFields extends Component {
         <Form.Group className="mb-3">
           <Form.Control
             type="text"
-            placeholder="Title"
+            placeholder="Search  Destination"
             name="title"
             placeholder="Title"
             aria-label="Title"
             value={title}
+            required
             onChange={e => this.props.handleChange(e, "title")}
           />
         </Form.Group>
@@ -164,6 +163,7 @@ class FlightBookingFields extends Component {
             aria-label="Description"
             aria-describedby="basic-addon1"
             value={description}
+            required
             onChange={e => this.props.handleChange(e, "description")}
           />
         </Form.Group>
@@ -174,6 +174,7 @@ class FlightBookingFields extends Component {
             placeholder="Key words"
             aria-label="key words"
             value={keywords}
+            required
             onChange={e => this.props.handleChange(e, "keywords")}
           />
         </Form.Group>
@@ -184,6 +185,7 @@ class FlightBookingFields extends Component {
             value={h1Tag}
             onChange={e => this.props.handleChange(e, "h1Tag")}
             name="h1Tag"
+            required
             placeholder="Enter H1 Title"
           />
         </Form.Group>
@@ -194,26 +196,30 @@ class FlightBookingFields extends Component {
             value={content}
             onChange={e => this.props.handleChange(e, "content")}
             name="content"
+            required
             placeholder="Enter Content "
           />
         </Form.Group>
 
-        {categoryType === "uniq" && currentSubType !== "index" ? (
+        {categoryType === "uniq" && (currentSubType === "flights-from" || currentSubType === "flights-to") ? (
           <Select1
-            value={selectedOption}
-            onChange={p => this.props.handleSelectedInput(p, "airlineName")}
-            options={this.props.options}
-            name="airlineName"
-            onInputChange={e => this.props.handleAutoSearch(e, "airlineName")}
+            value={cityNameSelected}
+            onChange={p => this.props.handleSelectedInput(p, "cityName")}
+            options={options}
+            name="cityName"
+            required
+            // onInputChange={this.handleAirlineSearch}
+            onInputChange={e => this.props.handleAutoSearch(e, "cityName")}
           />
         ) : null}
-        {categoryType === "uniq" && currentSubType === "airline-routes" ? (
+        {categoryType === "uniq" && currentSubType === "schedule-routes" ? (
           <div>
             <Select1
               value={depCityNameSelected}
               onChange={p => this.props.handleSelectedInput(p, "depCityName")}
-              options={this.props.options_dep}
+              options={options_dep}
               name="depCityName"
+              required
               // onInputChange={this.handleAirlineSearch}
               onInputChange={e => this.props.handleAutoSearch(e, "depCityName")}
             />
@@ -221,8 +227,9 @@ class FlightBookingFields extends Component {
             <Select1
               value={arrCityNameSelected}
               onChange={p => this.props.handleSelectedInput(p, "arrCityName")}
-              options={this.props.options_arr}
+              options={options_arr}
               name="arrCityName"
+              required
               // onInputChange={this.handleAirlineSearch}
               onInputChange={e => this.props.handleAutoSearch(e, "arrCityName")}
             />
@@ -240,4 +247,4 @@ class FlightBookingFields extends Component {
   }
 }
 
-export default FlightBookingFields;
+export default FlightScheduleFields;

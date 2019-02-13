@@ -50,7 +50,12 @@ class FlightBookingFields extends Component {
       h1Tag: nextProps.h1Tag,
       airlinName: nextProps.airlineName,
       depCityName: nextProps.depCityName,
-      arrCityName: nextProps.arrCityName
+      arrCityName: nextProps.arrCityName,
+      selectedOption: nextProps.selectedOption,
+      depCityNameSelected: nextProps.depCityNameSelected,
+      arrCityNameSelected: nextProps.arrCityNameSelected,
+      options_dep: nextProps.options_dep,
+      options_arr: nextProps.options_arr
     });
   }
 
@@ -84,6 +89,7 @@ class FlightBookingFields extends Component {
       depCityNameSelected,
       arrCityNameSelected
     } = this.props;
+    debugger;
     subTypeField = (
       <Form.Group as={Col}>
         <Form.Label>Sub PageType</Form.Label>
@@ -142,7 +148,7 @@ class FlightBookingFields extends Component {
         <Form.Group className="mb-3">
           <Form.Control
             type="text"
-            placeholder="Search  Destination"
+            placeholder="Title"
             name="title"
             placeholder="Title"
             aria-label="Title"
@@ -196,9 +202,8 @@ class FlightBookingFields extends Component {
           <Select1
             value={selectedOption}
             onChange={p => this.props.handleSelectedInput(p, "airlineName")}
-            options={options}
+            options={this.props.options}
             name="airlineName"
-            // onInputChange={this.handleAirlineSearch}
             onInputChange={e => this.props.handleAutoSearch(e, "airlineName")}
           />
         ) : null}
@@ -206,8 +211,8 @@ class FlightBookingFields extends Component {
           <div>
             <Select1
               value={depCityNameSelected}
-              onChange={p => this.props.handleAutoSearch(p, "depCityName")}
-              options={options_dep}
+              onChange={p => this.props.handleSelectedInput(p, "depCityName")}
+              options={this.props.options_dep}
               name="depCityName"
               // onInputChange={this.handleAirlineSearch}
               onInputChange={e => this.props.handleAutoSearch(e, "depCityName")}
@@ -216,7 +221,7 @@ class FlightBookingFields extends Component {
             <Select1
               value={arrCityNameSelected}
               onChange={p => this.props.handleSelectedInput(p, "arrCityName")}
-              options={options_arr}
+              options={this.props.options_arr}
               name="arrCityName"
               // onInputChange={this.handleAirlineSearch}
               onInputChange={e => this.props.handleAutoSearch(e, "arrCityName")}
