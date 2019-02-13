@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
 import axios from "axios";
-import "../Banner.css";
+import "./Banner.css";
 import FlightsTable from "./FlightsTable";
 const pageTypes = [
   "Select Page Type",

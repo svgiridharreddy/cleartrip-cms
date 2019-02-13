@@ -10,12 +10,9 @@ import TextField from "@material-ui/core/TextField";
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
 import Select1 from "react-select";
-
-// Require Editor CSS files.
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-import "font-awesome/css/font-awesome.css";
-import FroalaEditor from "react-froala-wysiwyg";
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 class FlightScheduleFields extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +34,8 @@ class FlightScheduleFields extends Component {
       options_arr: [],
       depCityNameSelected: "",
       arrCityNameSelected: "",
-      cityNameSelected: ""
+      cityNameSelected: "",
+      editorState: ""
     };
   }
 
@@ -57,6 +55,13 @@ class FlightScheduleFields extends Component {
       arrCityNameSelected: nextProps.arrCityNameSelected
     });
   }
+
+  onEditorStateChange: Function = (editorState) => {
+    debugger
+    this.setState({
+      editorState:editorState,
+    });
+  };
 
   render() {
     debugger;
@@ -86,7 +91,8 @@ class FlightScheduleFields extends Component {
       options_arr,
       depCityNameSelected,
       arrCityNameSelected,
-      cityNameSelected
+      cityNameSelected,
+      editorState
     } = this.props;
     subTypeField = (
       <Form.Group as={Col}>
@@ -202,8 +208,8 @@ class FlightScheduleFields extends Component {
             required
             placeholder="Enter Content "
           />
-        </Form.Group>
-
+        </Form.Group> 
+       
         {categoryType === "uniq" && (currentSubType === "flights-from" || currentSubType === "flights-to") ? (
           <Select1
             value={cityNameSelected}
