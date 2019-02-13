@@ -153,6 +153,7 @@ class Flights extends Component {
 
   handleFormSubmit = e => {
     e.preventDefault();
+    debugger
     const flightValues = this.state;
 
     let postData = {

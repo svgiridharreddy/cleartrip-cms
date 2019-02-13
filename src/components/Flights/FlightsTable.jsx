@@ -9,7 +9,8 @@ class FlightsTable extends Component {
       pageType: this.props.pageType,
       subType: this.props.subType,
       domain: this.props.domain,
-      language: this.props.language
+      language: this.props.language,
+      section: this.props.section
     };
   }
   componentWillReceiveProps = nextProps => {
@@ -71,7 +72,6 @@ class FlightsTable extends Component {
                     }}
                   >
                     <Button as="input" type="button" value="Edit" />
-
                   </Link>{" "}
                 </td>
                 <td>

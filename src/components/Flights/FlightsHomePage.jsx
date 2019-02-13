@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
 import axios from "axios";
-import "../Banner.css";
+import "./Banner.css";
 import FlightsTable from "./FlightsTable";
 const pageTypes = [
   "Select Page Type",
@@ -20,12 +20,18 @@ const domains = {
   QA: "Qatar",
   BH: "Bahrain"
 };
+const sections = ["Select section", "domestic", "international"];
 class FlightsHomePage extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       result: {
-        "flight-booking": { overview: [], routes: [], pnr: [], webcheckin: [] },
+        "flight-booking": {
+          overview: [],
+          routes: [],
+          pnr: [],
+          webcheckin: []
+        },
         "flight-schedule": { routes: [], from: [], to: [] },
         "flight-tickets": { tickets: [] }
       },
@@ -49,7 +55,9 @@ class FlightsHomePage extends PureComponent {
       routesHide: true,
       sectionHide: true,
       pageSubTypeHide: true,
-      contentTypeHide: true
+      contentTypeHide: true,
+      section: "",
+      categoryType: ""
     };
   }
 
@@ -67,14 +75,24 @@ class FlightsHomePage extends PureComponent {
   }
 
   componentWillMount = () => {
-    const { result, pageType, subType, domain, language } = this.state;
+    const {
+      result,
+      pageType,
+      subType,
+      domain,
+      language,
+      section,
+      categoryType
+    } = this.state;
 
     var url = "http://localhost:3000/fetch_details";
     var parameters = {
       page_type: pageType,
       domain: domain,
       sub_type: subType,
-      language: language
+      language: language,
+      section: section,
+      category: categoryType
     };
 
     if (pageType.length > 0 && subType.length > 0) {
@@ -146,13 +164,23 @@ class FlightsHomePage extends PureComponent {
       );
     });
   };
+
   render() {
-    const { result, pageType, subType, domain, language } = this.state;
+    const {
+      result,
+      pageType,
+      subType,
+      domain,
+      language,
+      categoryType
+    } = this.state;
+    let category;
     let subTypes = [];
     let tableFields = {};
     let tableTitle = {
       Domain: "domain",
       Langugage: "language",
+      Section: "section",
       "Page Type": "page_type",
       "Sub Page Type": "page_subtype",
       URL: "url"
@@ -179,6 +207,24 @@ class FlightsHomePage extends PureComponent {
       tableFields = {
         routes: { source: "source", destination: "destination" }
       };
+    }
+    if (subType === "routes") {
+      category = (
+        <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            as="select"
+            value={this.state.categoryType}
+            onChange={e => this.handleChange(e, "categoryType")}
+            name="categoryType"
+            required
+          >
+            <option>Select Category</option>
+            <option value="uniq">Unique</option>
+            <option value="common">Common</option>
+          </Form.Control>
+        </Form.Group>
+      );
     }
 
     return (
@@ -224,6 +270,18 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(pageTypes)}
               </Form.Control>
             </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Label>Select section</Form.Label>
+              <Form.Control
+                as="select"
+                onChange={e => this.handleChange(e, "section")}
+                name="section"
+                value={this.state.section}
+              >
+                {this.returnOptions(sections)}
+              </Form.Control>
+            </Form.Group>
+
             <Form.Group
               as={Col}
               className={this.state.subType.length >= 0 ? "" : "hidden"}
@@ -241,6 +299,7 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(subTypes)}
               </Form.Control>
             </Form.Group>
+            {category}
           </Form.Row>
           <ButtonToolbar>
             <Button variant="info" onClick={this.handleGetInfo}>
