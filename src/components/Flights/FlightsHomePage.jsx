@@ -20,6 +20,7 @@ const domains = {
   QA: "Qatar",
   BH: "Bahrain"
 };
+const sections = ["Select section", "domestic", "international"];
 class FlightsHomePage extends PureComponent {
   constructor(props) {
     super(props);
@@ -49,7 +50,8 @@ class FlightsHomePage extends PureComponent {
       routesHide: true,
       sectionHide: true,
       pageSubTypeHide: true,
-      contentTypeHide: true
+      contentTypeHide: true,
+      section: ""
     };
   }
 
@@ -67,14 +69,15 @@ class FlightsHomePage extends PureComponent {
   }
 
   componentWillMount = () => {
-    const { result, pageType, subType, domain, language } = this.state;
+    const { result, pageType, subType, domain, language, section } = this.state;
 
     var url = "http://localhost:3000/fetch_details";
     var parameters = {
       page_type: pageType,
       domain: domain,
       sub_type: subType,
-      language: language
+      language: language,
+      section: section
     };
 
     if (pageType.length > 0 && subType.length > 0) {
@@ -153,6 +156,7 @@ class FlightsHomePage extends PureComponent {
     let tableTitle = {
       Domain: "domain",
       Langugage: "language",
+      Section: "section",
       "Page Type": "page_type",
       "Sub Page Type": "page_subtype",
       URL: "url"
@@ -222,6 +226,17 @@ class FlightsHomePage extends PureComponent {
                 value={this.state.pageType}
               >
                 {this.returnOptions(pageTypes)}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Label>Select section</Form.Label>
+              <Form.Control
+                as="select"
+                onChange={e => this.handleChange(e, "section")}
+                name="section"
+                value={this.state.section}
+              >
+                {this.returnOptions(sections)}
               </Form.Control>
             </Form.Group>
             <Form.Group
