@@ -26,7 +26,12 @@ class FlightsHomePage extends PureComponent {
     super(props);
     this.state = {
       result: {
-        "flight-booking": { overview: [], routes: [], pnr: [], webcheckin: [] },
+        "flight-booking": {
+          overview: [],
+          routes: [],
+          pnr: [],
+          webcheckin: []
+        },
         "flight-schedule": { routes: [], from: [], to: [] },
         "flight-tickets": { tickets: [] }
       },
@@ -51,7 +56,8 @@ class FlightsHomePage extends PureComponent {
       sectionHide: true,
       pageSubTypeHide: true,
       contentTypeHide: true,
-      section: ""
+      section: "",
+      categoryType: ""
     };
   }
 
@@ -69,7 +75,15 @@ class FlightsHomePage extends PureComponent {
   }
 
   componentWillMount = () => {
-    const { result, pageType, subType, domain, language, section } = this.state;
+    const {
+      result,
+      pageType,
+      subType,
+      domain,
+      language,
+      section,
+      categoryType
+    } = this.state;
 
     var url = "http://localhost:3000/fetch_details";
     var parameters = {
@@ -77,7 +91,8 @@ class FlightsHomePage extends PureComponent {
       domain: domain,
       sub_type: subType,
       language: language,
-      section: section
+      section: section,
+      category: categoryType
     };
 
     if (pageType.length > 0 && subType.length > 0) {
@@ -149,8 +164,17 @@ class FlightsHomePage extends PureComponent {
       );
     });
   };
+
   render() {
-    const { result, pageType, subType, domain, language } = this.state;
+    const {
+      result,
+      pageType,
+      subType,
+      domain,
+      language,
+      categoryType
+    } = this.state;
+    let category;
     let subTypes = [];
     let tableFields = {};
     let tableTitle = {
@@ -183,6 +207,24 @@ class FlightsHomePage extends PureComponent {
       tableFields = {
         routes: { source: "source", destination: "destination" }
       };
+    }
+    if (subType === "routes") {
+      category = (
+        <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            as="select"
+            value={this.state.categoryType}
+            onChange={e => this.handleChange(e, "categoryType")}
+            name="categoryType"
+            required
+          >
+            <option>Select Category</option>
+            <option value="uniq">Unique</option>
+            <option value="common">Common</option>
+          </Form.Control>
+        </Form.Group>
+      );
     }
 
     return (
@@ -239,6 +281,7 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(sections)}
               </Form.Control>
             </Form.Group>
+
             <Form.Group
               as={Col}
               className={this.state.subType.length >= 0 ? "" : "hidden"}
@@ -256,6 +299,7 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(subTypes)}
               </Form.Control>
             </Form.Group>
+            {category}
           </Form.Row>
           <ButtonToolbar>
             <Button variant="info" onClick={this.handleGetInfo}>
