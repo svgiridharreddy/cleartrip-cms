@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+
+import "froala-editor/js/froala_editor.pkgd.min.js";
+
 import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
 import Select1 from "react-select";
 

@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+
+import "froala-editor/js/froala_editor.pkgd.min.js";
+
 import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
 import Select1 from "react-select";
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 class FlightScheduleFields extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +34,7 @@ class FlightScheduleFields extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    debugger
+    debugger;
     this.setState({
       currentSubType: nextProps.currentSubType,
       categoryType: nextProps.categoryType,
@@ -48,10 +50,10 @@ class FlightScheduleFields extends Component {
     });
   }
 
-  onEditorStateChange: Function = (editorState) => {
-    debugger
+  onEditorStateChange: Function = editorState => {
+    debugger;
     this.setState({
-      editorState:editorState,
+      editorState: editorState
     });
   };
 
@@ -145,6 +147,7 @@ class FlightScheduleFields extends Component {
     fields = (
       <div>
         <Form.Group className="mb-3">
+          <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
             placeholder="Search  Destination"
@@ -156,6 +159,7 @@ class FlightScheduleFields extends Component {
             onChange={e => this.props.handleChange(e, "title")}
           />
         </Form.Group>
+        <Form.Label>Description</Form.Label>
         <Form.Group className="mb-3">
           <Form.Control
             type="text"
@@ -168,6 +172,7 @@ class FlightScheduleFields extends Component {
             onChange={e => this.props.handleChange(e, "description")}
           />
         </Form.Group>
+        <Form.Label>Keywords</Form.Label>
         <Form.Group className="mb-3">
           <Form.Control
             name="keywords"
@@ -180,6 +185,7 @@ class FlightScheduleFields extends Component {
           />
         </Form.Group>
         <Form.Group className="mb-3">
+          <Form.Label>H1 Title</Form.Label>
           <Form.Control
             type="text"
             aria-label="H1 Title"
@@ -190,25 +196,29 @@ class FlightScheduleFields extends Component {
             placeholder="Enter H1 Title"
           />
         </Form.Group>
+        <Form.Label>Content</Form.Label>
         <Form.Group className="mb-3">
           <Form.Control
             type="text"
-            aria-label="H1 Title"
+            aria-label="Content"
             value={content}
             onChange={e => this.props.handleChange(e, "content")}
             name="content"
             required
             placeholder="Enter Content "
           />
-        </Form.Group> 
-       
-        {categoryType === "uniq" && (currentSubType === "flights-from" || currentSubType === "flights-to") ? (
+        </Form.Group>
+
+        {categoryType === "uniq" &&
+        (currentSubType === "flights-from" ||
+          currentSubType === "flights-to") ? (
           <Select1
             value={cityNameSelected}
             onChange={p => this.props.handleSelectedInput(p, "cityName")}
             options={options}
             name="cityName"
             required
+            placeholder="Search  City"
             // onInputChange={this.handleAirlineSearch}
             onInputChange={e => this.props.handleAutoSearch(e, "cityName")}
           />
@@ -221,6 +231,7 @@ class FlightScheduleFields extends Component {
               options={options_dep}
               name="depCityName"
               required
+              placeholder="Search Departure City"
               // onInputChange={this.handleAirlineSearch}
               onInputChange={e => this.props.handleAutoSearch(e, "depCityName")}
             />
@@ -230,6 +241,7 @@ class FlightScheduleFields extends Component {
               onChange={p => this.props.handleSelectedInput(p, "arrCityName")}
               options={options_arr}
               name="arrCityName"
+              placeholder="Search Arrival City"
               required
               // onInputChange={this.handleAirlineSearch}
               onInputChange={e => this.props.handleAutoSearch(e, "arrCityName")}
