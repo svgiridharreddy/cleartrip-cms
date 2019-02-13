@@ -5,53 +5,55 @@ import UniqueContentDataCollection from './unique/UniqueContentDataCollection';
 import CommonContentDataCollection from './common/CommonContentDataCollection';
 
 const contentType = ["Common Data","Unique Data"]
-const domainType = { "IN": "https://www.cleartrip.com", "AE": "https://www.cleartrip.ae", "SA": "https://www.cleartrip.sa", "QA": "https://qa.cleartrip.com", "OM": "https://om.cleartrip.com", "BH": "https://bh.cleartrip.com", "KW": "https://kw.cleartrip.com"}
-const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "Weekend Getaways", "PropertyInLocality","Region"]
 
 class Index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      contentValue: ''
+      content_type: ''
     }
   }
 
   handleOnChange = e => {
-    this.setState({ contentValue: e.target.value });
+    this.setState({ content_type: e.target.value });
   };
 
   render() {
     let contentFields;
-    const { contentValue } = this.state
-    if (contentValue === "Unique Data") {
+    const { content_type } = this.state
+    if (content_type === "Unique Data") {
        contentFields = (
-        <UniqueContentDataCollection />
+        <UniqueContentDataCollection content_type={content_type} />
         )
-    } else if (contentValue === "Common Data") {
+    } else if (content_type === "Common Data") {
         contentFields = (
-          <CommonContentDataCollection />
+          <CommonContentDataCollection content_type={content_type} />
           )
     }
     return (
       <div>
         <h1>Cleartrip Hotels</h1>
         <div className="filter">
-            <Form.Group as={Col} style={{width: '50%'}}>
-              <Form.Label>Content Section</Form.Label>
-              <Form.Control
-                as="select"
-                defaultValue="Content Section"
-                onChange={this.handleOnChange}
-                name="contentType"
-              >
-                <option value="">
-                  Select Content
-                </option>
-                {
-                contentType.map((content,i) => <option key={i}>{content}</option>)
-              }
-              </Form.Control>
-            </Form.Group>
+          <Form>
+            <Form.Row style={{width: '50%'}}>
+              <Form.Group as={Col}>
+                <Form.Label>Content Section</Form.Label>
+                <Form.Control
+                  as="select"
+                  defaultValue="Content Section"
+                  onChange={this.handleOnChange}
+                  name="content_type"
+                >
+                  <option value="">
+                    Select Content
+                  </option>
+                  {
+                  contentType.map((content,i) => <option key={i}>{content}</option>)
+                }
+                </Form.Control>
+              </Form.Group>
+            </Form.Row>
+          </Form>
           { contentFields }
         </div>
       </div>
