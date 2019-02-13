@@ -192,7 +192,9 @@ class Flights extends Component {
       });
   };
   onRecieveProps = () => {
+
     var { flight } = this.props.location.state;
+    debugger
     this.setState({
       currentPageType: flight.page_type,
       currentDomain: flight.domain,
@@ -206,11 +208,16 @@ class Flights extends Component {
       h1Tag: flight.heading,
       airlineName: flight.airline_name,
       cityName: flight.city_name,
+      depCityNameSelected: { label:flight.source, value:flight.source},
+      depCityName:flight.source,
+      arrCityNameSelected: { label:flight.destination, value:flight.destination},
+      arrCityName:flight.destination,
       readOnlyValue: true
     });
   };
   componentWillMount() {
     if (this.props.location.state !== undefined) {
+      debugger
       this.onRecieveProps();
     }
   }
@@ -233,6 +240,8 @@ class Flights extends Component {
       cityName,
       depCityName,
       arrCityName,
+      depCityNameSelected,
+      arrCityNameSelected,
       readOnlyValue
     } = this.state;
     let fields;
@@ -309,6 +318,8 @@ class Flights extends Component {
           cityName={cityName}
           depCityName={depCityName}
           arrCityName={arrCityName}
+          depCityNameSelected={depCityNameSelected}
+          arrCityNameSelected={arrCityNameSelected}
           readOnlyValue={readOnlyValue}
           handleAutoSearch={(e, fieldName) =>
             this.handleAutoSearch(e, fieldName)

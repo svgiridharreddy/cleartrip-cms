@@ -8,6 +8,8 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
 import "froala-editor/js/froala_editor.pkgd.min.js";
+import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
+import Select1 from "react-select";
 
 // Require Editor CSS files.
 import "froala-editor/css/froala_style.min.css";
@@ -27,7 +29,14 @@ class FlightBookingFields extends Component {
       keywords: this.props.keywords,
       airlinName: this.props.airlineName,
       depCityName: this.props.depCityName,
-      arrCityName: this.props.arrCityName
+      arrCityName: this.props.arrCityName,
+      readOnlyValue: this.props.readOnlyValue,
+      selectedOption: null,
+      options: [],
+      options_dep: [],
+      options_arr: [],
+      depCityNameSelected: "",
+      arrCityNameSelected: ""
     };
   }
 
@@ -41,13 +50,20 @@ class FlightBookingFields extends Component {
       h1Tag: nextProps.h1Tag,
       airlinName: nextProps.airlineName,
       depCityName: nextProps.depCityName,
-      arrCityName: nextProps.arrCityName
+      arrCityName: nextProps.arrCityName,
+      selectedOption: nextProps.selectedOption,
+      depCityNameSelected: nextProps.depCityNameSelected,
+      arrCityNameSelected: nextProps.arrCityNameSelected,
+      options_dep: nextProps.options_dep,
+      options_arr: nextProps.options_arr
     });
   }
 
   render() {
+    debugger;
     let subTypeField, category, fields;
     const subtypeOptions = {
+      "select subtype": "Select sub page type",
       "airline-routes": "Airline Routes",
       overview: "Overview",
       "pnr-status": "PNR Status",
@@ -55,7 +71,6 @@ class FlightBookingFields extends Component {
       index: "Index"
     };
     const {
-      classes,
       title,
       description,
       keywords,
@@ -65,185 +80,151 @@ class FlightBookingFields extends Component {
       depCityName,
       arrCityName,
       currentSubType,
-      categoryType
+      categoryType,
+      readOnlyValue,
+      selectedOption,
+      options,
+      options_dep,
+      options_arr,
+      depCityNameSelected,
+      arrCityNameSelected
     } = this.props;
     debugger;
     subTypeField = (
-      <FormControl className={classes.formControl}>
-        <InputLabel shrink htmlFor="subPageType-Label-placeholder">
-          Sub PageType
-        </InputLabel>
-        <Select
-          value={currentSubType}
-          onChange={e => this.props.handleChangeField(e, "currentSubType")}
-          input={<Input name="currentSubType" id="subtype-label-placeholder" />}
-          displayEmpty
+      <Form.Group as={Col}>
+        <Form.Label>Sub PageType</Form.Label>
+        <Form.Control
+          as="select"
           name="currentSubType"
-          className={classes.selectEmpty}
+          value={currentSubType}
+          onChange={e => this.props.handleChange(e, "currentSubType")}
         >
-          <MenuItem value="">
-            <em>Select Options</em>
-          </MenuItem>
           {Object.keys(subtypeOptions).map(option => (
-            <MenuItem key={option} value={option}>
+            <option key={option} value={option}>
               {subtypeOptions[option]}
-            </MenuItem>
+            </option>
           ))}
-        </Select>
-        <FormHelperText />
-      </FormControl>
+        </Form.Control>
+      </Form.Group>
     );
 
     if (currentSubType === "index") {
       category = (
-        <FormControl className={classes.formControl}>
-          <InputLabel shrink htmlFor="subPageType-Label-placeholder">
-            Category
-          </InputLabel>
-          <Select
+        <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            as="select"
             value={categoryType}
-            onChange={e => this.props.handleChangeField(e, "categoryType")}
-            input={<Input name="subtype" id="subtype-label-placeholder" />}
-            displayEmpty
+            onChange={e => this.props.handleChange(e, "categoryType")}
             name="categoryType"
-            className={classes.selectEmpty}
           >
-            <MenuItem value="">
-              <em>Select Option</em>
-            </MenuItem>
-            <MenuItem value="common">
-              <em>International</em>
-            </MenuItem>
-            <MenuItem value="uniq">
-              <em>Domestic</em>
-            </MenuItem>
-          </Select>
-          <FormHelperText />
-        </FormControl>
+            <option>Select Category</option>
+            <option>Domestic</option>
+            <option>International</option>
+          </Form.Control>
+        </Form.Group>
       );
     } else if (currentSubType !== "index" && currentSubType !== "") {
       category = (
-        <FormControl className={classes.formControl}>
-          <InputLabel shrink htmlFor="subPageType-Label-placeholder">
-            Category
-          </InputLabel>
-          <Select
+        <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            as="select"
             value={categoryType}
-            onChange={e => this.props.handleChangeField(e, "categoryType")}
-            input={<Input name="subtype" id="subtype-label-placeholder" />}
-            displayEmpty
+            onChange={e => this.props.handleChange(e, "categoryType")}
             name="categoryType"
-            className={classes.selectEmpty}
           >
-            <MenuItem value="">
-              <em>Select Option</em>
-            </MenuItem>
-            <MenuItem value="common">
-              <em>Common</em>
-            </MenuItem>
-            <MenuItem value="uniq">
-              <em>Unique</em>
-            </MenuItem>
-          </Select>
-          <FormHelperText />
-        </FormControl>
+            <option value="">Select Category</option>
+            <option value="uniq">Unique</option>
+            <option value="common">Common</option>
+          </Form.Control>
+        </Form.Group>
       );
     } else {
     }
 
     fields = (
       <div>
-        <TextField
-          id="outlined-name"
-          label="Title"
-          className={classes.textField}
-          value={title}
-          // onChange={handleTitleChange}
-          onChange={e => this.props.handleChangeField(e, "title")}
-          name="title"
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          id="outlined-name"
-          label="Description"
-          className={classes.textField}
-          value={description}
-          onChange={e => this.props.handleChangeField(e, "description")}
-          name="description"
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          id="outlined-textarea"
-          label="Keywords"
-          placeholder="MultiLine keywords"
-          multiline
-          className={classes.textField}
-          value={keywords}
-          onChange={e => this.props.handleChangeField(e, "keywords")}
-          name="keywords"
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          id="outlined-name"
-          label="H1 Title"
-          className={classes.textField}
-          value={h1Tag}
-          onChange={e => this.props.handleChangeField(e, "h1Tag")}
-          name="h1Tag"
-          margin="normal"
-          variant="outlined"
-          placeholder="Enter H1 Title"
-        />
+        <Form.Group className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="Title"
+            name="title"
+            placeholder="Title"
+            aria-label="Title"
+            value={title}
+            onChange={e => this.props.handleChange(e, "title")}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Control
+            type="text"
+            name="description"
+            placeholder="Description"
+            aria-label="Description"
+            aria-describedby="basic-addon1"
+            value={description}
+            onChange={e => this.props.handleChange(e, "description")}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Control
+            name="keywords"
+            type="text"
+            placeholder="Key words"
+            aria-label="key words"
+            value={keywords}
+            onChange={e => this.props.handleChange(e, "keywords")}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Control
+            type="text"
+            aria-label="H1 Title"
+            value={h1Tag}
+            onChange={e => this.props.handleChange(e, "h1Tag")}
+            name="h1Tag"
+            placeholder="Enter H1 Title"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Control
+            type="text"
+            aria-label="H1 Title"
+            value={content}
+            onChange={e => this.props.handleChange(e, "content")}
+            name="content"
+            placeholder="Enter Content "
+          />
+        </Form.Group>
 
-        <TextField
-          id="outlined-textarea"
-          label="Content"
-          placeholder="Enter content"
-          multiline
-          fullWidth
-          className={classes.textField}
-          value={content}
-          onChange={e => this.props.handleChangeField(e, "content")}
-          name="content"
-          margin="normal"
-          variant="outlined"
-        />
         {categoryType === "uniq" && currentSubType !== "index" ? (
-          <TextField
-            id="outlined-airline-name"
-            label="Airline Name"
-            className={classes.textField}
-            value={airlineName}
-            onChange={e => this.props.autoCompleteFields(e, "airlineName")}
+          <Select1
+            value={selectedOption}
+            onChange={p => this.props.handleSelectedInput(p, "airlineName")}
+            options={this.props.options}
             name="airlineName"
-            margin="normal"
-            variant="outlined"
+            onInputChange={e => this.props.handleAutoSearch(e, "airlineName")}
           />
         ) : null}
         {categoryType === "uniq" && currentSubType === "airline-routes" ? (
           <div>
-            <TextField
-              id="outlined-dep-city-name"
-              label="Source City"
-              className={classes.textField}
-              value={depCityName}
-              onChange={e => this.props.autoCompleteFields(e, "depCityName")}
+            <Select1
+              value={depCityNameSelected}
+              onChange={p => this.props.handleSelectedInput(p, "depCityName")}
+              options={this.props.options_dep}
               name="depCityName"
-              margin="normal"
-              variant="outlined"
+              // onInputChange={this.handleAirlineSearch}
+              onInputChange={e => this.props.handleAutoSearch(e, "depCityName")}
             />
-            <TextField
-              id="outlined-arr-city-name"
-              label="Destination City"
-              className={classes.textField}
-              value={arrCityName}
-              onChange={e => this.props.autoCompleteFields(e, "arrCityName")}
+
+            <Select1
+              value={arrCityNameSelected}
+              onChange={p => this.props.handleSelectedInput(p, "arrCityName")}
+              options={this.props.options_arr}
               name="arrCityName"
-              margin="normal"
-              variant="outlined"
+              // onInputChange={this.handleAirlineSearch}
+              onInputChange={e => this.props.handleAutoSearch(e, "arrCityName")}
             />
           </div>
         ) : null}
@@ -259,7 +240,4 @@ class FlightBookingFields extends Component {
   }
 }
 
-FlightBookingFields.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 export default FlightBookingFields;
