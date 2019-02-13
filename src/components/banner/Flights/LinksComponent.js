@@ -59,7 +59,12 @@ class LinksComponent extends Component {
 		});
 	}
 	headerAddBtn(menuName,linkName,e) {
+		let _self = this
+		let linkData = _self.state[linkName]
 		debugger
+		linkData = linkData[menuName].map((a,b) => {
+			debugger
+		})
 	}
 
 	renderForm = data => {
@@ -94,8 +99,8 @@ class LinksComponent extends Component {
 								<button
 									type="button"
 									className="plusButton"
-									data-btnId = {k}
-									data-btnName ="add"
+									data-btnid={k}
+									data-btnname="add"
 									onClick={this.headerAddBtn.bind(this, sub,"headerLinks")}
 								>
 									+
@@ -104,8 +109,8 @@ class LinksComponent extends Component {
 							<button
 								type="button"
 								className="plusButton"
-								data-btnId = {k}
-								data-btnName ="sub"
+								data-btnid={k}
+								data-btnname="sub"
 								onClick={this.headerAddBtn.bind(this, sub,"headerLinks")}
 							>
 								-

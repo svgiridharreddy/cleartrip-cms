@@ -10,7 +10,7 @@ import ViewUniqueHotelData from './components/hotels/unique/viewHotelUniqueData'
 import EditUniqueContent from './components/hotels/unique/editHotelUniqueData';
 
 import Layout from "./components/layout";
-import Flights from "./components/Flights/Flights";
+import Flights from "./components/Flights/flights";
 // import FlightsLandingPage from "./components/Flights/flightsLandingPage";
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/Flights/FlightsHomePage";
