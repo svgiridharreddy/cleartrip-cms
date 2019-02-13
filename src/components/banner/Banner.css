@@ -6,6 +6,32 @@
     margin-left: -5px;
     list-style: none;
 }
+.plusButton{
+    background-color: #ff7e33;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 8px 9px;
+    border-radius: 50%;
+}
+.addTagBtn{
+    padding: 10px;
+    display: inline;
+    border-radius: 2px;
+    font-family: "Arial";
+    border: 0;
+    margin: 0 10px;
+    background: #ff7e33;
+    font-size: 15px;
+    line-height: 15px;
+    color: white;
+    width: auto;
+    height: auto;
+    box-sizing: content-box;
+}
 
 .banner-type li {
     text-decoration: none;
