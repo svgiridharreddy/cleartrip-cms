@@ -124,8 +124,7 @@ class Flights extends Component {
           } else if (fieldName === "arrCityName") {
             debugger;
             this.setState({ options_arr: response.data });
-          }
-          else if (fieldName === "cityName") {
+          } else if (fieldName === "cityName") {
             this.setState({ options: response.data });
           }
         })
@@ -144,16 +143,15 @@ class Flights extends Component {
       this.setState({ depCityNameSelected: p, depCityName: p.value });
     } else if (fieldName === "arrCityName") {
       this.setState({ arrCityNameSelected: p, arrCityName: p.value });
-    }
-    else if (fieldName === "cityName") {
-      debugger
-      this.setState({ cityNameSelected: p,cityName: p.value });
+    } else if (fieldName === "cityName") {
+      debugger;
+      this.setState({ cityNameSelected: p, cityName: p.value });
     }
   };
 
   handleFormSubmit = e => {
     e.preventDefault();
-    debugger
+    debugger;
     const flightValues = this.state;
 
     let postData = {
@@ -172,7 +170,6 @@ class Flights extends Component {
         city_name: flightValues["cityNameSelected"]["value"],
         dep_city_name: flightValues["depCityNameSelected"]["value"],
         arr_city_name: flightValues["arrCityNameSelected"]["value"]
-
       }
     };
 
@@ -193,9 +190,8 @@ class Flights extends Component {
       });
   };
   onRecieveProps = () => {
-
     var { flight } = this.props.location.state;
-    debugger
+    debugger;
     this.setState({
       currentPageType: flight.page_type,
       currentDomain: flight.domain,
@@ -209,16 +205,19 @@ class Flights extends Component {
       h1Tag: flight.heading,
       airlineName: flight.airline_name,
       cityName: flight.city_name,
-      depCityNameSelected: { label:flight.source, value:flight.source},
-      depCityName:flight.source,
-      arrCityNameSelected: { label:flight.destination, value:flight.destination},
-      arrCityName:flight.destination,
+      depCityNameSelected: { label: flight.source, value: flight.source },
+      depCityName: flight.source,
+      arrCityNameSelected: {
+        label: flight.destination,
+        value: flight.destination
+      },
+      arrCityName: flight.destination,
       readOnlyValue: true
     });
   };
   componentWillMount() {
     if (this.props.location.state !== undefined) {
-      debugger
+      debugger;
       this.onRecieveProps();
     }
   }
