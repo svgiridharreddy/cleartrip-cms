@@ -18,7 +18,8 @@ class CommonContentDataCollection extends Component {
       page_type: '',
       content_type: props.content_type,
       content_result: [],
-      linkUrlValue: 'addCommonData', 
+      linkUrlValue: 'addCommonData',
+      isValueSelected: false, 
       isDataPresent: false
     }
     this.handleChange = this.handleChange.bind(this);
@@ -29,30 +30,19 @@ class CommonContentDataCollection extends Component {
 		e.preventDefault();
 		this.setState({
 			[e.target.name]: e.target.value
-		})
-		if(this.state.domain_name !== '' &&  this.state.country_name !== '' && this.state.page_type !== '') {
-			const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
-			axios.post(`${QUERY_URL}`, data)
-	      .then(res => {
-	          this.setState({ isDataPresent: true, content_result: res.data })
-	      })
-	      .catch((err) => {
-	          console.log(err);
-	      })
-		}
+		}, function(){
+			if(this.state.domain_name !== '' &&  this.state.country_name !== '' && this.state.page_type !== '') {
+				const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
+				axios.post(`${QUERY_URL}`, data)
+		      .then(res => {
+		          this.setState({ isDataPresent: true, content_result: res.data })
+		      })
+		      .catch((err) => {
+		          console.log(err);
+		      })
+			}
+		});
 	}
-
-	// handleChangePageType(e) {
-	// 	e.preventDefault();
-	// 	const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: e.target.value }
-	// 	axios.post(`${QUERY_URL}`, data)
- //      .then(res => {
- //          this.setState({ isDataPresent: true, content_result: res.data })
- //      })
- //      .catch((err) => {
- //          console.log(err);
- //      })
-	// }
 
 	returnOptions(optData) {
     return optData.map((country, i) => {
@@ -65,7 +55,6 @@ class CommonContentDataCollection extends Component {
   }
 
 	render() {
-		let countryOpt = this.returnOptions(domainType);
 		let dataField; 
 		if (this.state.isDataPresent) {
 				 dataField = <TableContent isDataPresent={this.state.isDataPresent} linkURl={this.state.linkUrlValue} content_type={this.state.content_type} tableResult={this.state.content_result} />
@@ -81,7 +70,7 @@ class CommonContentDataCollection extends Component {
                   onChange={this.handleChange}
                   name="domain_name"
                 >
-                  <option value="" disabled={true} selected>
+                  <option value="">
                     Domain Type
                   </option>
                   {
