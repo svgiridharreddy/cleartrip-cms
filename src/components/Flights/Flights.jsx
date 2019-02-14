@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Redirect, Link } from "react-router-dom";
-import FlightBookingFields from "./flightBooking";
-import FlightScheduleFields from "./flightSchedule";
+import FlightBookingFields from "./FlightBooking";
+import FlightScheduleFields from "./FlightSchedule";
 import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
 
 const pageTypes = [
@@ -354,7 +354,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label>Select Country</Form.Label>
               <Form.Control
-                disabled = {readOnlyValue}
+                disabled={readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentDomain")}
                 name="currentDomain"
@@ -370,7 +370,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label>Select language</Form.Label>
               <Form.Control
-                disabled = {readOnlyValue}
+                disabled={readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentLanguage")}
                 name="currentLanguage"
@@ -383,7 +383,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label> Page type</Form.Label>
               <Form.Control
-                disabled = {readOnlyValue}
+                disabled={readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentPageType")}
                 name="pageType"

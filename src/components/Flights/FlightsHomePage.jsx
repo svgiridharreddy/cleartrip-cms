@@ -59,11 +59,11 @@ class FlightsHomePage extends PureComponent {
       contentTypeHide: true,
       section: "",
       categoryType: "",
-      cityNameSelected:"",
-      depCityNameSelected:"",
-      options:[],
-      options_dep:[],
-      options_arr:[]
+      cityNameSelected: "",
+      depCityNameSelected: "",
+      options: [],
+      options_dep: [],
+      options_arr: []
     };
   }
 
@@ -104,7 +104,10 @@ class FlightsHomePage extends PureComponent {
       sub_type: subType,
       language: language,
       section: section,
-      category: categoryType
+      category: categoryType,
+      dep_city_name: depCityNameSelected,
+      arr_city_name: arrCityNameSelected,
+      city_name: cityNameSelected.value
     };
 
     if (pageType.length > 0 && subType.length > 0) {
@@ -167,7 +170,7 @@ class FlightsHomePage extends PureComponent {
     this.componentWillMount();
   };
 
-   handleAutoSearch = (e, fieldName) => {
+  handleAutoSearch = (e, fieldName) => {
     let target_value = e;
     if (target_value !== "" && target_value.length >= -1) {
       let url = "";
@@ -210,7 +213,6 @@ class FlightsHomePage extends PureComponent {
       this.setState({ cityNameSelected: p, cityName: p.value });
     }
   };
-
 
   returnOptions = options => {
     return options.map((opt, idx) => {
@@ -271,7 +273,14 @@ class FlightsHomePage extends PureComponent {
         routes: { source: "source", destination: "destination" }
       };
     }
-    if (subType === "routes" || subType === "overview" || subType === "from" || subType === "to" || subType === "pnr" || subType === "web-checkin") {
+    if (
+      subType === "routes" ||
+      subType === "overview" ||
+      subType === "from" ||
+      subType === "to" ||
+      subType === "pnr" ||
+      subType === "web-checkin"
+    ) {
       category = (
         <Form.Group controlId="exampleForm.ControlSelect1">
           <Form.Label>Category</Form.Label>
@@ -308,7 +317,6 @@ class FlightsHomePage extends PureComponent {
     //   );
 
     // }
-    
 
     return (
       <div>
@@ -386,51 +394,50 @@ class FlightsHomePage extends PureComponent {
           </Form.Row>
 
           {categoryType === "uniq" &&
-        (subType === "from" ||
-          subType === "to") ? (
-          <div>
-          <Form.Label>City Name</Form.Label>
-          <Select1
-            // isDisabled = {readOnlyValue}
-            value={cityNameSelected}
-            onChange={p => this.handleSelectedInput(p, "cityName")}
-            options={options}
-            name="cityName"
-            required
-            placeholder="Search  City"
-            // onInputChange={this.handleAirlineSearch}
-            onInputChange={e => this.handleAutoSearch(e, "cityName")}
-          />
-          </div>
-        ) : null}
-        {categoryType === "uniq" && subType === "routes" ? (
-          <div>
-           <Form.Label>Dep City Name</Form.Label>
-            <Select1
-              // isDisabled = {readOnlyValue}
-              value={depCityNameSelected}
-              onChange={p => this.handleSelectedInput(p, "depCityName")}
-              options={options_dep}
-              name="depCityName"
-              required
-              placeholder="Search Departure City"
-              // onInputChange={this.handleAirlineSearch}
-              onInputChange={e => this.handleAutoSearch(e, "depCityName")}
-            />
-            <Form.Label>Arr City Name</Form.Label>
-            <Select1
-              // isDisabled = {readOnlyValue}
-              value={arrCityNameSelected}
-              onChange={p => this.handleSelectedInput(p, "arrCityName")}
-              options={options_arr}
-              name="arrCityName"
-              placeholder="Search Arrival City"
-              required
-              // onInputChange={this.handleAirlineSearch}
-              onInputChange={e => this.handleAutoSearch(e, "arrCityName")}
-            />
-          </div>
-        ) : null}
+          (subType === "from" || subType === "to") ? (
+            <div>
+              <Form.Label>City Name</Form.Label>
+              <Select1
+                // isDisabled = {readOnlyValue}
+                value={cityNameSelected}
+                onChange={p => this.handleSelectedInput(p, "cityName")}
+                options={options}
+                name="cityName"
+                required
+                placeholder="Search  City"
+                // onInputChange={this.handleAirlineSearch}
+                onInputChange={e => this.handleAutoSearch(e, "cityName")}
+              />
+            </div>
+          ) : null}
+          {categoryType === "uniq" && subType === "routes" ? (
+            <div>
+              <Form.Label>Dep City Name</Form.Label>
+              <Select1
+                // isDisabled = {readOnlyValue}
+                value={depCityNameSelected}
+                onChange={p => this.handleSelectedInput(p, "depCityName")}
+                options={options_dep}
+                name="depCityName"
+                required
+                placeholder="Search Departure City"
+                // onInputChange={this.handleAirlineSearch}
+                onInputChange={e => this.handleAutoSearch(e, "depCityName")}
+              />
+              <Form.Label>Arr City Name</Form.Label>
+              <Select1
+                // isDisabled = {readOnlyValue}
+                value={arrCityNameSelected}
+                onChange={p => this.handleSelectedInput(p, "arrCityName")}
+                options={options_arr}
+                name="arrCityName"
+                placeholder="Search Arrival City"
+                required
+                // onInputChange={this.handleAirlineSearch}
+                onInputChange={e => this.handleAutoSearch(e, "arrCityName")}
+              />
+            </div>
+          ) : null}
           <ButtonToolbar>
             <Button variant="info" onClick={this.handleGetInfo}>
               Get Info
