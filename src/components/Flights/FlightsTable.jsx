@@ -88,7 +88,6 @@ class FlightsTable extends Component {
             ))}
           </tbody>
         </Table>
-        ;
       </div>
     );
   }
