@@ -13,8 +13,9 @@ import EditCommonContent from './components/hotels/common/editCommonContent';
 import EditorContent from './components/hotels/editorContent';
 
 import Layout from "./components/layout";
-import Flights from "./components/Flights/flights";
-// import FlightsLandingPage from "./components/Flights/flightsLandingPage";
+
+import Flights from "./components/Flights/Flights";
+
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/Flights/FlightsHomePage";
 
