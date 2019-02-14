@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Redirect, Link } from "react-router-dom";
-import FlightBookingFields from "./FlightBooking";
-import FlightScheduleFields from "./FlightSchedule";
+import FlightBookingFields from "./flightBooking";
+import FlightScheduleFields from "./flightSchedule";
 import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
 
 const pageTypes = [

@@ -3,6 +3,19 @@ import { Link } from 'react-router-dom';
 import { Button, Form, Row, Col, ButtonToolbar } from 'react-bootstrap';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertFromRaw,
+  convertToRaw
+} from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import { stateToHTML } from "draft-js-export-html";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 const API_URL = 'http://localhost:3000'
 
 class ViewUniqueHotelData extends Component {
@@ -12,6 +25,7 @@ class ViewUniqueHotelData extends Component {
 				uniqueResult: [],
 				isDeleted: false
 		}
+		this.convertHtmlToDraftjs = this.convertHtmlToDraftjs.bind(this);
 	}
 
 	componentDidMount() {
@@ -33,6 +47,10 @@ class ViewUniqueHotelData extends Component {
       .catch((err) => {
           console.log(err);
       })
+	}
+
+	convertHtmlToDraftjs() {
+
 	}
 
 	// getData(){
@@ -114,7 +132,7 @@ class ViewUniqueHotelData extends Component {
 										  </Form.Group>
 										  <Form.Group as={Row} controlId="formHorizontalTopContent">
 										    <Form.Label column sm={2}>
-										      Top Content
+										      Header Content
 										    </Form.Label>
 										    <Col sm={10}>
 										      <span>{ item.top_content } </span>
