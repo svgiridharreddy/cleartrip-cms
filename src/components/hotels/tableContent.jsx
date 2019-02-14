@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Button, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 const API_URL = "http://localhost:3000"
@@ -15,8 +15,7 @@ class TableContent extends Component {
 	}
 
 	handleDelete(item){
-		const url = API_URL + "/hotels/" + item.id
-    axios.delete(url)
+    axios.delete(`${API_URL}/hotels/delete/${item.id}`)
       .then(res => {
           console.log(res.message);
           this.setState({ isDeleted: true })
@@ -28,6 +27,10 @@ class TableContent extends Component {
 
 	render() {
 		let dataField;
+		const { isDeleted } = this.state
+		if (isDeleted) {
+			return <Redirect to="/hotels" />
+		}
 		if ((this.props.content_type === "Common Data") && (this.props.isDataPresent) && (this.props.tableResult.length > 0)) {
 			dataField = (
 			  <Table striped bordered>
@@ -91,9 +94,9 @@ class TableContent extends Component {
 			dataField = (
 					<div>
 						<Alert variant="info">
-					    Your searched result not found, you can add by clicking Add button here.
-					  </Alert>
-						<Button>
+					   		Your searched result not found, you can add by clicking Add button here.
+					  	</Alert>
+						<Button variant="info" size="lg">
 							<Link to={`hotels/${this.props.linkURl}`}>Add</Link>
 						</Button>
 					</div>
