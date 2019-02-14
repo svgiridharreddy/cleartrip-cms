@@ -226,6 +226,25 @@ class FlightsHomePage extends PureComponent {
         </Form.Group>
       );
     }
+    else if (subType === "overview") {
+      category = (
+        <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            as="select"
+            value={this.state.categoryType}
+            onChange={e => this.handleChange(e, "categoryType")}
+            name="categoryType"
+            required
+          >
+            <option>Select Category</option>
+            <option value="uniq">Unique</option>
+            <option value="common">Common</option>
+          </Form.Control>
+        </Form.Group>
+      );
+
+    }
     
 
     return (
