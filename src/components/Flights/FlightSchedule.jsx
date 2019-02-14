@@ -235,7 +235,7 @@ class FlightScheduleFields extends Component {
           />
         </Form.Group>
         <Form.Label>Content</Form.Label>
-        
+
          <RichTextEditor
         value={this.state.content}
         onChange={this.onChange1}
