@@ -226,6 +226,7 @@ class FlightsHomePage extends PureComponent {
         </Form.Group>
       );
     }
+    
 
     return (
       <div>

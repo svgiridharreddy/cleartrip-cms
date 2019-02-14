@@ -56,12 +56,28 @@ class Flights extends Component {
       options_arr: [],
       depCityNameSelected: "",
       arrCityNameSelected: "",
-      cityNameSelected: ""
+      cityNameSelected: "",
+      value:"",
     };
   }
 
   handleChange = (e, fieldName) => {
-    this.setState({ [fieldName]: e.target.value });
+    if([fieldName] == "rte")
+      this.handleRTEchange(e);
+    else
+      this.setState({ [fieldName]: e.target.value });
+  };
+
+  handleRTEchange = (content) => {
+    this.setState({content});
+    if (this.props.onChange) {
+      // Send the changes up to the parent component as an HTML string.
+      // This is here to demonstrate using `.toString()` but in a real app it
+      // would be better to avoid generating a string on each change.
+      this.props.onChange(
+        content.toString('html')
+      );
+    }
   };
 
   getInfo = fieldName => {
@@ -166,7 +182,7 @@ class Flights extends Component {
         title: flightValues["title"],
         description: flightValues["description"],
         keywords: flightValues["keywords"],
-        content: flightValues["content"],
+        content: flightValues["content"].toString('html'),
         h1_title: flightValues["h1Tag"],
         airline_name: flightValues["airlineName"],
         city_name: flightValues["cityNameSelected"]["value"],
@@ -305,6 +321,7 @@ class Flights extends Component {
           classes={classes}
           name="flight-schedule"
           handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
+          handleRTEchange={content => this.handleRTEchange(content)}
           autoCompleteFields={(e, fieldName) =>
             this.autoCompleteFields(e, fieldName)
           }

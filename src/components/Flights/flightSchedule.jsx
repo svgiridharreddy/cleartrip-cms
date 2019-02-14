@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import "froala-editor/js/froala_editor.pkgd.min.js";
-
+import RichTextEditor from 'react-rte';
 import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
 import Select1 from "react-select";
 import { Editor } from "react-draft-wysiwyg";
@@ -15,7 +15,7 @@ class FlightScheduleFields extends Component {
       categoryType: this.props.categoryType,
       title: this.props.title,
       description: this.props.description,
-      content: this.props.content,
+      // content: this.props.content,
       h1Tag: this.props.h1Tag,
       keywords: this.props.keywords,
       cityName: this.props.cityName,
@@ -29,10 +29,28 @@ class FlightScheduleFields extends Component {
       depCityNameSelected: "",
       arrCityNameSelected: "",
       cityNameSelected: "",
-      editorState: ""
+      editorState: "",
+      content: RichTextEditor.createEmptyValue()
     };
-  }
 
+  }
+  onChange1 = (content) => {
+    this.setState({content});
+    if (this.props.onChange) {
+      // Send the changes up to the parent component as an HTML string.
+      // This is here to demonstrate using `.toString()` but in a real app it
+      // would be better to avoid generating a string on each change.
+      this.props.onChange(
+        content.toString('html')
+      );
+    }
+    this.props.handleChange(content, "rte")
+  };
+  componentWillMount(){
+    if(this.props.content){
+      this.setState({ content: RichTextEditor.createValueFromString(this.props.content, 'html') })
+    }
+  }
   componentWillReceiveProps(nextProps) {
     debugger;
     this.setState({
@@ -46,16 +64,16 @@ class FlightScheduleFields extends Component {
       depCityName: nextProps.depCityName,
       arrCityName: nextProps.arrCityName,
       depCityNameSelected: nextProps.depCityNameSelected,
-      arrCityNameSelected: nextProps.arrCityNameSelected
+      arrCityNameSelected: nextProps.arrCityNameSelected,
     });
   }
 
-  onEditorStateChange: Function = editorState => {
-    debugger;
-    this.setState({
-      editorState: editorState
-    });
-  };
+  // onEditorStateChange: Function = editorState => {
+  //   debugger;
+  //   this.setState({
+  //     editorState: editorState
+  //   });
+  // };
 
   render() {
     debugger;
@@ -85,8 +103,8 @@ class FlightScheduleFields extends Component {
       options_arr,
       depCityNameSelected,
       arrCityNameSelected,
-      cityNameSelected,
-      editorState
+      cityNameSelected
+
     } = this.props;
     subTypeField = (
       <Form.Group as={Col}>
@@ -197,17 +215,19 @@ class FlightScheduleFields extends Component {
           />
         </Form.Group>
         <Form.Label>Content</Form.Label>
-        <Form.Group className="mb-3">
-          <Form.Control
-            type="text"
-            aria-label="Content"
-            value={content}
-            onChange={e => this.props.handleChange(e, "content")}
-            name="content"
-            required
-            placeholder="Enter Content "
-          />
-        </Form.Group>
+        
+         <RichTextEditor
+        value={this.state.content}
+        onChange={this.onChange1}
+        />
+         {/*<Editor
+            editorState={this.state.editorState}
+            wrapperClassName="demo-wrapper"
+            editorClassName="editer-content"
+            onEditorStateChange={this.onChange}
+          /> */}
+
+
 
         {categoryType === "uniq" &&
         (currentSubType === "flights-from" ||
