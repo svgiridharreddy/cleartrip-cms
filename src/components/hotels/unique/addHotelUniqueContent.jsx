@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Form, Row, Col, Button } from 'react-bootstrap';
+import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertFromRaw,
+  convertToRaw
+} from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import { stateToHTML } from "draft-js-export-html";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const API_URL = 'http://localhost:3000'
 
@@ -17,6 +29,9 @@ class HotelUniqueContent extends Component {
 						top_content: '',
 						bottom_content: '',
 						faq: '',
+						headerEditorState: EditorState.createEmpty(),
+						footerEditorState: EditorState.createEmpty(),
+						faqEditorState: EditorState.createEmpty(),
 						message: ''
 					 };
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,6 +46,7 @@ class HotelUniqueContent extends Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		const data = this.state
+		debugger;
 		axios.post(`${API_URL}/hotels/content-section-data`, data)
 		.then(({ data }) => {
 				this.setState({
@@ -57,10 +73,48 @@ class HotelUniqueContent extends Component {
 	    console.log(error);
 	  });
 	}
+		onHeaderEditorStateChange: Function = (headerEditorState) => {
+			let convertedData = draftToHtml(
+		      convertToRaw(headerEditorState.getCurrentContent())
+		    );
+		    convertedData = convertedData.replace(/"/g, "'");
+		   this.setState({
+		     headerEditorState: convertedData
+		   });
+		};
+
+	  onFooterEditorStateChange: Function = (footerEditorState) => {
+	  	let convertedData = draftToHtml(
+	      convertToRaw(footerEditorState.getCurrentContent())
+	    );
+	    convertedData = convertedData.replace(/"/g, "'");
+	    this.setState({
+	      footerEditorState: convertedData
+	    });
+	  };
+	  onFaqEditorStateChange: Function = (faqEditorState) => {
+	  	let convertedData = draftToHtml(
+	      convertToRaw(faqEditorState.getCurrentContent())
+	    );
+	    convertedData = convertedData.replace(/"/g, "'");
+	    this.setState({
+	      faqEditorState: convertedData
+	    });
+	  };
+
 	render() {
+		const { message, headerEditorState, footerEditorState, faqEditorState } = this.state;
+	    let alertMessage;
+	    if(message !== '') {
+	      alertMessage = (
+	         <Alert variant="info">
+	            { this.state.message }
+	          </Alert>
+	          )
+	    }
 		return(
 			<div>
-					{ this.state.message }
+					{ alertMessage }
 			<Form onSubmit={this.handleSubmit}>
 			  <Form.Group as={Row} controlId="formHorizontalDomainUrl">
 			    <Form.Label column sm={2}>
@@ -119,12 +173,17 @@ class HotelUniqueContent extends Component {
 			      <Form.Control type="text" name="meta_keyword" onChange={this.handleChange} />
 			    </Col>
 			  </Form.Group>
-			  <Form.Group as={Row} controlId="formHorizontalTopContent">
+			  <Form.Group as={Row} controlId="formHorizontalHeaderContent">
 			    <Form.Label column sm={2}>
-			      Top Content
+			      Header Content
 			    </Form.Label>
 			    <Col sm={10}>
-			      <Form.Control type="text" name="top_content" onChange={this.handleChange} />
+			    	<Editor
+			          headerEditorState={headerEditorState}
+			          wrapperClassName="demo-wrapper"
+			          editorClassName="demo-editor"
+			          onEditorStateChange={this.onHeaderEditorStateChange}
+			        />
 			    </Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="formHorizontalFooterContent">
@@ -132,7 +191,12 @@ class HotelUniqueContent extends Component {
 			      Footer Content
 			    </Form.Label>
 			    <Col sm={10}>
-			      <Form.Control type="text" name="canonical_tag" onChange={this.handleChange} />
+			      <Editor
+			          footerEditorState={footerEditorState}
+			          wrapperClassName="demo-wrapper"
+			          editorClassName="demo-editor"
+			          onEditorStateChange={this.onFooterEditorStateChange}
+			        />
 			    </Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="formHorizontalFaq">
@@ -140,7 +204,12 @@ class HotelUniqueContent extends Component {
 			      Frequently Asked Questions
 			    </Form.Label>
 			    <Col sm={10}>
-			      <Form.Control type="text" name="faq" onChange={this.handleChange} />
+			      <Editor
+			          faqEditorState={faqEditorState}
+			          wrapperClassName="demo-wrapper"
+			          editorClassName="demo-editor"
+			          onEditorStateChange={this.onFaqEditorStateChange}
+			        />
 			    </Col>
 			  </Form.Group>
 			  <Form.Group as={Row}>

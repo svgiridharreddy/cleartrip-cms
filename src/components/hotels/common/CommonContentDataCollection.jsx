@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Col, Row } from 'react-bootstrap';
+import { Form, Col } from 'react-bootstrap';
 import TableContent from '../tableContent';
 import axios from 'axios';
 
