@@ -130,6 +130,7 @@ class FlightScheduleFields extends Component {
       <Form.Group as={Col}>
         <Form.Label>Sub PageType</Form.Label>
         <Form.Control
+          disabled = {readOnlyValue}
           as="select"
           name="currentSubType"
           value={currentSubType}
@@ -150,6 +151,7 @@ class FlightScheduleFields extends Component {
         <Form.Group controlId="exampleForm.ControlSelect1">
           <Form.Label>Category</Form.Label>
           <Form.Control
+            disabled = {readOnlyValue}
             as="select"
             value={categoryType}
             onChange={e => this.props.handleChange(e, "categoryType")}
@@ -167,6 +169,7 @@ class FlightScheduleFields extends Component {
         <Form.Group controlId="exampleForm.ControlSelect1">
           <Form.Label>Category</Form.Label>
           <Form.Control
+            disabled = {readOnlyValue}
             as="select"
             value={categoryType}
             onChange={e => this.props.handleChange(e, "categoryType")}
@@ -253,7 +256,10 @@ class FlightScheduleFields extends Component {
         {categoryType === "uniq" &&
         (currentSubType === "flights-from" ||
           currentSubType === "flights-to") ? (
+          <div>
+          <Form.Label>City Name</Form.Label>
           <Select1
+            isDisabled = {readOnlyValue}
             value={cityNameSelected}
             onChange={p => this.props.handleSelectedInput(p, "cityName")}
             options={options}
@@ -263,10 +269,13 @@ class FlightScheduleFields extends Component {
             // onInputChange={this.handleAirlineSearch}
             onInputChange={e => this.props.handleAutoSearch(e, "cityName")}
           />
+          </div>
         ) : null}
         {categoryType === "uniq" && currentSubType === "schedule-routes" ? (
           <div>
+           <Form.Label>Dep City Name</Form.Label>
             <Select1
+              isDisabled = {readOnlyValue}
               value={depCityNameSelected}
               onChange={p => this.props.handleSelectedInput(p, "depCityName")}
               options={options_dep}
@@ -276,8 +285,9 @@ class FlightScheduleFields extends Component {
               // onInputChange={this.handleAirlineSearch}
               onInputChange={e => this.props.handleAutoSearch(e, "depCityName")}
             />
-
+            <Form.Label>Arr City Name</Form.Label>
             <Select1
+              isDisabled = {readOnlyValue}
               value={arrCityNameSelected}
               onChange={p => this.props.handleSelectedInput(p, "arrCityName")}
               options={options_arr}

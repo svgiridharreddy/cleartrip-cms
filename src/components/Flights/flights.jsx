@@ -49,7 +49,7 @@ class Flights extends Component {
       options: [],
       isHomePage: false,
       flight: {},
-      readOnly: false,
+      readOnlyValue: false,
       selectedOption: "",
       options: [],
       options_dep: [],
@@ -185,7 +185,8 @@ class Flights extends Component {
         airline_name: flightValues["airlineName"],
         city_name: flightValues["cityNameSelected"]["value"],
         dep_city_name: flightValues["depCityNameSelected"]["value"],
-        arr_city_name: flightValues["arrCityNameSelected"]["value"]
+        arr_city_name: flightValues["arrCityNameSelected"]["value"],
+        readOnlyValue: true
       }
     };
 
@@ -309,7 +310,6 @@ class Flights extends Component {
           }
           options_dep={this.state.options_dep}
           options_arr={this.state.options_arr}
-          readOnlyValue={readOnlyValue}
         />
       );
     } else if (currentPageType === "flight-schedule") {
@@ -347,7 +347,6 @@ class Flights extends Component {
           }
           options_dep={this.state.options_dep}
           options_arr={this.state.options_arr}
-          readOnlyValue={readOnlyValue}
         />
       );
     }
@@ -359,6 +358,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label>Select Country</Form.Label>
               <Form.Control
+                disabled = {readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentDomain")}
                 name="currentDomain"
@@ -374,6 +374,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label>Select language</Form.Label>
               <Form.Control
+                disabled = {readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentLanguage")}
                 name="currentLanguage"
@@ -386,6 +387,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label> Page type</Form.Label>
               <Form.Control
+                disabled = {readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentPageType")}
                 name="pageType"
