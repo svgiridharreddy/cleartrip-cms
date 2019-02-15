@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Redirect, Link } from "react-router-dom";
-import FlightBookingFields from "./flightBooking";
-import FlightScheduleFields from "./flightSchedule";
+import FlightBookingFields from "./FlightBooking";
+import FlightScheduleFields from "./FlightSchedule";
 import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
 
 const pageTypes = [
@@ -49,19 +49,31 @@ class Flights extends Component {
       options: [],
       isHomePage: false,
       flight: {},
-      readOnly: false,
+      readOnlyValue: false,
       selectedOption: "",
       options: [],
       options_dep: [],
       options_arr: [],
       depCityNameSelected: "",
       arrCityNameSelected: "",
-      cityNameSelected: ""
+      cityNameSelected: "",
+      value: ""
     };
   }
 
   handleChange = (e, fieldName) => {
-    this.setState({ [fieldName]: e.target.value });
+    if ([fieldName] == "rte") this.handleRTEchange(e);
+    else this.setState({ [fieldName]: e.target.value });
+  };
+
+  handleRTEchange = content => {
+    this.setState({ content });
+    if (this.props.onChange) {
+      // Send the changes up to the parent component as an HTML string.
+      // This is here to demonstrate using `.toString()` but in a real app it
+      // would be better to avoid generating a string on each change.
+      this.props.onChange(content.toString("html"));
+    }
   };
 
   getInfo = fieldName => {
@@ -124,8 +136,7 @@ class Flights extends Component {
           } else if (fieldName === "arrCityName") {
             debugger;
             this.setState({ options_arr: response.data });
-          }
-          else if (fieldName === "cityName") {
+          } else if (fieldName === "cityName") {
             this.setState({ options: response.data });
           }
         })
@@ -144,16 +155,15 @@ class Flights extends Component {
       this.setState({ depCityNameSelected: p, depCityName: p.value });
     } else if (fieldName === "arrCityName") {
       this.setState({ arrCityNameSelected: p, arrCityName: p.value });
-    }
-    else if (fieldName === "cityName") {
-      debugger
-      this.setState({ cityNameSelected: p,cityName: p.value });
+    } else if (fieldName === "cityName") {
+      debugger;
+      this.setState({ cityNameSelected: p, cityName: p.value });
     }
   };
 
   handleFormSubmit = e => {
     e.preventDefault();
-    debugger
+    debugger;
     const flightValues = this.state;
 
     let postData = {
@@ -166,13 +176,13 @@ class Flights extends Component {
         title: flightValues["title"],
         description: flightValues["description"],
         keywords: flightValues["keywords"],
-        content: flightValues["content"],
+        content: flightValues["content"].toString("html"),
         h1_title: flightValues["h1Tag"],
         airline_name: flightValues["airlineName"],
         city_name: flightValues["cityNameSelected"]["value"],
         dep_city_name: flightValues["depCityNameSelected"]["value"],
-        arr_city_name: flightValues["arrCityNameSelected"]["value"]
-
+        arr_city_name: flightValues["arrCityNameSelected"]["value"],
+        readOnlyValue: true
       }
     };
 
@@ -193,9 +203,8 @@ class Flights extends Component {
       });
   };
   onRecieveProps = () => {
-
     var { flight } = this.props.location.state;
-    debugger
+    debugger;
     this.setState({
       currentPageType: flight.page_type,
       currentDomain: flight.domain,
@@ -209,16 +218,19 @@ class Flights extends Component {
       h1Tag: flight.heading,
       airlineName: flight.airline_name,
       cityName: flight.city_name,
-      depCityNameSelected: { label:flight.source, value:flight.source},
-      depCityName:flight.source,
-      arrCityNameSelected: { label:flight.destination, value:flight.destination},
-      arrCityName:flight.destination,
+      depCityNameSelected: { label: flight.source, value: flight.source },
+      depCityName: flight.source,
+      arrCityNameSelected: {
+        label: flight.destination,
+        value: flight.destination
+      },
+      arrCityName: flight.destination,
       readOnlyValue: true
     });
   };
   componentWillMount() {
     if (this.props.location.state !== undefined) {
-      debugger
+      debugger;
       this.onRecieveProps();
     }
   }
@@ -294,7 +306,6 @@ class Flights extends Component {
           }
           options_dep={this.state.options_dep}
           options_arr={this.state.options_arr}
-          readOnlyValue={readOnlyValue}
         />
       );
     } else if (currentPageType === "flight-schedule") {
@@ -305,6 +316,7 @@ class Flights extends Component {
           classes={classes}
           name="flight-schedule"
           handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
+          handleRTEchange={content => this.handleRTEchange(content)}
           autoCompleteFields={(e, fieldName) =>
             this.autoCompleteFields(e, fieldName)
           }
@@ -331,7 +343,6 @@ class Flights extends Component {
           }
           options_dep={this.state.options_dep}
           options_arr={this.state.options_arr}
-          readOnlyValue={readOnlyValue}
         />
       );
     }
@@ -343,6 +354,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label>Select Country</Form.Label>
               <Form.Control
+                disabled={readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentDomain")}
                 name="currentDomain"
@@ -358,6 +370,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label>Select language</Form.Label>
               <Form.Control
+                disabled={readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentLanguage")}
                 name="currentLanguage"
@@ -370,6 +383,7 @@ class Flights extends Component {
             <Form.Group as={Col}>
               <Form.Label> Page type</Form.Label>
               <Form.Control
+                disabled={readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentPageType")}
                 name="pageType"
