@@ -6,6 +6,9 @@
     margin-left: -5px;
     list-style: none;
 }
+.errormsg{
+    color: red;
+}
 .plusButton{
     background-color: #ff7e33;
     border: none;
