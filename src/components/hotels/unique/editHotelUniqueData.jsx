@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
+import RichTextEditor from 'react-rte';
 
 const API_URL = 'http://localhost:3000'
 
@@ -44,6 +45,18 @@ class EditUniqueContent extends Component {
 					faq: resData.faq 
 				})
 		})
+	}
+
+	onChange(e, value) {
+		debugger;
+		this.setState({
+			top_content: value
+		});
+    if (this.props.onChange) {
+      this.props.onChange(
+        value.toString('html')
+      );
+    }
 	} 
 
 	handleChange(e) {
@@ -60,8 +73,6 @@ class EditUniqueContent extends Component {
 				this.setState({
 					message: data.message,
 					isUpdate: true
-					 // MusicGraph returns an object named data, 
-					// as does axios. So... data.data                             
 				})
 				setTimeout(function(){
 					this.setState({
@@ -86,6 +97,26 @@ class EditUniqueContent extends Component {
 
 	render() {
 		const { isUpdate, domain_url, content_type, country_name, canonical_tag, meta_title, meta_description, meta_keyword, top_content, bottom_content, faq } = this.state
+
+		const toolbarConfig = {
+	    // Optionally specify the groups to display (displayed in the order listed).
+	    display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
+	    INLINE_STYLE_BUTTONS: [
+	      {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+	      {label: 'Italic', style: 'ITALIC'},
+	      {label: 'Underline', style: 'UNDERLINE'}
+	    ],
+	    BLOCK_TYPE_DROPDOWN: [
+	      {label: 'Normal', style: 'unstyled'},
+	      {label: 'H1', style: 'header-one'},
+	      {label: 'H2', style: 'header-two'},
+	      {label: 'H3', style: 'header-three'}
+	    ],
+	    BLOCK_TYPE_BUTTONS: [
+	      {label: 'UL', style: 'unordered-list-item'},
+	      {label: 'OL', style: 'ordered-list-item'}
+	    ]
+	  };
 		if (isUpdate) {
 			return <Redirect to="/hotels" />
 		}
@@ -153,10 +184,15 @@ class EditUniqueContent extends Component {
 				  </Form.Group>
 				  <Form.Group as={Row} controlId="formHorizontalTopContent">
 				    <Form.Label column sm={2}>
-				      Top Content
+				      Header Content
 				    </Form.Label>
 				    <Col sm={10}>
-				      <Form.Control type="text" value={ top_content } name="top_content" onChange={this.handleChange} />
+				    	<RichTextEditor
+			        	value={RichTextEditor.createValueFromString(top_content, 'html')}
+			        	name="top_content"
+			        	onChange={this.onChange}
+			        	toolbarConfig={toolbarConfig}
+			        />
 				    </Col>
 				  </Form.Group>
 				  <Form.Group as={Row} controlId="formHorizontalFooterContent">
@@ -164,7 +200,12 @@ class EditUniqueContent extends Component {
 				      Footer Content
 				    </Form.Label>
 				    <Col sm={10}>
-				      <Form.Control type="text" value={ bottom_content } name="bottom_content" onChange={this.handleChange} />
+				      <RichTextEditor
+			        	value={RichTextEditor.createValueFromString(bottom_content, 'html')}
+			        	name="bottom_content"
+			        	onChange={this.onChange}
+			        	toolbarConfig={toolbarConfig}
+			        />
 				    </Col>
 				  </Form.Group>
 				  <Form.Group as={Row} controlId="formHorizontalFaq">
@@ -172,7 +213,12 @@ class EditUniqueContent extends Component {
 				      Frequently Asked Questions
 				    </Form.Label>
 				    <Col sm={10}>
-				      <Form.Control type="text" value={ faq } name="faq" onChange={this.handleChange} />
+				      <RichTextEditor
+			        	value={RichTextEditor.createValueFromString(faq, 'html')}
+			        	name="faq"
+			        	onChange={this.onChange}
+			        	toolbarConfig={toolbarConfig}
+			        />
 				    </Col>
 				  </Form.Group>
 				  <Form.Group as={Row}>

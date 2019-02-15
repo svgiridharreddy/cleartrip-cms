@@ -32,7 +32,6 @@ class FlightScheduleFields extends Component {
       editorState: "",
       content: RichTextEditor.createEmptyValue()
     };
-
   }
   onChange1 = (content) => {
     this.setState({content});
