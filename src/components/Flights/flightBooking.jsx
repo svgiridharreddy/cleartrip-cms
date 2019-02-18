@@ -85,9 +85,9 @@ class FlightBookingFields extends Component {
     } = this.props;
     debugger;
     subTypeField = (
-      <Form.Group as={Col}>
-        <Form.Label>Sub PageType</Form.Label>
-        <Form.Control
+      <li>
+        <label>Sub PageType</label>
+        <select
           as="select"
           name="currentSubType"
           value={currentSubType}
@@ -98,15 +98,15 @@ class FlightBookingFields extends Component {
               {subtypeOptions[option]}
             </option>
           ))}
-        </Form.Control>
-      </Form.Group>
+        </select>
+      </li>
     );
 
     if (currentSubType === "index") {
       category = (
-        <Form.Group controlId="exampleForm.ControlSelect1">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
+        <li>
+          <label>Category</label>
+          <select
             as="select"
             value={categoryType}
             onChange={e => this.props.handleChange(e, "categoryType")}
@@ -115,14 +115,14 @@ class FlightBookingFields extends Component {
             <option>Select Category</option>
             <option>Domestic</option>
             <option>International</option>
-          </Form.Control>
-        </Form.Group>
+          </select>
+        </li>
       );
     } else if (currentSubType !== "index" && currentSubType !== "") {
       category = (
-        <Form.Group controlId="exampleForm.ControlSelect1">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
+        <li>
+          <label>Category</label>
+          <select
             as="select"
             value={categoryType}
             onChange={e => this.props.handleChange(e, "categoryType")}
@@ -131,16 +131,17 @@ class FlightBookingFields extends Component {
             <option value="">Select Category</option>
             <option value="uniq">Unique</option>
             <option value="common">Common</option>
-          </Form.Control>
-        </Form.Group>
+          </select>
+        </li>
       );
     } else {
     }
 
     fields = (
       <div>
-        <Form.Group className="mb-3">
-          <Form.Control
+        <li>
+          <label>Title</label>
+          <input
             type="text"
             placeholder="Title"
             name="title"
@@ -149,9 +150,9 @@ class FlightBookingFields extends Component {
             value={title}
             onChange={e => this.props.handleChange(e, "title")}
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
+        </li>
+        <li>
+          <input
             type="text"
             name="description"
             placeholder="Description"
@@ -160,9 +161,9 @@ class FlightBookingFields extends Component {
             value={description}
             onChange={e => this.props.handleChange(e, "description")}
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
+        </li>
+        <li>
+          <input
             name="keywords"
             type="text"
             placeholder="Key words"
@@ -170,9 +171,9 @@ class FlightBookingFields extends Component {
             value={keywords}
             onChange={e => this.props.handleChange(e, "keywords")}
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
+        </li>
+        <li>
+          <input
             type="text"
             aria-label="H1 Title"
             value={h1Tag}
@@ -180,9 +181,9 @@ class FlightBookingFields extends Component {
             name="h1Tag"
             placeholder="Enter H1 Title"
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
+        </li>
+        <li>
+          <input
             type="text"
             aria-label="H1 Title"
             value={content}
@@ -190,7 +191,7 @@ class FlightBookingFields extends Component {
             name="content"
             placeholder="Enter Content "
           />
-        </Form.Group>
+        </li>
 
         {categoryType === "uniq" && currentSubType !== "index" ? (
           <Select1
