@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import RichTextEditor from "react-rte";
 import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";

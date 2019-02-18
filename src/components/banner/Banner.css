@@ -9,6 +9,22 @@
 .errormsg {
   color: red;
 }
+<<<<<<< HEAD
+.editFormFields{
+    list-style: none;
+    display: inline-grid;
+}
+.plusButton{
+    background-color: #ff7e33;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 8px 9px;
+    border-radius: 50%;
+=======
 .plusButton {
   background-color: #ff7e33;
   border: none;
@@ -19,6 +35,7 @@
   font-size: 30px;
   margin: 8px 9px;
   border-radius: 50%;
+>>>>>>> 3363df08e95b0cbcb895b346080f48eb15d865ab
 }
 table {
   font-family: arial, sans-serif;
