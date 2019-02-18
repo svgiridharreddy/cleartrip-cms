@@ -20,6 +20,17 @@
     margin: 8px 9px;
     border-radius: 50%;
 }
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
 .addTagBtn{
     padding: 10px;
     display: inline;
