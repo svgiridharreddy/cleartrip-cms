@@ -9,6 +9,10 @@
 .errormsg{
     color: red;
 }
+.editFormFields{
+    list-style: none;
+    display: inline-grid;
+}
 .plusButton{
     background-color: #ff7e33;
     border: none;

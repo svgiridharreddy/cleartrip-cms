@@ -34,7 +34,7 @@ class FlightScheduleRevamp extends Component {
   }
   handleChange(field, e) {
     let _self = this;
-    _self.setState({results: []})
+    _self.setState({ results: [] });
     let form_data = _self.state.form_data;
     form_data[field] = e.target.value;
     _self.setState({
@@ -104,8 +104,11 @@ class FlightScheduleRevamp extends Component {
       form_data["section"] !== "" &&
       form_data["page_subtype"] !== ""
     ) {
+      if (form_data["page_type"] === "flight-schedule") {
+        delete form_data["airline_name"];
+      }
       axios
-        .get("http://localhost:3000/fetch_details_revamp", {
+        .get("http://localhost:3000/get_flights_data", {
           params: { data: form_data }
         })
         .then(response => {
@@ -165,7 +168,7 @@ class FlightScheduleRevamp extends Component {
   createRouteInfo() {
     axios({
       method: "post",
-      url: "http://localhost:3000/fetch_details_revamp",
+      url: "http://localhost:3000/get_flights_data",
       data: this.state.form_data
     }).then(response => {
       debugger;
@@ -348,14 +351,17 @@ class FlightScheduleRevamp extends Component {
             </li>
           </ul>
         </div>
-
         <div className={_self.state.showEmptymsg ? "hidden" : ""}>
           <p>No data found please create it</p>
           <button type="button" onClick={this.createRouteInfo.bind(this)}>
             create
           </button>
         </div>
-        {_self.state.results.length > 0 ? <TableData formData={_self.state.results}/> : ""}
+        {_self.state.results.length > 0 ? (
+          <TableData formData={_self.state.results} />
+        ) : (
+          ""
+        )}
       </div>
     );
   }
