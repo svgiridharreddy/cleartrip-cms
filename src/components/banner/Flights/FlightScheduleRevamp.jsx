@@ -352,10 +352,10 @@ class FlightScheduleRevamp extends Component {
           </ul>
         </div>
         <div className={_self.state.showEmptymsg ? "hidden" : ""}>
-          <p>No data found please create it</p>
-          <button type="button" onClick={this.createRouteInfo.bind(this)}>
+          <button type="button" onClick={this.createRouteInfo.bind(this)} className="button">
             create
           </button>
+           <span>No record found</span>
         </div>
         {_self.state.results.length > 0 ? (
           <TableData formData={_self.state.results} />

@@ -36,10 +36,10 @@ class TableData extends Component {
 			return (
 				<tr key={k}>
 					<td>{tdata["id"]}</td>
-					<td>{tdata["title"]}</td>
-					<td>{tdata["description"]}</td>
+					<td>{tdata["meta_title"]}</td>
+					<td>{tdata["meta_description"]}</td>
 					<td>{tdata["keyword"]}</td>
-					<td>{tdata["heading"]}</td>
+					<td>{tdata["h1_title"]}</td>
 					<td>
 						<a
 							href=""
@@ -64,17 +64,16 @@ class TableData extends Component {
 						<thead>
 							<tr>
 								<th>Id</th>
-								<th>Title</th>
-								<th>Description</th>
+								<th>Meta title</th>
+								<th>Meta description</th>
 								<th>keyword</th>
-								<th>heading</th>
+								<th>h1_title</th>
 								<th colSpan="2" />
 							</tr>
 						</thead>
 						<tbody>{table_data}</tbody>
 					</table>
 				</div>}
-				{JSON.stringify(this.state.form_data)}
 			</div>
 		);
 	}

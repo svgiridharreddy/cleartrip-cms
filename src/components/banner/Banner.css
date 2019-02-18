@@ -6,25 +6,34 @@
   margin-left: -5px;
   list-style: none;
 }
-.errormsg {
+.errormsg,
+.flashMsg {
   color: red;
 }
-<<<<<<< HEAD
-.editFormFields{
-    list-style: none;
-    display: inline-grid;
+.flashMsg {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+  padding: 2%;
+  color: red;
 }
-.plusButton{
-    background-color: #ff7e33;
-    border: none;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 30px;
-    margin: 8px 9px;
-    border-radius: 50%;
-=======
+.editFormFields {
+  list-style: none;
+  display: inline-grid;
+}
+.button {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 19px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  background-color: #ff7e33;
+  cursor: pointer;
+}
 .plusButton {
   background-color: #ff7e33;
   border: none;
@@ -35,7 +44,6 @@
   font-size: 30px;
   margin: 8px 9px;
   border-radius: 50%;
->>>>>>> 3363df08e95b0cbcb895b346080f48eb15d865ab
 }
 table {
   font-family: arial, sans-serif;
