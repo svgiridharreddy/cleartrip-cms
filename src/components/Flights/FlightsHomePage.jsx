@@ -67,7 +67,8 @@ class FlightsHomePage extends PureComponent {
       depCityName: "",
       options: [],
       options_dep: [],
-      options_arr: []
+      options_arr: [],
+      showAddButton: false
     };
   }
 
@@ -80,7 +81,8 @@ class FlightsHomePage extends PureComponent {
       pageType: nextProps.pageType,
       domain: nextProps.domain,
       language: nextProps.language,
-      subType: nextProps.subType
+      subType: nextProps.subType,
+      result: nextProps.result
     });
   }
 
@@ -102,7 +104,6 @@ class FlightsHomePage extends PureComponent {
       options_arr,
       options_dep
     } = this.state;
-
     var url = "http://localhost:3000/fetch_details";
     debugger;
     var parameters = {
@@ -121,15 +122,21 @@ class FlightsHomePage extends PureComponent {
         .get(url, { params: { args: parameters } })
         .then(response => {
           //handle success
+          this.setState({ renderTables: false, showAddButton: false });
           if (
             typeof response.data.result[pageType][subType] !== "undefined" &&
             response.data.result[pageType][subType].length > 0
           ) {
             result[pageType][subType] = response.data.result[pageType][subType];
-            this.setState({ result: result, renderTables: true });
-            debugger;
+            this.setState({
+              result: result,
+              renderTables: true,
+              showAddButton: false
+            });
           } else {
             this.setState({
+              showAddButton: true,
+              renderTables: false,
               message: (
                 <div>
                   <h4>
@@ -142,7 +149,7 @@ class FlightsHomePage extends PureComponent {
           }
         })
         .catch(response => {
-          this.setState({ renderTables: false });
+          this.setState({ renderTables: false, showAddButton: true });
         });
     }
   };
@@ -160,6 +167,7 @@ class FlightsHomePage extends PureComponent {
         const result = { ...this.state.result };
         const { pageType, subType } = this.state;
         const values = result[pageType][subType];
+
         if (index !== -1) {
           values.splice(index, 1);
           result[pageType][subType] = values;
@@ -224,8 +232,18 @@ class FlightsHomePage extends PureComponent {
         this.handleGetInfo()
       );
     } else if (fieldName === "arrCityName") {
-      this.setState({ arrCityNameSelected: p, arrCityName: p.value }, () =>
-        this.handleGetInfo()
+      debugger;
+      this.setState(
+        {
+          domain: this.state.domain,
+          language: this.state.language,
+          pageType: this.state.pageType,
+          subType: this.state.subType,
+          categoryType: this.state.categoryType,
+          arrCityNameSelected: p,
+          arrCityName: p.value
+        },
+        () => this.handleGetInfo()
       );
     } else if (fieldName === "cityName") {
       this.setState({ cityNameSelected: p, cityName: p.value }, () =>
@@ -429,7 +447,7 @@ class FlightsHomePage extends PureComponent {
             ) : null}
           </ul>
         </div>
-        <div className={this.state.renderTables ? "hidden" : ""}>
+        <div className={this.state.showAddButton ? "" : "hidden"}>
           <button type="button" onClick={this.handleAdd}>
             Add New{" "}
           </button>
