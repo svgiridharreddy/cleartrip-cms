@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Form, Row, Col, ButtonToolbar } from 'react-bootstrap';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import RichTextEditor from 'react-rte';
 import {
   EditorState,
   ContentState,
@@ -61,6 +62,25 @@ class ViewUniqueHotelData extends Component {
 	// }
 
 	render() {
+		const toolbarConfig = {
+    // Optionally specify the groups to display (displayed in the order listed).
+    display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
+    INLINE_STYLE_BUTTONS: [
+      {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+      {label: 'Italic', style: 'ITALIC'},
+      {label: 'Underline', style: 'UNDERLINE'}
+    ],
+    BLOCK_TYPE_DROPDOWN: [
+      {label: 'Normal', style: 'unstyled'},
+      {label: 'H1', style: 'header-one'},
+      {label: 'H2', style: 'header-two'},
+      {label: 'H3', style: 'header-three'}
+    ],
+    BLOCK_TYPE_BUTTONS: [
+      {label: 'UL', style: 'unordered-list-item'},
+      {label: 'OL', style: 'ordered-list-item'}
+    ]
+  };
 		const { isDeleted, uniqueResult } = this.state
 		if (isDeleted) {
 			return <Redirect to="/hotels" />
@@ -135,7 +155,15 @@ class ViewUniqueHotelData extends Component {
 										      Header Content
 										    </Form.Label>
 										    <Col sm={10}>
-										      <span>{ item.top_content } </span>
+										    	<RichTextEditor
+									        	value={RichTextEditor.createValueFromString(item.top_content, 'html')}
+									        	toolbarConfig={toolbarConfig}
+									        />
+										    	 {/*<Editor
+									          wrapperClassName="demo-wrapper"
+									          editorClassName="demo-editor"
+									          onEditorStateChange={this.onHeaderEditorStateChange}
+									        />*/}
 										    </Col>
 										  </Form.Group>
 										  <Form.Group as={Row} controlId="formHorizontalFooterContent">
@@ -143,7 +171,10 @@ class ViewUniqueHotelData extends Component {
 										      Footer Content
 										    </Form.Label>
 										    <Col sm={10}>
-										      <span>{ item.bottom_content } </span>
+										    <RichTextEditor
+									        	value={RichTextEditor.createValueFromString(item.bottom_content, 'html')}
+									        	toolbarConfig={toolbarConfig}
+									        />
 										    </Col>
 										  </Form.Group>
 										  <Form.Group as={Row} controlId="formHorizontalFaq">
@@ -151,7 +182,10 @@ class ViewUniqueHotelData extends Component {
 										      Frequently Asked Questions
 										    </Form.Label>
 										    <Col sm={10}>
-										      <span>{ item.faq } </span>
+										    	<RichTextEditor
+									        	value={RichTextEditor.createValueFromString(item.faq, 'html')}
+									        	toolbarConfig={toolbarConfig}
+									        />
 										    </Col>
 										  </Form.Group>
 										  <ButtonToolbar>
