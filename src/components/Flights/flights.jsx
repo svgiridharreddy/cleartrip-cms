@@ -62,12 +62,8 @@ class Flights extends Component {
   }
 
   handleChange = (e, fieldName) => {
-    if ([fieldName] == "rte") {
-      this.handleRTEchange(e);
-    } else {
-      debugger;
-      this.setState({ [fieldName]: e.target.value });
-    }
+    if ([fieldName] == "rte") this.handleRTEchange(e);
+    else this.setState({ [fieldName]: e.target.value });
   };
 
   handleRTEchange = content => {
@@ -240,7 +236,7 @@ class Flights extends Component {
   }
 
   render() {
-    debugger;
+    const { classes } = this.props;
 
     const {
       currentPageType,
@@ -283,6 +279,7 @@ class Flights extends Component {
         <FlightBookingFields
           currentSubType={currentSubType}
           categoryType={categoryType}
+          classes={classes}
           name="flight-booking"
           handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
           autoCompleteFields={(e, fieldName) =>
@@ -316,6 +313,7 @@ class Flights extends Component {
         <FlightScheduleFields
           currentSubType={currentSubType}
           categoryType={categoryType}
+          classes={classes}
           name="flight-schedule"
           handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
           handleRTEchange={content => this.handleRTEchange(content)}
@@ -349,50 +347,60 @@ class Flights extends Component {
       );
     }
     return (
-      <div className="top-wrapper">
-        <div>
-          <ul className="list-inline">
-            <li>
-              <label>Country</label>
-              <select
+      <div>
+        <h1>Cleartrip Flights</h1>
+        <Form onSubmit={this.handleFormSubmit.bind(this)}>
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Label>Select Country</Form.Label>
+              <Form.Control
+                disabled={readOnlyValue}
+                as="select"
                 onChange={e => this.handleChange(e, "currentDomain")}
                 name="currentDomain"
-                value={this.state.currentDomain}
+                value={currentDomain}
               >
                 {Object.keys(domains).map(option => (
                   <option key={option} value={option}>
                     {domains[option]}
                   </option>
                 ))}
-              </select>
-            </li>
-            <li>
-              <label>Language</label>
-              <select
-                onChange={e => this.handleChange(e, "language")}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Label>Select language</Form.Label>
+              <Form.Control
+                disabled={readOnlyValue}
+                as="select"
+                onChange={e => this.handleChange(e, "currentLanguage")}
                 name="currentLanguage"
-                value={this.state.currentLanguage}
+                value={currentLanguage}
               >
                 {this.returnOptions(languages)}
-              </select>
-            </li>
+              </Form.Control>
+            </Form.Group>
 
-            <li>
-              <label>Page Type</label>
-              <select
+            <Form.Group as={Col}>
+              <Form.Label> Page type</Form.Label>
+              <Form.Control
+                disabled={readOnlyValue}
+                as="select"
                 onChange={e => this.handleChange(e, "currentPageType")}
-                name="currentPageType"
-                value={this.state.currentPageType}
+                name="pageType"
+                value={currentPageType}
               >
                 {this.returnOptions(pageTypes)}
-              </select>
-            </li>
-            {fields}
-          </ul>
-        </div>
-        <button type="submit" onClick={this.handleFormSubmit.bind(this)}>
-          Submit
-        </button>
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+
+          {fields}
+          <ButtonToolbar>
+            <Button variant="success" type="submit">
+              Submit
+            </Button>
+          </ButtonToolbar>
+        </Form>
       </div>
     );
   }

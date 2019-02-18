@@ -4,8 +4,6 @@ import { Form, Col } from "react-bootstrap";
 import UniqueContentDataCollection from './unique/uniqueContentDataCollection';
 import CommonContentDataCollection from './common/commonContentDataCollection';
 
-
-
 const contentType = ["Common Data", "Unique Data"];
 
 class Index extends Component {
