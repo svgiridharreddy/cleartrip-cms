@@ -79,6 +79,7 @@ class FlightScheduleFields extends Component {
 
   render() {
     debugger;
+    debugger;
     let subTypeField, category, fields;
     const subtypeOptions = {
       "select sub page type": "select sub page type",
@@ -137,9 +138,9 @@ class FlightScheduleFields extends Component {
       ]
     };
     subTypeField = (
-      <Form.Group as={Col}>
-        <Form.Label>Sub PageType</Form.Label>
-        <Form.Control
+      <li>
+        <label>Page Subtype</label>
+        <select
           disabled={readOnlyValue}
           as="select"
           name="currentSubType"
@@ -152,15 +153,15 @@ class FlightScheduleFields extends Component {
               {subtypeOptions[option]}
             </option>
           ))}
-        </Form.Control>
-      </Form.Group>
+        </select>
+      </li>
     );
 
     if (currentSubType === "index") {
       category = (
-        <Form.Group controlId="exampleForm.ControlSelect1">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
+        <li>
+          <label>Category</label>
+          <select
             disabled={readOnlyValue}
             as="select"
             value={categoryType}
@@ -171,14 +172,14 @@ class FlightScheduleFields extends Component {
             <option>Select Category</option>
             <option>Domestic</option>
             <option>International</option>
-          </Form.Control>
-        </Form.Group>
+          </select>
+        </li>
       );
     } else if (currentSubType !== "index" && currentSubType !== "") {
       category = (
-        <Form.Group controlId="exampleForm.ControlSelect1">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
+        <li>
+          <label>Category</label>
+          <select
             disabled={readOnlyValue}
             as="select"
             value={categoryType}
@@ -189,17 +190,17 @@ class FlightScheduleFields extends Component {
             <option value="">Select Category</option>
             <option value="uniq">Unique</option>
             <option value="common">Common</option>
-          </Form.Control>
-        </Form.Group>
+          </select>
+        </li>
       );
     } else {
     }
 
     fields = (
       <div>
-        <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
-          <Form.Control
+        <li>
+          <label>Title</label>
+          <input
             type="text"
             placeholder="Search  Destination"
             name="title"
@@ -209,10 +210,11 @@ class FlightScheduleFields extends Component {
             required
             onChange={e => this.props.handleChange(e, "title")}
           />
-        </Form.Group>
-        <Form.Label>Description</Form.Label>
-        <Form.Group className="mb-3">
-          <Form.Control
+        </li>
+        <li>
+          <label>Description</label>
+
+          <input
             type="text"
             name="description"
             placeholder="Description"
@@ -222,10 +224,11 @@ class FlightScheduleFields extends Component {
             required
             onChange={e => this.props.handleChange(e, "description")}
           />
-        </Form.Group>
-        <Form.Label>Keywords</Form.Label>
-        <Form.Group className="mb-3">
-          <Form.Control
+        </li>
+        <li>
+          <label>Keywords</label>
+
+          <input
             name="keywords"
             type="text"
             placeholder="Key words"
@@ -234,10 +237,10 @@ class FlightScheduleFields extends Component {
             required
             onChange={e => this.props.handleChange(e, "keywords")}
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>H1 Title</Form.Label>
-          <Form.Control
+        </li>
+        <li>
+          <label>H1 Title</label>
+          <input
             type="text"
             aria-label="H1 Title"
             value={h1Tag}
@@ -246,8 +249,8 @@ class FlightScheduleFields extends Component {
             required
             placeholder="Enter H1 Title"
           />
-        </Form.Group>
-        <Form.Label>Content</Form.Label>
+        </li>
+        <label>Content</label>
 
         <RichTextEditor
           value={this.state.content}
@@ -265,7 +268,7 @@ class FlightScheduleFields extends Component {
         (currentSubType === "flights-from" ||
           currentSubType === "flights-to") ? (
           <div>
-            <Form.Label>City Name</Form.Label>
+            <label>City Name</label>
             <Select1
               isDisabled={readOnlyValue}
               value={cityNameSelected}
@@ -281,7 +284,7 @@ class FlightScheduleFields extends Component {
         ) : null}
         {categoryType === "uniq" && currentSubType === "schedule-routes" ? (
           <div>
-            <Form.Label>Dep City Name</Form.Label>
+            <label>Dep City Name</label>
             <Select1
               isDisabled={readOnlyValue}
               value={depCityNameSelected}
@@ -293,7 +296,7 @@ class FlightScheduleFields extends Component {
               // onInputChange={this.handleAirlineSearch}
               onInputChange={e => this.props.handleAutoSearch(e, "depCityName")}
             />
-            <Form.Label>Arr City Name</Form.Label>
+            <label>Arr City Name</label>
             <Select1
               isDisabled={readOnlyValue}
               value={arrCityNameSelected}

@@ -34,7 +34,7 @@ class FlightScheduleRevamp extends Component {
   }
   handleChange(field, e) {
     let _self = this;
-    _self.setState({results: []})
+    _self.setState({ results: [] });
     let form_data = _self.state.form_data;
     form_data[field] = e.target.value;
     _self.setState({
@@ -355,7 +355,11 @@ class FlightScheduleRevamp extends Component {
             create
           </button>
         </div>
-        {_self.state.results.length > 0 ? <TableData formData={_self.state.results}/> : ""}
+        {_self.state.results.length > 0 ? (
+          <TableData formData={_self.state.results} />
+        ) : (
+          ""
+        )}
       </div>
     );
   }
