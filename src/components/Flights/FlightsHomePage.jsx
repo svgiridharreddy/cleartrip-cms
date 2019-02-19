@@ -202,6 +202,9 @@ class FlightsHomePage extends PureComponent {
       ) {
         this.fetchDetails();
       }
+      else if ((this.state.subType==="from" || this.state.subType==="to") && (this.state.cityName!="" || this.state.cityName!="undefined")){
+          this.fetchDetails();
+      }
     }
   };
 
