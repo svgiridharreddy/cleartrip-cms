@@ -17,7 +17,7 @@ const domains = {
   selectDomain: "Select Domain",
   IN: "India",
   AE: "United Arab Emirates",
-  SA: "Saudi Arabia",
+  SA: "Saudi Arabia", 
   KW: "Kuwait",
   OM: "Oman",
   QA: "Qatar",
