@@ -28,8 +28,7 @@ class FlightScheduleForm extends Component {
 			editorState: editorState,
 			contentData: "",
 			updateMsg: "",
-			flashShow: false,
-			updated: false
+			flashShow: false
 		};
 		this.onChange = this.onChange.bind(this);
 	}
@@ -70,8 +69,11 @@ class FlightScheduleForm extends Component {
 			if (response.status == 200) {
 				_self.setState({
 					updateMsg: response.data.message,
-					updated: true
+					flashShow: true
 				});
+				setTimeout(function(){
+					window.location.reload();
+				},1500)
 			}
 		});
 	}
@@ -90,10 +92,6 @@ class FlightScheduleForm extends Component {
 	}
 	render() {
 		let _self = this;
-		if (_self.state.updated) {
-			debugger
-			return <FlightScheduleRevamp />
-		}
 		const { editorState } = this.state;
 		let indexDefaults = [
 			"id",
@@ -122,6 +120,10 @@ class FlightScheduleForm extends Component {
 		});
 		return (
 			<div>
+				<FlashMassage duration={10000} persistOnHover={true}>
+					<span className={_self.state.flashShow ? "flashMsg" : "flashMsg hidden"}>{_self.state.updateMsg}</span>
+				</FlashMassage>
+				
 				<ul className="editFormFields">
 					{form_elements}
 					<Editor

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Form, Col } from "react-bootstrap";
 
 import UniqueContentDataCollection from "./unique/UniqueContentDataCollection";
-import CommonContentDataCollection from "./common/commonContentDataCollection";
+import CommonContentDataCollection from "./common/CommonContentDataCollection";
 
 const contentType = ["Common Data", "Unique Data"];
 
