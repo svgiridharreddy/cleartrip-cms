@@ -3,13 +3,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import Index from "./components/hotels/index";
-import HotelUniqueContent from "./components/hotels/unique/addHotelUniqueContent";
-import ViewUniqueHotelData from "./components/hotels/unique/viewHotelUniqueData";
-import EditUniqueContent from "./components/hotels/unique/editHotelUniqueData";
-import HotelCommonContent from "./components/hotels/common/HotelCommonContent";
-import ViewCommonHotelData from "./components/hotels/common/viewCommonHotelData";
-import EditCommonContent from "./components/hotels/common/editCommonContent";
+import Index from './components/hotels/index';
+import HotelUniqueContent from './components/hotels/unique/AddHotelUniqueContent';
+import ViewUniqueHotelData from './components/hotels/unique/ViewHotelUniqueData';
+import EditUniqueContent from './components/hotels/unique/EditHotelUniqueData';
+import HotelCommonContent from './components/hotels/common/HotelCommonContent';
+import ViewCommonHotelData from './components/hotels/common/ViewCommonHotelData';
+import EditCommonContent from './components/hotels/common/EditCommonContent';
+
 
 import Layout from "./components/layout";
 import Flights from "./components/Flights/Flights";
