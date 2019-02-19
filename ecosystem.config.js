@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "cleartrip-cms",
       script: "npm",
-      // args: 'run start:production',
+      args: "run start:production",
       instances: 1,
       autorestart: true,
       watch: false,
