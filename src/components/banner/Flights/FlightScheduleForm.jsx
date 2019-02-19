@@ -46,106 +46,114 @@ class FlightScheduleForm extends Component {
       }
     }
   }
+	editFields() {
+		let _self = this;
+		let form_data = this.state.form_data;
+		if (this.state.editorState != "") {
+			let convertedData = draftToHtml(
+				convertToRaw(this.state.editorState.getCurrentContent())
+			);
+			convertedData = convertedData.replace(/"/g, "'");
+			form_data["content"] = convertedData;
+			_self.setState({
+				form_data
+			});
+		}
 
-  editFields() {
-    let convertedData = draftToHtml(
-      convertToRaw(this.state.editorState.getCurrentContent())
-    );
-    convertedData = convertedData.replace(/"/g, "'");
-    let _self = this;
-    let form_data = this.state.form_data;
-    form_data["content"] = convertedData;
-    _self.setState({
-      form_data
-    });
+		axios({
+			method: "post",
+			url: "http://localhost:3000/update_flights_data",
+			data: this.state.form_data
+		}).then(response => {
+			if (response.status == 200) {
+				_self.setState({
+					updateMsg: response.data.message,
+					flashShow: true
+				});
+				setTimeout(function() {
+					window.location.reload();
+				}, 1500);
+			}
+		});
+	}
+	onChange(editorState) {
+		this.setState({ editorState });
+	}
 
-    axios({
-      method: "post",
-      url: "http://localhost:3000/update_flights_data",
-      data: this.state.form_data
-    }).then(response => {
-      if (response.status == 200) {
-        _self.setState({
-          updateMsg: response.data.message,
-          flashShow: true
-        });
-        setTimeout(function() {
-          window.location.reload();
-        }, 1500);
-      }
-    });
-  }
-  onChange(editorState) {
-    this.setState({ editorState });
-  }
+	handleChange(field, e) {
+		e.preventDefault();
+		let _self = this;
+		let form_data = this.state.form_data;
+		form_data[e.target.name] = e.target.value;
+		_self.setState({
+			form_data
+		});
+	}
+	render() {
+		let _self = this;
+		const { editorState } = this.state;
+		let indexDefaults = [
+			"id",
+			"page_type",
+			"language",
+			"page_subtype",
+			"section",
+			"domain",
+			"content",
+			"content_type",
+			"source",
+			"destination"
+		];
+		let form_data = this.state.form_data;
+		let form_elements = Object.keys(form_data).map((ele, k) => {
+			if (!indexDefaults.includes(ele)) {
+				return (
+					<li key={k}>
+						<label>{ele}</label>
+						<input
+							type="text"
+							value={form_data[ele]}
+							name={ele}
+							onChange={this.handleChange.bind(this, ele)}
+						/>
+					</li>
+				);
+			}
+		});
+		return (
+			<div>
+				<FlashMassage duration={10000} persistOnHover={true}>
+					<span
+						className={
+							_self.state.flashShow
+								? "flashMsg"
+								: "flashMsg hidden"
+						}
+					>
+						{_self.state.updateMsg}
+					</span>
+				</FlashMassage>
 
-  handleChange(field, e) {
-    e.preventDefault();
-    let _self = this;
-    let form_data = this.state.form_data;
-    form_data[e.target.name] = e.target.value;
-    _self.setState({
-      form_data
-    });
-  }
-  render() {
-    let _self = this;
-    const { editorState } = this.state;
-    let indexDefaults = [
-      "id",
-      "page_type",
-      "language",
-      "page_subtype",
-      "section",
-      "domain",
-      "content"
-    ];
-    let form_data = this.state.form_data;
-    let form_elements = Object.keys(form_data).map((ele, k) => {
-      if (!indexDefaults.includes(ele)) {
-        return (
-          <li key={k}>
-            <label>{ele}</label>
-            <input
-              type="text"
-              value={form_data[ele]}
-              name={ele}
-              onChange={this.handleChange.bind(this, ele)}
-            />
-          </li>
-        );
-      }
-    });
-    return (
-      <div>
-        <FlashMassage duration={10000} persistOnHover={true}>
-          <span
-            className={_self.state.flashShow ? "flashMsg" : "flashMsg hidden"}
-          >
-            {_self.state.updateMsg}
-          </span>
-        </FlashMassage>
-
-        <ul className="editFormFields">
-          {form_elements}
-          <Editor
-            editorState={this.state.editorState}
-            wrapperClassName="demo-wrapper"
-            editorClassName="editer-content"
-            onEditorStateChange={this.onChange}
-          />
-          <li>
-            <button
-              type="button"
-              className="button"
-              onClick={this.editFields.bind(this)}
-            >
-              Editor
-            </button>
-          </li>
-        </ul>
-      </div>
-    );
-  }
+				<ul className="editFormFields">
+					{form_elements}
+					<Editor
+						editorState={this.state.editorState}
+						wrapperClassName="demo-wrapper"
+						editorClassName="editer-content"
+						onEditorStateChange={this.onChange}
+					/>
+					<li>
+						<button
+							type="button"
+							className="button"
+							onClick={this.editFields.bind(this)}
+						>
+							Edit
+						</button>
+					</li>
+				</ul>
+			</div>
+		);
+	}
 }
 export default FlightScheduleForm;

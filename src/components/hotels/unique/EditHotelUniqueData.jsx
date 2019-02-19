@@ -26,10 +26,13 @@ class EditUniqueContent extends Component {
       FaqeditorState: "",
       domain_url: "",
       domain_name: "",
-      content_type: props.content_type,
+      content_type: '',
       country_name: "",
       page_type: "",
       canonical_tag: "",
+      h1_tag: "",
+      h2_tag: "",
+      h3_tag: "",
       meta_title: "",
       meta_description: "",
       meta_keyword: "",
@@ -62,6 +65,9 @@ class EditUniqueContent extends Component {
           country_name: resData.country_name,
           page_type: resData.page_type,
           canonical_tag: resData.canonical_tag,
+          h1_tag: resData.h1_tag,
+          h2_tag: resData.h2_tag,
+          h3_tag: resData.h3_tag,
           meta_title: resData.meta_title,
           meta_description: resData.meta_description,
           meta_keyword: resData.meta_keyword,
@@ -108,7 +114,6 @@ class EditUniqueContent extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    debugger;
     let convertedHeaderData;
     let convertedFooterData;
     let convertedFaqData;
@@ -137,9 +142,14 @@ class EditUniqueContent extends Component {
       convertedFaqData = this.state.FaqeditorState;
     }
     const data = {
+      domain_name: this.state.domain_name,
       domain_url: this.state.domain_url,
       content_type: this.state.content_type,
       country_name: this.state.country_name,
+      page_type: this.state.page_type,
+      h1_tag: this.state.h1_tag,
+      h2_tag: this.state.h2_tag,
+      h3_tag: this.state.h3_tag,
       canonical_tag: this.state.canonical_tag,
       meta_title: this.state.meta_title,
       meta_description: this.state.meta_description,
@@ -148,7 +158,6 @@ class EditUniqueContent extends Component {
       bottom_content: convertedFooterData,
       faq: convertedFaqData
     };
-    debugger;
     axios
       .post(
         `${API_URL}/hotels/update/uniquedata/${this.props.match.params.id}`,
@@ -164,10 +173,13 @@ class EditUniqueContent extends Component {
             this.setState({
               domain_name: "",
               domain_url: "",
-              content_type: "Unique Data",
+              content_type: "",
               country_name: "",
               page_type: "",
               canonical_tag: "",
+              h1_tag: "",
+              h2_tag: "",
+              h3_tag: "",
               meta_title: "",
               meta_description: "",
               meta_keyword: "",
@@ -197,6 +209,9 @@ class EditUniqueContent extends Component {
       country_name,
       page_type,
       canonical_tag,
+      h1_tag,
+      h2_tag,
+      h3_tag,
       meta_title,
       meta_description,
       meta_keyword,
@@ -223,7 +238,6 @@ class EditUniqueContent extends Component {
                   type="text"
                   value={domain_url}
                   name="domain_url"
-                  onChange={this.handleChange}
                 />
               </Col>
             </Form.Group>
@@ -238,7 +252,6 @@ class EditUniqueContent extends Component {
                   type="text"
                   value={domain_name}
                   name="domain_name"
-                  onChange={this.handleChange}
                 />
               </Col>
             </Form.Group>
@@ -274,7 +287,6 @@ class EditUniqueContent extends Component {
                   type="text"
                   value={page_type}
                   name="page_type"
-                  onChange={this.handleChange}
                 />
               </Col>
             </Form.Group>
@@ -294,6 +306,45 @@ class EditUniqueContent extends Component {
               </Col>
             </Form.Group>
           ) : null}
+          <Form.Group as={Row} controlId="formHorizontalH1Title">
+            <Form.Label column sm={2}>
+              H1 Title
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                type="text"
+                value={h1_tag}
+                name="h1_tag"
+                onChange={this.handleChange}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} controlId="formHorizontalH2Title">
+            <Form.Label column sm={2}>
+              H2 Title
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                type="text"
+                value={h2_tag}
+                name="h2_tag"
+                onChange={this.handleChange}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} controlId="formHorizontalH3Title">
+            <Form.Label column sm={2}>
+              H3 Title
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                type="text"
+                value={h3_tag}
+                name="h3_tag"
+                onChange={this.handleChange}
+              />
+            </Col>
+          </Form.Group>
           <Form.Group as={Row} controlId="formHorizontalMetaTitle">
             <Form.Label column sm={2}>
               Meta Title

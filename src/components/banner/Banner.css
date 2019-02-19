@@ -6,6 +6,13 @@
   margin-left: -5px;
   list-style: none;
 }
+.DraftEditor-editorContainer {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #000000ed;
+  position: relative;
+  height: auto;
+  overflow: scroll;
+}
 .errormsg {
   color: red;
 }

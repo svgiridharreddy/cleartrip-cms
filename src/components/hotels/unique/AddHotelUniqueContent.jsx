@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
+import Select from 'react-select';
 import {
   EditorState,
   ContentState,
@@ -15,14 +16,19 @@ import htmlToDraft from "html-to-draftjs";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const API_URL = 'http://localhost:3000'
+const AUTO_COMPLETE = "http://localhost:3000/country_autocomplete" 
 
 class HotelUniqueContent extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { domain_url: '',
-			content_type: props.content_type,
+			content_type: 'Unique Data',
 			country_name: '',
+			selectedCountry: null,
 			canonical_tag: '',
+			h1_tag: '',
+			h2_tag: '',
+			h3_tag: '',
 			meta_title: '',
 			meta_description: '',
 			meta_keyword:'',
@@ -38,6 +44,24 @@ class HotelUniqueContent extends Component {
 		this.handleChange = this.handleChange.bind(this);
 	}
 
+	handleSelectedInput = (p, source) => {
+    this.setState({
+      [source]: p.value,
+      selectedCountry: p
+    })
+  }
+
+  handleAutoSearch = (e, source) => {
+    if (e !== "" && e.length > 2) {
+      axios.get(`${AUTO_COMPLETE}?country=${e}`)
+      .then((response) => {
+        this.setState({
+           options: response.data
+        })
+      })
+    }
+  }
+
 	handleChange(e) {
 		this.setState({
 			[e.target.name]: e.target.value
@@ -51,12 +75,14 @@ class HotelUniqueContent extends Component {
 		headerState = typeof(headerState) == "string" ? headerState : ""
 		footerState = typeof(footerState) == "string" ? footerState : ""
 		faqState = typeof(faqState) == "string" ? faqState : ""
-		debugger;
 		const data = {
 			domain_url: this.state.domain_url,
 			content_type: this.state.content_type,
 			country_name: this.state.country_name,
 			canonical_tag: this.state.canonical_tag,
+			h1_tag: this.state.h1_tag,
+			h2_tag: this.state.h2_tag,
+			h3_tag: this.state.h3_tag,
 			meta_title: this.state.meta_title,
 			meta_description: this.state.meta_description,
 			meta_keyword: this.state.meta_keyword,
@@ -76,12 +102,16 @@ class HotelUniqueContent extends Component {
 						content_type: 'Unique Data',
 						country_name: '',
 						canonical_tag: '',
+						selectedCountry: null,
+						h1_tag: '',
+						h2_tag: '',
+						h3_tag: '',
 						meta_title: '',
 						meta_description: '',
 						meta_keywords:'',
 						headerEditorState: EditorState.createEmpty(),
-            			footerEditorState: EditorState.createEmpty(),
-            			faqEditorState: EditorState.createEmpty(),
+            footerEditorState: EditorState.createEmpty(),
+            faqEditorState: EditorState.createEmpty(),
 						message: ''
 					})
 				}.bind(this),2000)
@@ -147,7 +177,7 @@ class HotelUniqueContent extends Component {
 			      Content Section
 			    </Form.Label>
 			    <Col sm={10}>
-			      <Form.Control value={ this.state.content_type } name="content_type" onChange={this.handleChange} />
+			      <Form.Control value={ this.state.content_type } name="content_type" />
 			    </Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="formHorizontalCountryName">
@@ -155,7 +185,13 @@ class HotelUniqueContent extends Component {
 			      Country Name
 			    </Form.Label>
 			    <Col sm={10}>
-			      <Form.Control type="text" name="country_name" onChange={this.handleChange} />
+			      <Select
+              value={this.state.selectedCountry}
+              name="country_name"
+              onChange={p => this.handleSelectedInput(p, "country_name")}
+              onInputChange={e => this.handleAutoSearch(e, "country_name")}
+              options={this.state.options}
+            />
 			    </Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="formHorizontalCanonicalTag">
@@ -166,6 +202,30 @@ class HotelUniqueContent extends Component {
 			      <Form.Control type="text" name="canonical_tag" onChange={this.handleChange} />
 			    </Col>
 			  </Form.Group>
+			  <Form.Group as={Row} controlId="formHorizontalH1Title">
+	              <Form.Label column sm={2}>
+	                H1 Title
+	              </Form.Label>
+	              <Col sm={10}>
+	                <Form.Control type="text" value={this.state.h1_tag} name="h1_tag" onChange={this.handleChange} />
+	              </Col>
+	            </Form.Group>
+	            <Form.Group as={Row} controlId="formHorizontalH2Title">
+	              <Form.Label column sm={2}>
+	                H2 Title
+	              </Form.Label>
+	              <Col sm={10}>
+	                <Form.Control type="text" value={this.state.h2_tag} name="h2_tag" onChange={this.handleChange} />
+	              </Col>
+	            </Form.Group>
+	            <Form.Group as={Row} controlId="formHorizontalH3Title">
+	              <Form.Label column sm={2}>
+	                H3 Title
+	              </Form.Label>
+	              <Col sm={10}>
+	                <Form.Control type="text" value={this.state.h3_tag} name="h3_tag" onChange={this.handleChange} />
+	              </Col>
+	            </Form.Group>
 			  <Form.Group as={Row} controlId="formHorizontalMetaTitle">
 			    <Form.Label column sm={2}>
 			      Meta Title

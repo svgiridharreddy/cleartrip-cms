@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Select1 from "react-select";
 import "../Banner.css";
 import TableData from "./TableData";
+
 class FlightScheduleRevamp extends Component {
   constructor(props) {
     super(props);
@@ -25,16 +27,70 @@ class FlightScheduleRevamp extends Component {
       from_cities_list: [],
       to_cities_list: [],
       results: [],
-      showEmptymsg: true
+      showEmptymsg: true,
+      options_dep: [],
+      options_arr: [],
+      sourcedOption: null,
+      destinationdOption: null
     };
     this.optReturn = this.optReturn.bind(this);
     this.countryRtn = this.countryRtn.bind(this);
-    this.routesAutoComplete = this.routesAutoComplete.bind(this);
     this.createRouteInfo = this.createRouteInfo.bind(this);
+    this.fetchFlightsData = this.fetchFlightsData.bind(this);
+  }
+
+  fetchFlightsData(form_data) {
+    let hitAPI = false;
+    if (
+      form_data["domain"] !== "" &&
+      form_data["language"] !== "" &&
+      form_data["page_type"] !== "" &&
+      form_data["section"] !== "" &&
+      form_data["page_subtype"] !== ""
+    ) {
+      this.setState({
+        results:[]
+      })
+      if (form_data["page_subtype"] == "index") {
+        hitAPI = true;
+      } else if (
+        form_data["page_subtype"] == "routes" &&
+        form_data["content_type"] !== ""
+      ) {
+        if (form_data["content_type"] === "uniq") {
+          if (form_data["source"] !== "" && form_data["destination"] !== "") {
+            hitAPI = true;
+          }
+        } else {
+          hitAPI = true;
+        }
+      }
+      if (form_data["page_type"] === "flight-schedule") {
+        delete form_data["airline_name"];
+      }
+      if (hitAPI) {
+        axios
+          .get("http://localhost:3000/get_flights_data", {
+            params: { data: form_data }
+          })
+          .then(response => {
+            if (response.data && response.data.length > 0) {
+              this.setState({
+                showEmptymsg: true,
+                results: response.data
+              });
+            } else {
+              this.setState({
+                showEmptymsg: false,
+                results: []
+              });
+            }
+          });
+      }
+    }
   }
   handleChange(field, e) {
     let _self = this;
-    _self.setState({ results: [] });
     let form_data = _self.state.form_data;
     form_data[field] = e.target.value;
     _self.setState({
@@ -92,38 +148,12 @@ class FlightScheduleRevamp extends Component {
         form_data
       });
       this.setState({
-        routesHide: e.target.value == "unique" ? false : true
+        routesHide: e.target.value == "uniq" ? false : true
       });
     }
+    this.fetchFlightsData(form_data); //calling api data
     // Flight schedule flow ending
 
-    if (
-      form_data["domain"] !== "" &&
-      form_data["language"] !== "" &&
-      form_data["page_type"] !== "" &&
-      form_data["section"] !== "" &&
-      form_data["page_subtype"] !== ""
-    ) {
-      if (form_data["page_type"] === "flight-schedule") {
-        delete form_data["airline_name"];
-      }
-      axios
-        .get("http://localhost:3000/get_flights_data", {
-          params: { data: form_data }
-        })
-        .then(response => {
-          if (response.data && response.data.length > 0) {
-            this.setState({
-              showEmptymsg: true,
-              results: response.data
-            });
-          } else {
-            this.setState({
-              showEmptymsg: false
-            });
-          }
-        });
-    }
     if (e.target.name === "page_type" && e.target.value === "flight-booking") {
       let form_json = {
         page_subtype: "",
@@ -162,9 +192,7 @@ class FlightScheduleRevamp extends Component {
       );
     });
   }
-  routesAutoComplete(r) {
-    debugger;
-  }
+
   createRouteInfo() {
     axios({
       method: "post",
@@ -172,8 +200,64 @@ class FlightScheduleRevamp extends Component {
       data: this.state.form_data
     }).then(response => {
       debugger;
+      this.setState({
+        results: response.data,
+        showEmptymsg: true
+      });
     });
   }
+
+  handleSelectedInput(p, fieldName) {
+    let _self = this;
+    let form_data = _self.state;
+    form_data = _self.state.form_data;
+    if (fieldName === "airlineName") {
+      this.setState({ selectedOption: p, airlineName: p.value });
+    } else if (fieldName === "source") {
+      this.setState({ sourcedOption: p });
+      form_data["source"] = p.value;
+      _self.setState({ form_data });
+    } else if (fieldName === "destination") {
+      this.setState({ destinationdOption: p });
+      form_data["destination"] = p.value;
+      _self.setState({ form_data });
+    } else if (fieldName === "cityName") {
+      this.setState({ cityNameSelected: p, cityName: p.value });
+    }
+    if(form_data["source"] !== "" && form_data["destination"] !== ""){
+      this.fetchFlightsData(form_data)
+    }
+  }
+
+  handleAutoSearch(e, fieldName) {
+    let _self = this;
+    let target_value = e;
+    if (target_value !== "" && target_value.length >= 3) {
+      let url = "";
+      if (fieldName === "airlineName") {
+        url = "http://localhost:3000/airline_autocomplete";
+      } else {
+        url = "http://localhost:3000/city_autocomplete_revamp";
+      }
+      axios
+        .get(url, { params: { query_term: target_value } })
+        .then(response => {
+          if (fieldName === "airlineName") {
+            _self.setState({ options: response.data });
+          } else if (fieldName === "source") {
+            _self.setState({ options_dep: response.data });
+          } else if (fieldName === "destination") {
+            _self.setState({ options_arr: response.data });
+          } else if (fieldName === "cityName") {
+            _self.setState({ options: response.data });
+          }
+        })
+        .then(response => {
+          
+        });
+    }
+  }
+
   render() {
     let _self = this;
     let form_data = _self.state.form_data;
@@ -316,20 +400,20 @@ class FlightScheduleRevamp extends Component {
             <div className={this.state.routesHide ? "hidden" : ""}>
               <li>
                 <label>Departure city</label>
-                <input
-                  type="text"
-                  name="source"
-                  placeholder="Departure city"
-                  onChange={this.handleChange.bind(this, "source")}
+                <Select1
+                  value={_self.state.sourcedOption}
+                  onChange={p => this.handleSelectedInput(p, "source")}
+                  options={_self.state.options_dep}
+                  onInputChange={e => this.handleAutoSearch(e, "source")}
                 />
               </li>
               <li>
                 <label>Arrival city</label>
-                <input
-                  type="text"
-                  placeholder="Arrival city"
-                  name="destination"
-                  onChange={this.handleChange.bind(this, "destination")}
+                <Select1
+                  value={_self.state.destinationdOption}
+                  onChange={p => this.handleSelectedInput(p, "destination")}
+                  options={_self.state.options_arr}
+                  onInputChange={e => this.handleAutoSearch(e, "destination")}
                 />
               </li>
             </div>
@@ -352,13 +436,17 @@ class FlightScheduleRevamp extends Component {
           </ul>
         </div>
         <div className={_self.state.showEmptymsg ? "hidden" : ""}>
-          <button type="button" onClick={this.createRouteInfo.bind(this)} className="button">
+          <button
+            type="button"
+            onClick={this.createRouteInfo.bind(this)}
+            className="button"
+          >
             create
           </button>
-           <span>No record found</span>
+          <span>No record found</span>
         </div>
         {_self.state.results.length > 0 ? (
-          <TableData formData={_self.state.results} />
+          <TableData formData={_self.state.results}  className={_self.state.results.length > 0 ? "" : "hidden"}/>
         ) : (
           ""
         )}
