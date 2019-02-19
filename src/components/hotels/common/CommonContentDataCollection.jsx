@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Form, Col } from 'react-bootstrap';
 import TableContent from '../TableContent';
 import axios from 'axios';
+import Select1 from 'react-select';
 
-const QUERY_URL = "http://localhost:3000/hotels/common-content-data-collection" 
+const QUERY_URL = "http://localhost:3000/hotels/common-content-data-collection"
+const AUTO_COMPLETE = "http://localhost:3000/country_autocomplete" 
 
 const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"] 
 const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "Weekend Getaways", "PropertyInLocality","Region"]
@@ -13,8 +15,10 @@ class CommonContentDataCollection extends Component {
 	constructor(props) {
     super(props)
     this.state = {
+    	options: [],
       domain_name: '',
       country_name: '',
+      selectedCountry:null,
       page_type: '',
       content_type: props.content_type,
       content_result: [],
@@ -24,6 +28,8 @@ class CommonContentDataCollection extends Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.returnOptions = this.returnOptions.bind(this);
+    this.handleAutoSearch = this.handleAutoSearch.bind(this);
+    this.handleSelectedInput = this.handleSelectedInput.bind(this);
   }
 
 	handleChange(e) {
@@ -44,15 +50,33 @@ class CommonContentDataCollection extends Component {
 		});
 	}
 
+	handleSelectedInput = (p, source) => {
+		this.setState({
+			[source]: p.value,
+			selectedCountry: p
+		})
+	}
+
+	handleAutoSearch = (e, source) => {
+		if (e !== "" && e.length > 2) {
+			axios.get(`${AUTO_COMPLETE}?country=${e}`)
+			.then((response) => {
+				this.setState({
+					 options: response.data
+				})
+			})
+		}
+	}
+
 	returnOptions(optData) {
-    return optData.map((country, i) => {
-      return (
-        <option key={i} value={country}>
-          {country}
-        </option>
-      );
-    });
-  }
+	    return optData.map((country, i) => {
+	      return (
+	        <option key={i} value={country}>
+	          {country}
+	        </option>
+	      );
+	    });
+	  }
 
 	render() {
 		let dataField; 
@@ -78,21 +102,20 @@ class CommonContentDataCollection extends Component {
                 }
                 </Form.Control>
               </Form.Group>
-	            <Form.Group as={Col}>
-	              <Form.Label>Country</Form.Label>
-	              <Form.Control
-	                as="select"
-	                onChange={this.handleChange}
-	                name="country_name"
-	              >
-	                <option value="">
-	                  Select Country
-	                </option>
-	                {
-	                	this.returnOptions(countryList)
-	                }
-	              </Form.Control>
-	            </Form.Group>
+              	<Form.Group as={Col}>
+		            <Form.Label column sm={2}>
+		              Country
+		            </Form.Label>
+		            <Col sm={10}>
+		              <Select1
+		                value={this.state.selectedCountry}
+		                name="country_name"
+		                onChange={p => this.handleSelectedInput(p, "country_name")}
+		                onInputChange={e => this.handleAutoSearch(e, "country_name")}
+		                options={this.state.options}
+		              />
+		            </Col>
+		        </Form.Group>
 	            <Form.Group as={Col}>
 	              <Form.Label>Page Type</Form.Label>
 	              <Form.Control
