@@ -10,7 +10,9 @@ class FlightsTable extends Component {
       subType: this.props.subType,
       domain: this.props.domain,
       language: this.props.language,
-      section: this.props.section
+      section: this.props.section,
+      arrCityName: this.props.arrCityName,
+      depCityName: this.props.depCityName
     };
   }
   componentWillReceiveProps = nextProps => {
@@ -18,7 +20,9 @@ class FlightsTable extends Component {
       pageType: nextProps.pageType,
       subType: nextProps.subType,
       domain: nextProps.domain,
-      language: nextProps.language
+      language: nextProps.language,
+      arrCityName: nextProps.arrCityName,
+      depCityName: nextProps.depCityName
     });
   };
 

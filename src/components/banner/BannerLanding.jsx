@@ -5,6 +5,9 @@ import CollectionBanner from './Collection/CollectionBanner'
 import TrainsBanner from './Trains/TrainsBanner'
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import LinksComponent from './Flights/LinksComponent'
+import ContentCheck from './Flights/ContentCheck'
+import FlightScheduleRevamp from './Flights/FlightScheduleRevamp'
 import axios from "axios";
 import './Banner.css'
 class BannerLanding extends Component{
@@ -33,8 +36,8 @@ class BannerLanding extends Component{
 			</select>
 			 {banner_type === 'Trains'  || banner_type == 'Hotels' ?(banner_type === 'Trains' ? <TrainsBanner /> : <HotelsBanner />) :(banner_type === 'Collection' ? <CollectionBanner /> : <FlightSchedule />)}
 		*/}
-			{/*<FlightSchedule />*/}
-			{/*<LinksComponent />*/}
+			{/*<ContentCheck />*/}
+			<FlightScheduleRevamp />
 			</div>
 			)
 	}
