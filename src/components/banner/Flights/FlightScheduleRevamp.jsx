@@ -49,8 +49,8 @@ class FlightScheduleRevamp extends Component {
       form_data["page_subtype"] !== ""
     ) {
       this.setState({
-        results:[]
-      })
+        results: []
+      });
       if (form_data["page_subtype"] == "index") {
         hitAPI = true;
       } else if (
@@ -224,8 +224,8 @@ class FlightScheduleRevamp extends Component {
     } else if (fieldName === "cityName") {
       this.setState({ cityNameSelected: p, cityName: p.value });
     }
-    if(form_data["source"] !== "" && form_data["destination"] !== ""){
-      this.fetchFlightsData(form_data)
+    if (form_data["source"] !== "" && form_data["destination"] !== "") {
+      this.fetchFlightsData(form_data);
     }
   }
 
@@ -252,9 +252,7 @@ class FlightScheduleRevamp extends Component {
             _self.setState({ options: response.data });
           }
         })
-        .then(response => {
-          
-        });
+        .then(response => {});
     }
   }
 
@@ -446,7 +444,10 @@ class FlightScheduleRevamp extends Component {
           <span>No record found</span>
         </div>
         {_self.state.results.length > 0 ? (
-          <TableData formData={_self.state.results}  className={_self.state.results.length > 0 ? "" : "hidden"}/>
+          <TableData
+            formData={_self.state.results}
+            className={_self.state.results.length > 0 ? "" : "hidden"}
+          />
         ) : (
           ""
         )}

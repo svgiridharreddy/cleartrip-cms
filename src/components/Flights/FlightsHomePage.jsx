@@ -69,7 +69,9 @@ class FlightsHomePage extends PureComponent {
       options: [],
       options_dep: [],
       options_arr: [],
-      showAddButton: false
+      showAddButton: false,
+      airlineNameSelected: "",
+      airlineName: ""
     };
   }
 
@@ -121,7 +123,8 @@ class FlightsHomePage extends PureComponent {
 
       dep_city_name: depCityName,
       arr_city_name: arrCityName,
-      city_name: cityNameSelected.value
+      city_name: cityNameSelected.value,
+      airline_name: airlineName
     };
     if (pageType.length > 0 && subType.length > 0) {
       axios
@@ -201,6 +204,26 @@ class FlightsHomePage extends PureComponent {
         this.state.arrCityName != ""
       ) {
         this.fetchDetails();
+      } else if (
+        (this.state.subType === "from" || this.state.subType === "to") &&
+        (this.state.cityName != "" || this.state.cityName != "undefined")
+      ) {
+        this.fetchDetails();
+      }
+    } else if (this.state.pageType === "flight-booking") {
+      if (
+        this.state.subType === "routes" &&
+        this.state.depCityName != "" &&
+        this.state.arrCityName != ""
+      ) {
+        this.fetchDetails();
+      } else if (
+        (this.state.subType === "overview" ||
+          this.state.subType === "pnr-status" ||
+          this.state.subType === "web-checkin") &&
+        (this.state.airlineName != "" || this.state.airlineName != "undefined")
+      ) {
+        this.fetchDetails();
       }
       else if ((this.state.subType==="from" || this.state.subType==="to") && (this.state.cityName!="" || this.state.cityName!="undefined")){
           this.fetchDetails();
@@ -239,6 +262,9 @@ class FlightsHomePage extends PureComponent {
 
   handleSelectedInput = (p, fieldName) => {
     if (fieldName === "airlineName") {
+<<<<<<< HEAD
+      this.setState({ airlineNameSelected: p, airlineName: p.value }, () =>
+=======
 // <<<<<<< HEAD
 //       this.setState({ selectedOption: p, airlineName: p.value },()=>this.handleGetInfo());
 //     } else if (fieldName === "depCityName") {
@@ -251,6 +277,7 @@ class FlightsHomePage extends PureComponent {
 //       this.setState({ cityNameSelected: p, cityName: p.value },()=>this.handleGetInfo());
 // =======
       this.setState({ selectedOption: p, airlineName: p.value }, () =>
+>>>>>>> 68e5c3284caf6d52e37688f710c2308fe64d07a4
         this.handleGetInfo()
       );
     } else if (fieldName === "depCityName") {
@@ -272,8 +299,17 @@ class FlightsHomePage extends PureComponent {
         () => this.handleGetInfo()
       );
     } else if (fieldName === "cityName") {
-      this.setState({ cityNameSelected: p, cityName: p.value }, () =>
-        this.handleGetInfo()
+      this.setState(
+        {
+          cityNameSelected: p,
+          cityName: p.value,
+          domain: this.state.domain,
+          language: this.state.language,
+          pageType: this.state.pageType,
+          subType: this.state.subType,
+          categoryType: this.state.categoryType
+        },
+        () => this.handleGetInfo()
       );
     }
 
@@ -308,6 +344,7 @@ class FlightsHomePage extends PureComponent {
       options_dep
     } = this.state;
     let category;
+    let checkfields;
     let subTypes = [];
     let tableFields = {};
     let tableTitle = {
@@ -364,6 +401,49 @@ class FlightsHomePage extends PureComponent {
         </li>
       );
     }
+    if (pageType === "flight-booking") {
+      if (
+        categoryType === "uniq" &&
+        (subType === "overview" ||
+          subType === "pnr-status" ||
+          subType === "web-checkin" ||
+          subType === "routes")
+      ) {
+        checkfields = (
+          <li>
+            <label>Airline Name</label>
+            <Select1
+              value={this.state.airlineNameSelected}
+              onChange={p => this.handleSelectedInput(p, "airlineName")}
+              options={options}
+              name="airlineName"
+              required
+              placeholder="Search  Airline"
+              onInputChange={e => this.handleAutoSearch(e, "airlineName")}
+            />
+          </li>
+        );
+      }
+    } else if (pageType === "flight-schedule") {
+      if (categoryType === "uniq" && (subType === "from" || subType === "to")) {
+        checkfields = (
+          <li>
+            <label>City Name</label>
+            <Select1
+              // isDisabled = {readOnlyValue}
+              value={cityNameSelected}
+              onChange={p => this.handleSelectedInput(p, "cityName")}
+              options={options}
+              name="cityName"
+              required
+              placeholder="Search  City"
+              // onInputChange={this.handleAirlineSearch}
+              onInputChange={e => this.handleAutoSearch(e, "cityName")}
+            />
+          </li>
+        );
+      }
+    }
 
     return (
       <div className="top-wrapper">
@@ -393,7 +473,6 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(languages)}
               </select>
             </li>
-
             <li>
               <label>Page Type</label>
               <select
@@ -404,7 +483,19 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(pageTypes)}
               </select>
             </li>
-              <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
+
+            <li>
+              <label>Section</label>
+              <select
+                name="section"
+                value={this.state.section}
+                onChange={e => this.handleChange(e, "section")}
+              >
+                {this.returnOptions(sections)}
+              </select>
+            </li>
+            <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
+
               <label>Page Subtype</label>
               <select
                 onChange={e => this.handleChange(e, "subType")}
@@ -432,26 +523,10 @@ class FlightsHomePage extends PureComponent {
 
             {category}
 
+            {checkfields}
 
-            {categoryType === "uniq" &&
-            (subType === "from" || subType === "to") ? (
-              <div>
-                <label>City Name</label>
-                <Select1
-                  // isDisabled = {readOnlyValue}
-                  value={cityNameSelected}
-                  onChange={p => this.handleSelectedInput(p, "cityName")}
-                  options={options}
-                  name="cityName"
-                  required
-                  placeholder="Search  City"
-                  // onInputChange={this.handleAirlineSearch}
-                  onInputChange={e => this.handleAutoSearch(e, "cityName")}
-                />
-              </div>
-            ) : null}
             {categoryType === "uniq" && subType === "routes" ? (
-              <div>
+              <li>
                 <label>Dep City Name</label>
                 <Select1
                   // isDisabled = {readOnlyValue}
@@ -476,7 +551,7 @@ class FlightsHomePage extends PureComponent {
                   // onInputChange={this.handleAirlineSearch}
                   onInputChange={e => this.handleAutoSearch(e, "arrCityName")}
                 />
-              </div>
+              </li>
             ) : null}
           </ul>
         </div>
