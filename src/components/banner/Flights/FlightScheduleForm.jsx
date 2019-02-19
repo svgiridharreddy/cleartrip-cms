@@ -50,16 +50,18 @@ class FlightScheduleForm extends Component {
 	}
 
 	editFields() {
-		let convertedData = draftToHtml(
-			convertToRaw(this.state.editorState.getCurrentContent())
-		);
-		convertedData = convertedData.replace(/"/g, "'");
 		let _self = this;
 		let form_data = this.state.form_data;
-		form_data["content"] = convertedData;
-		_self.setState({
-			form_data
-		});
+		if (this.state.editorState != "") {
+			let convertedData = draftToHtml(
+				convertToRaw(this.state.editorState.getCurrentContent())
+			);
+			convertedData = convertedData.replace(/"/g, "'");
+			form_data["content"] = convertedData;
+			_self.setState({
+				form_data
+			});
+		}
 
 		axios({
 			method: "post",
@@ -71,9 +73,9 @@ class FlightScheduleForm extends Component {
 					updateMsg: response.data.message,
 					flashShow: true
 				});
-				setTimeout(function(){
+				setTimeout(function() {
 					window.location.reload();
-				},1500)
+				}, 1500);
 			}
 		});
 	}
@@ -100,7 +102,10 @@ class FlightScheduleForm extends Component {
 			"page_subtype",
 			"section",
 			"domain",
-			"content"
+			"content",
+			"content_type",
+			"source",
+			"destination"
 		];
 		let form_data = this.state.form_data;
 		let form_elements = Object.keys(form_data).map((ele, k) => {
@@ -121,9 +126,17 @@ class FlightScheduleForm extends Component {
 		return (
 			<div>
 				<FlashMassage duration={10000} persistOnHover={true}>
-					<span className={_self.state.flashShow ? "flashMsg" : "flashMsg hidden"}>{_self.state.updateMsg}</span>
+					<span
+						className={
+							_self.state.flashShow
+								? "flashMsg"
+								: "flashMsg hidden"
+						}
+					>
+						{_self.state.updateMsg}
+					</span>
 				</FlashMassage>
-				
+
 				<ul className="editFormFields">
 					{form_elements}
 					<Editor
