@@ -349,11 +349,11 @@ class Flights extends Component {
     return (
       <div>
         <h1>Cleartrip Flights</h1>
-        <Form onSubmit={this.handleFormSubmit.bind(this)}>
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Select Country</Form.Label>
-              <Form.Control
+        <div>
+          <ul>
+            <li>
+              <label>Select Country</label>
+              <select
                 disabled={readOnlyValue}
                 as="select"
                 onChange={e => this.handleChange(e, "currentDomain")}
@@ -365,42 +365,37 @@ class Flights extends Component {
                     {domains[option]}
                   </option>
                 ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group as={Col}>
-              <Form.Label>Select language</Form.Label>
-              <Form.Control
+              </select>
+            </li>
+
+            <li>
+              <label>Select language</label>
+              <select
                 disabled={readOnlyValue}
-                as="select"
                 onChange={e => this.handleChange(e, "currentLanguage")}
                 name="currentLanguage"
                 value={currentLanguage}
               >
                 {this.returnOptions(languages)}
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group as={Col}>
-              <Form.Label> Page type</Form.Label>
-              <Form.Control
+              </select>
+            </li>
+            <li>
+              <label> Page type</label>
+              <select
                 disabled={readOnlyValue}
-                as="select"
                 onChange={e => this.handleChange(e, "currentPageType")}
                 name="pageType"
                 value={currentPageType}
               >
                 {this.returnOptions(pageTypes)}
-              </Form.Control>
-            </Form.Group>
-          </Form.Row>
-
-          {fields}
-          <ButtonToolbar>
-            <Button variant="success" type="submit">
-              Submit
-            </Button>
-          </ButtonToolbar>
-        </Form>
+              </select>
+            </li>
+            {fields}
+          </ul>
+          <button type="submit" onClick={this.handleFormSubmit}>
+            Submit
+          </button>
+        </div>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Col } from 'react-bootstrap';
-import TableContent from '../tableContent';
+import TableContent from '../TableContent';
 import axios from 'axios';
 
 const QUERY_URL = "http://localhost:3000/hotels/common-content-data-collection" 

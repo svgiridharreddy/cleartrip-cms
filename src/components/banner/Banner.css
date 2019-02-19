@@ -6,13 +6,39 @@
   margin-left: -5px;
   list-style: none;
 }
+.DraftEditor-editorContainer {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #000000ed;
+  position: relative;
+  height: auto;
+  overflow: scroll;
+}
 .errormsg {
   color: red;
 }
-
+.flashMsg {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+  padding: 2%;
+  color: red;
+}
 .editFormFields {
   list-style: none;
   display: inline-grid;
+}
+.button {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 19px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  background-color: #ff7e33;
+  cursor: pointer;
 }
 .plusButton {
   background-color: #ff7e33;

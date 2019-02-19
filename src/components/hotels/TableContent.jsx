@@ -43,13 +43,13 @@ class TableContent extends Component {
 			        			<td>{item.country_name}</td>
 			        			<td>{item.page_type}</td>
 			        			<td>{item.content_type}</td>
-			        			<td>
+			        			{/*<td>
 			        				<Button variant="success" size="sm" block>
 			        					<Link to={`hotels/show/commondata/${item.id}`}>View</Link>
 										  </Button>
-			        			</td>
+			        			</td>*/}
 			        			<td>
-			        				<Button variant="info" size="sm" block><Link to={`/hotels/edit/commondata/${item.id}`}>Edit</Link></Button>
+			        				<Button variant="info" size="sm" block><Link to={`/hotels/edit/uniquedata/${item.id}`}>Edit</Link></Button>
 			        			</td>
 			        			<td>
 			        				<Button variant="danger" size="sm" block onClick={this.handleDelete.bind(this, item)}>Delete</Button>
@@ -72,11 +72,11 @@ class TableContent extends Component {
 				        			<td>{item.domain_url}</td>
 				        			<td>{item.content_type}</td>
 				        			<td>{item.meta_title}</td>
-				        			<td>
+				        			{/*<td>
 				        				<Button variant="success" size="sm" block>
 				        					<Link to={`hotels/show/uniquedata/${item.id}`}>View</Link>
 											  </Button>
-				        			</td>
+				        			</td>*/}
 				        			<td>
 				        				<Button variant="info" size="sm" block><Link to={`/hotels/edit/uniquedata/${item.id}`}>Edit</Link></Button>
 				        			</td>

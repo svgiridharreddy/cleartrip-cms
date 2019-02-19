@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormControl } from 'react-bootstrap';
 import axios from 'axios';
-import TableContent from '../tableContent';
+import TableContent from '../TableContent';
 
 const QUERY_URL = "http://localhost:3000/hotels/unique-content-data-collection" 
 
