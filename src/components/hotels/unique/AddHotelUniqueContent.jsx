@@ -20,20 +20,23 @@ class HotelUniqueContent extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { domain_url: '',
-						content_type: 'Unique Data',
-						country_name: '',
-						canonical_tag: '',
-						meta_title: '',
-						meta_description: '',
-						meta_keywords:'',
-						top_content: '',
-						bottom_content: '',
-						faq: '',
-						headerEditorState: EditorState.createEmpty(),
-						footerEditorState: EditorState.createEmpty(),
-						faqEditorState: EditorState.createEmpty(),
-						message: ''
-					 };
+			content_type: 'Unique Data',
+			country_name: '',
+			canonical_tag: '',
+			h1_tag: '',
+			h2_tag: '',
+			h3_tag: '',
+			meta_title: '',
+			meta_description: '',
+			meta_keyword:'',
+			top_content: '',
+			bottom_content: '',
+			faq: '',
+			headerEditorState: EditorState.createEmpty(),
+			footerEditorState: EditorState.createEmpty(),
+			faqEditorState: EditorState.createEmpty(),
+			message: ''
+		 };
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
@@ -45,8 +48,27 @@ class HotelUniqueContent extends Component {
 	}
 	handleSubmit(event) {
 		event.preventDefault();
-		const data = this.state
-		debugger;
+		let headerState = this.state.headerEditorState;
+		let footerState = this.state.footerEditorState;
+		let faqState = this.state.faqEditorState;
+		headerState = typeof(headerState) == "string" ? headerState : ""
+		footerState = typeof(footerState) == "string" ? footerState : ""
+		faqState = typeof(faqState) == "string" ? faqState : ""
+		const data = {
+			domain_url: this.state.domain_url,
+			content_type: this.state.content_type,
+			country_name: this.state.country_name,
+			canonical_tag: this.state.canonical_tag,
+			h1_tag: this.state.h1_tag,
+			h2_tag: this.state.h2_tag,
+			h3_tag: this.state.h3_tag,
+			meta_title: this.state.meta_title,
+			meta_description: this.state.meta_description,
+			meta_keyword: this.state.meta_keyword,
+			top_content: headerState,
+			bottom_content: footerState,
+			faq: faqState
+		}
 		axios.post(`${API_URL}/hotels/content-section-data`, data)
 		.then(({ data }) => {
 				this.setState({
@@ -59,12 +81,15 @@ class HotelUniqueContent extends Component {
 						content_type: 'Unique Data',
 						country_name: '',
 						canonical_tag: '',
+						h1_tag: '',
+						h2_tag: '',
+						h3_tag: '',
 						meta_title: '',
 						meta_description: '',
 						meta_keywords:'',
-						top_content: '',
-						bottom_content: '',
-						faq: '',
+						headerEditorState: EditorState.createEmpty(),
+            footerEditorState: EditorState.createEmpty(),
+            faqEditorState: EditorState.createEmpty(),
 						message: ''
 					})
 				}.bind(this),2000)
@@ -149,6 +174,30 @@ class HotelUniqueContent extends Component {
 			      <Form.Control type="text" name="canonical_tag" onChange={this.handleChange} />
 			    </Col>
 			  </Form.Group>
+			  <Form.Group as={Row} controlId="formHorizontalH1Title">
+	              <Form.Label column sm={2}>
+	                H1 Title
+	              </Form.Label>
+	              <Col sm={10}>
+	                <Form.Control type="text" value={this.state.h1_tag} name="h1_tag" onChange={this.handleChange} />
+	              </Col>
+	            </Form.Group>
+	            <Form.Group as={Row} controlId="formHorizontalH2Title">
+	              <Form.Label column sm={2}>
+	                H2 Title
+	              </Form.Label>
+	              <Col sm={10}>
+	                <Form.Control type="text" value={this.state.h2_tag} name="h2_tag" onChange={this.handleChange} />
+	              </Col>
+	            </Form.Group>
+	            <Form.Group as={Row} controlId="formHorizontalH3Title">
+	              <Form.Label column sm={2}>
+	                H3 Title
+	              </Form.Label>
+	              <Col sm={10}>
+	                <Form.Control type="text" value={this.state.h3_tag} name="h3_tag" onChange={this.handleChange} />
+	              </Col>
+	            </Form.Group>
 			  <Form.Group as={Row} controlId="formHorizontalMetaTitle">
 			    <Form.Label column sm={2}>
 			      Meta Title

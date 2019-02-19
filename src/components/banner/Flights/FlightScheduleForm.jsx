@@ -4,11 +4,11 @@ import axios from "axios";
 import FlightScheduleRevamp from "./FlightScheduleRevamp";
 import "../Banner.css";
 import {
-	EditorState,
-	ContentState,
-	convertFromHTML,
-	convertFromRaw,
-	convertToRaw
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertFromRaw,
+  convertToRaw
 } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import { stateToHTML } from "draft-js-export-html";
@@ -18,37 +18,34 @@ import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.cs
 import FlashMassage from "react-flash-message";
 
 class FlightScheduleForm extends Component {
-	constructor(props) {
-		super(props);
-		let editorState = "";
-		this.state = {
-			form_data: props.formData[0],
-			id: "",
-			page_type: "",
-			editorState: editorState,
-			contentData: "",
-			updateMsg: "",
-			flashShow: false
-		};
-		this.onChange = this.onChange.bind(this);
-	}
+  constructor(props) {
+    super(props);
+    let editorState = "";
+    this.state = {
+      form_data: props.formData[0],
+      id: "",
+      page_type: "",
+      editorState: editorState,
+      contentData: "",
+      updateMsg: "",
+      flashShow: false
+    };
+    this.onChange = this.onChange.bind(this);
+  }
 
-	componentDidMount() {
-		if (this.state.form_data.content) {
-			const html = this.state.form_data["content"];
-			const contentBlock = convertFromHTML(html);
-			if (contentBlock) {
-				const contentState = ContentState.createFromBlockArray(
-					contentBlock
-				);
-				const editorState = EditorState.createWithContent(contentState);
-				this.setState({
-					editorState: editorState
-				});
-			}
-		}
-	}
-
+  componentDidMount() {
+    if (this.state.form_data.content) {
+      const html = this.state.form_data["content"];
+      const contentBlock = convertFromHTML(html);
+      if (contentBlock) {
+        const contentState = ContentState.createFromBlockArray(contentBlock);
+        const editorState = EditorState.createWithContent(contentState);
+        this.setState({
+          editorState: editorState
+        });
+      }
+    }
+  }
 	editFields() {
 		let _self = this;
 		let form_data = this.state.form_data;

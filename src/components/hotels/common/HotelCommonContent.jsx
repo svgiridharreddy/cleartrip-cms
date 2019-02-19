@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertFromRaw,
+  convertToRaw
+} from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import { stateToHTML } from "draft-js-export-html";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const API_URL = 'http://localhost:3000'
 
-const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"]
+const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"] 
 const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "Weekend Getaways", "Property in Locality","Region"]
 const countryList = ["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Chad", "Chile", "China", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cyprus", "Czech Republic", "Democratic Republic of Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Islas Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar (Burma)", "Namibia", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "South Africa", "Spain", "Sri Lanka", "St, Martin", "St. Barts (St. Barthelemy)", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands", "Western Samoa", "Yemen", "Zambia", "Zimbabwe"]
 
@@ -15,19 +27,50 @@ class HotelCommonContent extends Component {
 						domain_name: '',
 						content_type: 'Common Data',
 						country_name: '',
-						canonical_tag: '',
+            h1_tag: '',
+            h2_tag: '',
+            h3_tag: '',
 						meta_title: '',
 						meta_description: '',
 						meta_keyword:'',
-						top_content: '',
-						bottom_contnet: '',
-						faq: '',
+						headerEditorState: EditorState.createEmpty(),
+            footerEditorState: EditorState.createEmpty(),
+            faqEditorState: EditorState.createEmpty(),
             message: ''
 					 };
 		this.handleChange = this.handleChange.bind(this);
     this.returnOptions = this.returnOptions.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
+
+  onHeaderEditorStateChange: Function = (headerEditorState) => {
+    let convertedData = draftToHtml(
+        convertToRaw(headerEditorState.getCurrentContent())
+      );
+      convertedData = convertedData.replace(/"/g, "'");
+     this.setState({
+       headerEditorState: convertedData
+     });
+  };
+
+  onFooterEditorStateChange: Function = (footerEditorState) => {
+    let convertedData = draftToHtml(
+      convertToRaw(footerEditorState.getCurrentContent())
+    );
+    convertedData = convertedData.replace(/"/g, "'");
+    this.setState({
+      footerEditorState: convertedData
+    });
+  };
+  onFaqEditorStateChange: Function = (faqEditorState) => {
+    let convertedData = draftToHtml(
+      convertToRaw(faqEditorState.getCurrentContent())
+    );
+    convertedData = convertedData.replace(/"/g, "'");
+    this.setState({
+      faqEditorState: convertedData
+    });
+  };
 
 	handleChange(e) {
 		this.setState({
@@ -37,7 +80,27 @@ class HotelCommonContent extends Component {
 
 	handleSubmit(event) {
     event.preventDefault();
-    const data = this.state
+    let headerState = this.state.headerEditorState;
+    let footerState = this.state.footerEditorState;
+    let faqState = this.state.faqEditorState;
+    headerState = typeof(headerState) == "string" ? headerState : ""
+    footerState = typeof(footerState) == "string" ? footerState : ""
+    faqState = typeof(faqState) == "string" ? faqState : ""
+    const data = {
+      domain_name: this.state.domain_name,
+      content_type: this.state.content_type,
+      country_name: this.state.country_name,
+      page_type: this.state.page_type,
+      h1_tag: this.state.h1_tag,
+      h2_tag: this.state.h2_tag,
+      h3_tag: this.state.h3_tag,
+      meta_title: this.state.meta_title,
+      meta_description: this.state.meta_description,
+      meta_keyword: this.state.meta_keyword,
+      top_content: headerState,
+      bottom_content: footerState,
+      faq: faqState
+    }
     axios.post(`${API_URL}/hotels/common-content-section-data`, data)
     .then(({ data }) => {
         this.setState({
@@ -46,13 +109,15 @@ class HotelCommonContent extends Component {
             page_type: '',
             content_type: '',
             country_name: '',
-            canonical_tag: '',
+            h1_tag: '',
+            h2_tag: '',
+            h3_tag: '',
             meta_title: '',
             meta_description: '',
             meta_keyword:'',
-            top_content: '',
-            bottom_content: '',
-            faq: ''
+            headerEditorState: EditorState.createEmpty(),
+            footerEditorState: EditorState.createEmpty(),
+            faqEditorState: EditorState.createEmpty()
         })
     })
     .catch(function (error) {
@@ -71,7 +136,7 @@ class HotelCommonContent extends Component {
   }
 
 	render() {
-    const { message } = this.state
+    const { message, headerEditorState, footerEditorState, faqEditorState } = this.state
     let alertMessage;
     if(message !== '') {
       alertMessage = (
@@ -83,7 +148,7 @@ class HotelCommonContent extends Component {
 		return(
 				<div>
             { alertMessage }
-          <Form onSubmit={this.handleSubmit} style={{width: '50%'}}>
+          <Form onSubmit={this.handleSubmit}>
             <Form.Group as={Row} controlId="formHorizontalDomainUrl">
               <Form.Label column sm={2}>
                 Domain Name
@@ -94,6 +159,7 @@ class HotelCommonContent extends Component {
                 onChange={this.handleChange}
                 name="domain_name"
                 value={this.state.domain_name}
+                style={{width: '50%'}}
               >
                 <option value="">
                   Domain Type
@@ -110,7 +176,7 @@ class HotelCommonContent extends Component {
                 Content Section
               </Form.Label>
               <Col sm={10}>
-                <Form.Control value={ this.state.content_type } name="content_type" onChange={this.handleChange} />
+                <Form.Control style={{width: '50%'}} value={ this.state.content_type } name="content_type" />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalCountryName">
@@ -118,7 +184,7 @@ class HotelCommonContent extends Component {
                 Country Name
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="text" value={this.state.country_name} name="country_name" onChange={this.handleChange} />
+                <Form.Control style={{width: '50%'}} type="text" value={this.state.country_name} name="country_name" onChange={this.handleChange} />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalPageType">
@@ -131,6 +197,7 @@ class HotelCommonContent extends Component {
                 onChange={this.handleChange}
                 value={this.state.page_type}
                 name="page_type"
+                style={{width: '50%'}}
               >
                 <option value="">
                   Page Type
@@ -139,6 +206,30 @@ class HotelCommonContent extends Component {
                 this.returnOptions(pageType)
               }
               </Form.Control>
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formHorizontalH1Title">
+              <Form.Label column sm={2}>
+                H1 Title
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control type="text" value={this.state.h1_tag} name="h1_tag" onChange={this.handleChange} />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formHorizontalH2Title">
+              <Form.Label column sm={2}>
+                H2 Title
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control type="text" value={this.state.h2_tag} name="h2_tag" onChange={this.handleChange} />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formHorizontalH3Title">
+              <Form.Label column sm={2}>
+                H3 Title
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control type="text" value={this.state.h3_tag} name="h3_tag" onChange={this.handleChange} />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalMetaTitle">
@@ -170,7 +261,12 @@ class HotelCommonContent extends Component {
                 Header Content
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="text" value={this.state.top_content} name="top_content" onChange={this.handleChange} />
+                <Editor
+                    headerEditorState={headerEditorState}
+                    wrapperClassName="demo-wrapper"
+                    editorClassName="demo-editor"
+                    onEditorStateChange={this.onHeaderEditorStateChange}
+                  />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalFooterContent">
@@ -178,7 +274,12 @@ class HotelCommonContent extends Component {
                 Footer Content
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="text" value={this.state.bottom_content} name="bottom_content" onChange={this.handleChange} />
+                <Editor
+                    footerEditorState={footerEditorState}
+                    wrapperClassName="demo-wrapper"
+                    editorClassName="demo-editor"
+                    onEditorStateChange={this.onFooterEditorStateChange}
+                  />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalFaq">
@@ -186,7 +287,12 @@ class HotelCommonContent extends Component {
                 Frequently Asked Questions
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="text" value={this.state.faq} name="faq" onChange={this.handleChange} />
+                <Editor
+                    faqEditorState={faqEditorState}
+                    wrapperClassName="demo-wrapper"
+                    editorClassName="demo-editor"
+                    onEditorStateChange={this.onFaqEditorStateChange}
+                  />
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
