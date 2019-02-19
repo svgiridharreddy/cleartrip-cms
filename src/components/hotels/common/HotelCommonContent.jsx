@@ -27,7 +27,9 @@ class HotelCommonContent extends Component {
 						domain_name: '',
 						content_type: 'Common Data',
 						country_name: '',
-						canonical_tag: '',
+            h1_tag: '',
+            h2_tag: '',
+            h3_tag: '',
 						meta_title: '',
 						meta_description: '',
 						meta_keyword:'',
@@ -84,12 +86,14 @@ class HotelCommonContent extends Component {
     headerState = typeof(headerState) == "string" ? headerState : ""
     footerState = typeof(footerState) == "string" ? footerState : ""
     faqState = typeof(faqState) == "string" ? faqState : ""
-    debugger;
     const data = {
       domain_name: this.state.domain_name,
       content_type: this.state.content_type,
       country_name: this.state.country_name,
       page_type: this.state.page_type,
+      h1_tag: this.state.h1_tag,
+      h2_tag: this.state.h2_tag,
+      h3_tag: this.state.h3_tag,
       meta_title: this.state.meta_title,
       meta_description: this.state.meta_description,
       meta_keyword: this.state.meta_keyword,
@@ -105,7 +109,9 @@ class HotelCommonContent extends Component {
             page_type: '',
             content_type: '',
             country_name: '',
-            canonical_tag: '',
+            h1_tag: '',
+            h2_tag: '',
+            h3_tag: '',
             meta_title: '',
             meta_description: '',
             meta_keyword:'',
@@ -170,7 +176,7 @@ class HotelCommonContent extends Component {
                 Content Section
               </Form.Label>
               <Col sm={10}>
-                <Form.Control style={{width: '50%'}} value={ this.state.content_type } name="content_type" onChange={this.handleChange} />
+                <Form.Control style={{width: '50%'}} value={ this.state.content_type } name="content_type" />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalCountryName">
@@ -200,6 +206,30 @@ class HotelCommonContent extends Component {
                 this.returnOptions(pageType)
               }
               </Form.Control>
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formHorizontalH1Title">
+              <Form.Label column sm={2}>
+                H1 Title
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control type="text" value={this.state.h1_tag} name="h1_tag" onChange={this.handleChange} />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formHorizontalH2Title">
+              <Form.Label column sm={2}>
+                H2 Title
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control type="text" value={this.state.h2_tag} name="h2_tag" onChange={this.handleChange} />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formHorizontalH3Title">
+              <Form.Label column sm={2}>
+                H3 Title
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control type="text" value={this.state.h3_tag} name="h3_tag" onChange={this.handleChange} />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalMetaTitle">
