@@ -79,7 +79,7 @@ class Flights extends Component {
   getInfo = fieldName => {
     let url = "";
     if (fieldName === "airlineName") {
-      url = "http://localhost:3000/airline_autocomplete";
+      url = "http://13.251.49.54:82/airline_autocomplete";
     } else {
       url = "/city_autocomplete";
     }
@@ -122,9 +122,9 @@ class Flights extends Component {
     if (target_value !== "" && target_value.length >= -1) {
       let url = "";
       if (fieldName === "airlineName") {
-        url = "http://localhost:3000/airline_autocomplete";
+        url = "http://13.251.49.54:82/airline_autocomplete";
       } else {
-        url = "http://localhost:3000/city_autocomplete";
+        url = "http://13.251.49.54:82/city_autocomplete";
       }
       axios
         .get(url, { params: { query_term: target_value } })
@@ -188,7 +188,7 @@ class Flights extends Component {
 
     axios({
       method: "post",
-      url: "http://localhost:3000/flights",
+      url: "http://13.251.49.54:82/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -347,7 +347,7 @@ class Flights extends Component {
       );
     }
     return (
-      <div>
+      <div className="top-wrapper">
         <h1>Cleartrip Flights</h1>
         <div>
           <ul>
