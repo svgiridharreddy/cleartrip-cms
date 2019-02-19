@@ -35,7 +35,6 @@ class FlightsTable extends Component {
       tableFields,
       tableTitle
     } = this.props;
-    debugger;
     var tableTitlearray = [];
     var tableValuearray = [];
     tableTitlearray = Object.keys(tableTitle);

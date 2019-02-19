@@ -17,7 +17,7 @@ const domains = {
   selectDomain: "Select Domain",
   IN: "India",
   AE: "United Arab Emirates",
-  SA: "Saudi Arabia", 
+  SA: "Saudi Arabia",
   KW: "Kuwait",
   OM: "Oman",
   QA: "Qatar",
@@ -188,7 +188,7 @@ class Flights extends Component {
 
     axios({
       method: "post",
-      url: "http://13.251.49.54:82/flights",
+      url: "http://localhost:3000/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
