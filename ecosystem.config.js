@@ -24,8 +24,7 @@ module.exports = {
       key:
         "/Users/giridharr/Documents/projects/cleartrip/key_files/dynamic-flights-high-config.pem",
       ssh_options: ["ForwardAgent=yes"],
-      "post-deploy":
-        "npm install --production && npm run build && pm2 del cms_fe || npm run production"
+      "post-deploy": "npm install --production && npm run build"
     }
   }
 };
