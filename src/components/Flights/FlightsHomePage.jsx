@@ -153,6 +153,7 @@ class FlightsHomePage extends PureComponent {
             typeof response.data.result["common"] !== "undefined" &&
             response.data.result["common"].length > 0)
           {
+            debugger
             result["common"] = response.data.result["common"]
 
           }
@@ -208,24 +209,25 @@ class FlightsHomePage extends PureComponent {
 
   handleGetInfo = () => {
     debugger
-    if (this.state.pageType === "flight-schedule" && this.state.categoryType == "Unique") {
+    if (this.state.pageType === "flight-schedule" && this.state.categoryType == "uniq") {
       if (
         this.state.subType === "routes" &&
         this.state.depCityName != "" &&
         this.state.arrCityName != "" 
       ) {
+        debugger
         this.fetchDetails();
       } else if (
-        (this.state.subType === "from" || this.state.subType === "to" && this.state.categoryType == "Unique") &&
-        (this.state.cityName != "" || this.state.cityName != "undefined" && this.state.categoryType == "Unique")
+        (this.state.subType === "from" || this.state.subType === "to" && this.state.categoryType == "uniq") &&
+        (this.state.cityName != "" || this.state.cityName != "undefined" && this.state.categoryType == "uniq")
       ) {
         this.fetchDetails();
       }
-    } else if (this.state.pageType === "flight-booking" && this.state.categoryType == "Unique") {
+    } else if (this.state.pageType === "flight-booking" && this.state.categoryType == "uniq") {
       if (
         this.state.subType === "routes" &&
         this.state.depCityName != "" &&
-        this.state.arrCityName != "" &&  this.state.categoryType == "Unique"
+        this.state.arrCityName != "" &&  this.state.categoryType == "uniq"
       ) {
         this.fetchDetails();
       } else if (
@@ -236,7 +238,7 @@ class FlightsHomePage extends PureComponent {
       ) {
         this.fetchDetails();
       }
-      else if ((this.state.subType==="from" || this.state.subType==="to") && (this.state.cityName!="" || this.state.cityName!="undefined" && this.state.categoryType == "Unique")){
+      else if ((this.state.subType==="from" || this.state.subType==="to") && (this.state.cityName!="" || this.state.cityName!="undefined" && this.state.categoryType == "uniq")){
           this.fetchDetails();
       }
     }
