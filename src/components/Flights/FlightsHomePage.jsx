@@ -35,7 +35,8 @@ class FlightsHomePage extends PureComponent {
           webcheckin: []
         },
         "flight-schedule": { routes: [], from: [], to: [] },
-        "flight-tickets": { tickets: [] }
+        "flight-tickets": { tickets: [] },
+        "common": { routes: [], from:[], to:[], overview:[], routes:[], pnr:[], webcheckin:[] }
       },
       pageType: "",
       domain: "",
@@ -68,15 +69,26 @@ class FlightsHomePage extends PureComponent {
       options: [],
       options_dep: [],
       options_arr: [],
-      showAddButton: false
+      showAddButton: false,
+      airlineNameSelected: "",
+      airlineName: ""
     };
   }
 
   handleChange = (e, fieldName) => {
-    this.setState({ [fieldName]: e.target.value });
+    if (fieldName==="section") {
+      this.setState({ [fieldName]: e.target.value }, () =>
+        this.handleGetInfo()
+      );
+      debugger
+    }
+    else{
+     this.setState({ [fieldName]: e.target.value });
+    }
   };
 
   componentWillReceiveProps(nextProps) {
+    debugger
     this.setState({
       pageType: nextProps.pageType,
       domain: nextProps.domain,
@@ -99,12 +111,15 @@ class FlightsHomePage extends PureComponent {
       cityNameSelected,
       depCityNameSelected,
       arrCityNameSelected,
+      airlineName,
       depCityName,
       arrCityName,
       options_arr,
       options_dep
     } = this.state;
     var url = "http://localhost:3000/fetch_details";
+ 
+    // var url = "http://13.251.49.54:82/fetch_details";
     debugger;
     var parameters = {
       page_type: pageType,
@@ -113,9 +128,11 @@ class FlightsHomePage extends PureComponent {
       language: language,
       section: section,
       category: categoryType,
+
       dep_city_name: depCityName,
       arr_city_name: arrCityName,
-      city_name: cityNameSelected.value
+      city_name: cityNameSelected.value,
+      airline_name: airlineName
     };
     if (pageType.length > 0 && subType.length > 0) {
       axios
@@ -125,15 +142,23 @@ class FlightsHomePage extends PureComponent {
           this.setState({ renderTables: false, showAddButton: false });
           if (
             typeof response.data.result[pageType][subType] !== "undefined" &&
-            response.data.result[pageType][subType].length > 0
-          ) {
-            result[pageType][subType] = response.data.result[pageType][subType];
-            this.setState({
-              result: result,
-              renderTables: true,
-              showAddButton: false
-            });
-          } else {
+            response.data.result[pageType][subType].length > 0)
+             {
+             result[pageType][subType] = response.data.result[pageType][subType];
+              this.setState({ result: result, renderTables: true, showAddButton: false });
+           
+          }
+
+          else if (
+            typeof response.data.result["common"] !== "undefined" &&
+            response.data.result["common"].length > 0)
+          {
+            result["common"] = response.data.result["common"]
+
+          }
+
+           else {
+            debugger
             this.setState({
               showAddButton: true,
               renderTables: false,
@@ -154,7 +179,7 @@ class FlightsHomePage extends PureComponent {
     }
   };
   handleDelete = (index, id) => {
-    var url = "http://localhost:3000/delete_data";
+    var url = "http://13.251.49.54:82/delete_data";
     axios
       .delete(url, {
         data: {
@@ -182,14 +207,43 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleGetInfo = () => {
-    if (this.state.pageType === "flight-schedule") {
+    debugger
+    if (this.state.pageType === "flight-schedule" && this.state.categoryType == "Unique") {
       if (
         this.state.subType === "routes" &&
         this.state.depCityName != "" &&
-        this.state.arrCityName != ""
+        this.state.arrCityName != "" 
+      ) {
+        this.fetchDetails();
+      } else if (
+        (this.state.subType === "from" || this.state.subType === "to" && this.state.categoryType == "Unique") &&
+        (this.state.cityName != "" || this.state.cityName != "undefined" && this.state.categoryType == "Unique")
       ) {
         this.fetchDetails();
       }
+    } else if (this.state.pageType === "flight-booking" && this.state.categoryType == "Unique") {
+      if (
+        this.state.subType === "routes" &&
+        this.state.depCityName != "" &&
+        this.state.arrCityName != "" &&  this.state.categoryType == "Unique"
+      ) {
+        this.fetchDetails();
+      } else if (
+        (this.state.subType === "overview" ||
+          this.state.subType === "pnr-status" ||
+          this.state.subType === "web-checkin") &&
+        (this.state.airlineName != "" || this.state.airlineName != "undefined" && this.state.categoryType == "Unique")
+      ) {
+        this.fetchDetails();
+      }
+      else if ((this.state.subType==="from" || this.state.subType==="to") && (this.state.cityName!="" || this.state.cityName!="undefined" && this.state.categoryType == "Unique")){
+          this.fetchDetails();
+      }
+    }
+    else if (this.state.categoryType==="common") {
+      debugger
+       this.fetchDetails();
+
     }
   };
 
@@ -198,9 +252,9 @@ class FlightsHomePage extends PureComponent {
     if (target_value !== "" && target_value.length >= -1) {
       let url = "";
       if (fieldName === "airlineName") {
-        url = "http://localhost:3000/airline_autocomplete";
+        url = "http://13.251.49.54:82/airline_autocomplete";
       } else {
-        url = "http://localhost:3000/city_autocomplete";
+        url = "http://13.251.49.54:82/city_autocomplete";
       }
       axios
         .get(url, { params: { query_term: target_value } })
@@ -224,7 +278,18 @@ class FlightsHomePage extends PureComponent {
 
   handleSelectedInput = (p, fieldName) => {
     if (fieldName === "airlineName") {
-      this.setState({ selectedOption: p, airlineName: p.value }, () =>
+      this.setState({ airlineNameSelected: p, airlineName: p.value }, () =>
+// <<<<<<< HEAD
+//       this.setState({ selectedOption: p, airlineName: p.value },()=>this.handleGetInfo());
+//     } else if (fieldName === "depCityName") {
+//       this.setState({ depCityNameSelected: p, depCityName: p.value },()=>this.handleGetInfo());
+//       debugger
+//     } else if (fieldName === "arrCityName") {
+//       this.setState({ arrCityNameSelected: p, arrCityName: p.value,domain: this.state.domain,language: this.state.lanugage,pageType: this.state.pageType,subType: this.state.subType },()=>this.handleGetInfo());
+//       debugger
+//     } else if (fieldName === "cityName") {
+//       this.setState({ cityNameSelected: p, cityName: p.value },()=>this.handleGetInfo());
+// =======
         this.handleGetInfo()
       );
     } else if (fieldName === "depCityName") {
@@ -246,10 +311,20 @@ class FlightsHomePage extends PureComponent {
         () => this.handleGetInfo()
       );
     } else if (fieldName === "cityName") {
-      this.setState({ cityNameSelected: p, cityName: p.value }, () =>
-        this.handleGetInfo()
+      this.setState(
+        {
+          cityNameSelected: p,
+          cityName: p.value,
+          domain: this.state.domain,
+          language: this.state.language,
+          pageType: this.state.pageType,
+          subType: this.state.subType,
+          categoryType: this.state.categoryType
+        },
+        () => this.handleGetInfo()
       );
     }
+
   };
 
   returnOptions = options => {
@@ -274,10 +349,14 @@ class FlightsHomePage extends PureComponent {
       cityNameSelected,
       depCityNameSelected,
       arrCityNameSelected,
+      airlineName,
+      depCityName,
+      arrCityName,
       options_arr,
       options_dep
     } = this.state;
     let category;
+    let checkfields;
     let subTypes = [];
     let tableFields = {};
     let tableTitle = {
@@ -334,6 +413,49 @@ class FlightsHomePage extends PureComponent {
         </li>
       );
     }
+    if (pageType === "flight-booking") {
+      if (
+        categoryType === "uniq" &&
+        (subType === "overview" ||
+          subType === "pnr-status" ||
+          subType === "web-checkin" ||
+          subType === "routes")
+      ) {
+        checkfields = (
+          <li>
+            <label>Airline Name</label>
+            <Select1
+              value={this.state.airlineNameSelected}
+              onChange={p => this.handleSelectedInput(p, "airlineName")}
+              options={options}
+              name="airlineName"
+              required
+              placeholder="Search  Airline"
+              onInputChange={e => this.handleAutoSearch(e, "airlineName")}
+            />
+          </li>
+        );
+      }
+    } else if (pageType === "flight-schedule") {
+      if (categoryType === "uniq" && (subType === "from" || subType === "to")) {
+        checkfields = (
+          <li>
+            <label>City Name</label>
+            <Select1
+              // isDisabled = {readOnlyValue}
+              value={cityNameSelected}
+              onChange={p => this.handleSelectedInput(p, "cityName")}
+              options={options}
+              name="cityName"
+              required
+              placeholder="Search  City"
+              // onInputChange={this.handleAirlineSearch}
+              onInputChange={e => this.handleAutoSearch(e, "cityName")}
+            />
+          </li>
+        );
+      }
+    }
 
     return (
       <div className="top-wrapper">
@@ -363,7 +485,6 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(languages)}
               </select>
             </li>
-
             <li>
               <label>Page Type</label>
               <select
@@ -374,18 +495,9 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(pageTypes)}
               </select>
             </li>
-
-            <li>
-              <label>Section</label>
-              <select
-                name="section"
-                value={this.state.section}
-                onChange={e => this.handleChange(e, "section")}
-              >
-                {this.returnOptions(sections)}
-              </select>
-            </li>
+           
             <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
+
               <label>Page Subtype</label>
               <select
                 onChange={e => this.handleChange(e, "subType")}
@@ -398,27 +510,26 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(subTypes)}
               </select>
             </li>
-            {category}
+            
 
-            {categoryType === "uniq" &&
-            (subType === "from" || subType === "to") ? (
-              <div>
-                <label>City Name</label>
-                <Select1
-                  // isDisabled = {readOnlyValue}
-                  value={cityNameSelected}
-                  onChange={p => this.handleSelectedInput(p, "cityName")}
-                  options={options}
-                  name="cityName"
-                  required
-                  placeholder="Search  City"
-                  // onInputChange={this.handleAirlineSearch}
-                  onInputChange={e => this.handleAutoSearch(e, "cityName")}
-                />
-              </div>
-            ) : null}
+            {category}
+            {categoryType==="common" ?
+            <li>
+              <label>Section</label>
+              <select
+                name="section"
+                value={this.state.section}
+                onChange={e => this.handleChange(e, "section")}
+              >
+                {this.returnOptions(sections)}
+              </select>
+            </li>
+            :null }
+
+            {checkfields}
+
             {categoryType === "uniq" && subType === "routes" ? (
-              <div>
+              <li>
                 <label>Dep City Name</label>
                 <Select1
                   // isDisabled = {readOnlyValue}
@@ -443,7 +554,7 @@ class FlightsHomePage extends PureComponent {
                   // onInputChange={this.handleAirlineSearch}
                   onInputChange={e => this.handleAutoSearch(e, "arrCityName")}
                 />
-              </div>
+              </li>
             ) : null}
           </ul>
         </div>

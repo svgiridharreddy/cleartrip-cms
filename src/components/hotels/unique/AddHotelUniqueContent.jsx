@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
+import Select from 'react-select';
 import {
   EditorState,
   ContentState,
@@ -15,6 +16,7 @@ import htmlToDraft from "html-to-draftjs";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const API_URL = 'http://localhost:3000'
+const AUTO_COMPLETE = "http://localhost:3000/country_autocomplete" 
 
 class HotelUniqueContent extends Component {
 	constructor(props) {
@@ -22,6 +24,7 @@ class HotelUniqueContent extends Component {
 		this.state = { domain_url: '',
 			content_type: 'Unique Data',
 			country_name: '',
+			selectedCountry: null,
 			canonical_tag: '',
 			h1_tag: '',
 			h2_tag: '',
@@ -40,6 +43,24 @@ class HotelUniqueContent extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
+
+	handleSelectedInput = (p, source) => {
+    this.setState({
+      [source]: p.value,
+      selectedCountry: p
+    })
+  }
+
+  handleAutoSearch = (e, source) => {
+    if (e !== "" && e.length > 2) {
+      axios.get(`${AUTO_COMPLETE}?country=${e}`)
+      .then((response) => {
+        this.setState({
+           options: response.data
+        })
+      })
+    }
+  }
 
 	handleChange(e) {
 		this.setState({
@@ -81,6 +102,7 @@ class HotelUniqueContent extends Component {
 						content_type: 'Unique Data',
 						country_name: '',
 						canonical_tag: '',
+						selectedCountry: null,
 						h1_tag: '',
 						h2_tag: '',
 						h3_tag: '',
@@ -155,7 +177,7 @@ class HotelUniqueContent extends Component {
 			      Content Section
 			    </Form.Label>
 			    <Col sm={10}>
-			      <Form.Control value={ this.state.content_type } name="content_type" onChange={this.handleChange} />
+			      <Form.Control value={ this.state.content_type } name="content_type" />
 			    </Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="formHorizontalCountryName">
@@ -163,7 +185,13 @@ class HotelUniqueContent extends Component {
 			      Country Name
 			    </Form.Label>
 			    <Col sm={10}>
-			      <Form.Control type="text" name="country_name" onChange={this.handleChange} />
+			      <Select
+              value={this.state.selectedCountry}
+              name="country_name"
+              onChange={p => this.handleSelectedInput(p, "country_name")}
+              onInputChange={e => this.handleAutoSearch(e, "country_name")}
+              options={this.state.options}
+            />
 			    </Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="formHorizontalCanonicalTag">
