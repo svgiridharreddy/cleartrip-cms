@@ -6,14 +6,12 @@ import FlightsTable from "./FlightsTable";
 import Select1 from "react-select";
 import "./css/Flights.css";
 const pageTypes = [
-  "Select Page Type",
   "flight-booking",
   "flight-schedule",
   "flight-tickets"
 ];
-const languages = ["Select language", "en", "ar"];
+const languages = [, "en", "ar"];
 const domains = {
-  selectCountry: "Select Country",
   IN: "India",
   AE: "United Arab Emirates",
   SA: "Saudi Arabia",
@@ -22,7 +20,7 @@ const domains = {
   QA: "Qatar",
   BH: "Bahrain"
 };
-const sections = ["Select section", "domestic", "international"];
+const sections = ["domestic", "international"];
 class FlightsHomePage extends PureComponent {
   constructor(props) {
     super(props);
@@ -468,6 +466,7 @@ class FlightsHomePage extends PureComponent {
                 name="domain"
                 value={this.state.domain}
               >
+              <option value="" disabled={true} selected>Domain</option>
                 {Object.keys(domains).map(option => (
                   <option key={option} value={option}>
                     {domains[option]}
@@ -482,7 +481,9 @@ class FlightsHomePage extends PureComponent {
                 name="language"
                 value={this.state.language}
               >
+              <option value="" disabled={true} selected>Language</option>
                 {this.returnOptions(languages)}
+              }
               </select>
             </li>
             <li>
@@ -492,6 +493,7 @@ class FlightsHomePage extends PureComponent {
                 name="pageType"
                 value={this.state.pageType}
               >
+              <option value="" disabled={true} selected>Page type</option>
                 {this.returnOptions(pageTypes)}
               </select>
             </li>
@@ -504,8 +506,8 @@ class FlightsHomePage extends PureComponent {
                 name="subType"
                 value={this.state.subType}
               >
-                <option key="select sub pagetype" value="Select sub pagetype">
-                  select sub pagetype
+                <option  value="" disabled={true} selected>
+                   page sub_type
                 </option>
                 {this.returnOptions(subTypes)}
               </select>
@@ -520,7 +522,9 @@ class FlightsHomePage extends PureComponent {
                 name="section"
                 value={this.state.section}
                 onChange={e => this.handleChange(e, "section")}
-              >
+              > <option  value="" disabled={true} selected>
+                section
+              </option>
                 {this.returnOptions(sections)}
               </select>
             </li>
