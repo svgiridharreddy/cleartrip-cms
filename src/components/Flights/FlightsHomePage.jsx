@@ -6,7 +6,7 @@ import FlightsTable from "./FlightsTable";
 import Select1 from "react-select";
 import "./css/Flights.css";
 const pageTypes = ["flight-booking", "flight-schedule", "flight-tickets"];
-const languages = [, "en", "ar"];
+const languages = ["en", "ar"];
 const domains = {
   IN: "India",
   AE: "United Arab Emirates",
@@ -74,7 +74,6 @@ class FlightsHomePage extends PureComponent {
       this.setState({ [fieldName]: e.target.value }, () =>
         this.handleGetInfo()
       );
-      debugger;
     } else {
       this.setState({ [fieldName]: e.target.value });
     }
@@ -112,7 +111,7 @@ class FlightsHomePage extends PureComponent {
     } = this.state;
     var url = "http://localhost:3000/fetch_details";
 
-    // var url = "http://13.251.49.54:82/fetch_details";
+    // var url = "http://localhost:3000/fetch_details";
     debugger;
     var parameters = {
       page_type: pageType,
@@ -147,7 +146,6 @@ class FlightsHomePage extends PureComponent {
           } else if (
             categoryType === "common" &&
             typeof response.data.result["common"] !== "undefined" &&
-
             response.data.result["common"].length > 0
           ) {
             debugger;
@@ -179,13 +177,14 @@ class FlightsHomePage extends PureComponent {
     }
   };
   handleDelete = (index, id) => {
-    var url = "http://13.251.49.54:82/delete_data";
+    var url = "http://localhost:3000/delete_data";
     axios
       .delete(url, {
         data: {
           id: id,
           page_type: this.state.pageType,
-          page_subtype: this.state.subType
+          page_subtype: this.state.subType,
+          category: this.state.categoryType
         }
       })
       .then(response => {
@@ -212,7 +211,6 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleGetInfo = () => {
-
     debugger;
     if (
       this.state.pageType === "flight-schedule" &&
@@ -223,10 +221,9 @@ class FlightsHomePage extends PureComponent {
         this.state.depCityName != "" &&
         this.state.arrCityName != ""
       ) {
-        debugger
+        debugger;
         this.fetchDetails();
       } else if (
-
         (this.state.subType === "from" ||
           (this.state.subType === "to" && this.state.categoryType == "uniq")) &&
         (this.state.cityName != "" ||
@@ -274,9 +271,9 @@ class FlightsHomePage extends PureComponent {
     if (target_value !== "" && target_value.length >= -1) {
       let url = "";
       if (fieldName === "airlineName") {
-        url = "http://13.251.49.54:82/airline_autocomplete";
+        url = "http://localhost:3000/airline_autocomplete";
       } else {
-        url = "http://13.251.49.54:82/city_autocomplete";
+        url = "http://localhost:3000/city_autocomplete";
       }
       axios
         .get(url, { params: { query_term: target_value } })
