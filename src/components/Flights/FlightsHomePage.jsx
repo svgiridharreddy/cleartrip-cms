@@ -36,7 +36,15 @@ class FlightsHomePage extends PureComponent {
         },
         "flight-schedule": { routes: [], from: [], to: [] },
         "flight-tickets": { tickets: [] },
-        "common": { routes: [], from:[], to:[], overview:[], routes:[], pnr:[], webcheckin:[] }
+        common: {
+          routes: [],
+          from: [],
+          to: [],
+          overview: [],
+          routes: [],
+          pnr: [],
+          webcheckin: []
+        }
       },
       pageType: "",
       domain: "",
@@ -80,7 +88,7 @@ class FlightsHomePage extends PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
-    debugger
+    debugger;
     this.setState({
       pageType: nextProps.pageType,
       domain: nextProps.domain,
@@ -110,7 +118,7 @@ class FlightsHomePage extends PureComponent {
       options_dep
     } = this.state;
     var url = "http://localhost:3000/fetch_details";
- 
+
     // var url = "http://13.251.49.54:82/fetch_details";
     debugger;
     var parameters = {
@@ -133,22 +141,28 @@ class FlightsHomePage extends PureComponent {
           //handle success
           this.setState({ renderTables: false, showAddButton: false });
           if (
-            typeof response.data.result[pageType][subType] !== "undefined" &&
-            response.data.result[pageType][subType].length > 0 || categoryType=="common"
+            (typeof response.data.result[pageType][subType] !== "undefined" &&
+              response.data.result[pageType][subType].length > 0) ||
+            categoryType == "common"
           ) {
-          if (categoryType=="common") {
-            result["common"][subType] = response.data.result["common"][subType];
-            this.setState({ result: result, renderTables: true, showAddButton: false });
-          }
-            else
-            {
-              result[pageType][subType] = response.data.result[pageType][subType];
-              this.setState({ result: result, renderTables: true, showAddButton: false });
-
+            if (categoryType == "common") {
+              result["common"][subType] =
+                response.data.result["common"][subType];
+              this.setState({
+                result: result,
+                renderTables: true,
+                showAddButton: false
+              });
+            } else {
+              result[pageType][subType] =
+                response.data.result[pageType][subType];
+              this.setState({
+                result: result,
+                renderTables: true,
+                showAddButton: false
+              });
             }
-           
           } else {
-            debugger
             this.setState({
               showAddButton: true,
               renderTables: false,
@@ -192,8 +206,13 @@ class FlightsHomePage extends PureComponent {
       .catch(error => console.log(error));
   };
   handleAdd = () => {
-    let path = "/flights";
-    this.props.history.push(path);
+    let metafFields = (
+      <ul>
+        <li />
+      </ul>
+    );
+    // let path = "/flights";
+    // this.props.history.push(path);
   };
 
   handleGetInfo = () => {
@@ -259,23 +278,17 @@ class FlightsHomePage extends PureComponent {
 
   handleSelectedInput = (p, fieldName) => {
     if (fieldName === "airlineName") {
-<<<<<<< HEAD
-      this.setState({ airlineNameSelected: p, airlineName: p.value }, () =>
-=======
-// <<<<<<< HEAD
-//       this.setState({ selectedOption: p, airlineName: p.value },()=>this.handleGetInfo());
-//     } else if (fieldName === "depCityName") {
-//       this.setState({ depCityNameSelected: p, depCityName: p.value },()=>this.handleGetInfo());
-//       debugger
-//     } else if (fieldName === "arrCityName") {
-//       this.setState({ arrCityNameSelected: p, arrCityName: p.value,domain: this.state.domain,language: this.state.lanugage,pageType: this.state.pageType,subType: this.state.subType },()=>this.handleGetInfo());
-//       debugger
-//     } else if (fieldName === "cityName") {
-//       this.setState({ cityNameSelected: p, cityName: p.value },()=>this.handleGetInfo());
-// =======
-      this.setState({ selectedOption: p, airlineName: p.value }, () =>
->>>>>>> 68e5c3284caf6d52e37688f710c2308fe64d07a4
-        this.handleGetInfo()
+      this.setState(
+        {
+          airlineNameSelected: p,
+          airlineName: p.value,
+          domain: this.state.domain,
+          language: this.state.language,
+          pageType: this.state.pageType,
+          subType: this.state.subType,
+          categoryType: this.state.categoryType
+        },
+        () => this.handleGetInfo()
       );
     } else if (fieldName === "depCityName") {
       this.setState({ depCityNameSelected: p, depCityName: p.value }, () =>
@@ -309,7 +322,6 @@ class FlightsHomePage extends PureComponent {
         () => this.handleGetInfo()
       );
     }
-
   };
 
   returnOptions = options => {
@@ -492,7 +504,6 @@ class FlightsHomePage extends PureComponent {
               </select>
             </li>
             <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
-
               <label>Page Subtype</label>
               <select
                 onChange={e => this.handleChange(e, "subType")}
@@ -505,58 +516,58 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(subTypes)}
               </select>
             </li>
-            { (categoryType === "common") ?
-            <li>
-              <label>Section</label>
-              <select
-                name="section"
-                value={this.state.section}
-                onChange={e => this.handleChange(e, "section")}
-              >
-                {this.returnOptions(sections)}
-              </select>
-            </li>
-            : null }
+            {categoryType === "common" ? (
+              <li>
+                <label>Section</label>
+                <select
+                  name="section"
+                  value={this.state.section}
+                  onChange={e => this.handleChange(e, "section")}
+                >
+                  {this.returnOptions(sections)}
+                </select>
+              </li>
+            ) : null}
 
             {category}
 
             {checkfields}
 
             {categoryType === "uniq" && subType === "routes" ? (
-              <li>
-                <label>Dep City Name</label>
-                <Select1
-                  // isDisabled = {readOnlyValue}
-                  value={depCityNameSelected}
-                  onChange={p => this.handleSelectedInput(p, "depCityName")}
-                  options={options_dep}
-                  name="depCityName"
-                  required
-                  placeholder="Search Departure City"
-                  // onInputChange={this.handleAirlineSearch}
-                  onInputChange={e => this.handleAutoSearch(e, "depCityName")}
-                />
-                <label>Arr City Name</label>
-                <Select1
-                  // isDisabled = {readOnlyValue}
-                  value={arrCityNameSelected}
-                  onChange={p => this.handleSelectedInput(p, "arrCityName")}
-                  options={options_arr}
-                  name="arrCityName"
-                  placeholder="Search Arrival City"
-                  required
-                  // onInputChange={this.handleAirlineSearch}
-                  onInputChange={e => this.handleAutoSearch(e, "arrCityName")}
-                />
-              </li>
+              <ul>
+                <li>
+                  <label>Dep City Name</label>
+                  <Select1
+                    // isDisabled = {readOnlyValue}
+                    value={depCityNameSelected}
+                    onChange={p => this.handleSelectedInput(p, "depCityName")}
+                    options={options_dep}
+                    name="depCityName"
+                    required
+                    placeholder="Search Departure City"
+                    // onInputChange={this.handleAirlineSearch}
+                    onInputChange={e => this.handleAutoSearch(e, "depCityName")}
+                  />
+                </li>
+                <li>
+                  <label>Arr City Name</label>
+                  <Select1
+                    // isDisabled = {readOnlyValue}
+                    value={arrCityNameSelected}
+                    onChange={p => this.handleSelectedInput(p, "arrCityName")}
+                    options={options_arr}
+                    name="arrCityName"
+                    placeholder="Search Arrival City"
+                    required
+                    // onInputChange={this.handleAirlineSearch}
+                    onInputChange={e => this.handleAutoSearch(e, "arrCityName")}
+                  />
+                </li>
+              </ul>
             ) : null}
           </ul>
         </div>
-        <div className={this.state.showAddButton ? "" : "hidden"}>
-          <button type="button" onClick={this.handleAdd}>
-            Add New{" "}
-          </button>
-        </div>
+
         {this.state.renderTables ? (
           <FlightsTable
             domain={domain}
@@ -569,7 +580,12 @@ class FlightsHomePage extends PureComponent {
             tableTitle={tableTitle}
           />
         ) : (
-          this.state.message
+          <p className={this.state.showAddButton ? "" : "hidden"}>
+            {this.state.message}
+            <button type="button" onClick={this.handleAdd}>
+              Add New{" "}
+            </button>
+          </p>
         )}
       </div>
     );
