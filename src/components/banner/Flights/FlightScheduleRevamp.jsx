@@ -18,7 +18,8 @@ class FlightScheduleRevamp extends Component {
         source: "",
         destination: "",
         content_type: "",
-        airline_name: ""
+        airline_name: "",
+        keywords:""
       },
       routesHide: true,
       sectionHide: true,
@@ -137,6 +138,7 @@ class FlightScheduleRevamp extends Component {
         routesHide: true,
         contentTypeHide: e.target.value == "routes" ? false : true
       });
+       this.fetchFlightsData(form_data)
     }
     if (e.target.name == "content_type") {
       let form_json = {
@@ -252,14 +254,14 @@ class FlightScheduleRevamp extends Component {
             _self.setState({ options: response.data });
           }
         })
-        .then(response => {});
+        .then(response => {
+        });
     }
   }
 
   render() {
     let _self = this;
     let form_data = _self.state.form_data;
-
     let country_codes = [
       { name: "India", code: "IN" },
       { name: "Qatar", code: "QA" },

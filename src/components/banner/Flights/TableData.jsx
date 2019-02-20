@@ -38,7 +38,7 @@ class TableData extends Component {
 					<td>{tdata["id"]}</td>
 					<td>{tdata["meta_title"]}</td>
 					<td>{tdata["meta_description"]}</td>
-					<td>{tdata["keyword"]}</td>
+					<td>{tdata["keywords"]}</td>
 					<td>{tdata["h1_title"]}</td>
 					<td>
 						<a
