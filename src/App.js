@@ -28,7 +28,7 @@ class App extends Component {
             <Route exact path="/flights" component={Flights} />
             <Route exact path="/flights/home" component={FlightsHomePage} />
             <Route exact path="/hotels" component={Index} />
-            // <Route exact path="/banners" component={Banner} />
+            <Route exact path="/banners" component={Banner} />
             
             <Route exact path="/hotels" component = { Index } />
             <Route exact path="/hotels/addUniqueData" component = { HotelUniqueContent } />
