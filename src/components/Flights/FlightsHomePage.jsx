@@ -36,15 +36,7 @@ class FlightsHomePage extends PureComponent {
         },
         "flight-schedule": { routes: [], from: [], to: [] },
         "flight-tickets": { tickets: [] },
-        common: {
-          routes: [],
-          from: [],
-          to: [],
-          overview: [],
-          routes: [],
-          pnr: [],
-          webcheckin: []
-        }
+        common: []
       },
       pageType: "",
       domain: "",
@@ -84,7 +76,14 @@ class FlightsHomePage extends PureComponent {
   }
 
   handleChange = (e, fieldName) => {
-    this.setState({ [fieldName]: e.target.value });
+    if (fieldName === "section") {
+      this.setState({ [fieldName]: e.target.value }, () =>
+        this.handleGetInfo()
+      );
+      debugger;
+    } else {
+      this.setState({ [fieldName]: e.target.value });
+    }
   };
 
   componentWillReceiveProps(nextProps) {
@@ -138,31 +137,33 @@ class FlightsHomePage extends PureComponent {
       axios
         .get(url, { params: { args: parameters } })
         .then(response => {
-          //handle success
+          debugger;
           this.setState({ renderTables: false, showAddButton: false });
           if (
-            (typeof response.data.result[pageType][subType] !== "undefined" &&
-              response.data.result[pageType][subType].length > 0) ||
-            categoryType == "common"
+            categoryType === "uniq" &&
+            typeof response.data.result[pageType][subType] !== "undefined" &&
+            response.data.result[pageType][subType].length > 0
           ) {
-            if (categoryType == "common") {
-              result["common"][subType] =
-                response.data.result["common"][subType];
-              this.setState({
-                result: result,
-                renderTables: true,
-                showAddButton: false
-              });
-            } else {
-              result[pageType][subType] =
-                response.data.result[pageType][subType];
-              this.setState({
-                result: result,
-                renderTables: true,
-                showAddButton: false
-              });
-            }
+            result[pageType][subType] = response.data.result[pageType][subType];
+            this.setState({
+              result: result,
+              renderTables: true,
+              showAddButton: false
+            });
+          } else if (
+            categoryType === "common" &&
+            typeof response.data.result["common"] !== "undefined" &&
+            response.data.result["common"].length > 0
+          ) {
+            debugger;
+            result["common"] = response.data.result["common"];
+            this.setState({
+              result: result,
+              renderTables: true,
+              showAddButton: false
+            });
           } else {
+            debugger;
             this.setState({
               showAddButton: true,
               renderTables: false,
@@ -216,7 +217,11 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleGetInfo = () => {
-    if (this.state.pageType === "flight-schedule") {
+    debugger;
+    if (
+      this.state.pageType === "flight-schedule" &&
+      this.state.categoryType == "uniq"
+    ) {
       if (
         this.state.subType === "routes" &&
         this.state.depCityName != "" &&
@@ -224,26 +229,45 @@ class FlightsHomePage extends PureComponent {
       ) {
         this.fetchDetails();
       } else if (
-        (this.state.subType === "from" || this.state.subType === "to") &&
-        (this.state.cityName != "" || this.state.cityName != "undefined")
+        (this.state.subType === "from" ||
+          (this.state.subType === "to" && this.state.categoryType == "uniq")) &&
+        (this.state.cityName != "" ||
+          (this.state.cityName != "undefined" &&
+            this.state.categoryType == "uniq"))
       ) {
         this.fetchDetails();
       }
-    } else if (this.state.pageType === "flight-booking") {
+    } else if (
+      this.state.pageType === "flight-booking" &&
+      this.state.categoryType == "uniq"
+    ) {
       if (
         this.state.subType === "routes" &&
         this.state.depCityName != "" &&
-        this.state.arrCityName != ""
+        this.state.arrCityName != "" &&
+        this.state.categoryType == "uniq"
       ) {
         this.fetchDetails();
       } else if (
         (this.state.subType === "overview" ||
           this.state.subType === "pnr-status" ||
           this.state.subType === "web-checkin") &&
-        (this.state.airlineName != "" || this.state.airlineName != "undefined")
+        (this.state.airlineName != "" ||
+          (this.state.airlineName != "undefined" &&
+            this.state.categoryType == "Unique"))
+      ) {
+        this.fetchDetails();
+      } else if (
+        (this.state.subType === "from" || this.state.subType === "to") &&
+        (this.state.cityName != "" ||
+          (this.state.cityName != "undefined" &&
+            this.state.categoryType == "uniq"))
       ) {
         this.fetchDetails();
       }
+    } else if (this.state.categoryType === "common") {
+      debugger;
+      this.fetchDetails();
     }
   };
 
@@ -493,16 +517,6 @@ class FlightsHomePage extends PureComponent {
               </select>
             </li>
 
-            <li>
-              <label>Section</label>
-              <select
-                name="section"
-                value={this.state.section}
-                onChange={e => this.handleChange(e, "section")}
-              >
-                {this.returnOptions(sections)}
-              </select>
-            </li>
             <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
               <label>Page Subtype</label>
               <select
@@ -516,6 +530,8 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(subTypes)}
               </select>
             </li>
+
+            {category}
             {categoryType === "common" ? (
               <li>
                 <label>Section</label>
@@ -528,8 +544,6 @@ class FlightsHomePage extends PureComponent {
                 </select>
               </li>
             ) : null}
-
-            {category}
 
             {checkfields}
 
@@ -575,17 +589,18 @@ class FlightsHomePage extends PureComponent {
             response={result}
             pageType={pageType}
             subType={subType}
+            categoryType={this.state.categoryType}
             handleDelete={this.handleDelete.bind(this)}
             tableFields={tableFields}
             tableTitle={tableTitle}
           />
         ) : (
-          <p className={this.state.showAddButton ? "" : "hidden"}>
+          <div className={this.state.showAddButton ? "" : "hidden"}>
             {this.state.message}
             <button type="button" onClick={this.handleAdd}>
               Add New{" "}
             </button>
-          </p>
+          </div>
         )}
       </div>
     );

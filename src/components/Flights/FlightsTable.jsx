@@ -33,7 +33,8 @@ class FlightsTable extends Component {
       pageType,
       subType,
       tableFields,
-      tableTitle
+      tableTitle,
+      categoryType
     } = this.props;
     var tableTitlearray = [];
     var tableValuearray = [];
@@ -46,6 +47,8 @@ class FlightsTable extends Component {
     var tempValueArray = Object.values(tableFields[subType]);
     tableValuearray = tableValuearray.concat(tempValueArray);
     var flight = [];
+    let result;
+    debugger;
     return (
       <div>
         <Table key={subType} responsive>
