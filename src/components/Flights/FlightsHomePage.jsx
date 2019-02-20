@@ -147,6 +147,7 @@ class FlightsHomePage extends PureComponent {
           } else if (
             categoryType === "common" &&
             typeof response.data.result["common"] !== "undefined" &&
+
             response.data.result["common"].length > 0
           ) {
             debugger;
@@ -211,6 +212,7 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleGetInfo = () => {
+
     debugger;
     if (
       this.state.pageType === "flight-schedule" &&
@@ -221,8 +223,10 @@ class FlightsHomePage extends PureComponent {
         this.state.depCityName != "" &&
         this.state.arrCityName != ""
       ) {
+        debugger
         this.fetchDetails();
       } else if (
+
         (this.state.subType === "from" ||
           (this.state.subType === "to" && this.state.categoryType == "uniq")) &&
         (this.state.cityName != "" ||
