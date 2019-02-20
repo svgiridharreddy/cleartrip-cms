@@ -10,7 +10,7 @@ const pageTypes = [
   "flight-schedule",
   "flight-tickets"
 ];
-const languages = [, "en", "ar"];
+const languages = ["en", "ar"];
 const domains = {
   IN: "India",
   AE: "United Arab Emirates",
@@ -78,9 +78,9 @@ class FlightsHomePage extends PureComponent {
       this.setState({ [fieldName]: e.target.value }, () =>
         this.handleGetInfo()
       );
-      debugger;
     } else {
       this.setState({ [fieldName]: e.target.value });
+      
     }
   };
 
