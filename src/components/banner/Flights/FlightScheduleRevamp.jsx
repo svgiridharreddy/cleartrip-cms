@@ -145,6 +145,15 @@ class FlightScheduleRevamp extends Component {
         destination: "",
         source: ""
       };
+      let autoComplete={
+      options_dep: [],
+      options_arr: [],
+      sourcedOption: null,
+      destinationdOption: null
+      }
+      this.setState({
+        autoComplete
+      })
       Object.keys(form_json).map(form => (form_data[form] = ""));
       this.setState({
         form_data

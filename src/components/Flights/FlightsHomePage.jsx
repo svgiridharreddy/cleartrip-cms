@@ -482,7 +482,7 @@ class FlightsHomePage extends PureComponent {
 
     return (
       <div className="top-wrapper">
-        <div>
+        <div className="filter-fileds">
           <ul className="list-inline">
             <li>
               <label>Country</label>
@@ -491,7 +491,9 @@ class FlightsHomePage extends PureComponent {
                 name="domain"
                 value={this.state.domain}
               >
-              <option value="" disabled={true} selected>Domain</option>
+                <option value="" disabled={true} selected>
+                  Domain
+                </option>
                 {Object.keys(domains).map(option => (
                   <option key={option} value={option}>
                     {domains[option]}
@@ -506,9 +508,10 @@ class FlightsHomePage extends PureComponent {
                 name="language"
                 value={this.state.language}
               >
-              <option value="" disabled={true} selected>Language</option>
-                {this.returnOptions(languages)}
-              }
+                <option value="" disabled={true} selected>
+                  Language
+                </option>
+                {this.returnOptions(languages)}}
               </select>
             </li>
             <li>
@@ -518,7 +521,9 @@ class FlightsHomePage extends PureComponent {
                 name="pageType"
                 value={this.state.pageType}
               >
-              <option value="" disabled={true} selected>Page type</option>
+                <option value="" disabled={true} selected>
+                  Page type
+                </option>
                 {this.returnOptions(pageTypes)}
               </select>
             </li>
@@ -530,28 +535,30 @@ class FlightsHomePage extends PureComponent {
                 name="subType"
                 value={this.state.subType}
               >
-                <option  value="" disabled={true} selected>
-                   page sub_type
+                <option value="" disabled={true} selected>
+                  page sub_type
                 </option>
                 {this.returnOptions(subTypes)}
               </select>
             </li>
 
             {category}
-            {categoryType==="common" ?
-            <li>
-              <label>Section</label>
-              <select
-                name="section"
-                value={this.state.section}
-                onChange={e => this.handleChange(e, "section")}
-              > <option  value="" disabled={true} selected>
-                section
-              </option>
-                {this.returnOptions(sections)}
-              </select>
-            </li>
-            :null }
+            {categoryType === "common" ? (
+              <li>
+                <label>Section</label>
+                <select
+                  name="section"
+                  value={this.state.section}
+                  onChange={e => this.handleChange(e, "section")}
+                >
+                  {" "}
+                  <option value="" disabled={true} selected>
+                    section
+                  </option>
+                  {this.returnOptions(sections)}
+                </select>
+              </li>
+            ) : null}
 
             {checkfields}
 
