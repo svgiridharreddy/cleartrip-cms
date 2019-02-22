@@ -10,39 +10,57 @@ class TableContent extends Component {
 	constructor(props){
 			super(props)
 			this.state = {
+				tableResult: props.tableResult,
+				content_type: props.content_type,
+				isDataPresent: props.isDataPresent,
+				linkURl: props.linkURl,
 				isDeleted: false
 			}
 	}
 
 	handleDelete(item){
-    axios.delete(`${API_URL}/hotels/delete/${item.id}`)
-      .then(res => {
-          console.log(res.message);
-          this.setState({ isDeleted: true })
-      })
-      .catch((err) => {
-          console.log(err);
-      })
+      	var contentList = this.state.tableResult.filter(function(content) { return content.id != item.id });
+		this.setState({ tableResult: contentList });
+		const alrt = window.confirm('Are you sure you wish to delete this item?')
+		if (alrt == true) {
+		    axios.delete(`${API_URL}/hotels/delete/${item.id}`)
+		      .then(res => {
+		          console.log(res.message);
+		          this.setState({ isDeleted: true })
+		      })
+		      .catch((err) => {
+		          console.log(err);
+		      })
+		}
 	}
 
 	render() {
 		let dataField;
-		const { isDeleted } = this.state
-		if (isDeleted) {
-			return <Redirect to="/hotels" />
-		}
-		if ((this.props.content_type === "Common Data") && (this.props.isDataPresent) && (this.props.tableResult.length > 0)) {
+		const { isDeleted, tableResult, content_type, isDataPresent, linkURl } = this.state
+		// if (isDeleted) {
+		// 	return <Redirect to="/hotels" />
+		// }
+		if ((content_type === "Common Data") && (isDataPresent) && (tableResult.length > 0)) {
 			dataField = (
 			  <Table striped bordered>
+			  	<thead>
+			  		<tr>
+			  			<th>Domain Name</th>
+			  			<th>Country Name</th>
+			  			<th>Meta Title</th>
+			  			<th>Meta Description</th>
+			  			<th colSpan="2"></th>
+			  		</tr>
+			  	</thead>
 			    <tbody>
 			      {
-        			this.props.tableResult.map((item, i) => {
+        			tableResult.map((item, i) => {
         				return(
         					<tr key={i}>
 			        			<td>{item.domain_name}</td>
 			        			<td>{item.country_name}</td>
-			        			<td>{item.page_type}</td>
-			        			<td>{item.content_type}</td>
+			        			<td>{item.meta_title}</td>
+			        			<td>{item.meta_description}</td>
 			        			{/*<td>
 			        				<Button variant="success" size="sm" block>
 			        					<Link to={`hotels/show/commondata/${item.id}`}>View</Link>
@@ -61,17 +79,27 @@ class TableContent extends Component {
 			    </tbody>
 			  </Table>
 			)
-		} else if ((this.props.content_type === "Unique Data") && (this.props.isDataPresent) && (this.props.tableResult.length > 0)) {
+		} else if ((content_type === "Unique Data") && (isDataPresent) && (tableResult.length > 0)) {
 			dataField = (
 				  <Table striped bordered>
+				  	<thead>
+				  		<tr>
+				  			<th>Client Path</th>
+				  			<th>Country Name</th>
+				  			<th>Meta Title</th>
+				  			<th>Meta Description</th>
+				  			<th colSpan="2"></th>
+				  		</tr>
+				  	</thead>
 				    <tbody>
 				      {
-	        			this.props.tableResult.map((item, i) => {
+	        			tableResult.map((item, i) => {
 	        				return(
 	        					<tr key={i}>
 				        			<td>{item.domain_url}</td>
-				        			<td>{item.content_type}</td>
+				        			<td>{item.country_name}</td>
 				        			<td>{item.meta_title}</td>
+				        			<td>{item.meta_description}</td>
 				        			{/*<td>
 				        				<Button variant="success" size="sm" block>
 				        					<Link to={`hotels/show/uniquedata/${item.id}`}>View</Link>
@@ -97,7 +125,7 @@ class TableContent extends Component {
 					   		Your searched result not found, you can add by clicking Add button here.
 					  	</Alert>
 						<Button variant="info" size="lg">
-							<Link to={`hotels/${this.props.linkURl}`}>Add</Link>
+							<Link to={`hotels/${linkURl}`}>Add</Link>
 						</Button>
 					</div>
 				)
