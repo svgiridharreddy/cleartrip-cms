@@ -160,7 +160,7 @@ class EditUniqueContent extends Component {
     };
     axios
       .post(
-        `${API_URL}/hotels/update/uniquedata/${this.props.match.params.id}`,
+        `${API_URL}/cmshotels/update/${this.props.match.params.id}`,
         data
       )
       .then(({ data }) => {

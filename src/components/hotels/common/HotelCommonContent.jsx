@@ -105,7 +105,7 @@ class HotelCommonContent extends Component {
       bottom_content: footerState,
       faq: faqState
     }
-    axios.post(`${API_URL}/hotels/common-content-section-data`, data)
+    axios.post(`${API_URL}/cmshotels/common-content-section-data`, data)
     .then(({ data }) => {
         this.setState({
           message: data.message,

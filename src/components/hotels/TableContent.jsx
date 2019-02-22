@@ -23,7 +23,7 @@ class TableContent extends Component {
 		this.setState({ tableResult: contentList });
 		const alrt = window.confirm('Are you sure you wish to delete this item?')
 		if (alrt == true) {
-		    axios.delete(`${API_URL}/hotels/delete/${item.id}`)
+		    axios.delete(`${API_URL}/cmshotels/delete/${item.id}`)
 		      .then(res => {
 		          console.log(res.message);
 		          this.setState({ isDeleted: true })
@@ -67,7 +67,7 @@ class TableContent extends Component {
 										  </Button>
 			        			</td>*/}
 			        			<td>
-			        				<Button variant="info" size="sm" block><Link to={`/hotels/edit/uniquedata/${item.id}`}>Edit</Link></Button>
+			        				<Button variant="info" size="sm" block><Link to={`/cmshotels/edit/${item.id}`}>Edit</Link></Button>
 			        			</td>
 			        			<td>
 			        				<Button variant="danger" size="sm" block onClick={this.handleDelete.bind(this, item)}>Delete</Button>
@@ -106,7 +106,7 @@ class TableContent extends Component {
 											  </Button>
 				        			</td>*/}
 				        			<td>
-				        				<Button variant="info" size="sm" block><Link to={`/hotels/edit/uniquedata/${item.id}`}>Edit</Link></Button>
+				        				<Button variant="info" size="sm" block><Link to={`/cmshotels/edit/${item.id}`}>Edit</Link></Button>
 				        			</td>
 				        			<td>
 				        				<Button variant="danger" size="sm" block onClick={this.handleDelete.bind(this, item)}>Delete</Button>
@@ -125,7 +125,7 @@ class TableContent extends Component {
 					   		Your searched result not found, you can add by clicking Add button here.
 					  	</Alert>
 						<Button variant="info" size="lg">
-							<Link to={`hotels/${linkURl}`}>Add</Link>
+							<Link to={`cmshotels/${linkURl}`}>Add</Link>
 						</Button>
 					</div>
 				)

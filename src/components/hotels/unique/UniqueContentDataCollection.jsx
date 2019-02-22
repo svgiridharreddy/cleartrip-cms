@@ -3,7 +3,7 @@ import { FormControl } from 'react-bootstrap';
 import axios from 'axios';
 import TableContent from '../TableContent';
 
-const QUERY_URL = "http://localhost:3000/hotels/unique-content-data-collection" 
+const QUERY_URL = "http://localhost:3000/cmshotels/unique-content-data-collection" 
 
 class UniqueContentDataCollection extends Component {
 	constructor(props) {

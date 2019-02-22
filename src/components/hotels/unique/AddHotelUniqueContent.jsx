@@ -90,7 +90,7 @@ class HotelUniqueContent extends Component {
 			bottom_content: footerState,
 			faq: faqState
 		}
-		axios.post(`${API_URL}/hotels/content-section-data`, data)
+		axios.post(`${API_URL}/cmshotels/content-section-data`, data)
 		.then(({ data }) => {
 				this.setState({
 					message: data.message // MusicGraph returns an object named data, 
