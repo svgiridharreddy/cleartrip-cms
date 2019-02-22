@@ -18,7 +18,8 @@ class FlightScheduleRevamp extends Component {
         source: "",
         destination: "",
         content_type: "",
-        airline_name: ""
+        airline_name: "",
+        keywords:""
       },
       routesHide: true,
       sectionHide: true,
@@ -49,8 +50,8 @@ class FlightScheduleRevamp extends Component {
       form_data["page_subtype"] !== ""
     ) {
       this.setState({
-        results:[]
-      })
+        results: []
+      });
       if (form_data["page_subtype"] == "index") {
         hitAPI = true;
       } else if (
@@ -58,9 +59,9 @@ class FlightScheduleRevamp extends Component {
         form_data["content_type"] !== ""
       ) {
         if (form_data["content_type"] === "uniq") {
-          if (form_data["source"] !== "" && form_data["destination"] !== "") {
+          // if (form_data["source"] !== "" && form_data["destination"] !== "") {
             hitAPI = true;
-          }
+          // }
         } else {
           hitAPI = true;
         }
@@ -137,12 +138,22 @@ class FlightScheduleRevamp extends Component {
         routesHide: true,
         contentTypeHide: e.target.value == "routes" ? false : true
       });
+       this.fetchFlightsData(form_data)
     }
     if (e.target.name == "content_type") {
       let form_json = {
         destination: "",
         source: ""
       };
+      let autoComplete={
+      options_dep: [],
+      options_arr: [],
+      sourcedOption: null,
+      destinationdOption: null
+      }
+      this.setState({
+        autoComplete
+      })
       Object.keys(form_json).map(form => (form_data[form] = ""));
       this.setState({
         form_data
@@ -224,8 +235,8 @@ class FlightScheduleRevamp extends Component {
     } else if (fieldName === "cityName") {
       this.setState({ cityNameSelected: p, cityName: p.value });
     }
-    if(form_data["source"] !== "" && form_data["destination"] !== ""){
-      this.fetchFlightsData(form_data)
+    if (form_data["source"] !== "" && form_data["destination"] !== "") {
+      this.fetchFlightsData(form_data);
     }
   }
 
@@ -253,7 +264,6 @@ class FlightScheduleRevamp extends Component {
           }
         })
         .then(response => {
-          
         });
     }
   }
@@ -261,7 +271,6 @@ class FlightScheduleRevamp extends Component {
   render() {
     let _self = this;
     let form_data = _self.state.form_data;
-
     let country_codes = [
       { name: "India", code: "IN" },
       { name: "Qatar", code: "QA" },
@@ -446,7 +455,10 @@ class FlightScheduleRevamp extends Component {
           <span>No record found</span>
         </div>
         {_self.state.results.length > 0 ? (
-          <TableData formData={_self.state.results}  className={_self.state.results.length > 0 ? "" : "hidden"}/>
+          <TableData
+            formData={_self.state.results}
+            className={_self.state.results.length > 0 ? "" : "hidden"}
+          />
         ) : (
           ""
         )}

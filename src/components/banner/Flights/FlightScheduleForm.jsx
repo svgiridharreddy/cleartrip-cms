@@ -22,7 +22,7 @@ class FlightScheduleForm extends Component {
     super(props);
     let editorState = "";
     this.state = {
-      form_data: props.formData[0],
+      form_data: props.formData,
       id: "",
       page_type: "",
       editorState: editorState,
@@ -47,6 +47,7 @@ class FlightScheduleForm extends Component {
     }
   }
 	editFields() {
+		debugger
 		let _self = this;
 		let form_data = this.state.form_data;
 		if (this.state.editorState != "") {

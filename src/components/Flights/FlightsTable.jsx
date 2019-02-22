@@ -33,9 +33,9 @@ class FlightsTable extends Component {
       pageType,
       subType,
       tableFields,
-      tableTitle
+      tableTitle,
+      categoryType
     } = this.props;
-    debugger;
     var tableTitlearray = [];
     var tableValuearray = [];
     tableTitlearray = Object.keys(tableTitle);
@@ -47,6 +47,8 @@ class FlightsTable extends Component {
     var tempValueArray = Object.values(tableFields[subType]);
     tableValuearray = tableValuearray.concat(tempValueArray);
     var flight = [];
+    let result;
+    debugger;
     return (
       <div>
         <Table key={subType} responsive>
@@ -60,7 +62,38 @@ class FlightsTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {response[pageType][subType].map((resp, idx) => (
+
+            { categoryType === "uniq" ? response[pageType][subType].map((resp, idx) => (
+              <tr key={resp.id}>
+                {tableValuearray.map(a => (
+                  <td key={a} align="center">
+                    {resp[a]}
+                  </td>
+                ))}
+
+                <td align="center">
+                  <Link
+                    to={{
+                      pathname: "/flights",
+                      state: { flight: resp }
+                    }}
+                  >
+                    <Button as="input" type="button" value="Edit" />
+                  </Link>{" "}
+                </td>
+                <td>
+                  <Button
+                    as="input"
+                    type="button"
+                    value="Delete"
+                    onClick={() => {
+                      this.props.handleDelete(idx, resp.id);
+                    }}
+                  />
+                </td>
+              </tr>
+            )):   
+            response["common"].map((resp, idx) => (
               <tr key={resp.id}>
                 {tableValuearray.map(a => (
                   <td key={a} align="center">
