@@ -62,6 +62,7 @@ class Flights extends Component {
   }
 
   handleChange = (e, fieldName) => {
+    debugger
     if ([fieldName] == "rte") this.handleRTEchange(e);
     else this.setState({ [fieldName]: e.target.value });
   };

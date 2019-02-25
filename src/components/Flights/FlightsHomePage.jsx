@@ -74,10 +74,19 @@ class FlightsHomePage extends PureComponent {
   }
 
   handleChange = (e, fieldName) => {
+    debugger
     if (fieldName === "section") {
       this.setState({ [fieldName]: e.target.value }, () =>
         this.handleGetInfo()
       );
+       }
+
+      else if (fieldName=="pageType"){
+        this.setState({ 
+          [fieldName]: e.target.value
+
+        })
+
     } else {
       this.setState({ [fieldName]: e.target.value });
       
