@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Redirect, Link } from "react-router-dom";
-import FlightBookingFields from "./FlightBooking";
+import FlightBookingFields from "./FlightBooking1";
 import FlightScheduleFields from "./FlightSchedule";
 import { Button, Form, Col, ButtonToolbar } from "react-bootstrap";
 
@@ -56,6 +56,7 @@ class Flights extends Component {
       options_arr: [],
       depCityNameSelected: "",
       arrCityNameSelected: "",
+      airlineNameSelected: "",
       cityNameSelected: "",
       value: ""
     };
@@ -225,6 +226,7 @@ class Flights extends Component {
         label: flight.destination,
         value: flight.destination
       },
+      airlineNameSelected: { label: flight.airline_name, value:flight.airline_name },
       arrCityName: flight.destination,
       readOnlyValue: true
     });
@@ -256,6 +258,7 @@ class Flights extends Component {
       arrCityName,
       depCityNameSelected,
       arrCityNameSelected,
+      airlineNameSelected,
       readOnlyValue
     } = this.state;
     let fields;
@@ -283,6 +286,7 @@ class Flights extends Component {
           classes={classes}
           name="flight-booking"
           handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
+          handleRTEchange={content => this.handleRTEchange(content)}
           autoCompleteFields={(e, fieldName) =>
             this.autoCompleteFields(e, fieldName)
           }
@@ -297,6 +301,9 @@ class Flights extends Component {
           airlineName={airlineName}
           depCityName={depCityName}
           arrCityName={arrCityName}
+          depCityNameSelected={depCityNameSelected}
+          arrCityNameSelected={arrCityNameSelected}
+          airlineNameSelected={airlineNameSelected}
           readOnlyValue={readOnlyValue}
           handleAutoSearch={(e, fieldName) =>
             this.handleAutoSearch(e, fieldName)

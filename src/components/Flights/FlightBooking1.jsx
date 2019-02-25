@@ -6,7 +6,7 @@ import Select1 from "react-select";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-class FlightScheduleFields extends Component {
+class FlightBookingFields extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +17,7 @@ class FlightScheduleFields extends Component {
       // content: this.props.content,
       h1Tag: this.props.h1Tag,
       keywords: this.props.keywords,
-      cityName: this.props.cityName,
+      airlineName: this.props.airlineName,
       depCityName: this.props.depCityName,
       arrCityName: this.props.arrCityName,
       readOnlyValue: this.props.readOnlyValue,
@@ -27,7 +27,7 @@ class FlightScheduleFields extends Component {
       options_arr: [],
       depCityNameSelected: "",
       arrCityNameSelected: "",
-      cityNameSelected: "",
+      airlineNameSelected:"",
       editorState: "",
       content: RichTextEditor.createEmptyValue()
     };
@@ -61,11 +61,12 @@ class FlightScheduleFields extends Component {
       description: nextProps.description,
       keywords: nextProps.keywords,
       h1Tag: nextProps.h1Tag,
-      cityName: nextProps.cityName,
+      airline: nextProps.airlineName,
       depCityName: nextProps.depCityName,
       arrCityName: nextProps.arrCityName,
       depCityNameSelected: nextProps.depCityNameSelected,
-      arrCityNameSelected: nextProps.arrCityNameSelected
+      arrCityNameSelected: nextProps.arrCityNameSelected,
+      airlineNameSelected: nextProps.airlineNameSelected
     });
   }
 
@@ -80,10 +81,11 @@ class FlightScheduleFields extends Component {
     debugger;
     let subTypeField, category, fields;
     const subtypeOptions = {
-      "select sub page type": "select sub page type",
-      "schedule-routes": "Schedule Routes",
-      "flights-from": "Flights From",
-      "flights-to": "Flights To",
+      "select subtype": "Select sub page type",
+      "airline-routes": "Airline Routes",
+      overview: "Overview",
+      "pnr-status": "PNR Status",
+      "web-checkin": "Web Checkin",
       index: "Index"
     };
     const {
@@ -92,7 +94,7 @@ class FlightScheduleFields extends Component {
       keywords,
       content,
       h1Tag,
-      cityName,
+      airlineName,
       depCityName,
       arrCityName,
       currentSubType,
@@ -104,7 +106,7 @@ class FlightScheduleFields extends Component {
       options_arr,
       depCityNameSelected,
       arrCityNameSelected,
-      cityNameSelected
+      airlineNameSelected
     } = this.props;
 
     const toolbarConfig = {
@@ -262,25 +264,23 @@ class FlightScheduleFields extends Component {
             onEditorStateChange={this.onChange}
           /> */}
 
-        {categoryType === "uniq" &&
-        (currentSubType === "flights-from" ||
-          currentSubType === "flights-to") ? (
+        {categoryType === "uniq" && currentSubType !== "index"  ? (
           <div>
-            <label>City Name</label>
+            <label>Airline Name</label>
             <Select1
               isDisabled={readOnlyValue}
-              value={cityNameSelected}
-              onChange={p => this.props.handleSelectedInput(p, "cityName")}
+              value={airlineNameSelected}
+              onChange={p => this.props.handleSelectedInput(p, "airlineName")}
               options={options}
-              name="cityName"
+              name="airlineName"
               required
-              placeholder="Search  City"
+              placeholder="Search Airline"
               // onInputChange={this.handleAirlineSearch}
-              onInputChange={e => this.props.handleAutoSearch(e, "cityName")}
+              onInputChange={e => this.props.handleAutoSearch(e, "airlineName")}
             />
           </div>
         ) : null}
-        {categoryType === "uniq" && currentSubType === "schedule-routes" ? (
+        {categoryType === "uniq" && currentSubType === "airline-routes" ? (
           <div>
             <label>Dep City Name</label>
             <Select1
@@ -320,4 +320,4 @@ class FlightScheduleFields extends Component {
   }
 }
 
-export default FlightScheduleFields;
+export default FlightBookingFields;
