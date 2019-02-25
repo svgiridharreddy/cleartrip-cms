@@ -59,9 +59,9 @@ class FlightScheduleRevamp extends Component {
         form_data["content_type"] !== ""
       ) {
         if (form_data["content_type"] === "uniq") {
-          if (form_data["source"] !== "" && form_data["destination"] !== "") {
+          // if (form_data["source"] !== "" && form_data["destination"] !== "") {
             hitAPI = true;
-          }
+          // }
         } else {
           hitAPI = true;
         }

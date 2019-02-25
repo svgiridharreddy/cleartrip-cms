@@ -15,14 +15,19 @@ class TableData extends Component {
 		this.editRoute = this.editRoute.bind(this);
 	}
 	editRoute(rid, e) {
+		
 		e.preventDefault();
 		if (rid) {
+			let indexVal = ""
 			let obj = {};
-			obj = this.state.resulstsObj.map(a => {
+			this.state.resulstsObj.map((a,k) => {
 				if (rid === a["id"]) {
+					indexVal = k
 					return a;
 				}
 			});
+			obj = this.state.resulstsObj[indexVal]
+			debugger
 			this.setState({
 				openEditForm: true,
 				form_data: obj
