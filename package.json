@@ -20,6 +20,7 @@
     "react-flash-message": "^1.0.2",
     "react-froala-wysiwyg": "^2.9.2",
     "react-material-ui-form-validator": "^2.0.3",
+    "react-notifications": "^1.4.3",
     "react-responsive-modal": "^3.5.1",
     "react-router": "^4.3.1",
     "react-rte": "^0.16.1",

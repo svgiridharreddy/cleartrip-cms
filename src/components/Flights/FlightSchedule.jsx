@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import RichTextEditor from "react-rte";
-import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
 import Select1 from "react-select";
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import {
   NotificationContainer,

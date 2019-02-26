@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Button, Form, Col, ButtonToolbar, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 
 class FlightsTable extends Component {
   constructor(props) {
@@ -48,8 +47,6 @@ class FlightsTable extends Component {
     var tempValueArray =
       subType.length > 0 ? Object.values(tableFields[subType]) : "";
     tableValuearray = tableValuearray.concat(tempValueArray);
-    var flight = [];
-    let result;
 
     return (
       <div>
@@ -79,7 +76,7 @@ class FlightsTable extends Component {
                           as="input"
                           type="button"
                           value="Edit"
-                          onClick={this.props.handleEdit}
+                          onClick={() => this.props.handleEdit(idx)}
                         />
                       </td>
                       <td>

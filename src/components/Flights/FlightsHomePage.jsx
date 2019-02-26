@@ -335,7 +335,7 @@ class FlightsHomePage extends PureComponent {
     });
   };
 
-  handleEdit = () => {
+  handleEdit = idx => {
     debugger;
     let { result, pageType, subType, categoryType } = this.state;
     if (categoryType === "common") {
@@ -344,19 +344,26 @@ class FlightsHomePage extends PureComponent {
         showComponent: true,
         message: "",
         showAddButton: false,
-        title: result["common"][0]["title"],
-        description: result["common"][0]["description"],
-        content: result["common"][0]["content"]
+        title: result["common"][idx]["title"],
+        description: result["common"][idx]["description"],
+        content: result["common"][idx]["content"]
       });
     } else {
+      debugger;
       this.setState({
         renderTables: false,
         showComponent: true,
         message: "",
         showAddButton: false,
-        title: result[pageType][subType][0]["title"],
-        description: result[pageType][subType][0]["description"],
-        content: result[pageType][subType][0]["content"]
+        title: result[pageType][subType][idx]["title"],
+        description: result[pageType][subType][idx]["description"],
+        content: result[pageType][subType][idx]["content"],
+        depCityName: result[pageType][subType][idx]["source"],
+        arrCityName: result[pageType][subType][idx]["destination"],
+        airlineName:
+          pageType === "flight-booking" && subType != "index"
+            ? result[pageType][subType][idx]["airline_name"]
+            : ""
       });
     }
   };
@@ -698,7 +705,11 @@ class FlightsHomePage extends PureComponent {
                   <label>Dep City Name</label>
                   <Select1
                     // isDisabled = {readOnlyValue}
-                    value={depCityNameSelected}
+                    value={
+                      depCityNameSelected === ""
+                        ? this.state.depCityName
+                        : depCityNameSelected
+                    }
                     onChange={p => this.handleSelectedInput(p, "depCityName")}
                     options={options_dep}
                     name="depCityName"
@@ -712,7 +723,11 @@ class FlightsHomePage extends PureComponent {
                   <label>Arr City Name</label>
                   <Select1
                     // isDisabled = {readOnlyValue}
-                    value={arrCityNameSelected}
+                    value={
+                      arrCityNameSelected === ""
+                        ? arrCityName
+                        : arrCityNameSelected
+                    }
                     onChange={p => this.handleSelectedInput(p, "arrCityName")}
                     options={options_arr}
                     name="arrCityName"
