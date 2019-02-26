@@ -1,0 +1,91 @@
+.hidden {
+  display: none;
+}
+.list-inline {
+  padding-left: 0;
+  margin-left: -5px;
+  list-style: none;
+}
+.errormsg {
+  color: red;
+}
+.plusButton {
+  background-color: #ff7e33;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  margin: 8px 9px;
+  border-radius: 50%;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+.addTagBtn {
+  padding: 10px;
+  display: inline;
+  border-radius: 2px;
+  font-family: "Arial";
+  border: 0;
+  margin: 0 10px;
+  background: #ff7e33;
+  font-size: 15px;
+  line-height: 15px;
+  color: white;
+  width: auto;
+  height: auto;
+  box-sizing: content-box;
+}
+
+.banner-type li {
+  text-decoration: none;
+  display: inline-block;
+  padding: 4px 10px;
+  color: #666;
+  border-radius: 3px;
+  border: 1px solid #e4e4e4;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  padding: 57px 0 0;
+}
+
+.filter-fileds {
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12);
+}
+.filter-fileds ul {
+  margin: 0;
+}
+.filter-fileds select {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  -webkit-appearance: none;
+  padding: 5px 10px;
+  outline: none;
+  width: 100%;
+}
+.top-wrapper label {
+  display: block;
+  font-size: 16px;
+  color: #43445c;
+}
+.top-wrapper li {
+  width: 15%;
+  margin: 0 15px 0 0;
+  float: left;
+}
+
+
