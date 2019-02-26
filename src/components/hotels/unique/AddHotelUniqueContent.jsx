@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import Select from 'react-select';
 import {
   EditorState,

@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import { Button, Form, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Select from 'react-select';
 import {
