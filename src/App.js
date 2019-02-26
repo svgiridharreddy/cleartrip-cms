@@ -25,8 +25,7 @@ class App extends Component {
         <Layout>
           <Switch>
             <Route exact path="/" component={FlightsHomePage} />
-            <Route exact path="/flights" component={Flights} />
-            <Route exact path="/flights/home" component={FlightsHomePage} />
+            <Route exact path="/flights" component={FlightsHomePage} />
             <Route exact path="/hotels" component={Index} />
             <Route exact path="/banners" component={Banner} />
           </Switch>

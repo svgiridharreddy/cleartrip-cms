@@ -15,11 +15,11 @@ class MetaFields extends Component {
     super(props);
     this.state = {
       pageType: this.props.pageType,
-      title: this.props.title,
-      description: this.props.description,
+      title: "",
+      description: "",
       content: RichTextEditor.createEmptyValue(),
-      h1Tag: this.props.h1Tag,
-      keywords: this.props.keywords,
+      h1Tag: "",
+      keywords: "",
       airlinName: "",
       depCityName: "",
       arrCityName: "",
@@ -56,17 +56,15 @@ class MetaFields extends Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({
-  //     currentSubType: "",
-  //     categoryType: "",
-  //     title: nextProps.title,
-  //     description: nextProps.description,
-  //     keywords: nextProps.keywords,
-  //     h1Tag: nextProps.h1Tag,
-  //     conent: nextProps.content
-  //   });
-  // }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      title: nextProps.title,
+      description: nextProps.description,
+      keywords: nextProps.keywords,
+      h1Tag: nextProps.h1Tag,
+      conent: nextProps.content
+    });
+  }
 
   render() {
     const toolbarConfig = {

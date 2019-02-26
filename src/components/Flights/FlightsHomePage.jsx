@@ -142,7 +142,9 @@ class FlightsHomePage extends PureComponent {
     if (fieldName === "section") {
       this.setState(
         { [fieldName]: e.target.value },
-        this.state.categoryType != "" ? () => this.fetchDetails() : null
+        this.state.categoryType != "" || this.state.subType === "index"
+          ? () => this.fetchDetails()
+          : null
       );
     } else if (fieldName === "pageType") {
       this.setState(
@@ -247,7 +249,10 @@ class FlightsHomePage extends PureComponent {
       airline_name: airlineName
     };
 
-    if (pageType != "" && subType != "" && categoryType != "") {
+    if (
+      (pageType != "" && subType != "" && categoryType != "") ||
+      (pageType != "" && subType === "index")
+    ) {
       axios
         .get(url, { params: { args: parameters } })
         .then(response => {
@@ -338,7 +343,7 @@ class FlightsHomePage extends PureComponent {
   handleEdit = idx => {
     debugger;
     let { result, pageType, subType, categoryType } = this.state;
-    if (categoryType === "common") {
+    if (categoryType === "common" || subType === "index") {
       this.setState({
         renderTables: false,
         showComponent: true,
@@ -349,7 +354,6 @@ class FlightsHomePage extends PureComponent {
         content: result["common"][idx]["content"]
       });
     } else {
-      debugger;
       this.setState({
         renderTables: false,
         showComponent: true,
@@ -357,13 +361,7 @@ class FlightsHomePage extends PureComponent {
         showAddButton: false,
         title: result[pageType][subType][idx]["title"],
         description: result[pageType][subType][idx]["description"],
-        content: result[pageType][subType][idx]["content"],
-        depCityName: result[pageType][subType][idx]["source"],
-        arrCityName: result[pageType][subType][idx]["destination"],
-        airlineName:
-          pageType === "flight-booking" && subType != "index"
-            ? result[pageType][subType][idx]["airline_name"]
-            : ""
+        content: result[pageType][subType][idx]["content"]
       });
     }
   };
@@ -705,11 +703,7 @@ class FlightsHomePage extends PureComponent {
                   <label>Dep City Name</label>
                   <Select1
                     // isDisabled = {readOnlyValue}
-                    value={
-                      depCityNameSelected === ""
-                        ? this.state.depCityName
-                        : depCityNameSelected
-                    }
+                    value={depCityNameSelected}
                     onChange={p => this.handleSelectedInput(p, "depCityName")}
                     options={options_dep}
                     name="depCityName"
@@ -723,11 +717,7 @@ class FlightsHomePage extends PureComponent {
                   <label>Arr City Name</label>
                   <Select1
                     // isDisabled = {readOnlyValue}
-                    value={
-                      arrCityNameSelected === ""
-                        ? arrCityName
-                        : arrCityNameSelected
-                    }
+                    value={arrCityNameSelected}
                     onChange={p => this.handleSelectedInput(p, "arrCityName")}
                     options={options_arr}
                     name="arrCityName"

@@ -26,6 +26,7 @@ class FlightsTable extends Component {
   };
 
   render() {
+    debugger;
     const {
       response,
       pageType,
@@ -35,23 +36,27 @@ class FlightsTable extends Component {
       categoryType,
       renderTables
     } = this.props;
-
+    debugger;
     var tableTitlearray = [];
     var tableValuearray = [];
     tableTitlearray = Object.keys(tableTitle);
-    var temparray = subType.length > 0 ? Object.keys(tableFields[subType]) : "";
+    var temparray =
+      subType != "index" && subType != ""
+        ? Object.keys(tableFields[subType])
+        : ["h1Tag", "keywords"];
     tableTitlearray = tableTitlearray.concat(temparray);
     var actions = ["Edit", "Delete"];
     tableTitlearray = tableTitlearray.concat(actions);
     tableValuearray = Object.values(tableTitle);
+    debugger;
     var tempValueArray =
-      subType.length > 0 ? Object.values(tableFields[subType]) : "";
+      subType && subType != "index" ? Object.values(tableFields[subType]) : [];
     tableValuearray = tableValuearray.concat(tempValueArray);
 
     return (
       <div>
-        {renderTables ? (
-          <Table key={subType.length > 0 ? subType : ""} responsive>
+        {renderTables && subType != "index" ? (
+          <Table key={subType != "" ? subType : ""} responsive>
             <thead>
               <tr>
                 {tableTitlearray.map(title => (
@@ -104,7 +109,7 @@ class FlightsTable extends Component {
                           as="input"
                           type="button"
                           value="Edit"
-                          onClick={this.props.handleEdit}
+                          onClick={() => this.props.handleEdit(idx)}
                         />
                       </td>
                       <td>
@@ -122,7 +127,46 @@ class FlightsTable extends Component {
             </tbody>
           </Table>
         ) : (
-          ""
+          <Table>
+            <thead>
+              <tr>
+                <td>Domain</td>
+                <td>Language</td>
+                <td>Section</td>
+                <td>Page Type</td>
+                <td>Sub Type</td>
+              </tr>
+            </thead>
+            <tbody>
+              {response["common"].map((resp, idx) => (
+                <tr>
+                  <td>{resp.domain}</td>
+                  <td>{resp.language}</td>
+                  <td>{resp.section}</td>
+                  <td>{resp.pageType}</td>
+                  <td>{resp.subType}</td>
+                  <td align="center">
+                    <Button
+                      as="input"
+                      type="button"
+                      value="Edit"
+                      onClick={() => this.props.handleEdit(idx)}
+                    />
+                  </td>
+                  <td>
+                    <Button
+                      as="input"
+                      type="button"
+                      value="Delete"
+                      onClick={() => {
+                        this.props.handleDelete(idx, resp.id);
+                      }}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         )}
       </div>
     );
