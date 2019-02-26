@@ -82,8 +82,8 @@ class HotelCommonContent extends Component {
 		});
 	}
 
-	handleSubmit(event) {
-    event.preventDefault();
+	handleSubmit(e) {
+    e.preventDefault();
     let headerState = this.state.headerEditorState;
     let footerState = this.state.footerEditorState;
     let faqState = this.state.faqEditorState;
@@ -120,9 +120,9 @@ class HotelCommonContent extends Component {
             meta_title: '',
             meta_description: '',
             meta_keyword:'',
-            headerEditorState: EditorState.createEmpty(),
-            footerEditorState: EditorState.createEmpty(),
-            faqEditorState: EditorState.createEmpty()
+            headerEditorState: "",
+            footerEditorState: "",
+            faqEditorState: ""
         })
     })
     .catch(function (error) {
@@ -169,168 +169,110 @@ class HotelCommonContent extends Component {
           )
     }
 		return(
-				<div>
-            { alertMessage }
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Group as={Row} controlId="formHorizontalDomainUrl">
-              <Form.Label column sm={2}>
-                Domain Name
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control
-                as="select"
+        <div className="top-wrapper">
+        { alertMessage }
+        <div className="filter-fileds">
+          <ul className="list-inline">
+            <li>
+              <label>Domain Name</label>
+              <select
                 onChange={this.handleChange}
                 name="domain_name"
                 value={this.state.domain_name}
-                style={{width: '50%'}}
               >
-                <option value="">
+                <option value="" disabled={true} selected>
                   Domain Type
                 </option>
-                {
-                this.returnOptions(domainType)
-              }
-              </Form.Control>
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} controlId="formHorizontalContnetSection">
-              <Form.Label column sm={2}>
-                Content Section
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control style={{width: '50%'}} value={ this.state.content_type } name="content_type" />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalCountryName">
-              <Form.Label column sm={2}>
-                Country Name
-              </Form.Label>
-              <Col sm={10}>
-                <Select
-                    value={this.state.selectedCountry}
-                    name="country_name"
-                    onChange={p => this.handleSelectedInput(p, "country_name")}
-                    onInputChange={e => this.handleAutoSearch(e, "country_name")}
-                    options={this.state.options}
-                  />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalPageType">
-              <Form.Label column sm={2}>
-                Page Type
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control
-                as="select"
+                {this.returnOptions(domainType)}
+              </select>
+            </li>
+            <li>
+              <label>Content Section</label>
+              <input value={ this.state.content_type } name="content_type" />
+            </li>
+            <li>
+              <label>Country Name</label>
+              <Select
+                value={this.state.selectedCountry}
+                name="country_name"
+                onChange={p => this.handleSelectedInput(p, "country_name")}
+                onInputChange={e => this.handleAutoSearch(e, "country_name")}
+                options={this.state.options}
+              />
+            </li>
+            <li>
+              <label>Page Type</label>
+              <select
                 onChange={this.handleChange}
-                value={this.state.page_type}
                 name="page_type"
-                style={{width: '50%'}}
+                value={this.state.page_type}
               >
-                <option value="">
+                <option value="" disabled={true} selected>
                   Page Type
                 </option>
-                {
-                this.returnOptions(pageType)
-              }
-              </Form.Control>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalH1Title">
-              <Form.Label column sm={2}>
-                H1 Title
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control type="text" value={this.state.h1_tag} name="h1_tag" onChange={this.handleChange} />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalH2Title">
-              <Form.Label column sm={2}>
-                H2 Title
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control type="text" value={this.state.h2_tag} name="h2_tag" onChange={this.handleChange} />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalH3Title">
-              <Form.Label column sm={2}>
-                H3 Title
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control type="text" value={this.state.h3_tag} name="h3_tag" onChange={this.handleChange} />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalMetaTitle">
-              <Form.Label column sm={2}>
-                Meta Title
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control type="text" value={this.state.meta_title} name="meta_title" onChange={this.handleChange} />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalMetaDescription">
-              <Form.Label column sm={2}>
-                Meta Description
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control type="text" value={this.state.meta_description} name="meta_description" onChange={this.handleChange} />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalMetaKeywords">
-              <Form.Label column sm={2}>
-                Meta Keywords
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control type="text" value={this.state.meta_keyword} name="meta_keyword" onChange={this.handleChange} />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalHeaderContent">
-              <Form.Label column sm={2}>
-                Header Content
-              </Form.Label>
-              <Col sm={10}>
-                <Editor
-                    headerEditorState={headerEditorState}
-                    wrapperClassName="demo-wrapper"
-                    editorClassName="demo-editor"
-                    onEditorStateChange={this.onHeaderEditorStateChange}
-                  />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalFooterContent">
-              <Form.Label column sm={2}>
-                Footer Content
-              </Form.Label>
-              <Col sm={10}>
-                <Editor
-                    footerEditorState={footerEditorState}
-                    wrapperClassName="demo-wrapper"
-                    editorClassName="demo-editor"
-                    onEditorStateChange={this.onFooterEditorStateChange}
-                  />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formHorizontalFaq">
-              <Form.Label column sm={2}>
-                Frequently Asked Questions
-              </Form.Label>
-              <Col sm={10}>
-                <Editor
-                    faqEditorState={faqEditorState}
-                    wrapperClassName="demo-wrapper"
-                    editorClassName="demo-editor"
-                    onEditorStateChange={this.onFaqEditorStateChange}
-                  />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row}>
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit">Submit</Button>
-              </Col>
-            </Form.Group>
-          </Form>
+                {this.returnOptions(pageType)}
+              </select>
+            </li>
+            <li>
+              <label>H1 Title</label>
+              <input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />
+            </li>
+            <li>
+              <label>H2 Title</label>
+              <input type="text" name="h2_tag" onChange={this.handleChange} value={this.state.h2_tag} />
+            </li>
+            <li>
+              <label>H3 Title</label>
+              <input type="text" name="h3_tag" onChange={this.handleChange} value={this.state.h3_tag} />
+            </li>
+            <li>
+              <label>Meta Title</label>
+              <input type="text" name="meta_title" onChange={this.handleChange} value={this.state.meta_title} />
+            </li>
+            <li>
+              <label>Meta Description</label>
+              <input type="text" name="meta_description" onChange={this.handleChange} value={this.state.meta_description} />
+            </li>
+            <li>
+              <label>Meta Keywords</label>
+              <input type="text" name="meta_keyword" onChange={this.handleChange} value={this.state.meta_keyword} />
+            </li>
+            <li>
+              <label>Header Content</label>
+              <Editor
+                headerEditorState={headerEditorState}
+                wrapperClassName="demo-wrapper"
+                editorClassName="demo-editor"
+                onEditorStateChange={this.onHeaderEditorStateChange}
+              />
+            </li>
+            <li>
+              <label>Footer Content</label>
+              <Editor
+                footerEditorState={footerEditorState}
+                wrapperClassName="demo-wrapper"
+                editorClassName="demo-editor"
+                onEditorStateChange={this.onFooterEditorStateChange}
+              />
+            </li>
+            <li>
+              <label>Frequently Asked Questions</label>
+              <Editor
+                faqEditorState={faqEditorState}
+                wrapperClassName="demo-wrapper"
+                editorClassName="demo-editor"
+                onEditorStateChange={this.onFaqEditorStateChange}
+              />
+            </li>
+            <button
+              type="button"
+              onClick={this.handleSubmit}
+              className="button">
+              Submit
+            </button>
+          </ul>
         </div>
+      </div>
 			)
 	}
 }

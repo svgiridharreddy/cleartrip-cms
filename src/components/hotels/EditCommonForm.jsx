@@ -1,8 +1,4 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import { Button, Form, Row, Col } from "react-bootstrap";
-import axios from "axios";
-import Select from 'react-select';
+import React, { Component } from 'react';
 import {
   EditorState,
   ContentState,
@@ -14,35 +10,34 @@ import { Editor } from "react-draft-wysiwyg";
 import { stateToHTML } from "draft-js-export-html";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
-import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const API_URL = "http://localhost:3000/cmshotels/edit/";
 
-class EditUniqueContent extends Component {
+class EditCommonForm extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       id: '',
+      domain_name: '',
+      country_name: '',
+      page_type: '',
+      content_type: '',
+      h1_tag: '',
+      h2_tag: '',
+      h3_tag: '',
+      meta_title: '',
+      meta_description: '',
+      meta_keyword: '',
       HeaderEditorState: "",
       FootereditorState: "",
-      FaqeditorState: "",
-      domain_url: "",
-      content_type: '',
-      country_name: "",
-      canonical_tag: "",
-      h1_tag: "",
-      h2_tag: "",
-      h3_tag: "",
-      meta_title: "",
-      meta_description: "",
-      meta_keyword: "",
-      message: "",
-    };
+      FaqeditorState: ""
+    }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.returnOptions = this.returnOptions.bind(this);
     this.conentConvertion = this.conentConvertion.bind(this);
   }
+
 
   componentDidMount() {
     var pathName = API_URL + this.props.contentRecord.id;
@@ -57,10 +52,10 @@ class EditUniqueContent extends Component {
           FootereditorState: this.conentConvertion(footerHtml),
           FaqeditorState: this.conentConvertion(faqHtml),
           id: resData.id,
-          domain_url: resData.domain_url,
-          content_type: resData.content_type,
+          domain_name: resData.domain_name,
           country_name: resData.country_name,
-          canonical_tag: resData.canonical_tag,
+          page_type: resData.page_type,
+          content_type: resData.content_type,
           h1_tag: resData.h1_tag,
           h2_tag: resData.h2_tag,
           h3_tag: resData.h3_tag,
@@ -105,81 +100,38 @@ class EditUniqueContent extends Component {
     });
   }
 
-  returnOptions(optData) {
-    return optData.map((country, i) => {
-      return (
-        <option key={i} value={country}>
-          {country}
-        </option>
-      );
-    });
-  }
-
   handleSubmit(e) {
     this.props.handleChangeEditData(this.state)
   }
 
   render() {
-    const {
-      HeaderEditorState,
-      FootereditorState,
-      FaqeditorState,
-      domain_url,
-      content_type,
-      country_name,
-      canonical_tag,
-      h1_tag,
-      h2_tag,
-      h3_tag,
-      meta_title,
-      meta_description,
-      meta_keyword,
-    } = this.state;
-
-    return (
-      <div className="top-wrapper">
-        <h3 align="center">Update Data</h3>
-        <div className="filter-fileds">
-          <ul className="list-inline">
-            <li>
-              <label>Domain Url</label>
-              <input type="text" value={domain_url} name="domain_url" />
-            </li>
-            <li>
-              <label>Content Section</label>
-              <input value={content_type} name="content_type" />
-            </li>
-            <li>
-              <label>Country Name</label>
-              <input value={country_name} name="country_name" />
-            </li>
-            <li>
-              <label>Canonical Tag</label>
-              <input type="text" value={canonical_tag} name="canonical_tag" onChange={this.handleChange} />
-            </li>
+        const { HeaderEditorState, FootereditorState, FaqeditorState } = this.state
+    return(
+        <div>
+          <ul>
             <li>
               <label>H1 Title</label>
-              <input type="text" value={h1_tag} name="h1_tag" onChange={this.handleChange} />
+              <input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />
             </li>
             <li>
               <label>H2 Title</label>
-              <input type="text" value={h2_tag} name="h2_tag" onChange={this.handleChange} />
+              <input type="text" name="h2_tag" onChange={this.handleChange} value={this.state.h2_tag} />
             </li>
             <li>
               <label>H3 Title</label>
-              <input type="text" value={h3_tag} name="h3_tag" onChange={this.handleChange} />
+              <input type="text" name="h3_tag" onChange={this.handleChange} value={this.state.h3_tag} />
             </li>
             <li>
               <label>Meta Title</label>
-              <input type="text" value={meta_title} name="meta_title" onChange={this.handleChange} />
+              <input type="text" name="meta_title" onChange={this.handleChange} value={this.state.meta_title} />
             </li>
             <li>
               <label>Meta Description</label>
-              <input type="text" value={meta_description} name="meta_description" onChange={this.handleChange} />
+              <input type="text" name="meta_description" onChange={this.handleChange} value={this.state.meta_description} />
             </li>
             <li>
               <label>Meta Keywords</label>
-              <input type="text" value={meta_keyword} name="meta_keyword" onChange={this.handleChange} />
+              <input type="text" name="meta_keyword" onChange={this.handleChange} value={this.state.meta_keyword} />
             </li>
             <li>
               <label>Header Content</label>
@@ -210,17 +162,16 @@ class EditUniqueContent extends Component {
             </li>
             <li>
               <button
-              type="button"
-              onClick={this.handleSubmit}
-              className="button">
-              Update
-            </button>
+                type="button"
+                onClick={this.handleSubmit}
+                className="button">
+                Update
+              </button>
             </li>
           </ul>
         </div>
-      </div>
-    );
+      )
   }
 }
 
-export default EditUniqueContent;
+export default EditCommonForm;

@@ -29,13 +29,6 @@ class App extends Component {
             <Route exact path="/flights/home" component={FlightsHomePage} />
             <Route exact path="/hotels" component={Index} />
             <Route exact path="/banners" component={Banner} />
-            
-            <Route exact path="/cmshotels/addUniqueData" component = { HotelUniqueContent } />
-            <Route path="/cmshotels/edit/:id" component = { EditUniqueContent } />
-            <Route exact path="/cmshotels/addCommonData" component = { HotelCommonContent } />
-            {/*<Route path="/hotels/show/uniquedata/:id" component = { ViewUniqueHotelData } /> */}
-            {/* <Route path="/hotels/show/commondata/:id" component = { ViewCommonHotelData } /> */ }
-            {/*  <Route path="/hotels/edit/commondata/:id" component = { EditCommonContent } /> */}
           </Switch>
         </Layout>
       </Router>
