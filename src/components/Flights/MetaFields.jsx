@@ -97,7 +97,6 @@ class MetaFields extends Component {
         { label: "OL", style: "ordered-list-item" }
       ]
     };
-    debugger;
     let subTypeField, category, fields;
     const subtypeOptions = {
       "select subtype": "Select sub page type",
