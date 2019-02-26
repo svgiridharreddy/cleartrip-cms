@@ -12,7 +12,7 @@ import HotelCommonContent from "./components/hotels/common/HotelCommonContent";
 // import EditCommonContent from './components/hotels/common/EditCommonContent';
 
 import Layout from "./components/layout";
-import Flights from "./components/Flights/Flights";
+// import Flights from "./components/Flights/Flights";
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/Flights/FlightsHomePage";
 
