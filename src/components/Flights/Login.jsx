@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Redirect } from "react-router";
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
+import loginHelpers from '../../../helper'
 import "../Banner.css";
 
 class Login extends Component {
@@ -61,6 +62,7 @@ class Login extends Component {
 					params: loginCredentials
 				})
 				.then(resp => {
+					debugger
 					sessionStorage.setItem("loginSuccess", true);
 					_self.setState({
 						showErrormsg: false,

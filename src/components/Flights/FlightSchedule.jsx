@@ -55,7 +55,6 @@ class FlightScheduleFields extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    debugger;
     this.setState({
       currentSubType: nextProps.currentSubType,
       categoryType: nextProps.categoryType,

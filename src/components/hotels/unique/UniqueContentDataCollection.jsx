@@ -77,7 +77,6 @@ class UniqueContentDataCollection extends Component {
 		if (name === "add") {
 			this.setState({isAddForm: true, isDataPresent: false, isEditForm: false})
 		}	else if (name === "edit") {
-			debugger;
 			this.setState({
 				isEditForm: true,
 				isAddForm: false,
@@ -196,7 +195,6 @@ class UniqueContentDataCollection extends Component {
         data
       )
       .then(({ data }) => {
-      	debugger;
         if(data.message) {
 					axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
 					.then((response) => {

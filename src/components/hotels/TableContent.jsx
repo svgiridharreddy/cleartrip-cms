@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Table, Button, Alert } from 'react-bootstrap';
-import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 const API_URL = "http://localhost:3000"

@@ -80,7 +80,6 @@ class CommonContentDataCollection extends Component {
 		if (name === "add") {
 			this.setState({isAddForm: true, isDataPresent: false, isEditForm: false})
 		}	else if (name === "edit") {
-			debugger;
 			this.setState({
 				isEditForm: true,
 				isAddForm: false,
@@ -133,7 +132,6 @@ class CommonContentDataCollection extends Component {
     }
     axios.post(`${API_URL}/cmshotels/common-content-section-data`, data)
     .then(({ data }) => {
-			      	debugger;
         if(data.message) {
 					const hdata = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
 					axios.post(`${QUERY_URL}`, hdata)
@@ -201,7 +199,6 @@ class CommonContentDataCollection extends Component {
         data
       )
       .then(({ data }) => {
-      	debugger;
         if(data.message) {
 					const hdata = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
 					axios.post(`${QUERY_URL}`, hdata)
