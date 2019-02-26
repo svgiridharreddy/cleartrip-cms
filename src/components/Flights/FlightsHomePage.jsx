@@ -78,7 +78,12 @@ class FlightsHomePage extends PureComponent {
       keywords: "",
       content: "",
       h1Tag: "",
-      showComponent: false
+      showComponent: false,
+      source: "",
+      destination: "",
+      brandName: "",
+      fromToCity: "",
+      editClicked: false
     };
   }
 
@@ -492,7 +497,12 @@ class FlightsHomePage extends PureComponent {
       arrCityName,
       options_arr,
       options_dep,
-      renderTables
+      renderTables,
+      editClicked,
+      source,
+      destination,
+      brandName,
+      fromToCity
     } = this.state;
     let category;
     let checkfields;
@@ -674,22 +684,6 @@ class FlightsHomePage extends PureComponent {
               </select>
             </li>
             {category}
-            {/* {categoryType === "common" || subType === "index" ? (
-              <li>
-                <label>Section</label>
-                <select
-                  name="section"
-                  value={this.state.section}
-                  onChange={e => this.handleChange(e, "section")}
-                >
-                  {" "}
-                  <option value="" disabled={true} selected>
-                    section
-                  </option>
-                  {this.returnOptions(sections)}
-                </select>
-              </li>
-            ) : null} */}
 
             {checkfields}
 
@@ -698,7 +692,8 @@ class FlightsHomePage extends PureComponent {
             (pageType === "flight-booking" ||
               pageType === "flight-schedule" ||
               pageType === "flight-tickets") ? (
-              <ul>
+                <div>
+              <ul className={editClicked ? "hidden" : ""}>
                 <li>
                   <label>Dep City Name</label>
                   <Select1
@@ -728,6 +723,18 @@ class FlightsHomePage extends PureComponent {
                   />
                 </li>
               </ul>
+              <ul className={editClicked ? "" : "hidden"}>
+                <li>
+                  <label>Dep City Name</label>
+                  <input type="text" value={this.state.source} disabled />
+
+                </li>
+                <li>
+                <label>Arr City Name</label>
+                <input type="text" value={this.state.destination} disabled />
+                </li>
+              </ul>
+              </div>
             ) : null}
           </ul>
         </div>
