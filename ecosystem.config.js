@@ -18,7 +18,7 @@ module.exports = {
     production: {
       user: "ubuntu",
       host: "13.251.49.54",
-      ref: "origin/development",
+      ref: "origin/testing",
       repo: "git@github.com:svgiridharreddy/cleartrip-cms.git",
       path: "/var/www/cms_fe",
       key:

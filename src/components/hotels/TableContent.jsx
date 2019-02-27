@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import { Table, Button, Alert } from 'react-bootstrap';
-import axios from 'axios';
-
-const API_URL = "http://localhost:3000"
-
 
 class TableContent extends Component {
 	constructor(props){
@@ -12,8 +8,7 @@ class TableContent extends Component {
 
 	render() {
 		let dataField;
-		let name;
-		const { contentType, tableResult } = this.props
+		const { tableResult } = this.props
 		if (tableResult.length > 0) {
 				dataField = (
 				  <Table striped bordered>

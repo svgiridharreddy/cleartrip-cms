@@ -140,7 +140,7 @@ class FlightsHomePage extends PureComponent {
     };
     axios({
       method: "post",
-      url: "http://localhost:3000/flights",
+      url: "http://13.251.49.54:82/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -156,11 +156,12 @@ class FlightsHomePage extends PureComponent {
           cityNameSelected: "",
           cityName: "",
           airlineName: "",
+          readOnlyValue: false,
           options: [],
           options_dep: [],
           options_arr: [],
-          source:"",
-          destination:""
+          source: "",
+          destination: ""
         });
 
         console.log(response);
@@ -234,6 +235,7 @@ class FlightsHomePage extends PureComponent {
           airlineNameSelected: "",
           airlineName: "",
           message: "",
+          categoryType: "",
           showAddButton: true,
           renderTables: false
         },
@@ -268,7 +270,9 @@ class FlightsHomePage extends PureComponent {
     } else if ([fieldName] == "rte") {
       this.handleRTEchange(e);
     } else {
-      this.setState({ [fieldName]: e.target.value }, () => this.fetchDetails());
+      this.setState({ [fieldName]: e.target.value, categoryType: "" }, () =>
+        this.fetchDetails()
+      );
     }
   };
 
@@ -295,10 +299,11 @@ class FlightsHomePage extends PureComponent {
       brandName,
       fromToCity
     } = this.state;
-    var url = "http://localhost:3000/fetch_details";
+    // var url = "http://13.251.49.54:82/fetch_details";
 
     // var url = "http://localhost:3000/fetch_details";
     debugger
+    var url = "http://13.251.49.54:82/fetch_details";
 
     var parameters = {
       page_type: pageType,
@@ -323,6 +328,7 @@ class FlightsHomePage extends PureComponent {
       axios
         .get(url, { params: { args: parameters } })
         .then(response => {
+          debugger;
           this.setState({
             renderTables: false,
             showAddButton: false,
@@ -407,9 +413,10 @@ class FlightsHomePage extends PureComponent {
     }
   };
   handleDelete = (index, id) => {
+    let _self = this;
     var result = window.confirm("Want to delete?");
     if (result) {
-      var url = "http://localhost:3000/delete_data";
+      var url = "http://13.251.49.54:82/delete_data";
       axios
         .delete(url, {
           data: {
@@ -420,22 +427,18 @@ class FlightsHomePage extends PureComponent {
           }
         })
         .then(response => {
+          debugger;
           const result = { ...this.state.result };
-          const { pageType, subType, catgoryType } = this.state;
+          const { pageType, subType, categoryType } = this.state;
           const values =
-            catgoryType === "uniq"
+            categoryType === "uniq"
               ? result[pageType][subType]
               : result["common"];
           if (index !== -1) {
             values.splice(index, 1);
             result[pageType][subType] = values;
-            values.length > 0
-              ? this.setState({ result })
-              : this.setState({
-                  result,
-                  renderTables: false,
-                  showAddButton: true
-                });
+            debugger;
+            this.setState({ result });
           }
           NotificationManager.warning(response.data.message, "", 1500);
         })
@@ -449,7 +452,12 @@ class FlightsHomePage extends PureComponent {
     this.setState({
       showComponent: true,
       message: "",
-      showAddButton: false
+      showAddButton: false,
+      title: "",
+      description: "",
+      keywords: "",
+      content: "",
+      h1Tag: ""
     });
   };
 
@@ -465,7 +473,8 @@ class FlightsHomePage extends PureComponent {
         description: result["common"][idx]["description"],
         keywords: result["common"][idx]["keyword"],
         content: result["common"][idx]["content"],
-        h1Tag: result["common"][idx]["heading"]
+        h1Tag: result["common"][idx]["heading"],
+        readOnlyValue: true
       });
     } else {
       debugger;
@@ -487,7 +496,8 @@ class FlightsHomePage extends PureComponent {
           this.state.arrCityNameSelected != ""
             ? this.state.arrCityNameSelected
             : this.state.source,
-        editClicked: true
+        editClicked: true,
+        readOnlyValue: true
       });
     }
   };
@@ -643,8 +653,8 @@ class FlightsHomePage extends PureComponent {
         overview: { AirlineName: "airline_name" },
         routes: {
           AirlineName: "airline_name",
-          source: "url",
-          destination: "url"
+          source: "source",
+          destination: "destination"
         },
         pnr: { AirlineName: "airline_name" },
         "web-checkin": { AirlineName: "airline_name" }
@@ -677,6 +687,7 @@ class FlightsHomePage extends PureComponent {
             value={this.state.categoryType}
             onChange={e => this.handleChange(e, "categoryType")}
             name="categoryType"
+            disabled={this.state.readOnlyValue}
           >
             <option>Select Category</option>
             <option value="uniq">Unique</option>
@@ -748,6 +759,7 @@ class FlightsHomePage extends PureComponent {
               <select
                 onChange={e => this.handleChange(e, "domain")}
                 name="domain"
+                disabled={this.state.readOnlyValue}
                 value={this.state.domain}
               >
                 <option value="" disabled={true} selected>
@@ -765,6 +777,7 @@ class FlightsHomePage extends PureComponent {
               <select
                 onChange={e => this.handleChange(e, "language")}
                 name="language"
+                disabled={this.state.readOnlyValue}
                 value={this.state.language}
               >
                 <option value="" disabled={true} selected>
@@ -779,6 +792,7 @@ class FlightsHomePage extends PureComponent {
                 onChange={e => this.handleChange(e, "pageType")}
                 name="pageType"
                 value={this.state.pageType}
+                disabled={this.state.readOnlyValue}
               >
                 <option value="" disabled={true} selected>
                   Page type
@@ -786,35 +800,48 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(pageTypes)}
               </select>
             </li>
+            {domain != "" && language != "" && pageType != "" ? (
+              <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
+                <label>Page Subtype</label>
+                <select
+                  onChange={e => this.handleChange(e, "subType")}
+                  name="subType"
+                  value={this.state.subType}
+                  disabled={this.state.readOnlyValue}
+                >
+                  <option value="" disabled={true} selected>
+                    page sub_type
+                  </option>
+                  {this.returnOptions(subTypes)}
+                </select>
+              </li>
+            ) : (
+              ""
+            )}
 
-            <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
-              <label>Page Subtype</label>
-              <select
-                onChange={e => this.handleChange(e, "subType")}
-                name="subType"
-                value={this.state.subType}
-              >
-                <option value="" disabled={true} selected>
-                  page sub_type
-                </option>
-                {this.returnOptions(subTypes)}
-              </select>
-            </li>
+            {domain != "" &&
+            language != "" &&
+            pageType != "" &&
+            subType != "" ? (
+              <li>
+                <label>Section</label>
+                <select
+                  name="section"
+                  value={this.state.section}
+                  onChange={e => this.handleChange(e, "section")}
+                  disabled={this.state.readOnlyValue}
+                >
+                  {" "}
+                  <option value="" disabled={true} selected>
+                    section
+                  </option>
+                  {this.returnOptions(sections)}
+                </select>
+              </li>
+            ) : (
+              ""
+            )}
 
-            <li>
-              <label>Section</label>
-              <select
-                name="section"
-                value={this.state.section}
-                onChange={e => this.handleChange(e, "section")}
-              >
-                {" "}
-                <option value="" disabled={true} selected>
-                  section
-                </option>
-                {this.returnOptions(sections)}
-              </select>
-            </li>
             {category}
 
             {checkfields}
