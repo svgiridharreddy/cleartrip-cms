@@ -156,7 +156,12 @@ class FlightsHomePage extends PureComponent {
           cityNameSelected: "",
           cityName: "",
           airlineName: "",
-          readOnlyValue: false
+          readOnlyValue: false,
+          options: [],
+          options_dep: [],
+          options_arr: [],
+          source: "",
+          destination: ""
         });
 
         console.log(response);
@@ -230,6 +235,7 @@ class FlightsHomePage extends PureComponent {
           airlineNameSelected: "",
           airlineName: "",
           message: "",
+          categoryType: "",
           showAddButton: true,
           renderTables: false
         },
@@ -264,7 +270,9 @@ class FlightsHomePage extends PureComponent {
     } else if ([fieldName] == "rte") {
       this.handleRTEchange(e);
     } else {
-      this.setState({ [fieldName]: e.target.value }, () => this.fetchDetails());
+      this.setState({ [fieldName]: e.target.value, categoryType: "" }, () =>
+        this.fetchDetails()
+      );
     }
   };
 
@@ -291,9 +299,9 @@ class FlightsHomePage extends PureComponent {
       brandName,
       fromToCity
     } = this.state;
-    var url = "http://13.251.49.54:82/fetch_details";
-
     // var url = "http://13.251.49.54:82/fetch_details";
+
+    var url = "http://13.251.49.54:82/fetch_details";
 
     var parameters = {
       page_type: pageType,
@@ -318,6 +326,7 @@ class FlightsHomePage extends PureComponent {
       axios
         .get(url, { params: { args: parameters } })
         .then(response => {
+          debugger;
           this.setState({
             renderTables: false,
             showAddButton: false,
@@ -402,6 +411,7 @@ class FlightsHomePage extends PureComponent {
     }
   };
   handleDelete = (index, id) => {
+    let _self = this;
     var result = window.confirm("Want to delete?");
     if (result) {
       var url = "http://13.251.49.54:82/delete_data";
@@ -415,22 +425,18 @@ class FlightsHomePage extends PureComponent {
           }
         })
         .then(response => {
+          debugger;
           const result = { ...this.state.result };
-          const { pageType, subType, catgoryType } = this.state;
+          const { pageType, subType, categoryType } = this.state;
           const values =
-            catgoryType === "uniq"
+            categoryType === "uniq"
               ? result[pageType][subType]
               : result["common"];
           if (index !== -1) {
             values.splice(index, 1);
             result[pageType][subType] = values;
-            values.length > 0
-              ? this.setState({ result })
-              : this.setState({
-                  result,
-                  renderTables: false,
-                  showAddButton: true
-                });
+            debugger;
+            this.setState({ result });
           }
           NotificationManager.warning(response.data.message, "", 1500);
         })
@@ -603,7 +609,6 @@ class FlightsHomePage extends PureComponent {
   };
 
   render() {
-    debugger;
     const {
       result,
       pageType,
