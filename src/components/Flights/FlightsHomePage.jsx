@@ -140,7 +140,7 @@ class FlightsHomePage extends PureComponent {
     };
     axios({
       method: "post",
-      url: "http://localhost:3000/flights",
+      url: "http://13.251.49.54:82/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -291,9 +291,9 @@ class FlightsHomePage extends PureComponent {
       brandName,
       fromToCity
     } = this.state;
-    var url = "http://localhost:3000/fetch_details";
+    var url = "http://13.251.49.54:82/fetch_details";
 
-    // var url = "http://localhost:3000/fetch_details";
+    // var url = "http://13.251.49.54:82/fetch_details";
 
     var parameters = {
       page_type: pageType,
@@ -404,7 +404,7 @@ class FlightsHomePage extends PureComponent {
   handleDelete = (index, id) => {
     var result = window.confirm("Want to delete?");
     if (result) {
-      var url = "http://localhost:3000/delete_data";
+      var url = "http://13.251.49.54:82/delete_data";
       axios
         .delete(url, {
           data: {
