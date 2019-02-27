@@ -17,9 +17,9 @@ import TableContent from '../TableContent';
 import AddHotelUniqueContent from './AddHotelUniqueContent';
 import EditHotelUniqueData from './EditHotelUniqueData';
 
-const API_URL = "http://localhost:3000"
+const API_URL = "http://13.251.49.54:82"
 
-const QUERY_URL = "http://localhost:3000/cmshotels/unique-content-data-collection" 
+const QUERY_URL = "http://13.251.49.54:82/cmshotels/unique-content-data-collection" 
 
 class UniqueContentDataCollection extends Component {
 	constructor(props) {
@@ -85,7 +85,7 @@ class UniqueContentDataCollection extends Component {
 			})
 		} else if (name === "delete") {
 				const alrt = window.confirm('Are you sure you wish to delete this item?')
-				if (alrt == true) {
+				if (alrt === true) {
 				    axios.delete(`${API_URL}/cmshotels/delete/${item.id}`)
 				      .then(res => {
 				          console.log(res.message);

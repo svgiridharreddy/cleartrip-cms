@@ -1,20 +1,13 @@
 import React, { Component } from "react";
-import axios from "axios";
-import Select from 'react-select';
 import {
   EditorState,
   ContentState,
-  convertFromHTML,
-  convertFromRaw,
-  convertToRaw
+  convertFromHTML
 } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
-import { stateToHTML } from "draft-js-export-html";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-const API_URL = "http://localhost:3000/cmshotels/edit/";
+const API_URL = "http://13.251.49.54:82/cmshotels/edit/";
 
 class EditUniqueContent extends Component {
   constructor(props) {
@@ -70,7 +63,7 @@ class EditUniqueContent extends Component {
   }
 
   conentConvertion(html) {
-    if (html == "<p></p>\n" || html == "<p></p>") {
+    if (html === "<p></p>\n" || html === "<p></p>") {
       html = "";
     }
     if (html) {

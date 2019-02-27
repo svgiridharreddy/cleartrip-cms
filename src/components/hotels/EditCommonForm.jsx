@@ -12,7 +12,7 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-const API_URL = "http://localhost:3000/cmshotels/edit/";
+const API_URL = "http://13.251.49.54:82/cmshotels/edit/";
 
 class EditCommonForm extends Component {
   constructor(props) {
@@ -67,7 +67,7 @@ class EditCommonForm extends Component {
   }
 
   conentConvertion(html) {
-    if (html == "<p></p>\n" || html == "<p></p>") {
+    if (html === "<p></p>\n" || html === "<p></p>") {
       html = "";
     }
     if (html) {

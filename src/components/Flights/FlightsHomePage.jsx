@@ -35,7 +35,13 @@ class FlightsHomePage extends PureComponent {
           pnr: [],
           webcheckin: []
         },
-        "flight-schedule": { routes: [], from: [], to: [] },
+        "flight-schedule": {
+          routes: [],
+          from: [],
+          to: [],
+          pnr: [],
+          "web-checkin": []
+        },
         "flight-tickets": { tickets: [] },
         common: []
       },
@@ -303,9 +309,7 @@ class FlightsHomePage extends PureComponent {
       fromToCity
     } = this.state;
     // var url = "http://localhost:3000/fetch_details";
-
-    var url = "http://localhost:3000/fetch_details";
-
+    var url = "http://13.251.49.54:82/fetch_details";
     var parameters = {
       page_type: pageType,
       domain: domain,
@@ -654,9 +658,11 @@ class FlightsHomePage extends PureComponent {
         overview: { AirlineName: "airline_name" },
         routes: {
           AirlineName: "airline_name",
-          source: "url",
-          destination: "url"
-        }
+          source: "source",
+          destination: "destination"
+        },
+        pnr: { AirlineName: "airline_name" },
+        "web-checkin": { AirlineName: "airline_name" }
       };
     } else if (pageType === "flight-schedule") {
       subTypes = ["routes", "from", "to", "index"];
