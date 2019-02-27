@@ -35,7 +35,7 @@ class FlightsHomePage extends PureComponent {
           pnr: [],
           webcheckin: []
         },
-        "flight-schedule": { routes: [], from: [], to: [] },
+        "flight-schedule": { routes: [], from: [], to: [] ,pnr: [], "web-checkin": []},
         "flight-tickets": { tickets: [] },
         common: []
       },
@@ -155,7 +155,12 @@ class FlightsHomePage extends PureComponent {
           airlineNameSelected: "",
           cityNameSelected: "",
           cityName: "",
-          airlineName: ""
+          airlineName: "",
+          options: [],
+          options_dep: [],
+          options_arr: [],
+          source:"",
+          destination:""
         });
 
         console.log(response);
@@ -293,6 +298,7 @@ class FlightsHomePage extends PureComponent {
     var url = "http://localhost:3000/fetch_details";
 
     // var url = "http://localhost:3000/fetch_details";
+    debugger
 
     var parameters = {
       page_type: pageType,
@@ -639,7 +645,9 @@ class FlightsHomePage extends PureComponent {
           AirlineName: "airline_name",
           source: "url",
           destination: "url"
-        }
+        },
+        pnr: { AirlineName: "airline_name" },
+        "web-checkin": { AirlineName: "airline_name" }
       };
     } else if (pageType === "flight-schedule") {
       subTypes = ["routes", "from", "to", "index"];
