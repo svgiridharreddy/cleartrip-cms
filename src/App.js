@@ -15,22 +15,50 @@ import Layout from "./components/layout";
 // import Flights from "./components/Flights/Flights";
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/Flights/FlightsHomePage";
-
 import "typeface-roboto";
+import loginHelpers from "./components/helper";
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
+
+import "../node_modules/react-notifications/lib/notifications.css";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loginStatus: false
+    };
+  }
+
+  componentDidMount = () => {
+    if (loginHelpers.checkUser()) {
+      this.setState({
+        loginStatus: true
+      });
+    }
+  };
   render() {
+    let { loginStatus } = this.state;
     return (
-      <Router>
-        <Layout>
-          <Switch>
-            <Route exact path="/" component={FlightsHomePage} />
-            <Route exact path="/flights" component={FlightsHomePage} />
-            <Route exact path="/hotels" component={Index} />
-            <Route exact path="/banners" component={Banner} />
-          </Switch>
-        </Layout>
-      </Router>
+      <div>
+        <Router>
+          <Layout>
+            {loginStatus ? (
+              <Switch>
+                <Route exact path="/" component={FlightsHomePage} />
+                <Route exact path="/flights" component={FlightsHomePage} />
+                <Route exact path="/hotels" component={Index} />
+                <Route exact path="/banners" component={Banner} />
+              </Switch>
+            ) : (
+              ""
+            )}
+          </Layout>
+        </Router>
+        <NotificationContainer />
+      </div>
     );
   }
 }

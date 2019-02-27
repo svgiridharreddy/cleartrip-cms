@@ -140,7 +140,7 @@ class FlightsHomePage extends PureComponent {
     };
     axios({
       method: "post",
-      url: "http://13.251.49.54:82/flights",
+      url: "http://localhost:3000/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -161,7 +161,10 @@ class FlightsHomePage extends PureComponent {
           options_dep: [],
           options_arr: [],
           source: "",
-          destination: ""
+          destination: "",
+          brandName: "",
+          fromToCity: "",
+          options: []
         });
 
         console.log(response);
@@ -299,9 +302,9 @@ class FlightsHomePage extends PureComponent {
       brandName,
       fromToCity
     } = this.state;
-    // var url = "http://13.251.49.54:82/fetch_details";
+    // var url = "http://localhost:3000/fetch_details";
 
-    var url = "http://13.251.49.54:82/fetch_details";
+    var url = "http://localhost:3000/fetch_details";
 
     var parameters = {
       page_type: pageType,
@@ -414,7 +417,7 @@ class FlightsHomePage extends PureComponent {
     let _self = this;
     var result = window.confirm("Want to delete?");
     if (result) {
-      var url = "http://13.251.49.54:82/delete_data";
+      var url = "http://localhost:3000/delete_data";
       axios
         .delete(url, {
           data: {
@@ -519,12 +522,12 @@ class FlightsHomePage extends PureComponent {
 
   handleAutoSearch = (e, fieldName) => {
     let target_value = e;
-    if (target_value !== "" && target_value.length >= -1) {
+    if (target_value !== "" && target_value.length >= 3) {
       let url = "";
       if (fieldName === "airlineName") {
-        url = "http://13.251.49.54:82/airline_autocomplete";
+        url = "http://localhost:3000/airline_autocomplete";
       } else {
-        url = "http://13.251.49.54:82/city_autocomplete";
+        url = "http://localhost:3000/city_autocomplete";
       }
       axios
         .get(url, { params: { query_term: target_value } })
