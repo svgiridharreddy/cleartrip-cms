@@ -603,6 +603,7 @@ class FlightsHomePage extends PureComponent {
   };
 
   render() {
+    debugger;
     const {
       result,
       pageType,
@@ -790,37 +791,48 @@ class FlightsHomePage extends PureComponent {
                 {this.returnOptions(pageTypes)}
               </select>
             </li>
+            {domain != "" && language != "" && pageType != "" ? (
+              <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
+                <label>Page Subtype</label>
+                <select
+                  onChange={e => this.handleChange(e, "subType")}
+                  name="subType"
+                  value={this.state.subType}
+                  disabled={this.state.readOnlyValue}
+                >
+                  <option value="" disabled={true} selected>
+                    page sub_type
+                  </option>
+                  {this.returnOptions(subTypes)}
+                </select>
+              </li>
+            ) : (
+              ""
+            )}
 
-            <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
-              <label>Page Subtype</label>
-              <select
-                onChange={e => this.handleChange(e, "subType")}
-                name="subType"
-                value={this.state.subType}
-                disabled={this.state.readOnlyValue}
-              >
-                <option value="" disabled={true} selected>
-                  page sub_type
-                </option>
-                {this.returnOptions(subTypes)}
-              </select>
-            </li>
+            {domain != "" &&
+            language != "" &&
+            pageType != "" &&
+            subType != "" ? (
+              <li>
+                <label>Section</label>
+                <select
+                  name="section"
+                  value={this.state.section}
+                  onChange={e => this.handleChange(e, "section")}
+                  disabled={this.state.readOnlyValue}
+                >
+                  {" "}
+                  <option value="" disabled={true} selected>
+                    section
+                  </option>
+                  {this.returnOptions(sections)}
+                </select>
+              </li>
+            ) : (
+              ""
+            )}
 
-            <li>
-              <label>Section</label>
-              <select
-                name="section"
-                value={this.state.section}
-                onChange={e => this.handleChange(e, "section")}
-                disabled={this.state.readOnlyValue}
-              >
-                {" "}
-                <option value="" disabled={true} selected>
-                  section
-                </option>
-                {this.returnOptions(sections)}
-              </select>
-            </li>
             {category}
 
             {checkfields}
