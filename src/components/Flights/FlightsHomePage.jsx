@@ -33,7 +33,7 @@ class FlightsHomePage extends PureComponent {
           overview: [],
           routes: [],
           pnr: [],
-          webcheckin: []
+          "web-checkin": []
         },
         "flight-schedule": { routes: [], from: [], to: [] ,pnr: [], "web-checkin": []},
         "flight-tickets": { tickets: [] },
@@ -299,11 +299,11 @@ class FlightsHomePage extends PureComponent {
       brandName,
       fromToCity
     } = this.state;
-    // var url = "http://13.251.49.54:82/fetch_details";
+    var url = "http://13.251.49.54:82/fetch_details";
 
     // var url = "http://localhost:3000/fetch_details";
-    debugger
-    var url = "http://13.251.49.54:82/fetch_details";
+    // debugger
+    // var url = "http://13.251.49.54:82/fetch_details";
 
     var parameters = {
       page_type: pageType,
