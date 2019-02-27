@@ -49,7 +49,7 @@ class FlightsTable extends Component {
     var tempValueArray =
       subType && subType != "index" ? Object.values(tableFields[subType]) : [];
     tableValuearray = tableValuearray.concat(tempValueArray);
-
+    debugger;
     return (
       <div>
         {renderTables && subType != "index" ? (

@@ -86,17 +86,17 @@ class FlightsHomePage extends PureComponent {
       editClicked: false
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this)
-    this.handleMetaChanges = this.handleMetaChanges.bind(this)
-    this.handleRTEchange = this.handleRTEchange.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.fetchDetails = this.fetchDetails.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
-    this.handleAdd =  this.handleAdd.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
-    this.handleGetInfo = this.handleGetInfo.bind(this)
-    this.handleAutoSearch = this.handleAutoSearch.bind(this)
-    this.handleSelectedInput = this.handleSelectedInput.bind(this)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleMetaChanges = this.handleMetaChanges.bind(this);
+    this.handleRTEchange = this.handleRTEchange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.fetchDetails = this.fetchDetails.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleGetInfo = this.handleGetInfo.bind(this);
+    this.handleAutoSearch = this.handleAutoSearch.bind(this);
+    this.handleSelectedInput = this.handleSelectedInput.bind(this);
   }
 
   handleFormSubmit = e => {
@@ -116,14 +116,25 @@ class FlightsHomePage extends PureComponent {
         keywords: flightValues["keywords"],
         content: flightValues["content"].toString("html"),
         h1_title: flightValues["h1Tag"],
-        airline_name: flightValues["airlineName"],
-        city_name:flightValues["cityNameSelected"] && flightValues["cityNameSelected"]["value"] ? flightValues["cityNameSelected"]["value"] : "",
-        dep_city_name: flightValues["depCityNameSelected"] && flightValues["depCityNameSelected"]["value"]
-          ? flightValues["depCityNameSelected"]["value"]
-          : this.state.source,
-        arr_city_name:flightValues["arrCityNameSelected"] &&  flightValues["arrCityNameSelected"]["value"]
-          ? flightValues["arrCityNameSelected"]["value"]
-          : this.state.destination,
+        airline_name:
+          flightValues["airlineName"] && flightValues["airlineName"] != ""
+            ? flightValues["airlineName"]
+            : this.state.brandName,
+        city_name:
+          flightValues["cityNameSelected"] &&
+          flightValues["cityNameSelected"]["value"]
+            ? flightValues["cityNameSelected"]["value"]
+            : this.state.fromToCity,
+        dep_city_name:
+          flightValues["depCityNameSelected"] &&
+          flightValues["depCityNameSelected"]["value"]
+            ? flightValues["depCityNameSelected"]["value"]
+            : this.state.source,
+        arr_city_name:
+          flightValues["arrCityNameSelected"] &&
+          flightValues["arrCityNameSelected"]["value"]
+            ? flightValues["arrCityNameSelected"]["value"]
+            : this.state.destination,
         readOnlyValue: true
       }
     };
@@ -140,7 +151,11 @@ class FlightsHomePage extends PureComponent {
           depCityName: "",
           depCityNameSelected: "",
           arrCityName: "",
-          arrCityNameSelected: ""
+          arrCityNameSelected: "",
+          airlineNameSelected: "",
+          cityNameSelected: "",
+          cityName: "",
+          airlineName: ""
         });
 
         console.log(response);
@@ -288,7 +303,10 @@ class FlightsHomePage extends PureComponent {
       category: categoryType,
       dep_city_name: depCityName ? depCityName : source,
       arr_city_name: arrCityName ? arrCityName : destination,
-      city_name: cityNameSelected &&  cityNameSelected.value ? cityNameSelected.value : fromToCity,
+      city_name:
+        cityNameSelected && cityNameSelected.value
+          ? cityNameSelected.value
+          : fromToCity,
       airline_name: airlineName ? airlineName : brandName
     };
 
@@ -309,7 +327,7 @@ class FlightsHomePage extends PureComponent {
             typeof response.data.result[pageType][subType] !== "undefined" &&
             response.data.result[pageType][subType].length > 0
           ) {
-            debugger
+            debugger;
             result[pageType][subType] = response.data.result[pageType][subType];
             if (this.state.editClicked) {
               this.setState({
@@ -317,7 +335,7 @@ class FlightsHomePage extends PureComponent {
                 renderTables: true,
                 showAddButton: false,
                 showComponent: false
-                              });
+              });
             } else {
               this.setState({
                 result: result,
@@ -439,9 +457,12 @@ class FlightsHomePage extends PureComponent {
         showAddButton: false,
         title: result["common"][idx]["title"],
         description: result["common"][idx]["description"],
-        content: result["common"][idx]["content"]
+        keywords: result["common"][idx]["keyword"],
+        content: result["common"][idx]["content"],
+        h1Tag: result["common"][idx]["heading"]
       });
     } else {
+      debugger;
       this.setState({
         renderTables: false,
         showComponent: true,
@@ -451,7 +472,7 @@ class FlightsHomePage extends PureComponent {
         description: result[pageType][subType][idx]["description"],
         content: result[pageType][subType][idx]["content"],
         h1Tag: result[pageType][subType][idx]["heading"],
-        keywords: result[pageType][subType][idx]["keywords"],
+        keywords: result[pageType][subType][idx]["keyword"],
         source: result[pageType][subType][idx]["source"],
         destination: result[pageType][subType][idx]["destination"],
         fromToCity: result[pageType][subType][idx]["city_name"],
@@ -516,7 +537,7 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleSelectedInput = (p, fieldName) => {
-    debugger
+    debugger;
     if (fieldName === "airlineName") {
       this.setState(
         {
