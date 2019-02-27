@@ -135,6 +135,8 @@ class FlightsTable extends Component {
                 <td>Section</td>
                 <td>Page Type</td>
                 <td>Sub Type</td>
+                <td>Edit</td>
+                <td>Delete</td>
               </tr>
             </thead>
             <tbody>
@@ -143,8 +145,8 @@ class FlightsTable extends Component {
                   <td>{resp.domain}</td>
                   <td>{resp.language}</td>
                   <td>{resp.section}</td>
-                  <td>{resp.pageType}</td>
-                  <td>{resp.subType}</td>
+                  <td>{resp.page_type}</td>
+                  <td>{resp.page_subtype}</td>
                   <td align="center">
                     <Button
                       as="input"
