@@ -146,7 +146,7 @@ class FlightsHomePage extends PureComponent {
     };
     axios({
       method: "post",
-      url: "http://localhost:3000/flights",
+      url: "http://13.251.49.54:82/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -310,10 +310,9 @@ class FlightsHomePage extends PureComponent {
     } = this.state;
     var url = "http://13.251.49.54:82/fetch_details";
 
-    // var url = "http://localhost:3000/fetch_details";
+    // var url = "http://13.251.49.54:82/fetch_details";
     // debugger
     // var url = "http://13.251.49.54:82/fetch_details";
-
 
     var parameters = {
       page_type: pageType,
@@ -426,7 +425,7 @@ class FlightsHomePage extends PureComponent {
     let _self = this;
     var result = window.confirm("Want to delete?");
     if (result) {
-      var url = "http://localhost:3000/delete_data";
+      var url = "http://13.251.49.54:82/delete_data";
       axios
         .delete(url, {
           data: {
@@ -534,9 +533,9 @@ class FlightsHomePage extends PureComponent {
     if (target_value !== "" && target_value.length >= 3) {
       let url = "";
       if (fieldName === "airlineName") {
-        url = "http://localhost:3000/airline_autocomplete";
+        url = "http://13.251.49.54:82/airline_autocomplete";
       } else {
-        url = "http://localhost:3000/city_autocomplete";
+        url = "http://13.251.49.54:82/city_autocomplete";
       }
       axios
         .get(url, { params: { query_term: target_value } })
