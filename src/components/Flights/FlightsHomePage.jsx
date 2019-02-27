@@ -86,13 +86,23 @@ class FlightsHomePage extends PureComponent {
       editClicked: false
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    this.handleMetaChanges = this.handleMetaChanges.bind(this)
+    this.handleRTEchange = this.handleRTEchange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.fetchDetails = this.fetchDetails.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
+    this.handleAdd =  this.handleAdd.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
+    this.handleGetInfo = this.handleGetInfo.bind(this)
+    this.handleAutoSearch = this.handleAutoSearch.bind(this)
+    this.handleSelectedInput = this.handleSelectedInput.bind(this)
   }
 
   handleFormSubmit = e => {
     e.preventDefault();
 
     const flightValues = this.state;
-    debugger;
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -107,11 +117,11 @@ class FlightsHomePage extends PureComponent {
         content: flightValues["content"].toString("html"),
         h1_title: flightValues["h1Tag"],
         airline_name: flightValues["airlineName"],
-        city_name: flightValues["cityNameSelected"]["value"],
-        dep_city_name: flightValues["depCityNameSelected"]["value"]
+        city_name:flightValues["cityNameSelected"] && flightValues["cityNameSelected"]["value"] ? flightValues["cityNameSelected"]["value"] : "",
+        dep_city_name: flightValues["depCityNameSelected"] && flightValues["depCityNameSelected"]["value"]
           ? flightValues["depCityNameSelected"]["value"]
           : this.state.source,
-        arr_city_name: flightValues["arrCityNameSelected"]["value"]
+        arr_city_name:flightValues["arrCityNameSelected"] &&  flightValues["arrCityNameSelected"]["value"]
           ? flightValues["arrCityNameSelected"]["value"]
           : this.state.destination,
         readOnlyValue: true
@@ -142,7 +152,6 @@ class FlightsHomePage extends PureComponent {
       });
   };
   handleMetaChanges = (e, fieldName) => {
-    debugger;
     this.setState({ [fieldName]: e.target.value });
   };
   handleRTEchange = content => {
@@ -279,7 +288,7 @@ class FlightsHomePage extends PureComponent {
       category: categoryType,
       dep_city_name: depCityName ? depCityName : source,
       arr_city_name: arrCityName ? arrCityName : destination,
-      city_name: cityNameSelected.value ? cityNameSelected.value : fromToCity,
+      city_name: cityNameSelected &&  cityNameSelected.value ? cityNameSelected.value : fromToCity,
       airline_name: airlineName ? airlineName : brandName
     };
 
@@ -300,26 +309,16 @@ class FlightsHomePage extends PureComponent {
             typeof response.data.result[pageType][subType] !== "undefined" &&
             response.data.result[pageType][subType].length > 0
           ) {
+            debugger
             result[pageType][subType] = response.data.result[pageType][subType];
-            debugger;
             if (this.state.editClicked) {
               this.setState({
                 result: result,
                 renderTables: true,
                 showAddButton: false,
-                showComponent: false,
-                depCityNameSelected: "",
-                arrCityNameSelected: "",
-                depCityName: "",
-                arrCityName: "",
-                airlineName: "",
-                airlineNameSelected: "",
-                cityNameSelected: "",
-                cityName: ""
-                // brandName: this.state.airlineNameSelected ? this.state.airlineNameSelected: ""
-              });
+                showComponent: false
+                              });
             } else {
-              debugger;
               this.setState({
                 result: result,
                 renderTables: true,
@@ -354,7 +353,6 @@ class FlightsHomePage extends PureComponent {
             typeof response.data.result["common"] !== "undefined" &&
             response.data.result["common"].length > 0
           ) {
-            debugger;
             result["common"] = response.data.result["common"];
             this.setState({
               result: result,
@@ -407,7 +405,6 @@ class FlightsHomePage extends PureComponent {
           if (index !== -1) {
             values.splice(index, 1);
             result[pageType][subType] = values;
-            debugger;
             values.length > 0
               ? this.setState({ result })
               : this.setState({
@@ -433,7 +430,6 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleEdit = idx => {
-    debugger;
     let { result, pageType, subType, categoryType } = this.state;
     if (categoryType === "common" || subType === "index") {
       this.setState({
@@ -520,8 +516,8 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleSelectedInput = (p, fieldName) => {
+    debugger
     if (fieldName === "airlineName") {
-      debugger;
       this.setState(
         {
           airlineNameSelected: p,
@@ -530,14 +526,14 @@ class FlightsHomePage extends PureComponent {
           language: this.state.language,
           pageType: this.state.pageType,
           subType: this.state.subType,
-          categoryType: this.state.categoryType
+          categoryType: this.state.categoryType,
+          source: p.value
         },
         () => this.fetchDetails()
       );
     } else if (fieldName === "depCityName") {
       this.setState({ depCityNameSelected: p, depCityName: p.value });
     } else if (fieldName === "arrCityName") {
-      debugger;
       this.setState(
         {
           domain: this.state.domain,
@@ -546,7 +542,8 @@ class FlightsHomePage extends PureComponent {
           subType: this.state.subType,
           categoryType: this.state.categoryType,
           arrCityNameSelected: p,
-          arrCityName: p.value
+          arrCityName: p.value,
+          description: p.value
         },
         () => this.fetchDetails()
       );

@@ -26,7 +26,6 @@ class FlightsTable extends Component {
   };
 
   render() {
-    debugger;
     const {
       response,
       pageType,
@@ -36,7 +35,6 @@ class FlightsTable extends Component {
       categoryType,
       renderTables
     } = this.props;
-    debugger;
     var tableTitlearray = [];
     var tableValuearray = [];
     tableTitlearray = Object.keys(tableTitle);
@@ -48,7 +46,6 @@ class FlightsTable extends Component {
     var actions = ["Edit", "Delete"];
     tableTitlearray = tableTitlearray.concat(actions);
     tableValuearray = Object.values(tableTitle);
-    debugger;
     var tempValueArray =
       subType && subType != "index" ? Object.values(tableFields[subType]) : [];
     tableValuearray = tableValuearray.concat(tempValueArray);
