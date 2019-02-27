@@ -7,7 +7,7 @@ import {
 import { Editor } from "react-draft-wysiwyg";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-const API_URL = "http://13.251.49.54/cmshotels/edit/";
+const API_URL = "http://13.251.49.54:82/cmshotels/edit/";
 
 class EditUniqueContent extends Component {
   constructor(props) {

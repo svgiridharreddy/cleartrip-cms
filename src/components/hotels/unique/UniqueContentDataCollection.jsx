@@ -17,9 +17,9 @@ import TableContent from '../TableContent';
 import AddHotelUniqueContent from './AddHotelUniqueContent';
 import EditHotelUniqueData from './EditHotelUniqueData';
 
-const API_URL = "http://13.251.49.54"
+const API_URL = "http://13.251.49.54:82"
 
-const QUERY_URL = "http://13.251.49.54/cmshotels/unique-content-data-collection" 
+const QUERY_URL = "http://13.251.49.54:82/cmshotels/unique-content-data-collection" 
 
 class UniqueContentDataCollection extends Component {
 	constructor(props) {
