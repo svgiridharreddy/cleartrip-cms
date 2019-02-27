@@ -155,7 +155,8 @@ class FlightsHomePage extends PureComponent {
           airlineNameSelected: "",
           cityNameSelected: "",
           cityName: "",
-          airlineName: ""
+          airlineName: "",
+          readOnlyValue: false
         });
 
         console.log(response);
@@ -443,7 +444,12 @@ class FlightsHomePage extends PureComponent {
     this.setState({
       showComponent: true,
       message: "",
-      showAddButton: false
+      showAddButton: false,
+      title: "",
+      description: "",
+      keywords: "",
+      content: "",
+      h1Tag: ""
     });
   };
 
@@ -459,7 +465,8 @@ class FlightsHomePage extends PureComponent {
         description: result["common"][idx]["description"],
         keywords: result["common"][idx]["keyword"],
         content: result["common"][idx]["content"],
-        h1Tag: result["common"][idx]["heading"]
+        h1Tag: result["common"][idx]["heading"],
+        readOnlyValue: true
       });
     } else {
       debugger;
@@ -481,7 +488,8 @@ class FlightsHomePage extends PureComponent {
           this.state.arrCityNameSelected != ""
             ? this.state.arrCityNameSelected
             : this.state.source,
-        editClicked: true
+        editClicked: true,
+        readOnlyValue: true
       });
     }
   };
@@ -669,6 +677,7 @@ class FlightsHomePage extends PureComponent {
             value={this.state.categoryType}
             onChange={e => this.handleChange(e, "categoryType")}
             name="categoryType"
+            disabled={this.state.readOnlyValue}
           >
             <option>Select Category</option>
             <option value="uniq">Unique</option>
@@ -740,6 +749,7 @@ class FlightsHomePage extends PureComponent {
               <select
                 onChange={e => this.handleChange(e, "domain")}
                 name="domain"
+                disabled={this.state.readOnlyValue}
                 value={this.state.domain}
               >
                 <option value="" disabled={true} selected>
@@ -757,6 +767,7 @@ class FlightsHomePage extends PureComponent {
               <select
                 onChange={e => this.handleChange(e, "language")}
                 name="language"
+                disabled={this.state.readOnlyValue}
                 value={this.state.language}
               >
                 <option value="" disabled={true} selected>
@@ -771,6 +782,7 @@ class FlightsHomePage extends PureComponent {
                 onChange={e => this.handleChange(e, "pageType")}
                 name="pageType"
                 value={this.state.pageType}
+                disabled={this.state.readOnlyValue}
               >
                 <option value="" disabled={true} selected>
                   Page type
@@ -785,6 +797,7 @@ class FlightsHomePage extends PureComponent {
                 onChange={e => this.handleChange(e, "subType")}
                 name="subType"
                 value={this.state.subType}
+                disabled={this.state.readOnlyValue}
               >
                 <option value="" disabled={true} selected>
                   page sub_type
@@ -799,6 +812,7 @@ class FlightsHomePage extends PureComponent {
                 name="section"
                 value={this.state.section}
                 onChange={e => this.handleChange(e, "section")}
+                disabled={this.state.readOnlyValue}
               >
                 {" "}
                 <option value="" disabled={true} selected>
