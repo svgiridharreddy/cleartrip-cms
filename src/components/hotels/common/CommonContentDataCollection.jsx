@@ -18,10 +18,10 @@ import AddCommonForm from '../AddCommonForm';
 import EditCommonForm from '../EditCommonForm';
 
 
-const API_URL = 'http://13.251.49.54'
+const API_URL = 'http://13.251.49.54:82'
 
-const QUERY_URL = "http://13.251.49.54/cmshotels/common-content-data-collection"
-const AUTO_COMPLETE = "http://13.251.49.54/country_autocomplete" 
+const QUERY_URL = "http://13.251.49.54:82/cmshotels/common-content-data-collection"
+const AUTO_COMPLETE = "http://13.251.49.54:82/country_autocomplete" 
 
 const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"] 
 const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "Weekend Getaways", "PropertyInLocality","Region"]
