@@ -120,14 +120,15 @@ class Layout extends React.Component {
         <div>
           <header>
             <div className="cleartripLogo ">
-              asd
-			</div>
+            </div>
             {loginStatus ? (
               <div className="nav-right" onClick={this.logout.bind(this)}>
                 Log Out
           </div>
             ) : (
+              <div className="nav-right">
                 <Login />
+                </div>
               )}
           </header>
         </div>
@@ -137,8 +138,8 @@ class Layout extends React.Component {
           </div>
           <div className="main-content">
             {children}
+          </div>
         </div>
-      </div>
       </div>
     );
   }
