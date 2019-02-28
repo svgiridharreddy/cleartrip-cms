@@ -71,7 +71,7 @@ class Layout extends React.Component {
       loginStatus: false
     });
     NotificationManager.info("logged out successfully", "logout", 1500);
-    setTimeout(function() {
+    setTimeout(function () {
       window.location.reload();
     }, 1000);
   }
@@ -109,68 +109,38 @@ class Layout extends React.Component {
               </ListItem>
             </List>
           ) : (
-            ""
-          )}
+              ""
+            )}
         </div>
       </div>
     );
 
     return (
-      <React.Fragment>
-        <CssBaseline />
-        <div className={classes.root}>
-          <AppBar position="absolute" className={classes.appBar}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                className={classes.menuButton}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" color="inherit" noWrap>
-                Cleartrip CMS
-              </Typography>
-              {loginStatus ? (
-                <Button variant="warning" onClick={this.logout.bind(this)}>
-                  Logout
-                </Button>
-              ) : (
+      <div>
+        <div>
+          <header>
+            <div className="cleartripLogo ">
+            </div>
+            {loginStatus ? (
+              <div className="nav-right" onClick={this.logout.bind(this)}>
+                Log Out
+          </div>
+            ) : (
+              <div className="nav-right">
                 <Login />
+                </div>
               )}
-            </Toolbar>
-          </AppBar>
-          <nav className={classes.drawer}>
-            <Hidden smUp implementation="css">
-              <Drawer
-                container={this.props.container}
-                variant="temporary"
-                open={mobileOpen}
-                onClose={this.handleDrawerToggle}
-                classes={{
-                  paper: classes.drawerPaper
-                }}
-              />
-            </Hidden>
-            <Hidden xsDown implementation="css">
-              <Drawer
-                classes={{
-                  paper: classes.drawerPaper
-                }}
-                variant="permanent"
-                open
-              >
-                {drawer}
-              </Drawer>
-            </Hidden>
-          </nav>
-
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            {children}
-          </main>
+          </header>
         </div>
-      </React.Fragment>
+        <div className="content-wrapper">
+          <div className="sidebar">
+            {drawer}
+          </div>
+          <div className="main-content">
+            {children}
+          </div>
+        </div>
+      </div>
     );
   }
 }

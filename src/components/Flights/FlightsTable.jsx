@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Table } from "react-bootstrap";
-
+import './css/Flights.css'
 class FlightsTable extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +53,7 @@ class FlightsTable extends Component {
     return (
       <div>
         {renderTables && subType != "index" ? (
-          <Table key={subType != "" ? subType : ""} responsive>
+          <Table key={subType != "" ? subType : ""} responsive className="table main-table" width="100%">
             <thead>
               <tr>
                 {tableTitlearray.map(title => (
@@ -66,107 +66,76 @@ class FlightsTable extends Component {
             <tbody>
               {categoryType === "uniq"
                 ? response[pageType][subType].map((resp, idx) => (
-                    <tr key={resp.id}>
-                      {tableValuearray.map(a => (
-                        <td key={a} align="center">
-                          {resp[a]}
-                        </td>
-                      ))}
+                  <tr key={resp.id}>
+                    {tableValuearray.map(a => (
+                      <td key={a} align="center">
+                        {resp[a]}
+                      </td>
+                    ))}
 
-                      <td align="center">
-                        <Button
-                          as="input"
-                          type="button"
-                          value="Edit"
-                          onClick={() => this.props.handleEdit(idx)}
-                        />
-                      </td>
-                      <td>
-                        <Button
-                          as="input"
-                          type="button"
-                          value="Delete"
-                          onClick={() => {
-                            this.props.handleDelete(idx, resp.id);
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  ))
+                    <td align="center">
+                      <ul class="list-inline">
+                        <li ><a href="" class="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</a></li>
+                        <li><a href="" onClick={() => {
+                          this.props.handleDelete(idx, resp.id);
+                        }}>Delete</a></li>
+                      </ul>
+                    </td>
+                  </tr>
+                ))
                 : response["common"].map((resp, idx) => (
-                    <tr key={resp.id}>
-                      {tableValuearray.map(a => (
-                        <td key={a} align="center">
-                          {resp[a]}
-                        </td>
-                      ))}
-
-                      <td align="center">
-                        <Button
-                          as="input"
-                          type="button"
-                          value="Edit"
-                          onClick={() => this.props.handleEdit(idx)}
-                        />
+                  <tr key={resp.id}>
+                    {tableValuearray.map(a => (
+                      <td key={a} align="center">
+                        {resp[a]}
                       </td>
-                      <td>
-                        <Button
-                          as="input"
-                          type="button"
-                          value="Delete"
-                          onClick={() => {
-                            this.props.handleDelete(idx, resp.id);
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  ))}
+                    ))}
+                    <td align="center">
+                      <ul class="list-inline">
+                        <li ><a href="" class="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</a></li>
+                        <li><a href="" onClick={() => {
+                          this.props.handleDelete(idx, resp.id);
+                        }}>Delete</a></li>
+                      </ul>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
         ) : (
-          <Table>
-            <thead>
-              <tr>
-                <td>Domain</td>
-                <td>Language</td>
-                <td>Section</td>
-                <td>Page Type</td>
-                <td>Sub Type</td>
-                <td>Edit</td>
-                <td>Delete</td>
-              </tr>
-            </thead>
-            <tbody>
-              {response["common"].map((resp, idx) => (
+            <Table className="table main-table" width="100%">
+              <thead>
                 <tr>
-                  <td>{resp.domain}</td>
-                  <td>{resp.language}</td>
-                  <td>{resp.section}</td>
-                  <td>{resp.page_type}</td>
-                  <td>{resp.page_subtype}</td>
-                  <td align="center">
-                    <Button
-                      as="input"
-                      type="button"
-                      value="Edit"
-                      onClick={() => this.props.handleEdit(idx)}
-                    />
-                  </td>
-                  <td>
-                    <Button
-                      as="input"
-                      type="button"
-                      value="Delete"
-                      onClick={() => {
-                        this.props.handleDelete(idx, resp.id);
-                      }}
-                    />
-                  </td>
+                  <td>Domain</td>
+                  <td>Language</td>
+                  <td>Section</td>
+                  <td>Page Type</td>
+                  <td>Sub Type</td>
+                  <td>Edit</td>
+                  <td>Delete</td>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
+              </thead>
+              <tbody>
+                {response["common"].map((resp, idx) => (
+                  <tr>
+                    <td>{resp.domain}</td>
+                    <td>{resp.language}</td>
+                    <td>{resp.section}</td>
+                    <td>{resp.page_type}</td>
+                    <td>{resp.page_subtype}</td>
+                    <td>
+                      <ul class="list-inline">
+                        <li ><a href="" class="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</a></li>
+                        <li><a href="" onClick={() => {
+                          this.props.handleDelete(idx, resp.id);
+                        }}>Delete</a></li>
+                      </ul>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
       </div>
     );
   }
