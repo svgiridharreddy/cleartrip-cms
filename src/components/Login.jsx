@@ -61,7 +61,7 @@ class Login extends Component {
     let loginCredentials = _self.state.loginCredentials;
     if (this.handleValidate()) {
       axios
-        .get("http://localhost:3000/user/login", {
+        .get("http://13.251.49.54:82/user/login", {
           params: loginCredentials
         })
         .then(resp => {
