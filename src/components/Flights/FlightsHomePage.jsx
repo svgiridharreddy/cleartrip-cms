@@ -12,6 +12,8 @@ import {
   NotificationContainer,
   NotificationManager
 } from "react-notifications";
+import { host } from "../helper";
+
 const pageTypes = ["flight-booking", "flight-schedule", "flight-tickets"];
 const languages = ["en", "ar"];
 const domains = {
@@ -23,6 +25,7 @@ const domains = {
   QA: "Qatar",
   BH: "Bahrain"
 };
+
 const sections = ["domestic", "international"];
 class FlightsHomePage extends PureComponent {
   constructor(props) {
@@ -89,9 +92,9 @@ class FlightsHomePage extends PureComponent {
       destination: "",
       brandName: "",
       fromToCity: "",
-      editClicked: false
+      editClicked: false,
+      host: host()
     };
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleMetaChanges = this.handleMetaChanges.bind(this);
     this.handleRTEchange = this.handleRTEchange.bind(this);
@@ -100,14 +103,12 @@ class FlightsHomePage extends PureComponent {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleGetInfo = this.handleGetInfo.bind(this);
     this.handleAutoSearch = this.handleAutoSearch.bind(this);
     this.handleSelectedInput = this.handleSelectedInput.bind(this);
   }
 
   handleFormSubmit = e => {
     e.preventDefault();
-
     const flightValues = this.state;
     let postData = {
       flights_data: {
@@ -144,9 +145,10 @@ class FlightsHomePage extends PureComponent {
         readOnlyValue: true
       }
     };
+    debugger;
     axios({
       method: "post",
-      url: "http://13.251.49.54:82/flights",
+      url: this.state.host + "/flights",
       data: postData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -172,8 +174,6 @@ class FlightsHomePage extends PureComponent {
           fromToCity: "",
           options: []
         });
-
-        console.log(response);
 
         this.fetchDetails();
       })
@@ -308,11 +308,11 @@ class FlightsHomePage extends PureComponent {
       brandName,
       fromToCity
     } = this.state;
-    var url = "http://13.251.49.54:82/fetch_details";
+    var url = this.state.host + "/fetch_details";
 
-    // var url = "http://13.251.49.54:82/fetch_details";
+    // var url = this.state.host + "/fetch_details";
     // debugger
-    // var url = "http://13.251.49.54:82/fetch_details";
+    // var url = this.state.host + "/fetch_details";
 
     var parameters = {
       page_type: pageType,
@@ -425,7 +425,7 @@ class FlightsHomePage extends PureComponent {
     let _self = this;
     var result = window.confirm("Want to delete?");
     if (result) {
-      var url = "http://13.251.49.54:82/delete_data";
+      var url = this.state.host + "/delete_data";
       axios
         .delete(url, {
           data: {
@@ -533,9 +533,9 @@ class FlightsHomePage extends PureComponent {
     if (target_value !== "" && target_value.length >= 3) {
       let url = "";
       if (fieldName === "airlineName") {
-        url = "http://13.251.49.54:82/airline_autocomplete";
+        url = this.state.host + "/airline_autocomplete";
       } else {
-        url = "http://13.251.49.54:82/city_autocomplete";
+        url = this.state.host + "/city_autocomplete";
       }
       axios
         .get(url, { params: { query_term: target_value } })
