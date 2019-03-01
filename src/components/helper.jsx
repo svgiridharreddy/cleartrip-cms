@@ -11,3 +11,12 @@ const loginHelpers = {
   }
 };
 export default loginHelpers;
+export const host = function() {
+  let host = window.location.hostname;
+  if (host === "13.251.49.54") {
+    return "http://13.251.49.54:82";
+  } else {
+    return "http://localhost:3000";
+  }
+  return host;
+};

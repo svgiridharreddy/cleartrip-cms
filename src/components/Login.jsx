@@ -7,6 +7,7 @@ import {
 } from "react-notifications";
 
 import "../../node_modules/react-notifications/lib/notifications.css";
+import { host } from "./helper";
 
 class Login extends Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class Login extends Component {
         username: "",
         password: ""
       },
-      showErrormsg: false
+      showErrormsg: false,
+      host: host()
     };
   }
   handleClose() {
@@ -61,7 +63,7 @@ class Login extends Component {
     let loginCredentials = _self.state.loginCredentials;
     if (this.handleValidate()) {
       axios
-        .get("http://13.251.49.54:82/user/login", {
+        .get(this.state.host + "/user/login", {
           params: loginCredentials
         })
         .then(resp => {
@@ -72,9 +74,9 @@ class Login extends Component {
             show: false
           });
           NotificationManager.success("successfully login", "login", 1500);
-          setTimeout(function() {
-            window.location.reload();
-          }, 1000);
+          // setTimeout(function() {
+          //   window.location.reload();
+          // }, 1000);
         })
         .catch(err => {
           loginCredentials["username"] = "";
