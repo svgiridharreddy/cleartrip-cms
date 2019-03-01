@@ -58,9 +58,12 @@ class FlightsTable extends Component {
                 {tableTitlearray.map(title => (
                   (title == "Section") ? <td key={title} align="center">
                     Domain-Language-Section
-                  </td> : (title != "Domain" && title != "Language"  && title != "Delete" ? <td key={title} align="center">
-                      {title}
-                    </td> : "")
+                  </td> : (title != "Domain" && title != "Language" && title != "Delete" && title !="Edit") ?
+                      (categoryType === "common" && title !="source" && title !="destination" ? <td key={title} align="center">
+                        {title}
+                      </td> : (categoryType == "uniq" ? <td key={title} align="center">
+                        {title}
+                      </td> : ""))  : ""
                 ))}
               </tr>
             </thead>
@@ -71,14 +74,14 @@ class FlightsTable extends Component {
                     {tableValuearray.map(a => (
                       (a == "section" ? <td key={a} align="center">
                         {resp["domain"] + "-" + resp["language"] + "-" + resp["section"]}
-                      </td> : (a !="domain" && a !="language") ?  <td key={a} align="center">
-                          {resp[a]}
-                        </td> : ""
+                      </td> : (a != "domain" && a != "language") ? <td key={a} align="center">
+                        {resp[a]}
+                      </td> : ""
                       )))}
                     <td align="center">
                       <ul class="list-inline">
-                        <li><span  className="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</span></li>
-                        <li><span  onClick={() => {
+                        <li><span className="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</span></li>
+                        <li><span  className="delete-btn" onClick={() => {
                           this.props.handleDelete(idx, resp.id);
                         }}>Delete</span></li>
                       </ul>
@@ -88,14 +91,16 @@ class FlightsTable extends Component {
                 : response["common"].map((resp, idx) => (
                   <tr key={resp.id}>
                     {tableValuearray.map(a => (
-                      <td key={a} align="center">
+                      (a == "section" ? <td key={a} align="center">
+                        {resp["domain"] + "-" + resp["language"] + "-" + resp["section"]}
+                      </td> : (a != "domain" && a != "language" && a != "source" && a != "destination") ? <td key={a} align="center">
                         {resp[a]}
-                      </td>
-                    ))}
+                      </td> : ""
+                      )))}
                     <td align="center">
                       <ul class="list-inline">
-                        <li ><span  className="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</span></li>
-                        <li><span  onClick={() => {
+                        <li ><span className="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</span></li>
+                        <li><span  className="delete-btn" onClick={() => {
                           this.props.handleDelete(idx, resp.id);
                         }}>Delete</span></li>
                       </ul>
@@ -108,27 +113,21 @@ class FlightsTable extends Component {
             <Table className="table main-table" width="100%">
               <thead>
                 <tr>
-                  <td>Domain</td>
-                  <td>Language</td>
-                  <td>Section</td>
+                  <td>Domain-Language-Section</td>
                   <td>Page Type</td>
                   <td>Sub Type</td>
-                  <td>Edit</td>
-                  <td>Delete</td>
                 </tr>
               </thead>
               <tbody>
                 {response["common"].map((resp, idx) => (
                   <tr>
-                    <td>{resp.domain}</td>
-                    <td>{resp.language}</td>
-                    <td>{resp.section}</td>
+                    <td>{resp.domain+"-"+resp.language+"-"+resp.section}</td>
                     <td>{resp.page_type}</td>
                     <td>{resp.page_subtype}</td>
                     <td>
                       <ul class="list-inline">
                         <li ><span className="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</span></li>
-                        <li><span onClick={() => {
+                        <li><span className="delete-btn" onClick={() => {
                           this.props.handleDelete(idx, resp.id);
                         }}>Delete</span></li>
                       </ul>
