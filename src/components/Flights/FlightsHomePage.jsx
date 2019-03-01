@@ -145,7 +145,6 @@ class FlightsHomePage extends PureComponent {
         readOnlyValue: true
       }
     };
-    debugger;
     axios({
       method: "post",
       url: this.state.host + "/flights",
@@ -337,7 +336,6 @@ class FlightsHomePage extends PureComponent {
       axios
         .get(url, { params: { args: parameters } })
         .then(response => {
-          debugger;
           this.setState({
             renderTables: false,
             showAddButton: false,
@@ -348,7 +346,6 @@ class FlightsHomePage extends PureComponent {
             typeof response.data.result[pageType][subType] !== "undefined" &&
             response.data.result[pageType][subType].length > 0
           ) {
-            debugger;
             result[pageType][subType] = response.data.result[pageType][subType];
             if (this.state.editClicked) {
               this.setState({
@@ -436,7 +433,6 @@ class FlightsHomePage extends PureComponent {
           }
         })
         .then(response => {
-          debugger;
           const result = { ...this.state.result };
           const { pageType, subType, categoryType } = this.state;
           const values =
@@ -446,7 +442,6 @@ class FlightsHomePage extends PureComponent {
           if (index !== -1) {
             values.splice(index, 1);
             result[pageType][subType] = values;
-            debugger;
             this.setState({ result });
           }
           NotificationManager.warning(response.data.message, "", 1500);
@@ -486,7 +481,6 @@ class FlightsHomePage extends PureComponent {
         readOnlyValue: true
       });
     } else {
-      debugger;
       this.setState({
         renderTables: false,
         showComponent: true,
@@ -562,7 +556,6 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleSelectedInput = (p, fieldName) => {
-    debugger;
     if (fieldName === "airlineName") {
       this.setState(
         {
@@ -650,7 +643,7 @@ class FlightsHomePage extends PureComponent {
     let checkResult;
     let tableTitle = {
       Domain: "domain",
-      Langugage: "language",
+      Language: "language",
       Section: "section",
       "Page Type": "page_type",
       "Sub Page Type": "page_subtype",

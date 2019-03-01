@@ -49,7 +49,6 @@ class FlightsTable extends Component {
     var tempValueArray =
       subType && subType != "index" ? Object.values(tableFields[subType]) : [];
     tableValuearray = tableValuearray.concat(tempValueArray);
-    debugger;
     return (
       <div>
         {renderTables && subType != "index" ? (
@@ -57,9 +56,11 @@ class FlightsTable extends Component {
             <thead>
               <tr>
                 {tableTitlearray.map(title => (
-                  <td key={title} align="center">
-                    {title}
-                  </td>
+                  (title == "Section") ? <td key={title} align="center">
+                    Domain-Language-Section
+                  </td> : (title != "Domain" && title != "Language"  && title != "Delete" ? <td key={title} align="center">
+                      {title}
+                    </td> : "")
                 ))}
               </tr>
             </thead>
@@ -68,17 +69,18 @@ class FlightsTable extends Component {
                 ? response[pageType][subType].map((resp, idx) => (
                   <tr key={resp.id}>
                     {tableValuearray.map(a => (
-                      <td key={a} align="center">
-                        {resp[a]}
-                      </td>
-                    ))}
-
+                      (a == "section" ? <td key={a} align="center">
+                        {resp["domain"] + "-" + resp["language"] + "-" + resp["section"]}
+                      </td> : (a !="domain" && a !="language") ?  <td key={a} align="center">
+                          {resp[a]}
+                        </td> : ""
+                      )))}
                     <td align="center">
                       <ul class="list-inline">
-                        <li ><a href="" class="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</a></li>
-                        <li><a href="" onClick={() => {
+                        <li><span  className="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</span></li>
+                        <li><span  onClick={() => {
                           this.props.handleDelete(idx, resp.id);
-                        }}>Delete</a></li>
+                        }}>Delete</span></li>
                       </ul>
                     </td>
                   </tr>
@@ -92,10 +94,10 @@ class FlightsTable extends Component {
                     ))}
                     <td align="center">
                       <ul class="list-inline">
-                        <li ><a href="" class="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</a></li>
-                        <li><a href="" onClick={() => {
+                        <li ><span  className="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</span></li>
+                        <li><span  onClick={() => {
                           this.props.handleDelete(idx, resp.id);
-                        }}>Delete</a></li>
+                        }}>Delete</span></li>
                       </ul>
                     </td>
                   </tr>
@@ -125,10 +127,10 @@ class FlightsTable extends Component {
                     <td>{resp.page_subtype}</td>
                     <td>
                       <ul class="list-inline">
-                        <li ><a href="" class="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</a></li>
-                        <li><a href="" onClick={() => {
+                        <li ><span className="edit-btn" onClick={() => this.props.handleEdit(idx)}>Edit</span></li>
+                        <li><span onClick={() => {
                           this.props.handleDelete(idx, resp.id);
-                        }}>Delete</a></li>
+                        }}>Delete</span></li>
                       </ul>
                     </td>
                   </tr>

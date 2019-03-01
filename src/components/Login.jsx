@@ -74,9 +74,9 @@ class Login extends Component {
             show: false
           });
           NotificationManager.success("successfully login", "login", 1500);
-          setTimeout(function() {
-            window.location.reload();
-          }, 1000);
+          // setTimeout(function() {
+          //   window.location.reload();
+          // }, 1000);
         })
         .catch(err => {
           loginCredentials["username"] = "";

@@ -66,18 +66,16 @@ class Layout extends React.Component {
 
   logout() {
     loginHelpers.logout();
-    debugger;
     this.setState({
       loginStatus: false
     });
     NotificationManager.info("logged out successfully", "logout", 1500);
-    setTimeout(function () {
-      window.location.reload();
-    }, 1000);
+    // setTimeout(function () {
+    //   window.location.reload();
+    // }, 1000);
   }
 
   componentDidMount = () => {
-    debugger;
     if (loginHelpers.checkUser()) {
       this.setState({
         loginStatus: true
