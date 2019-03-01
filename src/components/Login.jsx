@@ -14,6 +14,7 @@ class Login extends Component {
     super(props);
     this.state = {
       show: false,
+      changeState: props.changeState,
       loginCredentials: {
         username: "",
         password: ""
@@ -68,15 +69,15 @@ class Login extends Component {
         })
         .then(resp => {
           let data = resp.data["authenticated"];
+          this.props.changeState()
           sessionStorage.setItem("user_data", JSON.stringify(data));
           _self.setState({
             showErrormsg: false,
-            show: false
+            show: false,
+            loginStatus: true
           });
           NotificationManager.success("successfully login", "login", 1500);
-          // setTimeout(function() {
-          //   window.location.reload();
-          // }, 1000);
+          window.location.reload()
         })
         .catch(err => {
           loginCredentials["username"] = "";

@@ -70,18 +70,24 @@ class Layout extends React.Component {
       loginStatus: false
     });
     NotificationManager.info("logged out successfully", "logout", 1500);
-    // setTimeout(function () {
-    //   window.location.reload();
-    // }, 1000);
+    setTimeout(function () {
+      window.location = '/';
+    }, 1000);
   }
 
-  componentDidMount = () => {
-    if (loginHelpers.checkUser()) {
-      this.setState({
-        loginStatus: true
-      });
-    }
+  componentDidMount(){
+      if (loginHelpers.checkUser()) {
+          this.setState({
+            loginStatus: true
+          });
+      }
   };
+  changeState(){
+    this.setState({
+      loginStatus: true
+    });
+  }
+
   render() {
     let { loginStatus } = this.state;
     const { classes, children } = this.props;
@@ -99,12 +105,12 @@ class Layout extends React.Component {
               <ListItem button key={"Hotels"} component={Link} to="/hotels">
                 <ListItemText primary={"Hotels"} />
               </ListItem>
-              <ListItem button key={"Trains"} component={Link} to="/trains">
+              {/* <ListItem button key={"Trains"} component={Link} to="/trains">
                 <ListItemText primary={"Trains"} />
-              </ListItem>
-              <ListItem button key={"Banners"} component={Link} to="/banners">
+              </ListItem> */}
+              {/* <ListItem button key={"Banners"} component={Link} to="/banners">
                 <ListItemText primary={"Banner"} />
-              </ListItem>
+              </ListItem> */}
             </List>
           ) : (
               ""
@@ -124,8 +130,8 @@ class Layout extends React.Component {
                 Log Out
           </div>
             ) : (
-              <div className="nav-right">
-                <Login />
+                <div className="nav-right">
+                  <Login  changeState={this.changeState.bind(this)}/>
                 </div>
               )}
           </header>

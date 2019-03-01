@@ -8,6 +8,7 @@ import Layout from "./components/layout";
 // import Flights from "./components/Flights/Flights";
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/Flights/FlightsHomePage";
+import LandingPage from "./components/LandingPage"
 import "typeface-roboto";
 import loginHelpers from "./components/helper";
 import {
@@ -24,7 +25,6 @@ class App extends Component {
       loginStatus: false
     };
   }
-
   componentDidMount = () => {
     if (loginHelpers.checkUser()) {
       this.setState({
@@ -40,14 +40,14 @@ class App extends Component {
           <Layout>
             {loginStatus ? (
               <Switch>
-                <Route exact path="/" component={FlightsHomePage} />
+                <Route exact path="/" component={LandingPage} />
                 <Route exact path="/flights" component={FlightsHomePage} />
                 <Route exact path="/hotels" component={Index} />
                 <Route exact path="/banners" component={Banner} />
               </Switch>
             ) : (
-              ""
-            )}
+                ""
+              )}
           </Layout>
         </Router>
         <NotificationContainer />

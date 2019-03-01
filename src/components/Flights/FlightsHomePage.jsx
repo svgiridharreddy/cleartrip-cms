@@ -12,7 +12,9 @@ import {
   NotificationContainer,
   NotificationManager
 } from "react-notifications";
-import { host } from "../helper";
+import { host} from "../helper";
+import loginHelpers from "../helper";
+
 
 const pageTypes = ["flight-booking", "flight-schedule", "flight-tickets"];
 const languages = ["en", "ar"];
@@ -613,6 +615,7 @@ class FlightsHomePage extends PureComponent {
   };
 
   render() {
+    loginHelpers.checkUser()
     const {
       result,
       pageType,

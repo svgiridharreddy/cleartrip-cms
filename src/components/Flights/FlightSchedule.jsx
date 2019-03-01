@@ -69,7 +69,6 @@ class FlightScheduleFields extends Component {
       arrCityNameSelected: nextProps.arrCityNameSelected
     });
   }
-
   // onEditorStateChange: Function = editorState => {
   //   debugger;
   //   this.setState({
@@ -78,8 +77,6 @@ class FlightScheduleFields extends Component {
   // };
 
   render() {
-    debugger;
-    debugger;
     let subTypeField, category, fields;
     const subtypeOptions = {
       "select sub page type": "select sub page type",
