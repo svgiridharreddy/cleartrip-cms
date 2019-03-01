@@ -25,7 +25,6 @@ class HotelUniqueContent extends Component {
 			content_type: 'Unique Data',
 			country_name: '',
 			selectedCountry: null,
-			canonical_tag: '',
 			h1_tag: '',
 			h2_tag: '',
 			h3_tag: '',
@@ -151,10 +150,6 @@ class HotelUniqueContent extends Component {
 	              onInputChange={e => this.handleAutoSearch(e, "country_name")}
 	              options={this.state.options}
 	            />
-            </li>
-            <li>
-            	<label>Canonical Tag</label>
-            	<input type="text" name="canonical_tag" onChange={this.handleChange} value={ this.state.canonical_tag } />
             </li>
             <li>
             	<label>H1 Title</label>

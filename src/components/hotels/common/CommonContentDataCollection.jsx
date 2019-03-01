@@ -178,14 +178,12 @@ class CommonContentDataCollection extends Component {
     }
     const data = {
       domain_name: result.domain_name,
-      domain_url: result.domain_url,
       content_type: result.content_type,
       country_name: result.country_name,
       page_type: result.page_type,
       h1_tag: result.h1_tag,
       h2_tag: result.h2_tag,
       h3_tag: result.h3_tag,
-      canonical_tag: result.canonical_tag,
       meta_title: result.meta_title,
       meta_description: result.meta_description,
       meta_keyword: result.meta_keyword,
