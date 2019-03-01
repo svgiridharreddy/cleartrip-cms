@@ -20,7 +20,6 @@ class EditUniqueContent extends Component {
       domain_url: "",
       content_type: '',
       country_name: "",
-      canonical_tag: "",
       h1_tag: "",
       h2_tag: "",
       h3_tag: "",
@@ -51,7 +50,6 @@ class EditUniqueContent extends Component {
           domain_url: resData.domain_url,
           content_type: resData.content_type,
           country_name: resData.country_name,
-          canonical_tag: resData.canonical_tag,
           h1_tag: resData.h1_tag,
           h2_tag: resData.h2_tag,
           h3_tag: resData.h3_tag,
@@ -118,7 +116,6 @@ class EditUniqueContent extends Component {
       domain_url,
       content_type,
       country_name,
-      canonical_tag,
       h1_tag,
       h2_tag,
       h3_tag,
@@ -143,10 +140,6 @@ class EditUniqueContent extends Component {
             <li>
               <label>Country Name</label>
               <input value={country_name} name="country_name" />
-            </li>
-            <li>
-              <label>Canonical Tag</label>
-              <input type="text" value={canonical_tag} name="canonical_tag" onChange={this.handleChange} />
             </li>
             <li>
               <label>H1 Title</label>
