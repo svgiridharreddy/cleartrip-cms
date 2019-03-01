@@ -177,3 +177,19 @@ th {
 }
 
 
+.loginSubmitbtn,.loginSubmitbtn:hover,.loginSubmitbtn:active{
+  border: none;
+  margin: 0% 3% 0px 4px;
+  padding: 1px 1px;
+  width: 50%;
+  font-size: 19px;
+  font-weight: bolder;
+  color: white;
+  background-color: #e8702e
+}
+.loginResetbtn,.loginResetbtn:hover,.loginResetbtn:active{
+  border: none;
+  width: 46%;
+  font-weight: bolder;
+  font-size: 19px;
+}

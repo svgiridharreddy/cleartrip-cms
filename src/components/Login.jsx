@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Form, ButtonToolbar } from "react-bootstrap";
 import axios from "axios";
 import {
   NotificationContainer,
@@ -59,7 +59,8 @@ class Login extends Component {
       return false;
     }
   }
-  checkCredentials() {
+  checkCredentials(e) {
+    e.preventDefault()
     let _self = this;
     let loginCredentials = _self.state.loginCredentials;
     if (this.handleValidate()) {
@@ -77,7 +78,9 @@ class Login extends Component {
             loginStatus: true
           });
           NotificationManager.success("successfully login", "login", 1500);
-          window.location.reload()
+          setTimeout(function () {
+            window.location.reload()
+          }, 1800)
         })
         .catch(err => {
           loginCredentials["username"] = "";
@@ -89,6 +92,15 @@ class Login extends Component {
         });
     }
   }
+  resetForm() {
+    let _self = this
+    let loginCredentials = _self.state.loginCredentials
+    loginCredentials["username"] = "";
+    loginCredentials["password"] = "";
+    _self.setState({
+      loginCredentials
+    })
+  }
   render() {
     let _self = this;
     let loginCredentials = _self.state.loginCredentials;
@@ -97,35 +109,37 @@ class Login extends Component {
         <Button variant="primary" onClick={this.handleShow.bind(this)}>
           Login
         </Button>
-        <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
+        <Modal show={this.state.show} onHide={this.handleClose.bind(this)} centered>
           <Modal.Header closeButton>
-            <Modal.Title>Login to CMS.</Modal.Title>
+            <Modal.Title>Login to CMS</Modal.Title>
           </Modal.Header>
           <span className={_self.state.showErrormsg ? "errormsg" : "hidden"}>
             plese enter correct credentials
           </span>
           <Modal.Body>
-            <div>
-              <label>username</label>
-              <input
-                type="text"
-                name="username"
-                value={loginCredentials.username}
-                onChange={this.handleChange.bind(this, "username")}
-              />
-            </div>
-            <div>
-              <label>password</label>
-              <input
-                type="password"
-                name="password"
-                value={loginCredentials.password}
-                onChange={this.handleChange.bind(this, "password")}
-              />
-            </div>
-            <Button type="button" onClick={this.checkCredentials.bind(this)}>
-              Login
+            <form onSubmit={this.checkCredentials.bind(this)}>
+              <Form.Group role="form">
+                <Form.Label>Enter username</Form.Label>
+                <Form.Control placeholder="Enter username/email" type="text"
+                  name="username"
+                  value={loginCredentials.username}
+                  onChange={this.handleChange.bind(this, "username")} />
+              </Form.Group>
+              <Form.Group role="form">
+                <Form.Label>Enter Password</Form.Label>
+                <Form.Control placeholder="password"
+                  type="password"
+                  name="password"
+                  value={loginCredentials.password}
+                  onChange={this.handleChange.bind(this, "password")} />
+              </Form.Group>
+              <ButtonToolbar>
+                <Button type="submit" variant="success" onClick={this.checkCredentials.bind(this)} className="btn btn-primary btn-large centerButton loginSubmitbtn">
+                  Login
             </Button>
+                <Button variant="secondary" onClick={this.resetForm.bind(this)} className ="loginResetbtn">Reset</Button>
+              </ButtonToolbar>
+            </form>
           </Modal.Body>
         </Modal>
         <NotificationContainer />

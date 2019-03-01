@@ -69,12 +69,7 @@ class FlightScheduleFields extends Component {
       arrCityNameSelected: nextProps.arrCityNameSelected
     });
   }
-  // onEditorStateChange: Function = editorState => {
-  //   debugger;
-  //   this.setState({
-  //     editorState: editorState
-  //   });
-  // };
+
 
   render() {
     let subTypeField, category, fields;
@@ -253,31 +248,25 @@ class FlightScheduleFields extends Component {
           onChange={this.onChange1}
           toolbarConfig={toolbarConfig}
         />
-        {/*<Editor
-            editorState={this.state.editorState}
-            wrapperClassName="demo-wrapper"
-            editorClassName="editer-content"
-            onEditorStateChange={this.onChange}
-          /> */}
 
         {categoryType === "uniq" &&
-        (currentSubType === "flights-from" ||
-          currentSubType === "flights-to") ? (
-          <div>
-            <label>City Name</label>
-            <Select1
-              isDisabled={readOnlyValue}
-              value={cityNameSelected}
-              onChange={p => this.props.handleSelectedInput(p, "cityName")}
-              options={options}
-              name="cityName"
-              required
-              placeholder="Search  City"
-              // onInputChange={this.handleAirlineSearch}
-              onInputChange={e => this.props.handleAutoSearch(e, "cityName")}
-            />
-          </div>
-        ) : null}
+          (currentSubType === "flights-from" ||
+            currentSubType === "flights-to") ? (
+            <div>
+              <label>City Name</label>
+              <Select1
+                isDisabled={readOnlyValue}
+                value={cityNameSelected}
+                onChange={p => this.props.handleSelectedInput(p, "cityName")}
+                options={options}
+                name="cityName"
+                required
+                placeholder="Search  City"
+                // onInputChange={this.handleAirlineSearch}
+                onInputChange={e => this.props.handleAutoSearch(e, "cityName")}
+              />
+            </div>
+          ) : null}
         {categoryType === "uniq" && currentSubType === "schedule-routes" ? (
           <div>
             <label>Dep City Name</label>
