@@ -83,7 +83,6 @@ class Login extends Component {
           }, 1800)
         })
         .catch(err => {
-          loginCredentials["username"] = "";
           loginCredentials["password"] = "";
           _self.setState({
             showErrormsg: true,
@@ -134,7 +133,7 @@ class Login extends Component {
                   onChange={this.handleChange.bind(this, "password")} />
               </Form.Group>
               <ButtonToolbar>
-                <Button type="submit" variant="success" onClick={this.checkCredentials.bind(this)} className="btn btn-primary btn-large centerButton loginSubmitbtn">
+                <Button type="submit"  onClick={this.checkCredentials.bind(this)} className="btn  btn-large  loginSubmitbtn">
                   Login
             </Button>
                 <Button variant="secondary" onClick={this.resetForm.bind(this)} className ="loginResetbtn">Reset</Button>

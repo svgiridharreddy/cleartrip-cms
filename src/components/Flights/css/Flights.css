@@ -185,7 +185,7 @@ th {
   font-size: 19px;
   font-weight: bolder;
   color: white;
-  background-color: #e8702e
+  background-color: #e8702e!important;
 }
 .loginResetbtn,.loginResetbtn:hover,.loginResetbtn:active{
   border: none;
