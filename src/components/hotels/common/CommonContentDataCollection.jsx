@@ -25,6 +25,7 @@ const AUTO_COMPLETE = "http://13.251.49.54:82/country_autocomplete"
 
 const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"] 
 const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "Weekend Getaways", "PropertyInLocality","Region"]
+const localPageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "PropertyInLocality","Region"]
 
 class CommonContentDataCollection extends Component {
 	constructor(props) {
@@ -220,6 +221,16 @@ class CommonContentDataCollection extends Component {
 			[source]: p.value,
 			selectedCountry: p
 		})
+		if(this.state.domain_name !== '' &&  p.value !== '' && this.state.page_type !== '') {
+			const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: p.value, page_type: this.state.page_type }
+			axios.post(`${QUERY_URL}`, data)
+	      .then(res => {
+	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+	      })
+	      .catch((err) => {
+	          console.log(err);
+	      })
+		}
 	}
 
 	handleAutoSearch = (e, source) => {
@@ -292,7 +303,7 @@ class CommonContentDataCollection extends Component {
 		                <option value="" disabled={true} selected>
 		                  Page Type
 		                </option>
-		                {this.returnOptions(pageType)}
+		                {this.state.country_name.toLowerCase() === "india" ? this.returnOptions(pageType) : this.returnOptions(localPageType)}
 		              </select>
 		            </li>
 		          </ul>
