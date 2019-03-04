@@ -109,6 +109,7 @@ class MetaFields extends Component {
     return (
       <div>
         <li>
+          <label>Title</label>
           <input
             type="text"
             placeholder="Title"
@@ -121,6 +122,7 @@ class MetaFields extends Component {
           />
         </li>
         <li>
+          <label>Description</label>
           <input
             type="text"
             name="description"
@@ -133,6 +135,7 @@ class MetaFields extends Component {
           />
         </li>
         <li>
+          <label>Keywords</label>
           <input
             name="keywords"
             type="text"
@@ -144,7 +147,7 @@ class MetaFields extends Component {
           />
         </li>
         <li>
-          <label />
+          <label>H1 Title</label>
           <input
             type="text"
             aria-label="H1 Title"
@@ -155,7 +158,7 @@ class MetaFields extends Component {
             placeholder="Enter H1 Title"
           />
         </li>
-
+        <label>Content</label>
         <RichTextEditor
           value={this.state.content}
           onChange={this.onChange1}
