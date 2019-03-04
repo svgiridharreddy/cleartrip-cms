@@ -16,6 +16,10 @@ import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.cs
 import TableContent from '../TableContent';
 import AddHotelUniqueContent from './AddHotelUniqueContent';
 import EditHotelUniqueData from './EditHotelUniqueData';
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
 
 const API_URL = "http://13.251.49.54:82"
 
@@ -95,6 +99,7 @@ class UniqueContentDataCollection extends Component {
 												isDataPresent: true,
 											 content_result: response.data
 										})
+										NotificationManager.info("Unique content data deleted successfully", "Unique Data deleted", 1500);
 									})
 				      })
 				      .catch((err) => {
@@ -128,7 +133,6 @@ class UniqueContentDataCollection extends Component {
     }
     axios.post(`${API_URL}/cmshotels/content-section-data`, data)
     .then(({ data }) => {
-			      	debugger;
         if(data.message) {
 					axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
 					.then((response) => {
@@ -138,6 +142,7 @@ class UniqueContentDataCollection extends Component {
 								isEditForm: false,
 							 content_result: response.data
 						})
+						NotificationManager.info("Unique content data added successfully", "Unique Data Added", 1500);
 					})
 				}
     })
@@ -204,6 +209,7 @@ class UniqueContentDataCollection extends Component {
 								isEditForm: false,
 							 content_result: response.data
 						})
+						NotificationManager.info("Unique content data updation done successfully", "Updation", 1500);
 					})
 				}
       })
