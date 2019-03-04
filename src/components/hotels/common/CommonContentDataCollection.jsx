@@ -16,6 +16,10 @@ import htmlToDraft from "html-to-draftjs";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import AddCommonForm from '../AddCommonForm';
 import EditCommonForm from '../EditCommonForm';
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
 
 
 const API_URL = 'http://13.251.49.54:82'
@@ -96,6 +100,7 @@ class CommonContentDataCollection extends Component {
 									axios.post(`${QUERY_URL}`, data)
 							      .then(res => {
 							          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false,content_result: res.data })
+							          NotificationManager.info("Common content data deleted successfully", "Common Data deleted", 1500);
 							      })
 							      .catch((err) => {
 							          console.log(err);
@@ -137,6 +142,7 @@ class CommonContentDataCollection extends Component {
 					axios.post(`${QUERY_URL}`, hdata)
 			      .then(res => {
 			          this.setState({ isDataPresent: true, isAddForm: false, content_result: res.data })
+			          NotificationManager.info("Common content data added successfully", "Common Data Added", 1500);
 			      })
 			      .catch((err) => {
 			          console.log(err);
@@ -202,6 +208,7 @@ class CommonContentDataCollection extends Component {
 					axios.post(`${QUERY_URL}`, hdata)
 			      .then(res => {
 			          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+			          NotificationManager.info("Common content data updation done successfully", "Updation", 1500);
 			      })
 			      .catch((err) => {
 			          console.log(err);
