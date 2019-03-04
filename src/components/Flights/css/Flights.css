@@ -193,3 +193,21 @@ th {
   font-weight: bolder;
   font-size: 19px;
 }
+thead:last-of-type{
+  display: none
+}
+i.fa.fa-sort.float-right {
+  display: none;
+}
+.editBtn{
+color: white;
+background-color: #e16f4b;
+padding: 7px 13px 4px 19px;
+font-weight: bolder;
+}
+.deleteBtn{
+  color: white;
+background-color: red;
+padding: 7px 13px 4px 19px;
+font-weight: bolder;
+}
