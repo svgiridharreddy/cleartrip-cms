@@ -140,7 +140,7 @@ class FlightsApprovalPending extends Component {
                         tabObj[col] = data[col]
                     }
                 })
-                tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)}>approve</MDBBtn>
+                tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false }>{data.is_approved ? "Approved" : "Approve" }</MDBBtn>
                 return tabObj
             }
         } else if (thead == "uniq_flight_to" || thead == "uniq_flight_from") {
@@ -191,7 +191,7 @@ class FlightsApprovalPending extends Component {
                 return tabObj
             }
 
-        }else if(thead == "common"){
+        } else if (thead == "common") {
             let columns_data = []
             let columns = ["id", "Domain-Language-Section", "page_type", "page_subtype"]
             if (type == "columns") {
@@ -223,14 +223,14 @@ class FlightsApprovalPending extends Component {
         this.getTableData(e.target.value)
     }
     render() {
-         if(loginHelpers.check_usertype()){
+        if (loginHelpers.check_usertype()) {
             console.log("super")
-         }else{
+        } else {
             NotificationManager.info("Forbidden", "You are not eligible to access this page", 1800);
-             setTimeout(function () {
-              window.location.replace("/")
+            setTimeout(function () {
+                window.location.replace("/")
             }, 2000)
-         }
+        }
         const { data, tabData, is_admin, approval_table } = this.state
         return (
             <div>
