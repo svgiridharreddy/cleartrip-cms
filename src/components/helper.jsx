@@ -8,7 +8,7 @@ import {
 
 const loginHelpers = {
   checkUser: function () {
-    let user_data = sessionStorage.getItem("user_data");
+    let user_data = localStorage.getItem("user_data");
     if (user_data) {
       return true
       // return new Promise(function (resolve) {
@@ -26,22 +26,22 @@ const loginHelpers = {
     }
   },
   logout: function () {
-    debugger
-    sessionStorage.removeItem("user_data");
+    localStorage.removeItem("user_data");
   },
   check_usertype: function () {
-    let user_data = sessionStorage.getItem("user_data");
+    let user_data = localStorage.getItem("user_data");
     if (user_data) {
       let user = JSON.parse(user_data)
-      if (user.user_type == "admin") {
+      if (user.user_type == "superadmin") {
         return true
       }
     } else {
+      return false
       // loginHelpers.logout()
       // NotificationManager.error("Forbidden", "You are not eligible to access this page", 1800);
-       setTimeout(function () {
-        window.location.replace("/")
-      }, 2000)
+      //  setTimeout(function () {
+      //   window.location.replace("/")
+      // }, 2000)
     }
   }
 };

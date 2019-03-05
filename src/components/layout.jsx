@@ -66,8 +66,9 @@ class Layout extends React.Component {
   };
 
   logout() {
+  let _self = this
     loginHelpers.logout();
-    this.setState({
+    _self.setState({
       loginStatus: false
     });
     NotificationManager.info("logged out successfully", "logout", 1500);
@@ -136,7 +137,7 @@ class Layout extends React.Component {
             <div className="cleartripLogo ">
             </div>
             {loginStatus ? (
-              <div className="nav-right" onClick={this.logout}>
+              <div className="nav-right" onClick={this.logout.bind(this)}>
                 Log Out
           </div>
             ) : (

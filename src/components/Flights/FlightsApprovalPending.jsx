@@ -34,12 +34,11 @@ class FlightsApprovalPending extends Component {
         this.createTable = this.createTable.bind(this)
         this.approveRoute = this.approveRoute.bind(this)
     }
-
     getTableData(table_name) {
         let _self = this
         let approval_table = _self.state.approval_table
         return new Promise(function (resolve) {
-            let user_data = sessionStorage.getItem("user_data");
+            let user_data = localStorage.getItem("user_data");
             if (user_data && table_name != "") {
                 let userdata = JSON.parse(user_data)
                 userdata["table_name"] = table_name
@@ -224,7 +223,14 @@ class FlightsApprovalPending extends Component {
         this.getTableData(e.target.value)
     }
     render() {
-         loginHelpers.check_usertype()
+         if(loginHelpers.check_usertype()){
+            console.log("super")
+         }else{
+            NotificationManager.info("Forbidden", "You are not eligible to access this page", 1800);
+             setTimeout(function () {
+              window.location.replace("/")
+            }, 2000)
+         }
         const { data, tabData, is_admin, approval_table } = this.state
         return (
             <div>
