@@ -4,6 +4,7 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Index from './components/hotels/index';
+import HotelsApprovalPending from './components/hotels/HotelsApprovalPending';
 import Layout from "./components/layout";
 // import Flights from "./components/Flights/Flights";
 import Banner from "./components/banner/BannerLanding";
@@ -46,6 +47,7 @@ class App extends Component {
                 <Route exact path="/hotels" component={Index} />
                 {/* <Route exact path="/banners" component={Banner} /> */}
                 <Route exact path="/flights-approve" component={FlightsApprovalPending} />
+                <Route exact path="/hotels-approve" component={HotelsApprovalPending} />
               </Switch>
             ) : (
                 ""
