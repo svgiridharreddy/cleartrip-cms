@@ -238,7 +238,6 @@ class CommonContentDataCollection extends Component {
 
 	handleAutoSearch = (e, source) => {
 		if (e !== "" && e.length > 2) {
-			debugger;
 			axios.get(`${this.state.host}/country_autocomplete?country=${e}`)
 			.then((response) => {
 				this.setState({

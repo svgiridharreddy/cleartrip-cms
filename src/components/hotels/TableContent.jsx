@@ -23,7 +23,7 @@ class TableContent extends Component {
 		      let obj = {}
 		      obj["domain_url"] = item.domain_url
 		      obj["content_type"] = item.content_type
-		      obj["country_name"] = item.counry_name
+		      obj["country_name"] = item.country_name
 		      obj['meta_title'] = item.meta_title
 		      obj["editbtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.props.changeFunction("edit",item)}>Edit</MDBBtn>
 		      obj["deletebtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.props.changeFunction("delete",item)}>Delete</MDBBtn>
@@ -36,7 +36,7 @@ class TableContent extends Component {
 		      let obj = {}
 		      obj["domain_name"] = item.domain_name
 		      obj["content_type"] = item.content_type
-		      obj["country_name"] = item.counry_name
+		      obj["country_name"] = item.country_name
 		      obj['meta_title'] = item.meta_title
 		      obj["editbtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.props.changeFunction("edit",item)}>Edit</MDBBtn>
 		      obj["deletebtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.props.changeFunction("delete",item)}>Delete</MDBBtn>
