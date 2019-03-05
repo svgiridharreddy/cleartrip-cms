@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import { Table, Button, Alert } from 'react-bootstrap';
+import {MDBBtn, MDBDataTable} from 'mdbreact';
+
+const uniqueColoumn = [{label: "Domain Url", field: "domain_url", width: 150}, {label: "Content Type", field: "content_type", width: 150}, {label: "Counry Name", field: "counry_name", width: 150}, {label: "Meta Title", field: "meta_title", width: 150}]
+
+const commonColoumn = [{label: "Domain Name", field: "domain_name", width: 150}, {label: "Content Type", field: "content_type", width: 150}, {label: "Counry Name", field: "counry_name", width: 150}, {label: "Meta Title", field: "meta_title", width: 150}]
+
 
 class TableContent extends Component {
 	constructor(props){
@@ -7,41 +13,46 @@ class TableContent extends Component {
 	}
 
 	render() {
+		const data = {}
 		let dataField;
-		const { tableResult } = this.props
+		let rows = []
+		const { tableResult, contentType } = this.props
+		if (contentType === "Unique Data") {
+				data["columns"] = uniqueColoumn
+				tableResult.map((item, idx) => {
+		      let obj = {}
+		      obj["domain_url"] = item.domain_url
+		      obj["content_type"] = item.content_type
+		      obj["country_name"] = item.counry_name
+		      obj['meta_title'] = item.meta_title
+		      obj["editbtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.props.changeFunction("edit",item)}>Edit</MDBBtn>
+		      obj["deletebtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.props.changeFunction("delete",item)}>Delete</MDBBtn>
+		      rows.push(obj)
+		    })
+		    data["rows"] = rows
+		} else if (contentType === "Common Data") {
+				data["columns"] = commonColoumn
+				tableResult.map((item, idx) => {
+		      let obj = {}
+		      obj["domain_name"] = item.domain_name
+		      obj["content_type"] = item.content_type
+		      obj["country_name"] = item.counry_name
+		      obj['meta_title'] = item.meta_title
+		      obj["editbtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.props.changeFunction("edit",item)}>Edit</MDBBtn>
+		      obj["deletebtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.props.changeFunction("delete",item)}>Delete</MDBBtn>
+		      rows.push(obj)
+		    })
+		    data["rows"] = rows
+		}
 		if (tableResult.length > 0) {
 				dataField = (
-				  <Table striped bordered>
-				  	<thead>
-				  		<tr>
-				  			<th>Content Section</th>
-				  			<th>Country Name</th>
-				  			<th>Meta Title</th>
-				  			<th>Meta Description</th>
-				  			<th colSpan="2"></th>
-				  		</tr>
-				  	</thead>
-				    <tbody>
-				      {
-	        			tableResult.map((item, i) => {
-	        				return(
-	        					<tr key={i}>
-				        			<td>{item.content_type}</td>
-				        			<td>{item.country_name}</td>
-				        			<td>{item.meta_title}</td>
-				        			<td>{item.meta_description}</td>
-				        			<td>
-				        				<Button variant="info" name="edit" size="sm" block onClick={() => this.props.changeFunction("edit",item)}>Edit</Button>
-				        			</td>
-				        			<td>
-				        				<Button variant="danger" name="delete" size="sm" block onClick={() => this.props.changeFunction("delete",item)}>Delete</Button>
-				        			</td>
-				        		</tr>
-	        					)
-	        			})
-	        		}
-				    </tbody>
-				  </Table>
+				  <MDBDataTable btn
+          striped
+          bordered 
+          autoWidth 
+          orderable={false} 
+          data={data}
+        />
 				)
 		} else {
 			dataField = (

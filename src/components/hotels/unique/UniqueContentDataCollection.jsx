@@ -16,14 +16,13 @@ import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.cs
 import TableContent from '../TableContent';
 import AddHotelUniqueContent from './AddHotelUniqueContent';
 import EditHotelUniqueData from './EditHotelUniqueData';
+import { host } from "../../helper";
 import {
   NotificationContainer,
   NotificationManager
 } from "react-notifications";
 
-const API_URL = "http://13.251.49.54:82"
-
-const QUERY_URL = "http://13.251.49.54:82/cmshotels/unique-content-data-collection" 
+const QUERY_URL = host()+"/cmshotels/unique-content-data-collection" 
 
 class UniqueContentDataCollection extends Component {
 	constructor(props) {
@@ -47,7 +46,8 @@ class UniqueContentDataCollection extends Component {
 			itemData: {},
 			isDataPresent: false,
 			isAddForm: false,
-			isEditForm: false
+			isEditForm: false,
+			host: host()
 		}
 		this.getInfo = this.getInfo.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
@@ -90,7 +90,7 @@ class UniqueContentDataCollection extends Component {
 		} else if (name === "delete") {
 				const alrt = window.confirm('Are you sure you wish to delete this item?')
 				if (alrt === true) {
-				    axios.delete(`${API_URL}/cmshotels/delete/${item.id}`)
+				    axios.delete(`${host}/cmshotels/delete/${item.id}`)
 				      .then(res => {
 				          console.log(res.message);
 				          axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
@@ -131,7 +131,7 @@ class UniqueContentDataCollection extends Component {
       bottom_content: footerState,
       faq: faqState
     }
-    axios.post(`${API_URL}/cmshotels/content-section-data`, data)
+    axios.post(`${host}/cmshotels/content-section-data`, data)
     .then(({ data }) => {
         if(data.message) {
 					axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
@@ -196,7 +196,7 @@ class UniqueContentDataCollection extends Component {
     };
     axios
       .post(
-        `${API_URL}/cmshotels/update/${result.id}`,
+        `${this.state.host}/cmshotels/update/${result.id}`,
         data
       )
       .then(({ data }) => {
