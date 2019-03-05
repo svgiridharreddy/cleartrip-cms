@@ -224,7 +224,7 @@ class FlightsApprovalPending extends Component {
         this.getTableData(e.target.value)
     }
     render() {
-         loginHelpers.checkUser()
+         loginHelpers.check_usertype()
         const { data, tabData, is_admin, approval_table } = this.state
         return (
             <div>
@@ -240,7 +240,7 @@ class FlightsApprovalPending extends Component {
                     <option value="unique_flight_ticket_route">Unique Flight Ticket Route</option>
                     <option value="common">Common</option>
                 </select>
-                <div className={is_admin && data.length > 0 ? "" : ""}>
+                <div className={is_admin && data.length > 0 ? "" : "hidden"}>
                     <p>List of data need to approve in flights</p>
                     {tabData["columns"] && tabData["columns"].length > 0 && tabData["rows"] && tabData["rows"].length > 0 ? <MDBDataTable btn
                         striped

@@ -136,7 +136,7 @@ class Layout extends React.Component {
             <div className="cleartripLogo ">
             </div>
             {loginStatus ? (
-              <div className="nav-right" onClick={this.logout.bind(this)}>
+              <div className="nav-right" onClick={this.logout}>
                 Log Out
           </div>
             ) : (
