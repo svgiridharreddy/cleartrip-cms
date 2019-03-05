@@ -234,7 +234,7 @@ class FlightsApprovalPending extends Component {
         const { data, tabData, is_admin, approval_table } = this.state
         return (
             <div>
-                <p>Slect table to approve </p>
+                <p>Select table to approve </p>
                 <select name="approval_table" onChange={this.handleChange.bind(this)} value={approval_table}>
                     <option value="" selected disabled={true}>Table name</option>
                     <option value="uniq_flight_schedule_routes">Uniq Flight Schedule Routes</option>

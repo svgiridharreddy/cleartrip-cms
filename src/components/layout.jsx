@@ -113,9 +113,13 @@ class Layout extends React.Component {
                 <ListItemText primary={"Hotels"} />
               </ListItem>
               {is_admin ? 
-              <ListItem button key={"Flights Approve"} component={Link} to="/flights-approve">
-                <ListItemText primary={"Fligts Approve"} />
-          </ListItem> : "" }
+              <ListItem button key={"Approve Flights"} component={Link} to="/flights-approve">
+                    <ListItemText primary={"Approve Flights Data"} />
+              </ListItem> : ""}
+              {is_admin ? 
+              <ListItem button key={"Approve Hotels"} component={Link} to="/hotels-approve">
+                    <ListItemText primary={"Approve Hotels Data"} />
+              </ListItem> : ""}
               {/* <ListItem button key={"Trains"} component={Link} to="/trains">
                 <ListItemText primary={"Trains"} />
               </ListItem> */}
