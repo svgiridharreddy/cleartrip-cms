@@ -35,7 +35,7 @@ const loginHelpers = {
         return true
       }
     } else {
-      loginHelpers.logout()
+      // loginHelpers.logout()
       NotificationManager.error("Forbidden", "You are not eligible to access this page", 1800);
       return setTimeout(function () {
         window.location.replace("/")

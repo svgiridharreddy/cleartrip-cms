@@ -83,13 +83,13 @@ class FlightsApprovalPending extends Component {
         })
     }
     componentDidMount() {
-        // let _self = this
-        // if (loginHelpers.check_usertype()) {
-        //     this.setState({ is_admin: true })
-        // } else {
-        //     sessionStorage.removeItem("user_data");
-        //     loginHelpers.check_usertype()
-        // }
+        let _self = this
+        if (loginHelpers.check_usertype()) {
+            this.setState({ is_admin: true })
+        } else {
+            sessionStorage.removeItem("user_data");
+            loginHelpers.check_usertype()
+        }
     }
     approveRoute(id, table_name) {
         debugger
@@ -224,21 +224,21 @@ class FlightsApprovalPending extends Component {
         this.getTableData(e.target.value)
     }
     render() {
-        // loginHelpers.checkUser()
+         loginHelpers.checkUser()
         const { data, tabData, is_admin, approval_table } = this.state
         return (
             <div>
                 <p>Slect table to approve </p>
                 <select name="approval_table" onChange={this.handleChange.bind(this)} value={approval_table}>
                     <option value="" selected disabled={true}>Table name</option>
-                    <option value="uniq_flight_schedule_routes">uniq_flight_schedule_routes</option>
-                    <option value="uniq_flight_to">uniq_flight_to</option>
-                    <option value="uniq_flight_from">uniq_flight_from</option>
-                    <option value="uniq_flight_booking_overview">uniq_flight_booking_overview</option>
-                    <option value="uniq_flight_booking_pnrweb">uniq_flight_booking_pnrweb</option>
-                    <option value="uniq_flight_booking_routes">uniq_flight_booking_routes</option>
-                    <option value="unique_flight_ticket_route">unique_flight_ticket_route</option>
-                    <option value="common">common</option>
+                    <option value="uniq_flight_schedule_routes">Uniq Flight Schedule Routes</option>
+                    <option value="uniq_flight_to">Uniq Flight To</option>
+                    <option value="uniq_flight_from">Uniq Flight From</option>
+                    <option value="uniq_flight_booking_overview">Uniq Flight Booking Overview</option>
+                    <option value="uniq_flight_booking_pnrweb">Uniq Flight Booking Pnrweb</option>
+                    <option value="uniq_flight_booking_routes">Uniq Flight Booking Routes</option>
+                    <option value="unique_flight_ticket_route">Unique Flight Ticket Route</option>
+                    <option value="common">Common</option>
                 </select>
                 <div className={is_admin && data.length > 0 ? "" : ""}>
                     <p>List of data need to approve in flights</p>
