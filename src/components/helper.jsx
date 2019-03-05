@@ -11,21 +11,37 @@ const loginHelpers = {
     let user_data = sessionStorage.getItem("user_data");
     if (user_data) {
       return new Promise(function (resolve) {
-        axios.get(host() + "/user/checkSession", { params: JSON.parse(user_data) }).then(function(json) {
+        axios.get(host() + "/user/checkSession", { params: JSON.parse(user_data) }).then(function (json) {
           resolve(json)
           return true;
         }).catch(e => {
           loginHelpers.logout()
           NotificationManager.error(e.message, "Timeout error", 1800);
-        return setTimeout(function(){
-            window.location.reload()
-          },2000)
+          return setTimeout(function () {
+            window.location.replace("/")
+          }, 2000)
         })
       })
     }
   },
   logout: function () {
     sessionStorage.removeItem("user_data");
+  },
+  check_usertype: function () {
+    let user_data = sessionStorage.getItem("user_data");
+    if (user_data) {
+      let user = JSON.parse(user_data)
+      if (user.user_type == "admin") {
+        return true
+      }
+    } else {
+      loginHelpers.logout()
+      NotificationManager.error("Forbidden", "You are not eligible to access this page", 1800);
+      return setTimeout(function () {
+        window.location.replace("/")
+      }, 2000)
+    }
+    return false
   }
 };
 export default loginHelpers;

@@ -57,7 +57,8 @@ const styles = theme => ({
 class Layout extends React.Component {
   state = {
     mobileOpen: false,
-    loginStatus: false
+    loginStatus: false,
+    is_admin: false
   };
 
   handleDrawerToggle = () => {
@@ -75,21 +76,26 @@ class Layout extends React.Component {
     }, 1000);
   }
 
-  componentDidMount(){
-      if (loginHelpers.checkUser()) {
-          this.setState({
-            loginStatus: true
-          });
+  componentDidMount() {
+    if (loginHelpers.checkUser()) {
+      let is_admin = false
+      if(loginHelpers.check_usertype()){
+           is_admin= true
       }
+      this.setState({
+        loginStatus: true,
+        is_admin: is_admin
+      });
+    }
   };
-  changeState(){
+  changeState() {
     this.setState({
       loginStatus: true
     });
   }
 
   render() {
-    let { loginStatus } = this.state;
+    let { loginStatus,is_admin } = this.state;
     const { classes, children } = this.props;
     const { mobileOpen } = this.state;
 
@@ -105,6 +111,10 @@ class Layout extends React.Component {
               <ListItem button key={"Hotels"} component={Link} to="/hotels">
                 <ListItemText primary={"Hotels"} />
               </ListItem>
+              {is_admin ? 
+              <ListItem button key={"Flights Approve"} component={Link} to="/flights-approve">
+                <ListItemText primary={"Fligts Approve"} />
+          </ListItem> : "" }
               {/* <ListItem button key={"Trains"} component={Link} to="/trains">
                 <ListItemText primary={"Trains"} />
               </ListItem> */}
@@ -131,7 +141,7 @@ class Layout extends React.Component {
           </div>
             ) : (
                 <div className="nav-right">
-                  <Login  changeState={this.changeState.bind(this)}/>
+                  <Login changeState={this.changeState.bind(this)} />
                 </div>
               )}
           </header>
