@@ -30,7 +30,7 @@ class HotelsApprovalPending extends Component {
     approveFunction(item) {
       axios.get(`${this.state.host}/approve/${item.id}`)
       .then((response) => {
-        if(response.message) {
+        if(response.data.message) {
           NotificationManager.info("Data Approved", "Approve", 1500);
           axios.get(`${this.state.host}/collect/${this.state.contentType}`)
           .then((resp) => {
@@ -71,7 +71,6 @@ class HotelsApprovalPending extends Component {
             obj["content_type"] = item.content_type
             obj["country_name"] = item.country_name
             obj['meta_title'] = item.meta_title
-            obj["showBtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.showFunction(item)}>Show</MDBBtn>
             obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.approveFunction(item)}>Approve</MDBBtn>
             rows.push(obj)
           })
@@ -84,7 +83,6 @@ class HotelsApprovalPending extends Component {
             obj["content_type"] = item.content_type
             obj["country_name"] = item.country_name
             obj['meta_title'] = item.meta_title
-            obj["showBtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.showFunction(item)}>Show</MDBBtn>
             obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.approveFunction(item)}>Approve</MDBBtn>
             rows.push(obj)
           })
@@ -112,6 +110,7 @@ class HotelsApprovalPending extends Component {
                 {
                   dataField
                 }
+                <NotificationContainer />
               </div>
           </div>
       )
