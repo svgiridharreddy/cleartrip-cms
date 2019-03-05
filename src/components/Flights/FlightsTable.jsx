@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Table } from "react-bootstrap";
 import "./css/Flights.css";
-import {MDBBtn, MDBDataTable} from 'mdbreact';
+import { MDBBtn, MDBDataTable } from "mdbreact";
 class FlightsTable extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +27,7 @@ class FlightsTable extends Component {
   };
 
   render() {
-    const data ={}
+    const data = {};
     const {
       response,
       pageType,
@@ -51,65 +51,119 @@ class FlightsTable extends Component {
     var tempValueArray =
       subType && subType != "index" ? Object.values(tableFields[subType]) : [];
     tableValuearray = tableValuearray.concat(tempValueArray);
-    let columns = []
-    let rows = []
+    let columns = [];
+    let rows = [];
     if (subType === "index") {
-      columns = [{ label: "Domain-Language-Section", field: "Domain-Language-Section", width: 150 }, { label: "Page Type", field: "Page Type", width: 150 }, { label: "Sub Type", field: "Sub Type", width: 150 }]
+      columns = [
+        {
+          label: "Domain-Language-Section",
+          field: "Domain-Language-Section",
+          width: 150
+        },
+        { label: "Page Type", field: "Page Type", width: 150 },
+        { label: "Sub Type", field: "Sub Type", width: 150 }
+      ];
     } else {
       tableTitlearray.map(heading => {
-        let pword = heading == "Section" ? ("Domain-Language-Section") : heading != "Domain" && heading != "Language" && heading != "Delete" && heading != "Edit" ? (categoryType === "common" && heading != "source" && heading != "destination" ? (heading) : categoryType == "uniq" ? (heading) : ("")) : ("")
+        let pword =
+          heading == "Section"
+            ? "Domain-Language-Section"
+            : heading != "Domain" &&
+              heading != "Language" &&
+              heading != "Delete" &&
+              heading != "Edit"
+            ? categoryType === "common" &&
+              heading != "source" &&
+              heading != "destination"
+              ? heading
+              : categoryType == "uniq"
+              ? heading
+              : ""
+            : "";
         if (pword != "") {
           let obj = {
             label: pword,
             field: pword,
             width: 150
-          }
-          columns.push(obj)
+          };
+          columns.push(obj);
         }
-      })
+      });
     }
-    let obj_data = []
+    let obj_data = [];
     if (subType == "index" || categoryType == "common") {
-      obj_data = response["common"]
+      obj_data = response["common"];
     } else if (categoryType == "uniq") {
-      obj_data = response[pageType][subType]
+      obj_data = response[pageType][subType];
     }
     obj_data.map((resp, idx) => {
-      let obj = {}
+      let obj = {};
       columns.map(col => {
-        let tabObj = {}
-        tabObj["field"] = typeof (col) === "object" ? col["field"] : col
+        let tabObj = {};
+        tabObj["field"] = typeof col === "object" ? col["field"] : col;
         if (tabObj["field"] === "Domain-Language-Section") {
-          obj[tabObj["field"]] = resp["domain"] + "-" + resp["language"] + "-" + resp["section"]
+          obj[tabObj["field"]] =
+            resp["domain"] + "-" + resp["language"] + "-" + resp["section"];
         } else {
-          if (tabObj["field"] === "Sub Page Type" || tabObj["field"] === "Sub Type") {
-            obj["page_subtype"] = resp["page_subtype"]
+          if (
+            tabObj["field"] === "Sub Page Type" ||
+            tabObj["field"] === "Sub Type"
+          ) {
+            obj["page_subtype"] = resp["page_subtype"];
           } else if (tabObj["field"] == "From City") {
-            obj["from_city"] = resp["city_name"]
+            obj["from_city"] = resp["city_name"];
           } else if (tabObj["field"] == "To City") {
-            obj["to_city"] = resp["city_name"]
-          }else if(tabObj["field"] == "AirlineName"){
-            obj["AirlineName"] = resp["airline_name"]
+            obj["to_city"] = resp["city_name"];
+          } else if (tabObj["field"] == "AirlineName") {
+            obj["AirlineName"] = resp["airline_name"];
           } else {
-            obj[tabObj["field"].toLowerCase().replace(" ", "_")] = resp[tabObj["field"].toLowerCase().replace(" ", "_")]
+            obj[tabObj["field"].toLowerCase().replace(" ", "_")] =
+              resp[tabObj["field"].toLowerCase().replace(" ", "_")];
           }
         }
-      })
-      obj["editbtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.props.handleEdit(idx)}>Edit</MDBBtn>
-      obj["deletebtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => { this.props.handleDelete(idx, resp.id) }}>Delete</MDBBtn>
-      rows.push(obj)
-    })
-    data["columns"] = columns
-    data["rows"] = rows
+      });
+      obj["editbtn"] = (
+        <MDBBtn
+          color="default"
+          className="editBtn"
+          rounded
+          size="sm"
+          onClick={() => this.props.handleEdit(idx)}
+        >
+          Edit
+        </MDBBtn>
+      );
+      obj["deletebtn"] = (
+        <MDBBtn
+          color="default"
+          rounded
+          size="sm"
+          className="deleteBtn"
+          onClick={() => {
+            this.props.handleDelete(idx, resp.id);
+          }}
+        >
+          Delete
+        </MDBBtn>
+      );
+      rows.push(obj);
+    });
+    data["columns"] = columns;
+    data["rows"] = rows;
     return (
-      <div>
-       {renderTables ? <MDBDataTable btn
-          striped
-          bordered 
-          autoWidth 
-          orderable={false} 
-          data={data}
-        /> : ""}
+      <div className="index-tables">
+        {renderTables ? (
+          <MDBDataTable
+            btn
+            striped
+            bordered
+            autoWidth
+            orderable={false}
+            data={data}
+          />
+        ) : (
+          ""
+        )}
         {/* {renderTables && subType != "index" ? (
           <Table
             key={subType != "" ? subType : ""}

@@ -750,205 +750,216 @@ class FlightsHomePage extends PureComponent {
     }
 
     return (
-      <div className="top-wrapper">
-        <div className="filter-fileds">
-          <ul className="list-inline">
-            <li>
-              <label>Country</label>
-              <select
-                onChange={e => this.handleChange(e, "domain")}
-                name="domain"
-                disabled={this.state.readOnlyValue}
-                value={this.state.domain}
-              >
-                <option value="" disabled={true} selected>
-                  Domain
-                </option>
-                {Object.keys(domains).map(option => (
-                  <option key={option} value={option}>
-                    {domains[option]}
-                  </option>
-                ))}
-              </select>
-            </li>
-            <li>
-              <label>Language</label>
-              <select
-                onChange={e => this.handleChange(e, "language")}
-                name="language"
-                disabled={this.state.readOnlyValue}
-                value={this.state.language}
-              >
-                <option value="" disabled={true} selected>
-                  Language
-                </option>
-                {this.returnOptions(languages)}}
-              </select>
-            </li>
-            <li>
-              <label>Page Type</label>
-              <select
-                onChange={e => this.handleChange(e, "pageType")}
-                name="pageType"
-                value={this.state.pageType}
-                disabled={this.state.readOnlyValue}
-              >
-                <option value="" disabled={true} selected>
-                  Page type
-                </option>
-                {this.returnOptions(pageTypes)}
-              </select>
-            </li>
-            {domain != "" && language != "" && pageType != "" ? (
-              <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
-                <label>Page Subtype</label>
-                <select
-                  onChange={e => this.handleChange(e, "subType")}
-                  name="subType"
-                  value={this.state.subType}
-                  disabled={this.state.readOnlyValue}
-                >
-                  <option value="" disabled={true} selected>
-                    page sub_type
-                  </option>
-                  {this.returnOptions(subTypes)}
-                </select>
-              </li>
-            ) : (
-              ""
-            )}
-
-            {domain != "" &&
-            language != "" &&
-            pageType != "" &&
-            subType != "" ? (
+      <div>
+        <div className="top-wrapper">
+          <div className="filter-fileds">
+            <ul className="list-inline">
               <li>
-                <label>Section</label>
+                <label>Country</label>
                 <select
-                  name="section"
-                  value={this.state.section}
-                  onChange={e => this.handleChange(e, "section")}
+                  onChange={e => this.handleChange(e, "domain")}
+                  name="domain"
                   disabled={this.state.readOnlyValue}
+                  value={this.state.domain}
                 >
-                  {" "}
                   <option value="" disabled={true} selected>
-                    section
+                    Domain
                   </option>
-                  {this.returnOptions(sections)}
+                  {Object.keys(domains).map(option => (
+                    <option key={option} value={option}>
+                      {domains[option]}
+                    </option>
+                  ))}
                 </select>
               </li>
-            ) : (
-              ""
-            )}
+              <li>
+                <label>Language</label>
+                <select
+                  onChange={e => this.handleChange(e, "language")}
+                  name="language"
+                  disabled={this.state.readOnlyValue}
+                  value={this.state.language}
+                >
+                  <option value="" disabled={true} selected>
+                    Language
+                  </option>
+                  {this.returnOptions(languages)}}
+                </select>
+              </li>
+              <li>
+                <label>Page Type</label>
+                <select
+                  onChange={e => this.handleChange(e, "pageType")}
+                  name="pageType"
+                  value={this.state.pageType}
+                  disabled={this.state.readOnlyValue}
+                >
+                  <option value="" disabled={true} selected>
+                    Page type
+                  </option>
+                  {this.returnOptions(pageTypes)}
+                </select>
+              </li>
+              {domain != "" && language != "" && pageType != "" ? (
+                <li className={this.state.subType.length >= 0 ? "" : "hidden"}>
+                  <label>Page Subtype</label>
+                  <select
+                    onChange={e => this.handleChange(e, "subType")}
+                    name="subType"
+                    value={this.state.subType}
+                    disabled={this.state.readOnlyValue}
+                  >
+                    <option value="" disabled={true} selected>
+                      page sub_type
+                    </option>
+                    {this.returnOptions(subTypes)}
+                  </select>
+                </li>
+              ) : (
+                ""
+              )}
 
-            {category}
+              {domain != "" &&
+              language != "" &&
+              pageType != "" &&
+              subType != "" ? (
+                <li>
+                  <label>Section</label>
+                  <select
+                    name="section"
+                    value={this.state.section}
+                    onChange={e => this.handleChange(e, "section")}
+                    disabled={this.state.readOnlyValue}
+                  >
+                    {" "}
+                    <option value="" disabled={true} selected>
+                      section
+                    </option>
+                    {this.returnOptions(sections)}
+                  </select>
+                </li>
+              ) : (
+                ""
+              )}
 
-            {checkfields}
+              {category}
 
-            {categoryType === "uniq" &&
-            subType === "routes" &&
-            (pageType === "flight-booking" ||
-              pageType === "flight-schedule" ||
-              pageType === "flight-tickets") ? (
-              <div>
-                <ul className={editClicked ? "hidden" : ""}>
-                  <li>
-                    <label>Dep City Name</label>
-                    <Select1
-                      // isDisabled = {readOnlyValue}
-                      value={depCityNameSelected}
-                      onChange={p => this.handleSelectedInput(p, "depCityName")}
-                      options={options_dep}
-                      name="depCityName"
-                      required
-                      placeholder="Search Departure City"
-                      // onInputChange={this.handleAirlineSearch}
-                      onInputChange={e =>
-                        this.handleAutoSearch(e, "depCityName")
-                      }
-                    />
-                  </li>
-                  <li>
-                    <label>Arr City Name</label>
-                    <Select1
-                      // isDisabled = {readOnlyValue}
-                      value={arrCityNameSelected}
-                      onChange={p => this.handleSelectedInput(p, "arrCityName")}
-                      options={options_arr}
-                      name="arrCityName"
-                      placeholder="Search Arrival City"
-                      required
-                      // onInputChange={this.handleAirlineSearch}
-                      onInputChange={e =>
-                        this.handleAutoSearch(e, "arrCityName")
-                      }
-                    />
-                  </li>
-                </ul>
-                <ul className={editClicked ? "" : "hidden"}>
-                  <li>
-                    <label>Dep City Name</label>
-                    <input type="text" value={this.state.source} disabled />
-                  </li>
-                  <li>
-                    <label>Arr City Name</label>
-                    <input
-                      type="text"
-                      value={this.state.destination}
-                      disabled
-                    />
-                  </li>
-                </ul>
-              </div>
-            ) : null}
-          </ul>
-        </div>
+              {checkfields}
 
-        {this.state.renderTables ? (
-          <FlightsTable
-            renderTables={renderTables}
-            domain={domain}
-            language={language}
-            response={result}
-            pageType={pageType}
-            subType={subType}
-            categoryType={categoryType}
-            handleDelete={this.handleDelete.bind(this)}
-            tableFields={tableFields}
-            tableTitle={tableTitle}
-            handleEdit={this.handleEdit.bind(this)}
-          />
-        ) : (
-          <div className={this.state.showAddButton ? "hidden" : ""}>
-            {this.state.message}
-            {this.state.showComponent ? null : (
-              <button
-                type="button"
-                data-method="create"
-                onClick={this.handleAdd}
-              >
-                Add New
-              </button>
-            )}
-
-            {this.state.showComponent ? (
-              <MetaFields
-                handleMetaChanges={(e, fieldName) =>
-                  this.handleMetaChanges(e, fieldName)
-                }
-                handleFormSubmit={this.handleFormSubmit.bind(this)}
-                pageType={this.state.pageType}
-                title={this.state.title}
-                description={this.state.description}
-                content={this.state.content}
-                keywords={this.state.keywords}
-                h1Tag={this.state.h1Tag}
-                handleRTEchange={content => this.handleRTEchange(content)}
-                handleChange={(e, fieldName) => this.handleChange(e, fieldName)}
-              />
-            ) : null}
+              {categoryType === "uniq" &&
+              subType === "routes" &&
+              (pageType === "flight-booking" ||
+                pageType === "flight-schedule" ||
+                pageType === "flight-tickets") ? (
+                <div>
+                  <ul className={editClicked ? "hidden" : ""}>
+                    <li>
+                      <label>Dep City Name</label>
+                      <Select1
+                        // isDisabled = {readOnlyValue}
+                        value={depCityNameSelected}
+                        onChange={p =>
+                          this.handleSelectedInput(p, "depCityName")
+                        }
+                        options={options_dep}
+                        name="depCityName"
+                        required
+                        placeholder="Search Departure City"
+                        // onInputChange={this.handleAirlineSearch}
+                        onInputChange={e =>
+                          this.handleAutoSearch(e, "depCityName")
+                        }
+                      />
+                    </li>
+                    <li>
+                      <label>Arr City Name</label>
+                      <Select1
+                        // isDisabled = {readOnlyValue}
+                        value={arrCityNameSelected}
+                        onChange={p =>
+                          this.handleSelectedInput(p, "arrCityName")
+                        }
+                        options={options_arr}
+                        name="arrCityName"
+                        placeholder="Search Arrival City"
+                        required
+                        // onInputChange={this.handleAirlineSearch}
+                        onInputChange={e =>
+                          this.handleAutoSearch(e, "arrCityName")
+                        }
+                      />
+                    </li>
+                  </ul>
+                  <ul className={editClicked ? "" : "hidden"}>
+                    <li>
+                      <label>Dep City Name</label>
+                      <input type="text" value={this.state.source} disabled />
+                    </li>
+                    <li>
+                      <label>Arr City Name</label>
+                      <input
+                        type="text"
+                        value={this.state.destination}
+                        disabled
+                      />
+                    </li>
+                  </ul>
+                </div>
+              ) : null}
+            </ul>
+            <div className="clearfix" />
           </div>
-        )}
+        </div>
+        <div className="data-edit-section">
+          {this.state.renderTables ? (
+            <FlightsTable
+              renderTables={renderTables}
+              domain={domain}
+              language={language}
+              response={result}
+              pageType={pageType}
+              subType={subType}
+              categoryType={categoryType}
+              handleDelete={this.handleDelete.bind(this)}
+              tableFields={tableFields}
+              tableTitle={tableTitle}
+              handleEdit={this.handleEdit.bind(this)}
+            />
+          ) : (
+            <div className={this.state.showAddButton ? "hidden" : ""}>
+              {this.state.message}
+              {this.state.showComponent ? null : (
+                <button
+                  className="add-btn"
+                  type="button"
+                  data-method="create"
+                  onClick={this.handleAdd}
+                >
+                  Add New
+                </button>
+              )}
+
+              {this.state.showComponent ? (
+                <MetaFields
+                  handleMetaChanges={(e, fieldName) =>
+                    this.handleMetaChanges(e, fieldName)
+                  }
+                  handleFormSubmit={this.handleFormSubmit.bind(this)}
+                  pageType={this.state.pageType}
+                  title={this.state.title}
+                  description={this.state.description}
+                  content={this.state.content}
+                  keywords={this.state.keywords}
+                  h1Tag={this.state.h1Tag}
+                  handleRTEchange={content => this.handleRTEchange(content)}
+                  handleChange={(e, fieldName) =>
+                    this.handleChange(e, fieldName)
+                  }
+                />
+              ) : null}
+            </div>
+          )}
+        </div>
         <NotificationContainer />
       </div>
     );

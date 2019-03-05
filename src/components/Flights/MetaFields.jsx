@@ -107,7 +107,7 @@ class MetaFields extends Component {
     const { title, description, keywords, content, h1Tag } = this.props;
 
     return (
-      <div>
+      <ul>
         <li>
           <label>Title</label>
           <input
@@ -165,11 +165,15 @@ class MetaFields extends Component {
           toolbarConfig={toolbarConfig}
         />
         <li>
-          <button type="submit" onClick={this.props.handleFormSubmit}>
+          <button
+            className="save-btn"
+            type="submit"
+            onClick={this.props.handleFormSubmit}
+          >
             Save{" "}
           </button>
         </li>
-      </div>
+      </ul>
     );
   }
 }

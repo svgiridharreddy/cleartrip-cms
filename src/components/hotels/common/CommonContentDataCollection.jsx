@@ -16,16 +16,13 @@ import htmlToDraft from "html-to-draftjs";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import AddCommonForm from '../AddCommonForm';
 import EditCommonForm from '../EditCommonForm';
+import { host } from "../../helper";
 import {
   NotificationContainer,
   NotificationManager
 } from "react-notifications";
 
-
-const API_URL = 'http://13.251.49.54:82'
-
-const QUERY_URL = "http://13.251.49.54:82/cmshotels/common-content-data-collection"
-const AUTO_COMPLETE = "http://13.251.49.54:82/country_autocomplete" 
+const QUERY_URL = host()+"/cmshotels/common-content-data-collection"
 
 const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"] 
 const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "Weekend Getaways", "PropertyInLocality","Region"]
@@ -54,7 +51,8 @@ class CommonContentDataCollection extends Component {
       content_result: [],
       isDataPresent: false,
       isAddForm: false,
-      isEditForm: false
+      isEditForm: false,
+      host: host()
     }
     this.handleChange = this.handleChange.bind(this);
     this.returnOptions = this.returnOptions.bind(this);
@@ -93,7 +91,7 @@ class CommonContentDataCollection extends Component {
 		} else if (name === "delete") {
 				const alrt = window.confirm('Are you sure you wish to delete this item?')
 				if (alrt === true) {
-				    axios.delete(`${API_URL}/cmshotels/delete/${item.id}`)
+				    axios.delete(`${this.state.host}/cmshotels/delete/${item.id}`)
 				      .then(res => {
 				          console.log(res.message);
 				          const data = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
@@ -135,7 +133,7 @@ class CommonContentDataCollection extends Component {
       bottom_content: footerState,
       faq: faqState
     }
-    axios.post(`${API_URL}/cmshotels/common-content-section-data`, data)
+    axios.post(`${this.state.host}/cmshotels/common-content-section-data`, data)
     .then(({ data }) => {
         if(data.message) {
 					const hdata = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
@@ -199,7 +197,7 @@ class CommonContentDataCollection extends Component {
     };
     axios
       .post(
-        `${API_URL}/cmshotels/commondata/update/${result.id}`,
+        `${this.state.host}/cmshotels/commondata/update/${result.id}`,
         data
       )
       .then(({ data }) => {
@@ -240,7 +238,7 @@ class CommonContentDataCollection extends Component {
 
 	handleAutoSearch = (e, source) => {
 		if (e !== "" && e.length > 2) {
-			axios.get(`${AUTO_COMPLETE}?country=${e}`)
+			axios.get(`${this.state.host}/country_autocomplete?country=${e}`)
 			.then((response) => {
 				this.setState({
 					 options: response.data
