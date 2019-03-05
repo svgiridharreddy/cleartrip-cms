@@ -66,8 +66,9 @@ class Layout extends React.Component {
   };
 
   logout() {
+  let _self = this
     loginHelpers.logout();
-    this.setState({
+    _self.setState({
       loginStatus: false
     });
     NotificationManager.info("logged out successfully", "logout", 1500);

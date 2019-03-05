@@ -71,7 +71,7 @@ class Login extends Component {
         .then(resp => {
           let data = resp.data["authenticated"];
           this.props.changeState()
-          sessionStorage.setItem("user_data", JSON.stringify(data));
+          localStorage.setItem("user_data", JSON.stringify(data));
           _self.setState({
             showErrormsg: false,
             show: false,

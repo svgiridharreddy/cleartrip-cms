@@ -151,7 +151,7 @@ class FlightsHomePage extends PureComponent {
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
-        NotificationManager.success("updated sucessfully!", "Success", 1500);
+        NotificationManager.success("Approval required", "Admin Need to approve ", 1500);
         this.setState({
           editClicked: false,
           depCityName: "",
