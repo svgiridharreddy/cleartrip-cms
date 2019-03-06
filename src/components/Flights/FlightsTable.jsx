@@ -72,14 +72,14 @@ class FlightsTable extends Component {
               heading != "Language" &&
               heading != "Delete" &&
               heading != "Edit"
-            ? categoryType === "common" &&
-              heading != "source" &&
-              heading != "destination"
-              ? heading
-              : categoryType == "uniq"
-              ? heading
-              : ""
-            : "";
+              ? categoryType === "common" &&
+                heading != "source" &&
+                heading != "destination"
+                ? heading
+                : categoryType == "uniq"
+                  ? heading
+                  : ""
+              : "";
         if (pword != "") {
           let obj = {
             label: pword,
@@ -122,7 +122,7 @@ class FlightsTable extends Component {
           }
         }
       });
-      obj["editbtn"] = (
+      obj["editbtn"] =
         <MDBBtn
           color="default"
           className="editBtn"
@@ -132,20 +132,22 @@ class FlightsTable extends Component {
         >
           Edit
         </MDBBtn>
-      );
-      obj["deletebtn"] = (
-        <MDBBtn
-          color="default"
-          rounded
-          size="sm"
-          className="deleteBtn"
-          onClick={() => {
-            this.props.handleDelete(idx, resp.id);
-          }}
-        >
-          Delete
+      let user_type = JSON.parse(localStorage.getItem("user_data"))
+      debugger
+      if (user_type && user_type.user_type == "superadmin") {
+        obj["deletebtn"] =
+          <MDBBtn
+            color="default"
+            rounded
+            size="sm"
+            className="deleteBtn"
+            onClick={() => {
+              this.props.handleDelete(idx, resp.id);
+            }}
+          >
+            Delete
         </MDBBtn>
-      );
+      }
       rows.push(obj);
     });
     data["columns"] = columns;
@@ -158,12 +160,11 @@ class FlightsTable extends Component {
             striped
             bordered
             autoWidth
-            orderable={false}
             data={data}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     );
   }
