@@ -71,7 +71,7 @@ class UniqueContentDataCollection extends Component {
 	    this.setState({
 	      query: this.search.value
 	    }, () => {
-	      if (this.state.query) {
+	      if (this.state.query.length > 10) {
 	          this.getInfo()
 	      } 
 	    })
