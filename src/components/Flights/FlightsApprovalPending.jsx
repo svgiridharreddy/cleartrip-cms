@@ -6,7 +6,7 @@ import Promise from "promise"
 import fetch from "fetch";
 import { host } from "../helper";
 import loginHelpers from "../helper";
-import { Button, Modal, Form, ButtonToolbar } from "react-bootstrap";
+import {Modal } from "react-bootstrap";
 import {
     NotificationContainer,
     NotificationManager

@@ -5,6 +5,7 @@ import fetch from 'fetch'
 import Promise from "promise"
 import { host } from "../helper";
 import loginHelpers from "../helper";
+import {Modal } from "react-bootstrap";
 import {
     NotificationContainer,
     NotificationManager
@@ -21,12 +22,30 @@ class HotelsApprovalPending extends Component {
         this.state = {
             host: host(),
             approvalData: [],
-            contentType: ''
+            contentType: '',
+            show:false,
+            hotelData:''
         }
         this.handleChange = this.handleChange.bind(this)
         this.approveFunction = this.approveFunction.bind(this)
     }
 
+    handleClose() {
+      this.setState({ show: false });
+  }
+  handleShow(data) {
+      let showArr = [ "country_name","domain_name","domain_url","content_type", "page_type", "meta_title",  "meta_description","canonical_tag", "meta_keyword", "header_tag", "h1_tag", "h2_tag", "h3_tag", "top_content", "bottom_content", "faq" ]
+      let hotelData = showArr.map((ele, i) => {
+          if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
+              return (
+                  <li key={i}>
+                      <b>{ele}:</b>{data[ele]}
+                  </li>
+              );
+          }
+      });
+      this.setState({ show: true, hotelData: hotelData });
+  }
     approveFunction(item) {
       axios.get(`${this.state.host}/approve/${item.id}`)
       .then((response) => {
@@ -62,7 +81,7 @@ class HotelsApprovalPending extends Component {
       const data = {}
       let dataField;
       let rows = []
-      const { approvalData, contentType } = this.state
+      const { approvalData, contentType,hotelData } = this.state
       if (contentType === "unique-data") {
           data["columns"] = uniqueColoumn
           approvalData.map((item, idx) => {
@@ -74,6 +93,7 @@ class HotelsApprovalPending extends Component {
             obj["country_name"] = item.country_name
             obj['meta_title'] = item.meta_title
             obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.approveFunction(item)} disabled={item.is_approved}>{textName}</MDBBtn>
+            obj["show"] =<MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(item)} >show</MDBBtn>
             rows.push(obj)
           })
           data["rows"] = rows
@@ -86,6 +106,7 @@ class HotelsApprovalPending extends Component {
             obj["country_name"] = item.country_name
             obj['meta_title'] = item.meta_title
             obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.approveFunction(item)}>Approve</MDBBtn>
+            obj["show"] = <MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(item)} >show</MDBBtn>
             rows.push(obj)
           })
           data["rows"] = rows
@@ -103,6 +124,22 @@ class HotelsApprovalPending extends Component {
       }
       return (
           <div>
+              <Modal
+                    size="lg"
+                    onHide={this.handleClose.bind(this)}
+                    dialogClassName="modal-90w"
+                    aria-labelledby="example-modal-sizes-title-lg"
+                    show={this.state.show} onHide={this.handleClose.bind(this)} centered
+                >
+                    <Modal.Header closeButton>
+
+                    </Modal.Header>
+                    <Modal.Body>
+                        <ul className="showModel">
+                            {hotelData}
+                        </ul>
+                    </Modal.Body>
+                </Modal>
               <select name="content_type" onChange={this.handleChange}>
                   <option value="" selected disabled={true}>Select Content</option>
                   <option value="unique-data">Unique Content Data</option>
