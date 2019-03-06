@@ -121,100 +121,44 @@ class FlightsApprovalPending extends Component {
     createTable(type, thead, data) {
         let _self = this
         let obj_data = _self.state
+        let columns_data = []
+        let columns =[]
         if (thead === "uniq_flight_schedule_routes" || thead == "unique_flight_ticket_route") {
-            let columns_data = []
-            let columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "source", "destination"]
-            if (type == "columns") {
-                columns.map(col => {
-                    let obj = { label: col, field: col, width: 150 }
-                    columns_data.push(obj)
-                })
-                obj_data[thead][type] = columns_data
-                return columns_data
-            } else {
-                let tabObj = {}
-                columns.map(col => {
-                    if (col === "Domain-Language-Section") {
-                        tabObj["Domain-Language-Section"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
-                    } else {
-                        tabObj[col] = data[col]
-                    }
-                })
-                tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false }>{data.is_approved ? "Approved" : "Approve" }</MDBBtn>
-                return tabObj
-            }
-        } else if (thead == "uniq_flight_to" || thead == "uniq_flight_from") {
-            let columns_data = []
-            let columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "city_name"]
-            if (type == "columns") {
-                columns.map(col => {
-                    let obj = { label: col, field: col, width: 150 }
-                    columns_data.push(obj)
-                })
-                obj_data[thead][type] = columns_data
-                return columns_data
-            } else {
-                let tabObj = {}
-                columns.map(col => {
-                    if (col === "Domain-Language-Section") {
-                        tabObj["Domain-Language-Section"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
-                    } else {
-                        tabObj[col] = data[col]
-                    }
-                })
-                tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)}>approve</MDBBtn>
-                return tabObj
-            }
-        } else if (thead == "uniq_flight_booking_overview" || thead == "uniq_flight_booking_pnrweb" || thead == "uniq_flight_booking_routes") {
-            let columns_data = []
-            let columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "airline_name"]
+             columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "source", "destination"]
+        }
+        else if (thead == "uniq_flight_to" || thead == "uniq_flight_from") {
+             columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "city_name"]
+        }
+        else if (thead == "uniq_flight_booking_overview" || thead == "uniq_flight_booking_pnrweb" || thead == "uniq_flight_booking_routes") {
+             columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "airline_name"]
             if (thead == "uniq_flight_booking_routes") {
                 columns.push("source", "destination")
             }
-            if (type == "columns") {
-                columns.map(col => {
-                    let obj = { label: col, field: col, width: 150 }
-                    columns_data.push(obj)
-                })
-                obj_data[thead][type] = columns_data
-                return columns_data
-            } else {
-                let tabObj = {}
-                columns.map(col => {
-                    if (col === "Domain-Language-Section") {
-                        tabObj["Domain-Language-Section"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
-                    } else {
-                        tabObj[col] = data[col]
-                    }
-                })
-                tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)}>approve</MDBBtn>
-                return tabObj
-            }
-
-        } else if (thead == "common") {
-            let columns_data = []
-            let columns = ["id", "Domain-Language-Section", "page_type", "page_subtype"]
-            if (type == "columns") {
-                columns.map(col => {
-                    let obj = { label: col, field: col, width: 150 }
-                    columns_data.push(obj)
-                })
-                obj_data[thead][type] = columns_data
-                return columns_data
-            } else {
-                let tabObj = {}
-                columns.map(col => {
-                    if (col === "Domain-Language-Section") {
-                        tabObj["Domain-Language-Section"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
-                    } else {
-                        tabObj[col] = data[col]
-                    }
-                })
-                tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)}>approve</MDBBtn>
-                return tabObj
-            }
+        }
+        else if (thead == "common") {
+             columns = ["id", "Domain-Language-Section", "page_type", "page_subtype"]
+        }
+        if (type == "columns") {
+            columns.map(col => {
+                let obj = { label: col, field: col, width: 150 }
+                columns_data.push(obj)
+            })
+            obj_data[thead][type] = columns_data
+            return columns_data
+        } else {
+            let tabObj = {}
+            columns.map(col => {
+                if (col === "Domain-Language-Section") {
+                    tabObj["Domain-Language-Section"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
+                } else {
+                    tabObj[col] = data[col]
+                }
+            })
+            tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false }>{data.is_approved ? "Approved" : "Approve" }</MDBBtn>
+            return tabObj
         }
     }
+
     handleChange(e) {
         let _self = this
         _self.setState({

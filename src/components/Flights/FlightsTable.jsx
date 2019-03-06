@@ -158,7 +158,6 @@ class FlightsTable extends Component {
             striped
             bordered
             autoWidth
-            orderable={false}
             data={data}
           />
         ) : (

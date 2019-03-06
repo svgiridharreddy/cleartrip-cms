@@ -233,13 +233,13 @@ thead:last-of-type {
 i.fa.fa-sort.float-right {
   display: none;
 }
-.editBtn {
+.editBtn,.editBtn:hover,.editBtn:active {
   color: white;
   background-color: #e8702e;
   padding: 7px 13px 4px 19px;
   font-weight: bolder;
 }
-.deleteBtn {
+.deleteBtn,.deleteBtn:hover,.deleteBtn:active {
   color: white;
   background-color: red;
   padding: 7px 13px 4px 19px;
