@@ -60,19 +60,19 @@ class FlightsApprovalPending extends Component {
         let columns_data = []
         let columns = []
         if (thead === "uniq_flight_schedule_routes" || thead == "unique_flight_ticket_route") {
-            columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "source", "destination"]
+            columns = ["Domain-Language-Section", "page_type", "page_subtype", "url", "source", "destination"]
         }
         else if (thead == "uniq_flight_to" || thead == "uniq_flight_from") {
-            columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "city_name"]
+            columns = ["Domain-Language-Section", "page_type", "page_subtype", "url", "city_name"]
         }
         else if (thead == "uniq_flight_booking_overview" || thead == "uniq_flight_booking_pnrweb" || thead == "uniq_flight_booking_routes") {
-            columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "airline_name"]
+            columns = ["Domain-Language-Section", "page_type", "page_subtype", "url", "airline_name"]
             if (thead == "uniq_flight_booking_routes") {
                 columns.push("source", "destination")
             }
         }
         else if (thead == "common") {
-            columns = ["id", "Domain-Language-Section", "page_type", "page_subtype"]
+            columns = ["Domain-Language-Section", "page_type", "page_subtype"]
         }
         if (type == "columns") {
             columns.map(col => {
