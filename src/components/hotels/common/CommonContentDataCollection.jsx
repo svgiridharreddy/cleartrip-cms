@@ -98,7 +98,7 @@ class CommonContentDataCollection extends Component {
 									axios.post(`${QUERY_URL}`, data)
 							      .then(res => {
 							          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false,content_result: res.data })
-							          NotificationManager.info("Common content data deleted successfully", "Common Data deleted", 1500);
+							          NotificationManager.info("Common content data deleted successfully", "Common Data deleted", 2000);
 							      })
 							      .catch((err) => {
 							          console.log(err);
@@ -140,7 +140,7 @@ class CommonContentDataCollection extends Component {
 					axios.post(`${QUERY_URL}`, hdata)
 			      .then(res => {
 			          this.setState({ isDataPresent: true, isAddForm: false, content_result: res.data })
-			          NotificationManager.info("Common content data added successfully", "Common Data Added", 1500);
+			          NotificationManager.info("Common content data added successfully", "Common Data Added", 2000);
 			      })
 			      .catch((err) => {
 			          console.log(err);
@@ -206,7 +206,7 @@ class CommonContentDataCollection extends Component {
 					axios.post(`${QUERY_URL}`, hdata)
 			      .then(res => {
 			          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
-			          NotificationManager.info("Common content data updation done successfully", "Updation", 1500);
+			          NotificationManager.info("Common content data updation done successfully", "Updation", 2000);
 			      })
 			      .catch((err) => {
 			          console.log(err);

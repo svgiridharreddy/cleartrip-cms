@@ -60,19 +60,19 @@ class FlightsApprovalPending extends Component {
         let columns_data = []
         let columns = []
         if (thead === "uniq_flight_schedule_routes" || thead == "unique_flight_ticket_route") {
-            columns = ["Domain-Language-Section", "page_type", "page_subtype", "url", "source", "destination"]
+            columns = ["Domain-Section-Language", "page_type", "page_subtype", "url", "source", "destination"]
         }
         else if (thead == "uniq_flight_to" || thead == "uniq_flight_from") {
-            columns = ["Domain-Language-Section", "page_type", "page_subtype", "url", "city_name"]
+            columns = ["Domain-Section-Language", "page_type", "page_subtype", "url", "city_name"]
         }
         else if (thead == "uniq_flight_booking_overview" || thead == "uniq_flight_booking_pnrweb" || thead == "uniq_flight_booking_routes") {
-            columns = ["Domain-Language-Section", "page_type", "page_subtype", "url", "airline_name"]
+            columns = ["Domain-Section-Language", "page_type", "page_subtype", "url", "airline_name"]
             if (thead == "uniq_flight_booking_routes") {
                 columns.push("source", "destination")
             }
         }
         else if (thead == "common") {
-            columns = ["Domain-Language-Section", "page_type", "page_subtype"]
+            columns = ["Domain-Section-Language", "page_type", "page_subtype"]
         }
         if (type == "columns") {
             columns.map(col => {
@@ -84,8 +84,8 @@ class FlightsApprovalPending extends Component {
         } else {
             let tabObj = {}
             columns.map(col => {
-                if (col === "Domain-Language-Section") {
-                    tabObj["Domain-Language-Section"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
+                if (col === "Domain-Section-Language") {
+                    tabObj["Domain-Section-Language"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
                 } else {
                     tabObj[col] = data[col]
                 }
