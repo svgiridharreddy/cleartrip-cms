@@ -217,6 +217,7 @@ class FlightsApprovalPending extends Component {
         window.location.replace("/");
       }, 2000);
     }
+
     const { data, tabData, is_admin, approval_table } = this.state;
     return (
       <div>
