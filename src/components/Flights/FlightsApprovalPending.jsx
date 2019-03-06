@@ -179,7 +179,7 @@ class FlightsApprovalPending extends Component {
         return (
             <div>
                 <p>Select table to approve </p>
-                <select name="approval_table" onChange={this.handleChange.bind(this)} value={approval_table}>
+                <select name="approval_table"  className="approval_table" onChange={this.handleChange.bind(this)} value={approval_table}>
                     <option value="" selected disabled={true}>Table name</option>
                     <option value="uniq_flight_schedule_routes">Uniq Flight Schedule Routes</option>
                     <option value="uniq_flight_to">Uniq Flight To</option>
