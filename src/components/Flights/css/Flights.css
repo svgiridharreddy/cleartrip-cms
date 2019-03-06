@@ -277,8 +277,12 @@ ul.showModel{
   list-style-type: none;
 }
 ul.showModel li{
-  padding: 2%;
+  padding: 2px;
 }
 ul.showModel li b{
   padding-right: 6%;
+}
+
+.showFieldName{
+  text-transform: capitalize;
 }

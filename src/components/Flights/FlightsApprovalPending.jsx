@@ -6,7 +6,7 @@ import Promise from "promise"
 import fetch from "fetch";
 import { host } from "../helper";
 import loginHelpers from "../helper";
-import {Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import {
     NotificationContainer,
     NotificationManager
@@ -49,7 +49,7 @@ class FlightsApprovalPending extends Component {
             if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
                 return (
                     <li key={i}>
-                        <b>{ele}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
+                        <b className="showFieldName">{ele.replace("_"," ")}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
                     </li>
                 );
             }
@@ -92,8 +92,8 @@ class FlightsApprovalPending extends Component {
                     tabObj[col] = data[col]
                 }
             })
-            tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
-            tabObj["show"] = <MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
+            tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
+            tabObj["show"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
     }
@@ -251,7 +251,7 @@ class FlightsApprovalPending extends Component {
                     show={this.state.show} onHide={this.handleClose.bind(this)} centered
                 >
                     <Modal.Header closeButton>
-
+                    Route information
                     </Modal.Header>
                     <Modal.Body>
                         <ul className="showModel">
@@ -270,7 +270,7 @@ class FlightsApprovalPending extends Component {
                                 striped
                                 bordered
                                 autoWidth
-                                orderable={false}
+                                orderable="false"
                                 data={tabData}
                             />
                         ) : (
