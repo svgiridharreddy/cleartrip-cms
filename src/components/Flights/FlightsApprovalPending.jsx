@@ -12,6 +12,8 @@ import {
     NotificationManager
 } from "react-notifications";
 import "../../../node_modules/react-notifications/lib/notifications.css";
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
+
 
 class FlightsApprovalPending extends Component {
     constructor(props) {
@@ -47,7 +49,7 @@ class FlightsApprovalPending extends Component {
             if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
                 return (
                     <li key={i}>
-                        <b>{ele}:</b>{data[ele]}
+                        <b>{ele}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
                     </li>
                 );
             }
