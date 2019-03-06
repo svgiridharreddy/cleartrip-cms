@@ -67,11 +67,13 @@ class HotelsApprovalPending extends Component {
           data["columns"] = uniqueColoumn
           approvalData.map((item, idx) => {
             let obj = {}
+            let textName;
+            textName = item.is_approved ? "Approved" : "Approve"
             obj["domain_url"] = item.domain_url
             obj["content_type"] = item.content_type
             obj["country_name"] = item.country_name
             obj['meta_title'] = item.meta_title
-            obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.approveFunction(item)}>Approve</MDBBtn>
+            obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.approveFunction(item)} disabled={item.is_approved}>{textName}</MDBBtn>
             rows.push(obj)
           })
           data["rows"] = rows
