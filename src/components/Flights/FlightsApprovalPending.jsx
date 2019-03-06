@@ -176,7 +176,7 @@ class FlightsApprovalPending extends Component {
                 NotificationManager.success(
                     "successfully approved",
                     "success",
-                    1500
+                    2000
                 );
                 _self.setState({ apiResponse: true, tabData: tabData })
                 resolve(json)
@@ -203,11 +203,11 @@ class FlightsApprovalPending extends Component {
             NotificationManager.info(
                 "Forbidden",
                 "You are not eligible to access this page",
-                1800
+                2000
             );
             setTimeout(function () {
                 window.location.replace("/");
-            }, 2000);
+            }, 2300);
         }
 
         const { data, tabData, is_admin, approval_table, modelData } = this.state;

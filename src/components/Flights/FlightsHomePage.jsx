@@ -151,7 +151,7 @@ class FlightsHomePage extends PureComponent {
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
-        NotificationManager.success("Approval required", "Admin Need to approve ", 1500);
+        NotificationManager.success("Approval required", "Admin Need to approve ", 2000);
         this.setState({
           editClicked: false,
           depCityName: "",
@@ -394,7 +394,7 @@ class FlightsHomePage extends PureComponent {
             NotificationManager.error(
               "No record found",
               "Please try again",
-              1500
+              2000
             );
             this.setState({
               showAddButton: false,
@@ -440,11 +440,11 @@ class FlightsHomePage extends PureComponent {
             result[pageType][subType] = values;
             this.setState({ result });
           }
-          NotificationManager.warning(response.data.message, "", 1500);
+          NotificationManager.warning(response.data.message, "", 2000);
         })
         .catch(error => {
           console.log(error);
-          NotificationManager.error(error, "Something went wrong", 1500);
+          NotificationManager.error(error, "Something went wrong", 2000);
         });
     }
   };
