@@ -100,7 +100,7 @@ class FlightsApprovalPending extends Component {
             })
             tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data,thead)}/><span className="slider round" /></label>
             // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
-            tabObj["show"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
+            tabObj["view"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
     }
@@ -193,12 +193,12 @@ class FlightsApprovalPending extends Component {
                         );
                     }else{
                         NotificationManager.info(
-                            "successfully UN-approved",
-                            "un approved",
+                            "successfully un-approved",
+                            "un-approved",
                             2000
                         );
                     }
-                },2000)
+                },1500)
                 _self.setState({ apiResponse: true, tabData: tabData })
                 resolve(json)
             }).catch({

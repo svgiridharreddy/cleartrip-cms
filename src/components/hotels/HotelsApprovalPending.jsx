@@ -12,9 +12,10 @@ import {
 } from "react-notifications";
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
-const uniqueColoumn = [{ label: "Domain Url", field: "domain_url", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 }]
+import { debug } from 'util';
+const uniqueColoumn = [{ label: "Domain Url", field: "domain_url", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 },{ label: "Approval status", field: "Approval status", width: 150 }]
 
-const commonColoumn = [{ label: "Domain Name", field: "domain_name", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 }]
+const commonColoumn = [{ label: "Domain Name", field: "domain_name", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 },{ label: "Approval status", field: "Approval status", width: 150 }]
 
 class HotelsApprovalPending extends Component {
   constructor(props) {
@@ -47,21 +48,32 @@ class HotelsApprovalPending extends Component {
     this.setState({ show: true, hotelData: hotelData });
   }
   approveFunction(item) {
-    axios.get(`${this.state.host}/approve/${item.id}`)
-      .then((response) => {
-        if (response.data.message) {
-          NotificationManager.info("Data Approved", "Approve", 1500);
-          axios.get(`${this.state.host}/collect/${this.state.contentType}`)
-            .then((resp) => {
-              this.setState({
-                approvalData: resp.data
+    let _self = this
+    return new Promise(function (resolve) {
+      debugger
+      axios.get(`${_self.state.host}/approve/${item.id}`).then((response) => {
+        debugger
+        if (response.status == 200) {
+          return new Promise(function () {
+            axios.get(`${_self.state.host}/collect/${_self.state.contentType}`)
+              .then((resp) => {
+                _self.setState({
+                  approvalData: resp.data
+                })
+                resolve(resp)
+
+                if(item.is_approved){
+                  NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
+                }else{
+                  NotificationManager.success("Data Approved", "Approve", 1500);
+                }
               })
-            })
+          })
         }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      }).catch(function (error) {
+          console.log(error);
+        });
+    })
   }
 
   handleChange(e) {
@@ -93,7 +105,8 @@ class HotelsApprovalPending extends Component {
           obj["content_type"] = item.content_type
           obj["country_name"] = item.country_name
           obj['meta_title'] = item.meta_title
-          obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className="deleteBtn" onClick={() => this.approveFunction(item)} disabled={item.is_approved}>{textName}</MDBBtn>
+          // obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className="deleteBtn" onClick={() => this.approveFunction(item)} disabled={item.is_approved}>{textName}</MDBBtn>
+          obj["on/off"] = <label className="toggleswitch"><input type="checkbox" checked={item.is_approved} onClick={() => this.approveFunction(item)} /><span className="slider round" /></label>
           obj["show"] = <MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(item)} >show</MDBBtn>
           rows.push(obj)
         })
@@ -106,7 +119,8 @@ class HotelsApprovalPending extends Component {
           obj["content_type"] = item.content_type
           obj["country_name"] = item.country_name
           obj['meta_title'] = item.meta_title
-          obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className="deleteBtn" onClick={() => this.approveFunction(item)}>Approve</MDBBtn>
+          // obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className="deleteBtn" onClick={() => this.approveFunction(item)} disabled={item.is_approved}>Approve</MDBBtn>
+          obj["on/off"] = <label className="toggleswitch"><input type="checkbox" checked={item.is_approved} onClick={() => this.approveFunction(item)} /><span className="slider round" /></label>
           obj["show"] = <MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(item)} >show</MDBBtn>
           rows.push(obj)
         })
