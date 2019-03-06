@@ -1,18 +1,20 @@
 import React, { Component } from "react";
-import { MDBBtn, MDBDataTable } from "mdbreact";
+import { MDBBtn, MDBDataTable, MDBSwitch } from "mdbreact";
 import "./css/Flights.css";
 import axios from "axios";
 import Promise from "promise"
 import fetch from "fetch";
 import { host } from "../helper";
 import loginHelpers from "../helper";
-import {Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import {
     NotificationContainer,
     NotificationManager
 } from "react-notifications";
 import "../../../node_modules/react-notifications/lib/notifications.css";
+
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
+import Toggle from 'react-bootstrap-toggle';
 
 
 class FlightsApprovalPending extends Component {
@@ -33,12 +35,15 @@ class FlightsApprovalPending extends Component {
             common: { columns: [], rows: [] },
             tabData: { columns: [], rows: [] },
             show: false,
-            modelData: ""
+            modelData: "",
+            approvedVal: false
 
         }
         this.createTable = this.createTable.bind(this)
         this.approveRoute = this.approveRoute.bind(this)
     }
+
+
 
     handleClose() {
         this.setState({ show: false });
@@ -49,7 +54,7 @@ class FlightsApprovalPending extends Component {
             if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
                 return (
                     <li key={i}>
-                        <b>{ele}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
+                        <b className="showFieldName">{ele.replace("_", " ")}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
                     </li>
                 );
             }
@@ -76,6 +81,7 @@ class FlightsApprovalPending extends Component {
         else if (thead == "common") {
             columns = ["Domain-Section-Language", "page_type", "page_subtype"]
         }
+        columns.push("Approval status")
         if (type == "columns") {
             columns.map(col => {
                 let obj = { label: col, field: col, width: 150 }
@@ -92,8 +98,9 @@ class FlightsApprovalPending extends Component {
                     tabObj[col] = data[col]
                 }
             })
-            tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
-            tabObj["show"] = <MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
+            tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data,thead)}/><span className="slider round" /></label>
+            // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
+            tabObj["show"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
     }
@@ -160,26 +167,38 @@ class FlightsApprovalPending extends Component {
             loginHelpers.check_usertype();
         }
     }
-    approveRoute(id, table_name) {
+    approveRoute(rdata, table_name) {
+        let id = rdata.id
+        let approval_status = !rdata.is_approved
         let _self = this
         let tabData = _self.state.tabData
-        let data = { id: id, table_name: table_name }
+        let data = { id: id, table_name: table_name,approval_status:approval_status }
         return new Promise(function (resolve) {
             axios.get(host() + "/route-approval", { params: data }).then(function (json) {
-                let index = ''
-                let removeId = tabData["rows"].map((row, i) => {
-                    if (id == row.id) {
-                        index = i
-                        return i
-                    }
-                })
-                tabData["rows"].splice(index, 1)
+                // let index = ''
+                // let removeId = tabData["rows"].map((row, i) => {
+                //     if (id == row.id) {
+                //         index = i
+                //         return i
+                //     }
+                // })
+                // tabData["rows"].splice(index, 1)
                 _self.getTableData(_self.state.approval_table)
-                NotificationManager.success(
-                    "successfully approved",
-                    "success",
-                    2000
-                );
+                setTimeout(function(){
+                    if(approval_status){
+                        NotificationManager.success(
+                            "successfully approved",
+                            "success",
+                            2000
+                        );
+                    }else{
+                        NotificationManager.info(
+                            "successfully UN-approved",
+                            "un approved",
+                            2000
+                        );
+                    }
+                },2000)
                 _self.setState({ apiResponse: true, tabData: tabData })
                 resolve(json)
             }).catch({
@@ -251,7 +270,7 @@ class FlightsApprovalPending extends Component {
                     show={this.state.show} onHide={this.handleClose.bind(this)} centered
                 >
                     <Modal.Header closeButton>
-
+                        Route information
                     </Modal.Header>
                     <Modal.Body>
                         <ul className="showModel">
@@ -270,7 +289,7 @@ class FlightsApprovalPending extends Component {
                                 striped
                                 bordered
                                 autoWidth
-                                orderable={false}
+                                orderable="false"
                                 data={tabData}
                             />
                         ) : (
