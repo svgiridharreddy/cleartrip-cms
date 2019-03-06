@@ -266,3 +266,19 @@ i.fa.fa-sort.float-right {
   color: #fff;
   cursor: pointer;
 }
+.showBtn,.showBtn:hover,.showBtn:active{
+color: #fff;
+background-color: #5bc0de;
+border-color: #46b8da;
+font-weight: bolder;
+}
+
+ul.showModel{
+  list-style-type: none;
+}
+ul.showModel li{
+  padding: 2%;
+}
+ul.showModel li b{
+  padding-right: 6%;
+}

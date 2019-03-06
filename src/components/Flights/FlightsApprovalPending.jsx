@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { MDBBtn, MDBDataTable } from 'mdbreact';
 import "./css/Flights.css";
 import axios from "axios";
-import fetch from 'fetch'
 import Promise from "promise"
 import { host } from "../helper";
 import loginHelpers from "../helper";
+import { Button, Modal, Form, ButtonToolbar } from "react-bootstrap";
 import {
     NotificationContainer,
     NotificationManager
@@ -28,11 +28,30 @@ class FlightsApprovalPending extends Component {
             uniq_flight_booking_routes: { columns: [], rows: [] },
             unique_flight_ticket_route: { columns: [], rows: [] },
             common: { columns: [], rows: [] },
-            tabData: { columns: [], rows: [] }
+            tabData: { columns: [], rows: [] },
+            show: false,
+            modelData: ""
 
         }
         this.createTable = this.createTable.bind(this)
         this.approveRoute = this.approveRoute.bind(this)
+    }
+
+    handleClose() {
+        this.setState({ show: false });
+    }
+    handleShow(data) {
+        let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title"]
+        let modelData = showArr.map((ele, i) => {
+            if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
+                return (
+                    <li key={i}>
+                        <b>{ele}:</b>{data[ele]}
+                    </li>
+                );
+            }
+        });
+        this.setState({ show: true, modelData: modelData });
     }
     getTableData(table_name) {
         let _self = this
@@ -91,7 +110,6 @@ class FlightsApprovalPending extends Component {
         }
     }
     approveRoute(id, table_name) {
-        debugger
         let _self = this
         let tabData = _self.state.tabData
         let data = { id: id, table_name: table_name }
@@ -122,21 +140,21 @@ class FlightsApprovalPending extends Component {
         let _self = this
         let obj_data = _self.state
         let columns_data = []
-        let columns =[]
+        let columns = []
         if (thead === "uniq_flight_schedule_routes" || thead == "unique_flight_ticket_route") {
-             columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "source", "destination"]
+            columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "source", "destination"]
         }
         else if (thead == "uniq_flight_to" || thead == "uniq_flight_from") {
-             columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "city_name"]
+            columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "city_name"]
         }
         else if (thead == "uniq_flight_booking_overview" || thead == "uniq_flight_booking_pnrweb" || thead == "uniq_flight_booking_routes") {
-             columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "airline_name"]
+            columns = ["id", "Domain-Language-Section", "page_type", "page_subtype", "url", "airline_name"]
             if (thead == "uniq_flight_booking_routes") {
                 columns.push("source", "destination")
             }
         }
         else if (thead == "common") {
-             columns = ["id", "Domain-Language-Section", "page_type", "page_subtype"]
+            columns = ["id", "Domain-Language-Section", "page_type", "page_subtype"]
         }
         if (type == "columns") {
             columns.map(col => {
@@ -154,7 +172,8 @@ class FlightsApprovalPending extends Component {
                     tabObj[col] = data[col]
                 }
             })
-            tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false }>{data.is_approved ? "Approved" : "Approve" }</MDBBtn>
+            tabObj["approve"] = <MDBBtn color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
+            tabObj["show"] = <MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
     }
@@ -175,11 +194,11 @@ class FlightsApprovalPending extends Component {
                 window.location.replace("/")
             }, 2000)
         }
-        const { data, tabData, is_admin, approval_table } = this.state
+        const { data, tabData, is_admin, approval_table, modelData } = this.state
         return (
             <div>
                 <p>Select table to approve </p>
-                <select name="approval_table"  className="approval_table" onChange={this.handleChange.bind(this)} value={approval_table}>
+                <select name="approval_table" className="approval_table" onChange={this.handleChange.bind(this)} value={approval_table}>
                     <option value="" selected disabled={true}>Table name</option>
                     <option value="uniq_flight_schedule_routes">Uniq Flight Schedule Routes</option>
                     <option value="uniq_flight_to">Uniq Flight To</option>
@@ -190,6 +209,22 @@ class FlightsApprovalPending extends Component {
                     <option value="unique_flight_ticket_route">Unique Flight Ticket Route</option>
                     <option value="common">Common</option>
                 </select>
+                <Modal
+                    size="lg"
+                    onHide={this.handleClose.bind(this)}
+                    dialogClassName="modal-90w"
+                    aria-labelledby="example-modal-sizes-title-lg"
+                    show={this.state.show} onHide={this.handleClose.bind(this)} centered
+                >
+                    <Modal.Header closeButton>
+
+                    </Modal.Header>
+                    <Modal.Body>
+                        <ul className="showModel">
+                            {modelData}
+                        </ul>
+                    </Modal.Body>
+                </Modal>
                 <div className={is_admin && data.length > 0 ? "" : "hidden"}>
                     <p>List of data need to approve in flights</p>
                     {tabData["columns"] && tabData["columns"].length > 0 && tabData["rows"] && tabData["rows"].length > 0 ? <MDBDataTable btn

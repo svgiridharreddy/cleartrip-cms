@@ -23,6 +23,16 @@ class Login extends Component {
       host: host()
     };
   }
+
+  componentDidMount(){
+    let _self = this
+    let user_data = localStorage.getItem("user_data")
+    if(!user_data){
+      _self.setState({
+        show:true
+      })
+    }
+  }
   handleClose() {
     this.setState({ show: false, showErrormsg: false });
   }
@@ -101,6 +111,7 @@ class Login extends Component {
     })
   }
   render() {
+    debugger
     let _self = this;
     let loginCredentials = _self.state.loginCredentials;
     return (
