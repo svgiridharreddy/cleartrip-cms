@@ -126,6 +126,7 @@ class EditUniqueContent extends Component {
     } = this.state;
 
     return (
+      <div className="common-hotel-wrapper">
       <div className="top-wrapper">
         <h3 align="center">Update Data</h3>
         <div className="filter-fileds">
@@ -142,6 +143,13 @@ class EditUniqueContent extends Component {
               <label>Country Name</label>
               <input value={country_name} name="country_name" />
             </li>
+          </ul>
+          <div className="clearfix"></div>
+        </div>
+        <div className="clearfix"></div>
+      </div>
+      <div className="common-hotel-content">
+          <ul className="common-hotels-field">
             <li>
               <label>H1 Title</label>
               <input type="text" value={h1_tag} name="h1_tag" onChange={this.handleChange} />
@@ -202,7 +210,7 @@ class EditUniqueContent extends Component {
             </button>
             </li>
           </ul>
-        </div>
+      </div>
       </div>
     );
   }

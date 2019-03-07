@@ -31,7 +31,9 @@
     -webkit-transition: .4s;
     transition: .4s;
   }
-  
+  .clearfix{
+      clear: both;
+  }
   .slider:before {
     position: absolute;
     content: "";
@@ -56,4 +58,29 @@
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
+  }
+  .common-hotel-content {
+      margin: 25px 0 0;
+  }
+  .common-hotel-content table{
+      width: 100%!important;
+      font-size: 14px;
+  }
+  .common-hotel-content ul.common-hotels-field{
+      padding: 0;
+      margin: 0;
+  }
+  .common-hotel-content .common-hotels-field li{
+      padding: 0 0 15px;
+  }
+  .common-hotel-content .common-hotels-field label{
+      display: block;
+      font-weight: bold;
+  }
+  .common-hotel-content .common-hotels-field input{
+      padding: 8px;
+      width: 70%;
+  }
+  .rdw-editor-wrapper{
+      background: #fff;
   }

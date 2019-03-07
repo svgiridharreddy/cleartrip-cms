@@ -270,7 +270,8 @@ class CommonContentDataCollection extends Component {
 		}
 		 
 		return(
-			<div className="top-wrapper">
+				<div className="common-hotel-wrapper">
+					<div className="top-wrapper">
 		        <div className="filter-fileds">
 		          <ul className="list-inline">
 		            <li>
@@ -310,9 +311,14 @@ class CommonContentDataCollection extends Component {
 		              </select>
 		            </li>
 		          </ul>
+							<div className="clearfix"></div>
 		        </div>
-		        { dataField }
+		      <div className="clearfix"></div>
 		    </div>
+				<div className="common-hotel-content">
+					{ dataField }
+				</div>
+			</div>
 			)
 	}
 }

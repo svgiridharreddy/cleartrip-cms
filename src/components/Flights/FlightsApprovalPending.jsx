@@ -12,9 +12,8 @@ import {
     NotificationManager
 } from "react-notifications";
 import "../../../node_modules/react-notifications/lib/notifications.css";
-
+import Loader from 'react-loader-spinner'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
-import Toggle from 'react-bootstrap-toggle';
 
 
 class FlightsApprovalPending extends Component {
@@ -36,8 +35,8 @@ class FlightsApprovalPending extends Component {
             tabData: { columns: [], rows: [] },
             show: false,
             modelData: "",
-            approvedVal: false
-
+            approvedVal: false,
+            loading: true
         }
         this.createTable = this.createTable.bind(this)
         this.approveRoute = this.approveRoute.bind(this)
@@ -98,7 +97,7 @@ class FlightsApprovalPending extends Component {
                     tabObj[col] = data[col]
                 }
             })
-            tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data,thead)}/><span className="slider round" /></label>
+            tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
             // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
             tabObj["view"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
@@ -106,6 +105,7 @@ class FlightsApprovalPending extends Component {
     }
     getTableData(table_name) {
         let _self = this;
+        _self.setState({ loading: true })
         let approval_table = _self.state.approval_table;
         return new Promise(function (resolve) {
             let user_data = localStorage.getItem("user_data");
@@ -146,6 +146,7 @@ class FlightsApprovalPending extends Component {
                                 });
                             }
                         }
+                        _self.setState({ loading: false })
                         return resolve(json);
                     })
                     .catch(e => {
@@ -171,8 +172,9 @@ class FlightsApprovalPending extends Component {
         let id = rdata.id
         let approval_status = !rdata.is_approved
         let _self = this
+        _self.setState({loading: true})
         let tabData = _self.state.tabData
-        let data = { id: id, table_name: table_name,approval_status:approval_status }
+        let data = { id: id, table_name: table_name, approval_status: approval_status }
         return new Promise(function (resolve) {
             axios.get(host() + "/route-approval", { params: data }).then(function (json) {
                 // let index = ''
@@ -184,22 +186,22 @@ class FlightsApprovalPending extends Component {
                 // })
                 // tabData["rows"].splice(index, 1)
                 _self.getTableData(_self.state.approval_table)
-                setTimeout(function(){
-                    if(approval_status){
+                setTimeout(function () {
+                    if (approval_status) {
                         NotificationManager.success(
                             "successfully approved",
                             "success",
                             2000
                         );
-                    }else{
+                    } else {
                         NotificationManager.info(
                             "successfully un-approved",
                             "un-approved",
                             2000
                         );
                     }
-                },1500)
-                _self.setState({ apiResponse: true, tabData: tabData })
+                }, 1500)
+                _self.setState({ apiResponse: true, tabData: tabData,loading:false })
                 resolve(json)
             }).catch({
             })
@@ -231,7 +233,7 @@ class FlightsApprovalPending extends Component {
             }, 2300);
         }
 
-        const { data, tabData, is_admin, approval_table, modelData } = this.state;
+        const { data, tabData, is_admin, approval_table, modelData,loading } = this.state;
         return (
             <div>
                 <p>Select table to approve </p>
@@ -262,6 +264,12 @@ class FlightsApprovalPending extends Component {
           </option>
                     <option value="common">Common</option>
                 </select>
+                {/* {loading ? <Loader
+                    type="Watch"
+                    color="#e16f4b"
+                    height="15%"
+                    width="5%"
+                /> : ""} */}
                 <Modal
                     size="lg"
                     onHide={this.handleClose.bind(this)}

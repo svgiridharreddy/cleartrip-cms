@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import Select from 'react-select';
+import '../../css/Hotels.css';
 import {
   EditorState,
   ContentState,
@@ -169,50 +170,59 @@ class HotelCommonContent extends Component {
           )
     }
 		return(
+      <div className="common-hotel-wrapper">
         <div className="top-wrapper">
-        { alertMessage }
-        <div className="filter-fileds">
-          <ul className="list-inline">
-            <li>
-              <label>Domain Name</label>
-              <select
-                onChange={this.handleChange}
-                name="domain_name"
-                value={this.state.domain_name}
-              >
-                <option value="" disabled={true} selected>
-                  Domain Type
-                </option>
-                {this.returnOptions(domainType)}
-              </select>
-            </li>
-            <li>
-              <label>Content Section</label>
-              <input value={ this.state.content_type } name="content_type" />
-            </li>
-            <li>
-              <label>Country Name</label>
-              <Select
-                value={this.state.selectedCountry}
-                name="country_name"
-                onChange={p => this.handleSelectedInput(p, "country_name")}
-                onInputChange={e => this.handleAutoSearch(e, "country_name")}
-                options={this.state.options}
-              />
-            </li>
-            <li>
-              <label>Page Type</label>
-              <select
-                onChange={this.handleChange}
-                name="page_type"
-                value={this.state.page_type}
-              >
-                <option value="" disabled={true} selected>
-                  Page Type
-                </option>
-                {this.returnOptions(pageType)}
-              </select>
-            </li>
+          { alertMessage }
+          <div className="filter-fileds">
+            <ul className="list-inline">
+              <li>
+                <label>Domain Name</label>
+                <select
+                  onChange={this.handleChange}
+                  name="domain_name"
+                  value={this.state.domain_name}
+                >
+                  <option value="" disabled={true} selected>
+                    Domain Type
+                  </option>
+                  {this.returnOptions(domainType)}
+                </select>
+              </li>
+              <li>
+                <label>Content Section</label>
+                <input value={ this.state.content_type } name="content_type" />
+              </li>
+              <li>
+                <label>Country Name</label>
+                <Select
+                  value={this.state.selectedCountry}
+                  name="country_name"
+                  onChange={p => this.handleSelectedInput(p, "country_name")}
+                  onInputChange={e => this.handleAutoSearch(e, "country_name")}
+                  options={this.state.options}
+                />
+              </li>
+              <li>
+                <label>Page Type</label>
+                <select
+                  onChange={this.handleChange}
+                  name="page_type"
+                  value={this.state.page_type}
+                >
+                  <option value="" disabled={true} selected>
+                    Page Type
+                  </option>
+                  {this.returnOptions(pageType)}
+                </select>
+              </li>
+            </ul>
+          </div>
+          <div className="clearfix"></div>
+        </div>
+
+
+        <div className="common-hotel-content">
+          <ul className="list-unstyled">
             <li>
               <label>H1 Title</label>
               <input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />

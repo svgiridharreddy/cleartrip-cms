@@ -108,7 +108,7 @@ class EditCommonForm extends Component {
         const { HeaderEditorState, FootereditorState, FaqeditorState } = this.state
     return(
         <div>
-          <ul>
+          <ul className="common-hotels-field">
             <li>
               <label>H1 Title</label>
               <input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />
