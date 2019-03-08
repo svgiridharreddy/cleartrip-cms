@@ -31,7 +31,8 @@ class FlightScheduleFields extends Component {
       arrCityNameSelected: "",
       cityNameSelected: "",
       editorState: "",
-      content: RichTextEditor.createEmptyValue()
+      content: RichTextEditor.createEmptyValue(),
+      backBtnFun: this.props.backBtnFun()
     };
   }
   onChange1 = content => {

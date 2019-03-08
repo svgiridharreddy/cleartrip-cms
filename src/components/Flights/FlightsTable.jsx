@@ -133,7 +133,6 @@ class FlightsTable extends Component {
           Edit
         </MDBBtn>
       let user_type = JSON.parse(localStorage.getItem("user_data"))
-      debugger
       if (user_type && user_type.user_type == "superadmin") {
         obj["deletebtn"] =
           <MDBBtn

@@ -92,7 +92,8 @@ class FlightsHomePage extends PureComponent {
       brandName: "",
       fromToCity: "",
       editClicked: false,
-      host: host()
+      host: host(),
+      backBtnClicked:false
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleMetaChanges = this.handleMetaChanges.bind(this);
@@ -205,7 +206,8 @@ class FlightsHomePage extends PureComponent {
           depCityNameSelected: "",
           arrCityName: "",
           arrCityNameSelected: "",
-          renderTables: false
+          renderTables: false,
+          backBtnClicked:false
         },
         this.state.categoryType != "" || this.state.subType === "index"
           ? () => this.fetchDetails()
@@ -226,7 +228,8 @@ class FlightsHomePage extends PureComponent {
           airlineNameSelected: "",
           message: "",
           showAddButton: true,
-          renderTables: false
+          renderTables: false,
+          backBtnClicked:false
         },
         () => this.fetchDetails()
       );
@@ -244,7 +247,8 @@ class FlightsHomePage extends PureComponent {
           message: "",
           categoryType: "",
           showAddButton: true,
-          renderTables: false
+          renderTables: false,
+          backBtnClicked:false
         },
 
         this.state.section != "" && this.state.categoryType != ""
@@ -260,7 +264,8 @@ class FlightsHomePage extends PureComponent {
           depCityNameSelected: "",
           arrCityNameSelected: "",
           message: "",
-          showAddButton: true
+          showAddButton: true,
+          backBtnClicked:false
         },
         () => this.fetchDetails()
       );
@@ -270,7 +275,8 @@ class FlightsHomePage extends PureComponent {
           [fieldName]: e.target.value,
           message: "",
           showAddButton: true,
-          renderTables: false
+          renderTables: false,
+          backBtnClicked:false
         },
         () => this.fetchDetails()
       );
@@ -304,7 +310,8 @@ class FlightsHomePage extends PureComponent {
       source,
       destination,
       brandName,
-      fromToCity
+      fromToCity,
+      backBtnClicked
     } = this.state;
     var url = this.state.host + "/fetch_details";
 
@@ -323,7 +330,15 @@ class FlightsHomePage extends PureComponent {
           : fromToCity,
       airline_name: airlineName ? airlineName : brandName
     };
-
+    if(backBtnClicked){
+      parameters["airline_name"] =""
+      parameters["dep_city_name"] =""
+      parameters["arr_city_name"]=""
+      parameters["city_name"]=""
+      this.setState({
+        backBtnClicked: false
+      })
+    }
     if (
       (pageType != "" && subType != "" && categoryType != "") ||
       (pageType != "" && subType === "index")
@@ -461,6 +476,33 @@ class FlightsHomePage extends PureComponent {
     });
   };
 
+  backBtnFun = () =>{
+    debugger
+    let _self =this
+    setTimeout(function(){
+    _self.setState({
+      showComponent:false,
+      renderTables: true,
+      editClicked:false,
+      readOnlyValue:false,
+      backBtnClicked:true,
+      source:"",
+      depCityName:"",
+      cityNameSelected: "",
+      cityName: "",
+      airlineName: "",
+      airlineNameSelected: "",
+      depCityName: "",
+      depCityNameSelected: "",
+      arrCityName: "",
+      arrCityNameSelected: ""
+    })
+  },150)
+    setTimeout(function(){
+      _self.fetchDetails()
+    },300)
+  }
+
   handleEdit = idx => {
     let { result, pageType, subType, categoryType } = this.state;
     if (categoryType === "common" || subType === "index") {
@@ -531,17 +573,19 @@ class FlightsHomePage extends PureComponent {
         .get(url, { params: { query_term: target_value } })
         .then(response => {
           if (fieldName === "airlineName") {
-            this.setState({ options: response.data }, () =>
-              this.fetchDetails()
-            );
+            this.setState({ options: response.data })
+            //   , () =>
+            //   this.fetchDetails()
+            // );
           } else if (fieldName === "depCityName") {
             this.setState({ options_dep: response.data });
           } else if (fieldName === "arrCityName") {
             this.setState({ options_arr: response.data });
           } else if (fieldName === "cityName") {
-            this.setState({ options: response.data }, () =>
-              this.fetchDetails()
-            );
+            this.setState({ options: response.data })
+            //   , () =>
+            //   this.fetchDetails()
+            // );
           }
         })
         .then(response => {
@@ -952,6 +996,7 @@ class FlightsHomePage extends PureComponent {
                   keywords={this.state.keywords}
                   h1Tag={this.state.h1Tag}
                   handleRTEchange={content => this.handleRTEchange(content)}
+                  backBtnFun= {this.backBtnFun.bind(this)}
                   handleChange={(e, fieldName) =>
                     this.handleChange(e, fieldName)
                   }

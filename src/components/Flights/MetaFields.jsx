@@ -109,6 +109,8 @@ class MetaFields extends Component {
     return (
       <ul>
         <li>
+        <Button variant="secondary" onClick ={() => this.props.backBtnFun()}>Back</Button></li>
+        <li>
           <label>Title</label>
           <input
             type="text"
