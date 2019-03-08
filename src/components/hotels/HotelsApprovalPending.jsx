@@ -156,7 +156,7 @@ class HotelsApprovalPending extends Component {
             </ul>
           </Modal.Body>
         </Modal>
-        <select name="content_type" onChange={this.handleChange}>
+        <select name="content_type" onChange={this.handleChange} className="approval_table">
           <option value="" selected disabled={true}>Select Content</option>
           <option value="unique-data">Unique Content Data</option>
           <option value="common-data">Common Content Data</option>

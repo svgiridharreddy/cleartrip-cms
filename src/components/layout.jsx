@@ -12,7 +12,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import loginHelpers from "./helper";
 import Login from "./Login";
@@ -66,7 +66,7 @@ class Layout extends React.Component {
   };
 
   logout() {
-  let _self = this
+    let _self = this
     loginHelpers.logout();
     _self.setState({
       loginStatus: false
@@ -80,8 +80,8 @@ class Layout extends React.Component {
   componentDidMount() {
     if (loginHelpers.checkUser()) {
       let is_admin = false
-      if(loginHelpers.check_usertype()){
-           is_admin= true
+      if (loginHelpers.check_usertype()) {
+        is_admin = true
       }
       this.setState({
         loginStatus: true,
@@ -96,42 +96,27 @@ class Layout extends React.Component {
   }
 
   render() {
-    let { loginStatus,is_admin } = this.state;
+    let { loginStatus, is_admin } = this.state;
     const { classes, children } = this.props;
     const { mobileOpen } = this.state;
 
     const drawer = (
       <div>
-        <div className={classes.toolbar} />
-        <div>
+        <div className={classes.toolbar} >
           {loginStatus ? (
-            <List>
-              <ListItem button key={"Flights"} component={Link} to="/flights">
-                <ListItemText primary={"Flights"}/>
-              </ListItem>
-              <ListItem button key={"Hotels"} component={Link} to="/hotels">
-                <ListItemText primary={"Hotels"} />
-              </ListItem>
-              {is_admin ? 
-              <ListItem button key={"Approve Flights"} component={Link} to="/flights-approve">
-                    <ListItemText primary={"Approve Flights Data"} />
-              </ListItem> : ""}
-              {is_admin ? 
-              <ListItem button key={"Approve Hotels"} component={Link} to="/hotels-approve">
-                    <ListItemText primary={"Approve Hotels Data"} />
-              </ListItem> : ""}
-              {/* <ListItem button key={"Trains"} component={Link} to="/trains">
-                <ListItemText primary={"Trains"} />
-              </ListItem> */}
-              {/* <ListItem button key={"Banners"} component={Link} to="/banners">
-                <ListItemText primary={"Banner"} />
-              </ListItem> */}
-            </List>
+            <ul>
+              <li><NavLink to="/flights" activeClassName='current sidebarLinks'>Flights</NavLink></li>
+              <li><NavLink to="/hotels" activeClassName='current sidebarLinks'>Hotels</NavLink></li>
+              <li>{is_admin ? <NavLink to="/flights-approve" activeClassName='current sidebarLinks'>Approve Flights</NavLink> : ""}</li>
+              <li>{is_admin ? <NavLink to="/hotels-approve" activeClassName='current sidebarLinks'>Hotels Approve</NavLink> : ""}</li>
+              <li><a href="http://54.255.195.145/seo-banner-api/manager/" target="blank" className="sidebarLinks">Banner</a></li>
+              <li><a href="http://52.77.239.110/" target="blank" className="sidebarLinks">Interlinking</a></li>
+            </ul>
           ) : (
               ""
             )}
         </div>
-      </div>
+      </div >
     );
 
     return (
