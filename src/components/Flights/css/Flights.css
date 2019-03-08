@@ -118,8 +118,22 @@ table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  font-size: 14px;
 }
-
+.preview-content{
+  font-size: 15px;
+  line-height: 27px;
+  color: #494949;
+}
+.preview-content h2{
+  font-size: 21px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+.showFieldName{
+  display: inline-block;
+  width: 160px;
+}
 td,
 th {
   border: 1px solid #dddddd;

@@ -72,7 +72,8 @@ class AddCommonForm extends Component {
 	render() {
 				const { headerEditorState, footerEditorState, faqEditorState } = this.state
 		return(
-				<div>
+			<div className="common-hotel-wrapper">
+			<div className="common-hotel-content">
 					<ul>
 						<li>
               <label>H1 Title</label>
@@ -134,6 +135,8 @@ class AddCommonForm extends Component {
 	            </button>
             </li>
 					</ul>
+					<div className="clearfix"></div>
+					</div>
 				</div>
 			)
 	}

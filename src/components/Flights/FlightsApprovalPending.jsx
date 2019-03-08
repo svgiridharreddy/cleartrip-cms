@@ -208,10 +208,6 @@ class FlightsApprovalPending extends Component {
         })
 
     }
-
-
-
-
     handleChange(e) {
         let _self = this;
         _self.setState({
@@ -273,7 +269,7 @@ class FlightsApprovalPending extends Component {
                 <Modal
                     size="lg"
                     onHide={this.handleClose.bind(this)}
-                    dialogClassName="modal-90w"
+                    dialogClassName="modal-90w preview-content"
                     aria-labelledby="example-modal-sizes-title-lg"
                     show={this.state.show} onHide={this.handleClose.bind(this)} centered
                 >
@@ -287,7 +283,7 @@ class FlightsApprovalPending extends Component {
                     </Modal.Body>
                 </Modal>
                 <div className={is_admin && data.length > 0 ? "" : "hidden"}>
-                    <p>List of data need to approve in flights</p>
+                    <h2>List of data need to approve in flights</h2>
                     {tabData["columns"] &&
                         tabData["columns"].length > 0 &&
                         tabData["rows"] &&
