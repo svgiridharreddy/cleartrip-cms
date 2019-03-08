@@ -107,7 +107,7 @@ class Layout extends React.Component {
           {loginStatus ? (
             <List>
               <ListItem button key={"Flights"} component={Link} to="/flights">
-                <ListItemText primary={"Flights"} />
+                <ListItemText primary={"Flights"}/>
               </ListItem>
               <ListItem button key={"Hotels"} component={Link} to="/hotels">
                 <ListItemText primary={"Hotels"} />

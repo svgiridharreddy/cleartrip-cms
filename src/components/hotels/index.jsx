@@ -11,21 +11,26 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content_type: ""
+      content_type: "",
+      uniqData: false
     };
   }
 
   handleOnChange = e => {
-    this.setState({ content_type: e.target.value });
+    let uniqData = false 
+    if(e.target.value === "Unique Data"){
+      uniqData = true
+    }
+    this.setState({ content_type: e.target.value,uniqData:uniqData });
   };
 
   render() {
     loginHelpers.checkUser()
     let contentFields;
-    const { content_type } = this.state;
+    const { content_type,uniqData } = this.state;
     if (content_type === "Unique Data") {
       contentFields = (
-        <UniqueContentDataCollection content_type={content_type} />
+        <UniqueContentDataCollection content_type={content_type} uniqData={uniqData} />
       );
     } else if (content_type === "Common Data") {
       contentFields = (

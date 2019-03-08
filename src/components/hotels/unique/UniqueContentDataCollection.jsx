@@ -47,7 +47,8 @@ class UniqueContentDataCollection extends Component {
 			isDataPresent: false,
 			isAddForm: false,
 			isEditForm: false,
-			host: host()
+			host: host(),
+			uniqData: props.uniqData
 		}
 		this.getInfo = this.getInfo.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
@@ -57,6 +58,12 @@ class UniqueContentDataCollection extends Component {
 	}
 
 
+	componentDidMount(){
+		let _self =this
+		if(_self.state.uniqData){
+			_self.getInfo()
+		}
+	}
 	getInfo = () => {
 		axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
 		.then((response) => {
@@ -67,6 +74,7 @@ class UniqueContentDataCollection extends Component {
 		})
 	}
 
+
 	handleInputChange = (event) => {
 	    this.setState({
 	      query: this.search.value
@@ -74,7 +82,7 @@ class UniqueContentDataCollection extends Component {
 	      if (this.state.query.length > 10) {
 	          this.getInfo()
 	      } 
-	    })
+			})
 	}
 
 	handleChangeFunction = (name,item) => {
