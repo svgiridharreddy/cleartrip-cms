@@ -65,6 +65,16 @@ class UniqueContentDataCollection extends Component {
 
 	handleChange(e) {
 		e.preventDefault();
+		if(this.state.domain_name !== '' &&  this.state.country_name !== '') {
+			const data = { content_type: this.state.content_type, domain_name: e.target.value, country_name: this.state.country_name, prefix: this.state.query }
+			axios.post(`${QUERY_URL}`, data)
+	      .then(res => {
+	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+	      })
+	      .catch((err) => {
+	          console.log(err);
+	      })
+		}
 		this.setState({
 			[e.target.name]: e.target.value
 		})
