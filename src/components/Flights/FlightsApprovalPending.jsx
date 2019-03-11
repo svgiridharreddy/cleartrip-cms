@@ -14,7 +14,8 @@ import {
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import Loader from 'react-loader-spinner'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
-
+import queryString from 'query-string'
+import { func } from "prop-types";
 
 class FlightsApprovalPending extends Component {
     constructor(props) {
@@ -36,13 +37,14 @@ class FlightsApprovalPending extends Component {
             show: false,
             modelData: "",
             approvedVal: false,
-            loading: true
+            loading: true,
+            id: ""
         }
         this.createTable = this.createTable.bind(this)
         this.approveRoute = this.approveRoute.bind(this)
+        this.getApprovelPendingRecord = this.getApprovelPendingRecord.bind(this)
+        this.processTable = this.processTable.bind(this)
     }
-
-
 
     handleClose() {
         this.setState({ show: false });
@@ -103,6 +105,58 @@ class FlightsApprovalPending extends Component {
             return tabObj
         }
     }
+
+    getApprovelPendingRecord(table_name, id) {
+        let _self = this
+        return new Promise(function (resolve) {
+            let user_data = localStorage.getItem("user_data");
+            if (user_data && table_name != "" && id != '') {
+                let userdata = JSON.parse(user_data);
+                userdata["id"] = id
+                userdata["table_name"] = table_name;
+                axios.get(host() + "/flights-approvaldata", { params: userdata }).then(function (json) {
+                    _self.setState({
+                        data: json.data.data
+                    });
+                    _self.processTable(table_name)
+                    return resolve(json);
+                })
+            }
+
+        }).catch(function (e) {
+            console.log(e)
+        })
+    }
+
+    processTable(table_name) {
+        let _self = this
+        let thead = table_name;
+        let obj = {};
+        let columns_data = [];
+        let rows_data = [];
+        let cols = _self.createTable("columns", thead, {});
+        if (cols) {
+            columns_data = cols;
+        }
+        _self.state.data.map(row => {
+            let rowdata = _self.createTable("rows", thead, row);
+            if (rowdata) {
+                rows_data.push(rowdata);
+            }
+        });
+        obj["columns"] = columns_data;
+        obj["rows"] = rows_data;
+        if (
+            obj["columns"] &&
+            obj["columns"].length > 0 &&
+            obj["rows"] &&
+            obj["rows"].length > 0
+        ) {
+            _self.setState({
+                tabData: obj
+            });
+        }
+    }
     getTableData(table_name) {
         let _self = this;
         _self.setState({ loading: true })
@@ -115,36 +169,20 @@ class FlightsApprovalPending extends Component {
                 axios
                     .get(host() + "/flights-approvaldata", { params: userdata })
                     .then(function (json) {
-                        _self.setState({
-                            data: json.data.data
-                        });
-                        if (_self.state.data.length > 0) {
-                            let thead = table_name;
-                            let obj = {};
-                            let columns_data = [];
-                            let rows_data = [];
-                            let cols = _self.createTable("columns", thead, {});
-                            if (cols) {
-                                columns_data = cols;
-                            }
-                            _self.state.data.map(row => {
-                                let rowdata = _self.createTable("rows", thead, row);
-                                if (rowdata) {
-                                    rows_data.push(rowdata);
+                        let data = json.data.data
+                        if (_self.state.id) {
+                            data = data.filter(function (a) {
+                                if (_self.state.id == a.id) {
+                                    return a
                                 }
-                            });
-                            obj["columns"] = columns_data;
-                            obj["rows"] = rows_data;
-                            if (
-                                obj["columns"] &&
-                                obj["columns"].length > 0 &&
-                                obj["rows"] &&
-                                obj["rows"].length > 0
-                            ) {
-                                _self.setState({
-                                    tabData: obj
-                                });
-                            }
+                            })
+                        }
+                        _self.setState({
+                            data: data
+                        });
+
+                        if (_self.state.data.length > 0) {
+                            _self.processTable(table_name)
                         }
                         _self.setState({ loading: false })
                         return resolve(json);
@@ -167,24 +205,25 @@ class FlightsApprovalPending extends Component {
             sessionStorage.removeItem("user_data");
             loginHelpers.check_usertype();
         }
+        let search_params = queryString.parse(this.props.location.search)
+        _self.setState({
+            approval_table: search_params["table_name"],
+            id: search_params["id"]
+        })
+
+        setTimeout(function () {
+            _self.getApprovelPendingRecord(_self.state.approval_table, _self.state.id)
+        }, 300)
     }
     approveRoute(rdata, table_name) {
         let id = rdata.id
         let approval_status = !rdata.is_approved
         let _self = this
-        _self.setState({loading: true})
+        _self.setState({ loading: true })
         let tabData = _self.state.tabData
         let data = { id: id, table_name: table_name, approval_status: approval_status }
         return new Promise(function (resolve) {
             axios.get(host() + "/route-approval", { params: data }).then(function (json) {
-                // let index = ''
-                // let removeId = tabData["rows"].map((row, i) => {
-                //     if (id == row.id) {
-                //         index = i
-                //         return i
-                //     }
-                // })
-                // tabData["rows"].splice(index, 1)
                 _self.getTableData(_self.state.approval_table)
                 setTimeout(function () {
                     if (approval_status) {
@@ -201,7 +240,7 @@ class FlightsApprovalPending extends Component {
                         );
                     }
                 }, 1500)
-                _self.setState({ apiResponse: true, tabData: tabData,loading:false })
+                _self.setState({ apiResponse: true, tabData: tabData, loading: false })
                 resolve(json)
             }).catch({
             })
@@ -209,9 +248,11 @@ class FlightsApprovalPending extends Component {
 
     }
     handleChange(e) {
+       debugger
         let _self = this;
         _self.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
+            id: ''
         });
         this.getTableData(e.target.value);
     }
@@ -229,7 +270,7 @@ class FlightsApprovalPending extends Component {
             }, 2300);
         }
 
-        const { data, tabData, is_admin, approval_table, modelData,loading } = this.state;
+        const { data, tabData, is_admin, approval_table, modelData, loading } = this.state;
         return (
             <div>
                 <p>Select table to approve </p>

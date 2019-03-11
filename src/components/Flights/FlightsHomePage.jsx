@@ -110,6 +110,10 @@ class FlightsHomePage extends PureComponent {
   handleFormSubmit = e => {
     e.preventDefault();
     const flightValues = this.state;
+    let user_data = JSON.parse(localStorage.getItem("user_data"))
+    if(!user_data){
+      window.location.replace("/")
+    }
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -143,7 +147,8 @@ class FlightsHomePage extends PureComponent {
             ? flightValues["arrCityNameSelected"]["value"]
             : this.state.destination,
         readOnlyValue: true
-      }
+      },
+      user_data:user_data
     };
     axios({
       method: "post",
@@ -406,9 +411,9 @@ class FlightsHomePage extends PureComponent {
               showAddButton: false
             });
           } else {
-            NotificationManager.error(
-              "No record found",
-              "Please try again",
+            NotificationManager.info(
+           "Please click add new to add new route",
+           "No record found",
               2000
             );
             this.setState({
@@ -477,7 +482,6 @@ class FlightsHomePage extends PureComponent {
   };
 
   backBtnFun = () =>{
-    debugger
     let _self =this
     setTimeout(function(){
     _self.setState({

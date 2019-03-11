@@ -14,6 +14,7 @@
     "fetch": "^1.1.0",
     "mdbreact": "^4.9.0",
     "promise": "^8.0.2",
+    "query-string": "^6.3.0",
     "react": "^16.7.0",
     "react-autocomplete": "^1.8.1",
     "react-bootstrap": "^1.0.0-beta.5",
