@@ -11,17 +11,12 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content_type: "",
-      uniqData: false
+      content_type: ""
     };
   }
 
   handleOnChange = e => {
-    let uniqData = false 
-    if(e.target.value === "Unique Data"){
-      uniqData = true
-    }
-    this.setState({ content_type: e.target.value,uniqData:uniqData });
+    this.setState({ content_type: e.target.value });
   };
 
   render() {

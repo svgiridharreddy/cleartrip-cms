@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormControl } from 'react-bootstrap';
 import axios from 'axios';
 import Promise from "promise"
-
+import Select1 from 'react-select';
 import {
 	EditorState,
 	ContentState,
@@ -25,6 +25,7 @@ import {
 } from "react-notifications";
 
 const QUERY_URL = host() + "/cmshotels/unique-content-data-collection"
+const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"] 
 
 class UniqueContentDataCollection extends Component {
 	constructor(props) {
@@ -32,6 +33,7 @@ class UniqueContentDataCollection extends Component {
 		this.state = {
 			query: '',
 			content_result: [],
+			domain_name: '',
 			domain_url: '',
 			country_name: '',
 			canonical_tag: '',
@@ -57,31 +59,20 @@ class UniqueContentDataCollection extends Component {
 		this.handleChangeFunction = this.handleChangeFunction.bind(this);
 		this.handleChangeEditData = this.handleChangeEditData.bind(this);
 		this.handleChangeData = this.handleChangeData.bind(this);
+		this.returnOptions = this.returnOptions.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
 
-
-	componentDidMount() {
-		let _self = this
-		if (_self.state.uniqData) {
-			return new Promise(function (resolve) {
-				axios.get(host() + '/collect/unique-data')
-					.then((response) => {
-						debugger
-						setTimeout(function(){
-							_self.setState({
-								isDataPresent: true,
-								content_result: response.data
-							})
-						},100)
-						resolve(response)
-					}).catch(function (err) {
-						console.log(err)
-					})
-			})
-		}
+	handleChange(e) {
+		e.preventDefault();
+		this.setState({
+			[e.target.name]: e.target.value
+		})
 	}
+
 	getInfo = () => {
-		axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
+		const params = {prefix: this.state.query, content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name }
+		axios.post(`${QUERY_URL}`, params)
 			.then((response) => {
 				this.setState({
 					isDataPresent: true,
@@ -90,7 +81,43 @@ class UniqueContentDataCollection extends Component {
 			})
 	}
 
+	returnOptions(optData) {
+    return optData.map((dmName, i) => {
+      return (
+        <option key={i} value={dmName}>
+          {dmName}
+        </option>
+      );
+    });
+  }
 
+  handleSelectedInput = (p, source) => {
+		this.setState({
+			[source]: p.value,
+			selectedCountry: p
+		})
+		if(this.state.domain_name !== '' &&  p.value !== '') {
+			const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: p.value }
+			axios.post(`${QUERY_URL}`, data)
+	      .then(res => {
+	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+	      })
+	      .catch((err) => {
+	          console.log(err);
+	      })
+		}
+	}
+
+	handleAutoSearch = (e, source) => {
+		if (e !== "" && e.length > 2) {
+			axios.get(`${this.state.host}/country_autocomplete?country=${e}`)
+			.then((response) => {
+				this.setState({
+					 options: response.data
+				})
+			})
+		}
+	}
 
 	handleInputChange = (event) => {
 		this.setState({
@@ -257,11 +284,46 @@ class UniqueContentDataCollection extends Component {
 		}
 
 		return (
-			<div>
-				<FormControl type="text" placeholder="Search for Domain Url..." ref={input => this.search = input}
-					onChange={this.handleInputChange} className="mr-sm-8" style={{ width: '50%' }} />
-				<br />
-				{dataField}
+			<div className="common-hotel-wrapper">
+					<div className="top-wrapper">
+		        <div className="filter-fileds">
+		          <ul className="list-inline">
+		            <li>
+		              <label>Domain Name</label>
+		              <select
+		                onChange={this.handleChange}
+		                name="domain_name"
+		                value={this.state.domain_name}
+		              >
+		                <option value="" disabled={true} selected>
+		                  Domain Type
+		                </option>
+		                {this.returnOptions(domainType)}
+		              </select>
+		            </li>
+		            <li>
+		            	<label>Country Name</label>
+		            	<Select1
+			                value={this.state.selectedCountry}
+			                name="country_name"
+			                onChange={p => this.handleSelectedInput(p, "country_name")}
+			                onInputChange={e => this.handleAutoSearch(e, "country_name")}
+			                options={this.state.options}
+			            />
+		            </li>
+		            <li>
+		            	<label>Domain Url</label>
+		            	<FormControl type="text" placeholder="Search for Domain Url..." ref={input => this.search = input}
+					onChange={this.handleInputChange} className="mr-sm-8" style={{ width: '100%' }} />
+		            </li>
+		          </ul>
+							<div className="clearfix"></div>
+		        </div>
+		      <div className="clearfix"></div>
+		    </div>
+				<div className="common-hotel-content">
+					{ dataField }
+				</div>
 			</div>
 		)
 	}
