@@ -145,7 +145,7 @@ class UniqueContentDataCollection extends Component {
 				axios.delete(`${host}/cmshotels/delete/${item.id}`)
 					.then(res => {
 						console.log(res.message);
-						axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
+						axios.get(`${QUERY_URL}?prefix=${this.state.query}&content_type=${this.state.content_type}&domain_name=${this.state.domain_name}&country_name=${this.state.country_name}`)
 							.then((response) => {
 								this.setState({
 									isDataPresent: true,
@@ -170,6 +170,7 @@ class UniqueContentDataCollection extends Component {
 		faqState = typeof (faqState) == "string" ? faqState : ""
 		const data = {
 			domain_url: result.domain_url,
+			domain_name: result.domain_name,
 			content_type: result.content_type,
 			country_name: result.country_name,
 			canonical_tag: result.canonical_tag,
@@ -183,10 +184,10 @@ class UniqueContentDataCollection extends Component {
 			bottom_content: footerState,
 			faq: faqState
 		}
-		axios.post(`${host}/cmshotels/content-section-data`, data)
+		axios.post(`${this.state.host}/cmshotels/content-section-data`, data)
 			.then(({ data }) => {
 				if (data.message) {
-					axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
+					axios.post(`${QUERY_URL}?prefix=${this.state.query}&content_type=${this.state.content_type}&domain_name=${this.state.domain_name}&country_name=${this.state.country_name}`)
 						.then((response) => {
 							this.setState({
 								isDataPresent: true,
@@ -194,7 +195,7 @@ class UniqueContentDataCollection extends Component {
 								isEditForm: false,
 								content_result: response.data
 							})
-							NotificationManager.info("Unique content data added successfully", "Unique Data Added", 1500);
+							NotificationManager.success("Unique content data added successfully", "Unique Data Added", 1500);
 						})
 				}
 			})
@@ -235,6 +236,7 @@ class UniqueContentDataCollection extends Component {
 			domain_url: result.domain_url,
 			content_type: result.content_type,
 			country_name: result.country_name,
+			domain_name: result.domain_name,
 			h1_tag: result.h1_tag,
 			h2_tag: result.h2_tag,
 			h3_tag: result.h3_tag,
@@ -253,7 +255,7 @@ class UniqueContentDataCollection extends Component {
 			)
 			.then(({ data }) => {
 				if (data.message) {
-					axios.get(`${QUERY_URL}?prefix=${this.state.query}`)
+					axios.post(`${QUERY_URL}?prefix=${this.state.query}&content_type=${this.state.content_type}&domain_name=${this.state.domain_name}&country_name=${this.state.country_name}`)
 						.then((response) => {
 							this.setState({
 								isDataPresent: true,
@@ -277,10 +279,10 @@ class UniqueContentDataCollection extends Component {
 		}
 
 		if (this.state.isAddForm) {
-			dataField = <AddHotelUniqueContent handleChangeData={(result) => this.handleChangeData(result)} />
+			dataField = <AddHotelUniqueContent domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeData={(result) => this.handleChangeData(result)} />
 		}
 		if (this.state.isEditForm) {
-			dataField = <EditHotelUniqueData handleChangeEditData={(result) => this.handleChangeEditData(result)} contentRecord={this.state.itemData} />
+			dataField = <EditHotelUniqueData domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeEditData={(result) => this.handleChangeEditData(result)} contentRecord={this.state.itemData} />
 		}
 
 		return (

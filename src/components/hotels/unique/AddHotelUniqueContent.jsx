@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Alert } from 'react-bootstrap';
-import Select from 'react-select';
 import {
 	EditorState,
 	ContentState,
@@ -24,8 +23,8 @@ class HotelUniqueContent extends Component {
 		this.state = {
 			domain_url: '',
 			content_type: 'Unique Data',
-			country_name: '',
-			selectedCountry: null,
+			domain_name: this.props.domain_name,
+			country_name: this.props.country_name,
 			h1_tag: '',
 			h2_tag: '',
 			h3_tag: '',
@@ -37,30 +36,11 @@ class HotelUniqueContent extends Component {
 			faq: '',
 			headerEditorState: EditorState.createEmpty(),
 			footerEditorState: EditorState.createEmpty(),
-			faqEditorState: EditorState.createEmpty(),
-			message: ''
+			faqEditorState: EditorState.createEmpty()
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.contentConvertion = this.contentConvertion.bind(this);
-	}
-
-	handleSelectedInput = (p, source) => {
-		this.setState({
-			[source]: p.value,
-			selectedCountry: p
-		})
-	}
-
-	handleAutoSearch = (e, source) => {
-		if (e !== "" && e.length > 2) {
-			axios.get(`${AUTO_COMPLETE}?country=${e}`)
-				.then((response) => {
-					this.setState({
-						options: response.data
-					})
-				})
-		}
 	}
 
 	handleChange(e) {
@@ -120,18 +100,9 @@ class HotelUniqueContent extends Component {
 	};
 
 	render() {
-		const { message, headerEditorState, footerEditorState, faqEditorState } = this.state;
-		let alertMessage;
-		if (message !== '') {
-			alertMessage = (
-				<Alert variant="info">
-					{this.state.message}
-				</Alert>
-			)
-		}
+		const { headerEditorState, footerEditorState, faqEditorState } = this.state;
 		return (
 			<div className="common-hotel-wrapper">
-				{alertMessage}
 				<div className="common-hotel-content">
 					<ul className="common-hotels-field">
 						<li>
@@ -141,16 +112,6 @@ class HotelUniqueContent extends Component {
 						<li>
 							<label>Content Section</label>
 							<input value={this.state.content_type} name="content_type" />
-						</li>
-						<li>
-							<label>Country Name</label>
-							<Select
-								value={this.state.selectedCountry}
-								name="country_name"
-								onChange={p => this.handleSelectedInput(p, "country_name")}
-								onInputChange={e => this.handleAutoSearch(e, "country_name")}
-								options={this.state.options}
-							/>
 						</li>
 						<li>
 							<label>H1 Title</label>
