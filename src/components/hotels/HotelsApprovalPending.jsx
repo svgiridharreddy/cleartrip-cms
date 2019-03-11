@@ -93,17 +93,27 @@ class HotelsApprovalPending extends Component {
     this.setState({ show: false });
   }
   handleShow(data) {
-    let showArr = ["country_name", "domain_name", "domain_url", "content_type", "page_type", "meta_title", "meta_description", "canonical_tag", "meta_keyword", "header_tag", "h1_tag", "h2_tag", "h3_tag", "top_content", "bottom_content", "faq"]
-    let hotelData = showArr.map((ele, i) => {
-      if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
-        return (
-          <li key={i}>
-            <b>{ele}:</b>{ele == "top_content" || ele === "bottom_content" || ele === "faq" ? ReactHtmlParser(data[ele]) : data[ele]}
-          </li>
-        );
+    let _self = this
+    axios.get(`${_self.state.host}/cmshotels/edit/${data.id}`).then((response) => {
+      if (response.status == 200) {
+        let recordData = response.data
+        return new Promise(function () {
+          let showArr = ["country_name", "domain_name", "domain_url", "content_type", "page_type", "meta_title", "meta_description", "canonical_tag", "meta_keyword", "header_tag", "h1_tag", "h2_tag", "h3_tag", "top_content", "bottom_content", "faq"]
+          let hotelData = showArr.map((ele, i) => {
+            if (showArr.indexOf(ele) > -1 && recordData[ele] && recordData[ele] != "") {
+              return (
+                <li key={i}>
+                  <b>{ele}:</b>{ele == "top_content" || ele === "bottom_content" || ele === "faq" ? ReactHtmlParser(recordData[ele]) : recordData[ele]}
+                </li>
+              );
+            }
+          });
+          _self.setState({ show: true, hotelData: hotelData });
+        })
       }
-    });
-    this.setState({ show: true, hotelData: hotelData });
+    }).catch(function (error) {
+        console.log(error);
+      });
   }
   approveFunction(item) {
     let _self = this
