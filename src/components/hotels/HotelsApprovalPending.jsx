@@ -45,14 +45,27 @@ class HotelsApprovalPending extends Component {
     return optData.map((dmName, i) => {
       return (
         <option key={i} value={dmName}>
-          {dmName}
+        {dmName}
         </option>
-      );
+        );
     });
   }
 
   handleChangeUniqueData(e){
     e.preventDefault();
+    if(this.state.domain_name !== '' &&  this.state.country_name !== '') {
+      const data = { content_type: "unique data", domain_name: e.target.value, country_name: this.state.country_name}
+      axios.post(`${QUERY_URL}`, data)
+        .then(res => {
+            this.setState({
+              approvalData: res.data,
+              contentType: "unique-data"
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
     this.setState({
       [e.target.name]: e.target.value
     })
@@ -66,15 +79,15 @@ class HotelsApprovalPending extends Component {
     if(this.state.domain_name !== '' &&  p.value !== '') {
       const data = { content_type: "unique data", domain_name: this.state.domain_name, country_name: p.value }
       axios.post(`${QUERY_URL}`, data)
-        .then(res => {
-            this.setState({
-              approvalData: res.data,
-              contentType: "unique-data"
-            })
+      .then(res => {
+        this.setState({
+          approvalData: res.data,
+          contentType: "unique-data"
         })
-        .catch((err) => {
-            console.log(err);
-        })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     }
   }
 
@@ -83,8 +96,8 @@ class HotelsApprovalPending extends Component {
       axios.get(`${this.state.host}/country_autocomplete?country=${e}`)
       .then((response) => {
         this.setState({
-           options: response.data
-        })
+         options: response.data
+       })
       })
     }
   }
@@ -103,17 +116,17 @@ class HotelsApprovalPending extends Component {
             if (showArr.indexOf(ele) > -1 && recordData[ele] && recordData[ele] != "") {
               return (
                 <li key={i}>
-                  <b>{ele}:</b>{ele == "top_content" || ele === "bottom_content" || ele === "faq" ? ReactHtmlParser(recordData[ele]) : recordData[ele]}
+                <b>{ele}:</b>{ele == "top_content" || ele === "bottom_content" || ele === "faq" ? ReactHtmlParser(recordData[ele]) : recordData[ele]}
                 </li>
-              );
+                );
             }
           });
           _self.setState({ show: true, hotelData: hotelData });
         })
       }
     }).catch(function (error) {
-        console.log(error);
-      });
+      console.log(error);
+    });
   }
   approveFunction(item) {
     let _self = this
@@ -127,33 +140,36 @@ class HotelsApprovalPending extends Component {
                 _self.setState({
                   approvalData: resp.data
                 })
-                resolve(resp)
                 if(item.is_approved){
                   NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
                 }else{
                   NotificationManager.success("Data Approved", "Approve", 1500);
                 }
+                return resolve(resp)
+
               })
-            } else {
-              var data = { content_type: "unique data", domain_name: this.state.domain_name, country_name: this.state.country_name }
-              axios.post(`${QUERY_URL}`,data)
-              .then((resp) => {
+            } else if (_self.state.contentType === "unique-data") {
+              var data = { content_type: "unique data", domain_name: _self.state.domain_name, country_name: _self.state.country_name }
+              return new Promise(function (resolve) {
+               axios.post(`${QUERY_URL}`,data)
+               .then((resp) => {
                 _self.setState({
                   approvalData: resp.data
                 })
-                resolve(resp)
                 if(item.is_approved){
                   NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
                 }else{
                   NotificationManager.success("Data Approved", "Approve", 1500);
                 }
+                return resolve(resp)
               })
+             })
             }
           })
         }
       }).catch(function (error) {
-          console.log(error);
-        });
+        console.log(error);
+      });
     })
   }
 
@@ -161,13 +177,13 @@ class HotelsApprovalPending extends Component {
     var contentType = e.target.value;
     if (contentType === 'common-data') {
       axios.get(`${this.state.host}/collect/common-data`)
-        .then((response) => {
-          this.setState({
-            approvalData: response.data,
-            contentType: contentType,
-            isUniq: false
-          })
+      .then((response) => {
+        this.setState({
+          approvalData: response.data,
+          contentType: contentType,
+          isUniq: false
         })
+      })
     } else if (contentType === "unique-data") {
       this.setState({
         isUniq: true
@@ -184,37 +200,37 @@ class HotelsApprovalPending extends Component {
 
     if (isUniq) {
       uniqueDataField = (
-            <div className="top-wrapper">
-              <div className="filter-fileds">
-                <ul className="list-inline">
-                  <li>
-                    <label>Domain Name</label>
-                    <select
-                      onChange={this.handleChangeUniqueData}
-                      name="domain_name"
-                      value={this.state.domain_name}
-                    >
-                      <option value="" disabled={true} selected>
-                        Domain Type
-                      </option>
-                      {this.returnOptions(domainType)}
-                    </select>
-                  </li>
-                  <li>
-                    <label>Country Name</label>
-                    <Select1
-                        value={this.state.selectedCountry}
-                        name="country_name"
-                        onChange={p => this.handleSelectedInput(p, "country_name")}
-                        onInputChange={e => this.handleAutoSearch(e, "country_name")}
-                        options={this.state.options}
-                    />
-                  </li>
-                </ul>
-                <div className="clearfix"></div>
-              </div>
-            <div className="clearfix"></div>
-          </div>
+        <div className="top-wrapper">
+        <div className="filter-fileds">
+        <ul className="list-inline">
+        <li>
+        <label>Domain Name</label>
+        <select
+        onChange={this.handleChangeUniqueData}
+        name="domain_name"
+        value={this.state.domain_name}
+        >
+        <option value="" disabled={true} selected>
+        Domain Type
+        </option>
+        {this.returnOptions(domainType)}
+        </select>
+        </li>
+        <li>
+        <label>Country Name</label>
+        <Select1
+        value={this.state.selectedCountry}
+        name="country_name"
+        onChange={p => this.handleSelectedInput(p, "country_name")}
+        onInputChange={e => this.handleAutoSearch(e, "country_name")}
+        options={this.state.options}
+        />
+        </li>
+        </ul>
+        <div className="clearfix"></div>
+        </div>
+        <div className="clearfix"></div>
+        </div>
         )
     }
 
@@ -254,46 +270,46 @@ class HotelsApprovalPending extends Component {
     if (approvalData.length > 0) {
       dataField = (
         <MDBDataTable btn
-          striped
-          bordered
-          autoWidth
-          orderable={false}
-          data={data}
+        striped
+        bordered
+        autoWidth
+        orderable={false}
+        data={data}
         />
-      )
+        )
     }
     return (
       <div>
-        <Modal
-          size="lg"
-          onHide={this.handleClose.bind(this)}
-          dialogClassName="modal-90w"
-          aria-labelledby="example-modal-sizes-title-lg"
-          show={this.state.show} onHide={this.handleClose.bind(this)} centered
-        >
-          <Modal.Header closeButton>
+      <Modal
+      size="lg"
+      onHide={this.handleClose.bind(this)}
+      dialogClassName="modal-90w"
+      aria-labelledby="example-modal-sizes-title-lg"
+      show={this.state.show} onHide={this.handleClose.bind(this)} centered
+      >
+      <Modal.Header closeButton>
 
-          </Modal.Header>
-          <Modal.Body>
-            <ul className="showModel">
-              {hotelData}
-            </ul>
-          </Modal.Body>
-        </Modal>
-        <select name="content_type" onChange={this.handleChange} className="approval_table">
-          <option value="" selected disabled={true}>Select Content</option>
-          <option value="unique-data">Unique Content Data</option>
-          <option value="common-data">Common Content Data</option>
-        </select>
-        {uniqueDataField}
-        <div className="appovalTable">
-          {
-            dataField
-          }
-          <NotificationContainer />
-        </div>
+      </Modal.Header>
+      <Modal.Body>
+      <ul className="showModel">
+      {hotelData}
+      </ul>
+      </Modal.Body>
+      </Modal>
+      <select name="content_type" onChange={this.handleChange} className="approval_table">
+      <option value="" selected disabled={true}>Select Content</option>
+      <option value="unique-data">Unique Content Data</option>
+      <option value="common-data">Common Content Data</option>
+      </select>
+      {uniqueDataField}
+      <div className="appovalTable">
+      {
+        dataField
+      }
+      <NotificationContainer />
       </div>
-    )
+      </div>
+      )
   }
 }
 export default HotelsApprovalPending
