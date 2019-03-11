@@ -46,8 +46,8 @@ header {
   position: fixed;
   height: 100vh;
   left: 0;
-  top: 50px;
-  background: #fff;
+  top: 60px;
+  background: #19171724;
 }
 .sidebar ul {
   padding: 0;
@@ -57,7 +57,8 @@ header {
   display: block;
   padding: 15px;
   text-decoration: none;
-  color: #43445ca6;
+  color: #000000c7;
+  font-weight: bolder;
 }
 .sidebar a:hover {
   background: #eee;
@@ -355,4 +356,18 @@ input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+
+
+.sidebar li a:hover{
+  background-color: white;
+}
+.current,.current:hover,.current:active{
+  color: white!important;
+    background-color: #e16f4b!important;
+    font-weight: bold;
+}
+.sidebar li{
+  border-bottom: 2px solid #c8c8c8;
 }
