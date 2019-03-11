@@ -111,7 +111,8 @@ class HotelsApprovalPending extends Component {
       axios.get(`${_self.state.host}/approve/${item.id}`).then((response) => {
         if (response.status == 200) {
           return new Promise(function () {
-            axios.get(`${_self.state.host}/collect/${_self.state.contentType}`)
+            if (_self.state.contentType === "common-data") {
+              axios.get(`${_self.state.host}/collect/${_self.state.contentType}`)
               .then((resp) => {
                 _self.setState({
                   approvalData: resp.data
@@ -123,6 +124,21 @@ class HotelsApprovalPending extends Component {
                   NotificationManager.success("Data Approved", "Approve", 1500);
                 }
               })
+            } else {
+              var data = { content_type: "unique data", domain_name: this.state.domain_name, country_name: this.state.country_name }
+              axios.post(`${QUERY_URL}`,data)
+              .then((resp) => {
+                _self.setState({
+                  approvalData: resp.data
+                })
+                resolve(resp)
+                if(item.is_approved){
+                  NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
+                }else{
+                  NotificationManager.success("Data Approved", "Approve", 1500);
+                }
+              })
+            }
           })
         }
       }).catch(function (error) {
