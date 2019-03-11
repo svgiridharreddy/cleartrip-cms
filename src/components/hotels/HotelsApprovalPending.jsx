@@ -6,6 +6,7 @@ import Promise from "promise"
 import { host } from "../helper";
 import loginHelpers from "../helper";
 import { Modal } from "react-bootstrap";
+import Select1 from 'react-select';
 import {
   NotificationContainer,
   NotificationManager
@@ -17,18 +18,75 @@ const uniqueColoumn = [{ label: "Domain Url", field: "domain_url", width: 150 },
 
 const commonColoumn = [{ label: "Domain Name", field: "domain_name", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 },{ label: "Approval status", field: "Approval status", width: 150 }]
 
+const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"]
+
+const QUERY_URL = host() + "/cmshotels/unique-content-data-collection"
+
 class HotelsApprovalPending extends Component {
   constructor(props) {
     super(props)
     this.state = {
       host: host(),
+      domain_name: '',
+      country_name: '',
       approvalData: [],
       contentType: '',
       show: false,
+      isUniq: false,
       hotelData: ''
     }
-    this.handleChange = this.handleChange.bind(this)
-    this.approveFunction = this.approveFunction.bind(this)
+    this.handleChange = this.handleChange.bind(this);
+    this.approveFunction = this.approveFunction.bind(this);
+    this.returnOptions = this.returnOptions.bind(this);
+    this.handleChangeUniqueData = this.handleChangeUniqueData.bind(this);
+  }
+
+  returnOptions(optData) {
+    return optData.map((dmName, i) => {
+      return (
+        <option key={i} value={dmName}>
+          {dmName}
+        </option>
+      );
+    });
+  }
+
+  handleChangeUniqueData(e){
+    e.preventDefault();
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
+  handleSelectedInput = (p, source) => {
+    this.setState({
+      [source]: p.value,
+      selectedCountry: p
+    })
+    if(this.state.domain_name !== '' &&  p.value !== '') {
+      const data = { content_type: "unique data", domain_name: this.state.domain_name, country_name: p.value }
+      axios.post(`${QUERY_URL}`, data)
+        .then(res => {
+            this.setState({
+              approvalData: res.data,
+              contentType: "unique-data"
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
+  }
+
+  handleAutoSearch = (e, source) => {
+    if (e !== "" && e.length > 2) {
+      axios.get(`${this.state.host}/country_autocomplete?country=${e}`)
+      .then((response) => {
+        this.setState({
+           options: response.data
+        })
+      })
+    }
   }
 
   handleClose() {
@@ -50,9 +108,7 @@ class HotelsApprovalPending extends Component {
   approveFunction(item) {
     let _self = this
     return new Promise(function (resolve) {
-      debugger
       axios.get(`${_self.state.host}/approve/${item.id}`).then((response) => {
-        debugger
         if (response.status == 200) {
           return new Promise(function () {
             axios.get(`${_self.state.host}/collect/${_self.state.contentType}`)
@@ -61,7 +117,6 @@ class HotelsApprovalPending extends Component {
                   approvalData: resp.data
                 })
                 resolve(resp)
-
                 if(item.is_approved){
                   NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
                 }else{
@@ -78,22 +133,65 @@ class HotelsApprovalPending extends Component {
 
   handleChange(e) {
     var contentType = e.target.value;
-    if (contentType !== '') {
-      axios.get(`${this.state.host}/collect/${contentType}`)
+    if (contentType === 'common-data') {
+      axios.get(`${this.state.host}/collect/common-data`)
         .then((response) => {
           this.setState({
             approvalData: response.data,
-            contentType: contentType
+            contentType: contentType,
+            isUniq: false
           })
         })
+    } else if (contentType === "unique-data") {
+      this.setState({
+        isUniq: true
+      })
     }
   }
 
   render() {
     const data = {}
     let dataField;
+    let uniqueDataField;
     let rows = []
-    const { approvalData, contentType, hotelData } = this.state
+    const { approvalData, contentType, hotelData, isUniq } = this.state
+
+    if (isUniq) {
+      uniqueDataField = (
+            <div className="top-wrapper">
+              <div className="filter-fileds">
+                <ul className="list-inline">
+                  <li>
+                    <label>Domain Name</label>
+                    <select
+                      onChange={this.handleChangeUniqueData}
+                      name="domain_name"
+                      value={this.state.domain_name}
+                    >
+                      <option value="" disabled={true} selected>
+                        Domain Type
+                      </option>
+                      {this.returnOptions(domainType)}
+                    </select>
+                  </li>
+                  <li>
+                    <label>Country Name</label>
+                    <Select1
+                        value={this.state.selectedCountry}
+                        name="country_name"
+                        onChange={p => this.handleSelectedInput(p, "country_name")}
+                        onInputChange={e => this.handleAutoSearch(e, "country_name")}
+                        options={this.state.options}
+                    />
+                  </li>
+                </ul>
+                <div className="clearfix"></div>
+              </div>
+            <div className="clearfix"></div>
+          </div>
+        )
+    }
+
     if (approvalData.length > 0) {
       if (contentType === "unique-data") {
         data["columns"] = uniqueColoumn
@@ -161,6 +259,7 @@ class HotelsApprovalPending extends Component {
           <option value="unique-data">Unique Content Data</option>
           <option value="common-data">Common Content Data</option>
         </select>
+        {uniqueDataField}
         <div className="appovalTable">
           {
             dataField

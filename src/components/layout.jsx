@@ -108,7 +108,7 @@ class Layout extends React.Component {
               <li><NavLink to="/flights" activeClassName='current sidebarLinks'>Flights</NavLink></li>
               <li><NavLink to="/hotels" activeClassName='current sidebarLinks'>Hotels</NavLink></li>
               <li>{is_admin ? <NavLink to="/flights-approve" activeClassName='current sidebarLinks'>Approve Flights</NavLink> : ""}</li>
-              <li>{is_admin ? <NavLink to="/hotels-approve" activeClassName='current sidebarLinks'>Hotels Approve</NavLink> : ""}</li>
+              <li>{is_admin ? <NavLink to="/hotels-approve" activeClassName='current sidebarLinks'>Approve Hotels</NavLink> : ""}</li>
               <li><a href="http://54.255.195.145/seo-banner-api/manager/" target="blank" className="sidebarLinks">Banner</a></li>
               <li><a href="http://52.77.239.110/" target="blank" className="sidebarLinks">Interlinking</a></li>
             </ul>
