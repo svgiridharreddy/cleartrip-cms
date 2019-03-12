@@ -9,6 +9,9 @@ body {
   margin: 0;
   font-family: "Roboto", sans-serif;
 }
+h1 {
+  font-size: 27px;
+}
 header {
   width: 100%;
   position: fixed;
@@ -38,6 +41,25 @@ header {
 .content-wrapper {
   padding: 70px 0 0;
 }
+.nav-right .nav-user {
+  position: relative;
+  margin: 0 15px 0 0;
+}
+
+.nav-right .nav-user:hover {
+  pointer-events: none;
+}
+.nav-right .nav-user:before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  left: -40px;
+  background-image: url(http://localhost:5002/static/media/iconSprite37.2e54ac26.png);
+  background-position: 172px 837px;
+  top: -9px;
+}
 .content-wrapper ul {
   list-style-type: none;
 }
@@ -47,7 +69,7 @@ header {
   height: 100vh;
   left: 0;
   top: 60px;
-  background: #19171724;
+  background: #fff;
 }
 .sidebar ul {
   padding: 0;
@@ -69,7 +91,7 @@ header {
   cursor: pointer;
 }
 .main-content {
-  width: calc(100%-200px);
+  width: calc(100% - 240px);
   margin: 20px 0 0 220px;
 }
 .main-table {
@@ -121,17 +143,17 @@ table {
   width: 100%;
   font-size: 14px;
 }
-.preview-content{
+.preview-content {
   font-size: 15px;
   line-height: 27px;
   color: #494949;
 }
-.preview-content h2{
+.preview-content h2 {
   font-size: 21px;
   font-weight: bold;
   margin: 15px 0;
 }
-.showFieldName{
+.showFieldName {
   display: inline-block;
   width: 160px;
 }
@@ -171,9 +193,10 @@ th {
 }
 
 .filter-fileds {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.8);
   padding: 20px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
 }
 .filter-fileds ul {
   margin: 0;
@@ -187,7 +210,7 @@ th {
   outline: none;
   width: 100%;
 }
-select.approval_table{
+select.approval_table {
   background: #fff;
   border: 1px solid #d9d9d9;
   -webkit-appearance: none;
@@ -196,11 +219,12 @@ select.approval_table{
 }
 .top-wrapper label {
   display: block;
-  font-size: 16px;
+  font-size: 14px;
   color: #43445c;
+  font-weight: 600;
 }
 .top-wrapper li {
-  width: 18%;
+  width: 13%;
   margin: 0 15px 0 0;
   float: left;
 }
@@ -255,13 +279,17 @@ thead:last-of-type {
 i.fa.fa-sort.float-right {
   display: none;
 }
-.editBtn,.editBtn:hover,.editBtn:active {
+.editBtn,
+.editBtn:hover,
+.editBtn:active {
   color: white;
   background-color: #e8702e;
   padding: 7px 13px 4px 19px;
   font-weight: bolder;
 }
-.deleteBtn,.deleteBtn:hover,.deleteBtn:active {
+.deleteBtn,
+.deleteBtn:hover,
+.deleteBtn:active {
   color: white;
   background-color: red;
   padding: 7px 13px 4px 19px;
@@ -281,24 +309,26 @@ i.fa.fa-sort.float-right {
   color: #fff;
   cursor: pointer;
 }
-.showBtn,.showBtn:hover,.showBtn:active{
-color: #fff;
-background-color: #5bc0de;
-border-color: #46b8da;
-font-weight: bolder;
+.showBtn,
+.showBtn:hover,
+.showBtn:active {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+  font-weight: bolder;
 }
 
-ul.showModel{
+ul.showModel {
   list-style-type: none;
 }
-ul.showModel li{
+ul.showModel li {
   padding: 2px;
 }
-ul.showModel li b{
+ul.showModel li b {
   padding-right: 6%;
 }
 
-.showFieldName{
+.showFieldName {
   text-transform: capitalize;
 }
 .slider.round {
@@ -314,7 +344,7 @@ ul.showModel li b{
   height: 34px;
 }
 
-.toggleswitch input { 
+.toggleswitch input {
   opacity: 0;
   width: 0;
   height: 0;
@@ -328,8 +358,8 @@ ul.showModel li b{
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -340,8 +370,8 @@ ul.showModel li b{
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
@@ -358,16 +388,17 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-
-
-.sidebar li a:hover{
-  background-color: white;
+.sidebar li a:hover {
+  background-color: #d9d9d9;
 }
-.current,.current:hover,.current:active{
-  color: white!important;
-    background-color: #e16f4b!important;
-    font-weight: bold;
+.current,
+.current:hover,
+.current:active {
+  color: white !important;
+  background-color: #224a91 !important;
+  font-weight: bold;
 }
-.sidebar li{
-  border-bottom: 2px solid #c8c8c8;
+.table thead th {
+  background-color: #224a91 !important;
+  color: #fff;
 }
