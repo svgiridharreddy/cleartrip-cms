@@ -25,8 +25,8 @@ import {
 const QUERY_URL = host()+"/cmshotels/common-content-data-collection"
 
 const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"] 
-const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "Weekend Getaways", "PropertyInLocality","Region"]
-const localPageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "PropertyInLocality","Region"]
+const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "PropertyInLocality","Region"]
+const localPageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget"]
 
 class CommonContentDataCollection extends Component {
 	constructor(props) {
