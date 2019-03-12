@@ -22,10 +22,10 @@ class Index extends Component {
   render() {
     loginHelpers.checkUser()
     let contentFields;
-    const { content_type,uniqData } = this.state;
+    const { content_type } = this.state;
     if (content_type === "Unique Data") {
       contentFields = (
-        <UniqueContentDataCollection content_type={content_type} uniqData={uniqData} />
+        <UniqueContentDataCollection content_type={content_type} />
       );
     } else if (content_type === "Common Data") {
       contentFields = (

@@ -13,6 +13,7 @@ import { stateToHTML } from "draft-js-export-html";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import {Button} from "react-bootstrap";
 
 const API_URL = 'http://13.251.49.54:82'
 const AUTO_COMPLETE = "http://13.251.49.54:82/country_autocomplete"
@@ -105,6 +106,9 @@ class HotelUniqueContent extends Component {
 			<div className="common-hotel-wrapper">
 				<div className="common-hotel-content">
 					<ul className="common-hotels-field">
+						<li>
+        					<Button variant="secondary" onClick ={() => this.props.backBtnFun()}>Back</Button>
+       					</li>
 						<li>
 							<label>Domain Url</label>
 							<input type="text" name="domain_url" onChange={this.handleChange} value={this.state.domain_url} />

@@ -218,6 +218,17 @@ class CommonContentDataCollection extends Component {
       });
 	}
 
+	backBtnFun = () =>{
+		let _self =this
+		var backData = { content_type: _self.state.content_type, domain_name: _self.state.domain_name, country_name: _self.state.country_name, page_type: _self.state.page_type }
+		axios.post(`${QUERY_URL}`, backData)
+      .then(res => {
+          _self.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+      })
+      .catch((err) => {
+          console.log(err);
+      })
+	}
 
 	handleSelectedInput = (p, source) => {
 		this.setState({
@@ -263,10 +274,10 @@ class CommonContentDataCollection extends Component {
 				 dataField = <TableContent isDataPresent={this.state.isDataPresent} tableResult={this.state.content_result} contentType={this.state.content_type} changeFunction={(name,item ) => this.handleChangeFunction(name,item)} />
 		}
 		if (this.state.isAddForm) {
-			dataField = <AddCommonForm handleChangeData={(result) => this.handleChangeData(result)} />
+			dataField = <AddCommonForm backBtnFun= {this.backBtnFun.bind(this)} handleChangeData={(result) => this.handleChangeData(result)} />
 		}
 		if (this.state.isEditForm) {
-			dataField = <EditCommonForm handleChangeEditData={(result) => this.handleChangeEditData(result)} contentRecord={this.state.itemData} />
+			dataField = <EditCommonForm backBtnFun= {this.backBtnFun.bind(this)} handleChangeEditData={(result) => this.handleChangeEditData(result)} contentRecord={this.state.itemData} />
 		}
 		 
 		return(
