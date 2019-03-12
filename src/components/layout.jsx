@@ -66,29 +66,29 @@ class Layout extends React.Component {
   };
 
   logout() {
-    let _self = this
+    let _self = this;
     loginHelpers.logout();
     _self.setState({
       loginStatus: false
     });
     NotificationManager.info("logged out successfully", "logout", 1500);
-    setTimeout(function () {
-      window.location = '/';
+    setTimeout(function() {
+      window.location = "/";
     }, 1000);
   }
 
   componentDidMount() {
     if (loginHelpers.checkUser()) {
-      let is_admin = false
+      let is_admin = false;
       if (loginHelpers.check_usertype()) {
-        is_admin = true
+        is_admin = true;
       }
       this.setState({
         loginStatus: true,
         is_admin: is_admin
       });
     }
-  };
+  }
   changeState() {
     this.setState({
       loginStatus: true
@@ -102,47 +102,90 @@ class Layout extends React.Component {
 
     const drawer = (
       <div>
-        <div className={classes.toolbar} >
+        <div className={classes.toolbar}>
           {loginStatus ? (
             <ul>
-              <li><NavLink to="/flights" activeClassName='current sidebarLinks'>Flights</NavLink></li>
-              <li><NavLink to="/hotels" activeClassName='current sidebarLinks'>Hotels</NavLink></li>
-              <li>{is_admin ? <NavLink to="/flights-approve" activeClassName='current sidebarLinks'>Approve Flights</NavLink> : ""}</li>
-              <li>{is_admin ? <NavLink to="/hotels-approve" activeClassName='current sidebarLinks'>Approve Hotels</NavLink> : ""}</li>
-              <li><a href="http://54.255.195.145/seo-banner-api/manager/" target="blank" className="sidebarLinks">Banner</a></li>
-              <li><a href="http://52.77.239.110/" target="blank" className="sidebarLinks">Interlinking</a></li>
+              <li>
+                <NavLink to="/flights" activeClassName="current sidebarLinks">
+                  Flights
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/hotels" activeClassName="current sidebarLinks">
+                  Hotels
+                </NavLink>
+              </li>
+              <li>
+                {is_admin ? (
+                  <NavLink
+                    to="/flights-approve"
+                    activeClassName="current sidebarLinks"
+                  >
+                    Approve Flights
+                  </NavLink>
+                ) : (
+                  ""
+                )}
+              </li>
+              <li>
+                {is_admin ? (
+                  <NavLink
+                    to="/hotels-approve"
+                    activeClassName="current sidebarLinks"
+                  >
+                    Approve Hotels
+                  </NavLink>
+                ) : (
+                  ""
+                )}
+              </li>
+              <li>
+                <a
+                  href="http://54.255.195.145/seo-banner-api/manager/"
+                  target="blank"
+                  className="sidebarLinks"
+                >
+                  Banner
+                </a>
+              </li>
+              <li>
+                <a
+                  href="http://52.77.239.110/"
+                  target="blank"
+                  className="sidebarLinks"
+                >
+                  Interlinking
+                </a>
+              </li>
             </ul>
           ) : (
-              ""
-            )}
+            ""
+          )}
         </div>
-      </div >
+      </div>
     );
 
     return (
       <div>
         <div>
           <header>
-            <div className="cleartripLogo ">
-            </div>
+            <div className="cleartripLogo " />
+
             {loginStatus ? (
               <div className="nav-right" onClick={this.logout.bind(this)}>
+                <span className="nav-user">Super Admin</span>
                 Log Out
-          </div>
+              </div>
             ) : (
-                <div className="nav-right">
-                  <Login changeState={this.changeState.bind(this)} />
-                </div>
-              )}
+              <div className="nav-right">
+                <Login changeState={this.changeState.bind(this)} />
+              </div>
+            )}
           </header>
         </div>
         <div className="content-wrapper">
-          <div className="sidebar">
-            {drawer}
-          </div>
-          <div className="main-content">
-            {children}
-          </div>
+          <div className="sidebar">{drawer}</div>
+          <div className="main-content">{children}</div>
         </div>
       </div>
     );
