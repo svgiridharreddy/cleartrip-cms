@@ -170,11 +170,10 @@ class Layout extends React.Component {
         <div>
           <header>
             <div className="cleartripLogo " />
-
             {loginStatus ? (
-              <div className="nav-right" onClick={this.logout.bind(this)}>
-                <span className="nav-user">Super Admin</span>
-                Log Out
+              <div className="nav-right">
+                <span className="nav-user">{is_admin ? "Super Admin" : "Admin"}</span>
+                <span onClick={this.logout.bind(this)}>Log Out</span>
               </div>
             ) : (
               <div className="nav-right">

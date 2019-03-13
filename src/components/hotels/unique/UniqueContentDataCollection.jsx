@@ -51,8 +51,7 @@ class UniqueContentDataCollection extends Component {
 			isDataPresent: false,
 			isAddForm: false,
 			isEditForm: false,
-			host: host(),
-			uniqData: props.uniqData
+			host: host()
 		}
 		this.getInfo = this.getInfo.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
@@ -128,6 +127,19 @@ class UniqueContentDataCollection extends Component {
 			})
 		}
 	}
+
+	backBtnFun = () =>{
+    let _self =this
+    axios.post(`${QUERY_URL}?prefix=${_self.state.query}&content_type=${_self.state.content_type}&domain_name=${_self.state.domain_name}&country_name=${_self.state.country_name}`)
+		.then((response) => {
+			_self.setState({
+				isDataPresent: true,
+				isAddForm: false,
+				isEditForm: false,
+				content_result: response.data
+			})
+		})
+  }
 
 	handleInputChange = (event) => {
 		this.setState({
@@ -289,10 +301,10 @@ class UniqueContentDataCollection extends Component {
 		}
 
 		if (this.state.isAddForm) {
-			dataField = <AddHotelUniqueContent domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeData={(result) => this.handleChangeData(result)} />
+			dataField = <AddHotelUniqueContent backBtnFun= {this.backBtnFun.bind(this)} domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeData={(result) => this.handleChangeData(result)} />
 		}
 		if (this.state.isEditForm) {
-			dataField = <EditHotelUniqueData domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeEditData={(result) => this.handleChangeEditData(result)} contentRecord={this.state.itemData} />
+			dataField = <EditHotelUniqueData backBtnFun= {this.backBtnFun.bind(this)} domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeEditData={(result) => this.handleChangeEditData(result)} contentRecord={this.state.itemData} />
 		}
 
 		return (

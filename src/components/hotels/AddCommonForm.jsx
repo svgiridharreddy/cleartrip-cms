@@ -11,6 +11,7 @@ import { stateToHTML } from "draft-js-export-html";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import {Button} from "react-bootstrap";
 
 class AddCommonForm extends Component {
 	constructor(props) {
@@ -75,6 +76,9 @@ class AddCommonForm extends Component {
 			<div className="common-hotel-wrapper">
 			<div className="common-hotel-content">
 					<ul>
+					<li>
+    					<Button variant="secondary" onClick ={() => this.props.backBtnFun()}>Back</Button>
+   					</li>
 						<li>
               <label>H1 Title</label>
               <input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />

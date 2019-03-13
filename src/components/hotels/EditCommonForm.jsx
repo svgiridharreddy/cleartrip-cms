@@ -11,6 +11,7 @@ import { stateToHTML } from "draft-js-export-html";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import {Button} from "react-bootstrap";
 
 const API_URL = "http://13.251.49.54:82/cmshotels/edit/";
 
@@ -109,6 +110,9 @@ class EditCommonForm extends Component {
     return(
         <div>
           <ul className="common-hotels-field">
+            <li>
+              <Button variant="secondary" onClick ={() => this.props.backBtnFun()}>Back</Button>
+            </li>
             <li>
               <label>H1 Title</label>
               <input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />

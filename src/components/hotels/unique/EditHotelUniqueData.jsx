@@ -7,6 +7,7 @@ import {
 import { Editor } from "react-draft-wysiwyg";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { host } from '../../helper';
+import {Button} from "react-bootstrap";
 
 const API_URL = host()+"/cmshotels/edit/";
 
@@ -132,6 +133,9 @@ class EditUniqueContent extends Component {
         <h3 align="center">Update Data</h3>
         <div className="filter-fileds">
           <ul className="list-inline">
+            <li>
+                  <Button variant="secondary" onClick ={() => this.props.backBtnFun()}>Back</Button>
+                </li>
             <li>
               <label>Domain Url</label>
               <input type="text" value={domain_url} name="domain_url" />
