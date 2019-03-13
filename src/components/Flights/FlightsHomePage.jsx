@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import FlightsTable from "./FlightsTable";
 import Select1 from "react-select";
-import MetaFields from "./MetaFields";
+import MetaFields from "./MetafieldsTest";
 import "./css/Flights.css";
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import {
@@ -93,7 +93,7 @@ class FlightsHomePage extends PureComponent {
       fromToCity: "",
       editClicked: false,
       host: host(),
-      backBtnClicked:false
+      backBtnClicked: false
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleMetaChanges = this.handleMetaChanges.bind(this);
@@ -110,9 +110,9 @@ class FlightsHomePage extends PureComponent {
   handleFormSubmit = e => {
     e.preventDefault();
     const flightValues = this.state;
-    let user_data = JSON.parse(localStorage.getItem("user_data"))
-    if(!user_data){
-      window.location.replace("/")
+    let user_data = JSON.parse(localStorage.getItem("user_data"));
+    if (!user_data) {
+      window.location.replace("/");
     }
     let postData = {
       flights_data: {
@@ -148,7 +148,7 @@ class FlightsHomePage extends PureComponent {
             : this.state.destination,
         readOnlyValue: true
       },
-      user_data:user_data
+      user_data: user_data
     };
     axios({
       method: "post",
@@ -157,7 +157,11 @@ class FlightsHomePage extends PureComponent {
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
-        NotificationManager.success("Approval required", "Admin Need to approve ", 2000);
+        NotificationManager.success(
+          "Approval required",
+          "Admin Need to approve ",
+          2000
+        );
         this.setState({
           editClicked: false,
           depCityName: "",
@@ -212,7 +216,7 @@ class FlightsHomePage extends PureComponent {
           arrCityName: "",
           arrCityNameSelected: "",
           renderTables: false,
-          backBtnClicked:false
+          backBtnClicked: false
         },
         this.state.categoryType != "" || this.state.subType === "index"
           ? () => this.fetchDetails()
@@ -234,7 +238,7 @@ class FlightsHomePage extends PureComponent {
           message: "",
           showAddButton: true,
           renderTables: false,
-          backBtnClicked:false
+          backBtnClicked: false
         },
         () => this.fetchDetails()
       );
@@ -253,7 +257,7 @@ class FlightsHomePage extends PureComponent {
           categoryType: "",
           showAddButton: true,
           renderTables: false,
-          backBtnClicked:false
+          backBtnClicked: false
         },
 
         this.state.section != "" && this.state.categoryType != ""
@@ -270,7 +274,7 @@ class FlightsHomePage extends PureComponent {
           arrCityNameSelected: "",
           message: "",
           showAddButton: true,
-          backBtnClicked:false
+          backBtnClicked: false
         },
         () => this.fetchDetails()
       );
@@ -281,7 +285,7 @@ class FlightsHomePage extends PureComponent {
           message: "",
           showAddButton: true,
           renderTables: false,
-          backBtnClicked:false
+          backBtnClicked: false
         },
         () => this.fetchDetails()
       );
@@ -335,14 +339,14 @@ class FlightsHomePage extends PureComponent {
           : fromToCity,
       airline_name: airlineName ? airlineName : brandName
     };
-    if(backBtnClicked){
-      parameters["airline_name"] =""
-      parameters["dep_city_name"] =""
-      parameters["arr_city_name"]=""
-      parameters["city_name"]=""
+    if (backBtnClicked) {
+      parameters["airline_name"] = "";
+      parameters["dep_city_name"] = "";
+      parameters["arr_city_name"] = "";
+      parameters["city_name"] = "";
       this.setState({
         backBtnClicked: false
-      })
+      });
     }
     if (
       (pageType != "" && subType != "" && categoryType != "") ||
@@ -412,8 +416,8 @@ class FlightsHomePage extends PureComponent {
             });
           } else {
             NotificationManager.info(
-           "Please click add new to add new route",
-           "No record found",
+              "Please click add new to add new route",
+              "No record found",
               2000
             );
             this.setState({
@@ -481,31 +485,31 @@ class FlightsHomePage extends PureComponent {
     });
   };
 
-  backBtnFun = () =>{
-    let _self =this
-    setTimeout(function(){
-    _self.setState({
-      showComponent:false,
-      renderTables: true,
-      editClicked:false,
-      readOnlyValue:false,
-      backBtnClicked:true,
-      source:"",
-      depCityName:"",
-      cityNameSelected: "",
-      cityName: "",
-      airlineName: "",
-      airlineNameSelected: "",
-      depCityName: "",
-      depCityNameSelected: "",
-      arrCityName: "",
-      arrCityNameSelected: ""
-    })
-  },150)
-    setTimeout(function(){
-      _self.fetchDetails()
-    },300)
-  }
+  backBtnFun = () => {
+    let _self = this;
+    setTimeout(function() {
+      _self.setState({
+        showComponent: false,
+        renderTables: true,
+        editClicked: false,
+        readOnlyValue: false,
+        backBtnClicked: true,
+        source: "",
+        depCityName: "",
+        cityNameSelected: "",
+        cityName: "",
+        airlineName: "",
+        airlineNameSelected: "",
+        depCityName: "",
+        depCityNameSelected: "",
+        arrCityName: "",
+        arrCityNameSelected: ""
+      });
+    }, 150);
+    setTimeout(function() {
+      _self.fetchDetails();
+    }, 300);
+  };
 
   handleEdit = idx => {
     let { result, pageType, subType, categoryType } = this.state;
@@ -577,7 +581,7 @@ class FlightsHomePage extends PureComponent {
         .get(url, { params: { query_term: target_value } })
         .then(response => {
           if (fieldName === "airlineName") {
-            this.setState({ options: response.data })
+            this.setState({ options: response.data });
             //   , () =>
             //   this.fetchDetails()
             // );
@@ -586,7 +590,7 @@ class FlightsHomePage extends PureComponent {
           } else if (fieldName === "arrCityName") {
             this.setState({ options_arr: response.data });
           } else if (fieldName === "cityName") {
-            this.setState({ options: response.data })
+            this.setState({ options: response.data });
             //   , () =>
             //   this.fetchDetails()
             // );
@@ -1000,7 +1004,7 @@ class FlightsHomePage extends PureComponent {
                   keywords={this.state.keywords}
                   h1Tag={this.state.h1Tag}
                   handleRTEchange={content => this.handleRTEchange(content)}
-                  backBtnFun= {this.backBtnFun.bind(this)}
+                  backBtnFun={this.backBtnFun.bind(this)}
                   handleChange={(e, fieldName) =>
                     this.handleChange(e, fieldName)
                   }
