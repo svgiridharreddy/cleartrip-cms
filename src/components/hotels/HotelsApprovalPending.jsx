@@ -19,8 +19,11 @@ const uniqueColoumn = [{ label: "Domain Url", field: "domain_url", width: 150 },
 const commonColoumn = [{ label: "Domain Name", field: "domain_name", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 },{ label: "Approval status", field: "Approval status", width: 150 }]
 
 const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"]
+const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "PropertyInLocality","Region"]
+const localPageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget"]
 
 const QUERY_URL = host() + "/cmshotels/unique-content-data-collection"
+const QUERY_COMMON_URL = host()+"/cmshotels/common-content-data-collection"
 
 class HotelsApprovalPending extends Component {
   constructor(props) {
@@ -29,16 +32,20 @@ class HotelsApprovalPending extends Component {
       host: host(),
       domain_name: '',
       country_name: '',
+      page_type: '',
       approvalData: [],
-      contentType: '',
+      content_type: '',
+      selectedCountry:null,
       show: false,
       isUniq: false,
+      isCommon: false,
       hotelData: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.approveFunction = this.approveFunction.bind(this);
     this.returnOptions = this.returnOptions.bind(this);
     this.handleChangeUniqueData = this.handleChangeUniqueData.bind(this);
+    this.handleCommonChange = this.handleCommonChange.bind(this);
   }
 
   returnOptions(optData) {
@@ -59,7 +66,7 @@ class HotelsApprovalPending extends Component {
         .then(res => {
             this.setState({
               approvalData: res.data,
-              contentType: "unique-data"
+              content_type: "unique data"
             })
         })
         .catch((err) => {
@@ -77,12 +84,13 @@ class HotelsApprovalPending extends Component {
       selectedCountry: p
     })
     if(this.state.domain_name !== '' &&  p.value !== '') {
-      const data = { content_type: "unique data", domain_name: this.state.domain_name, country_name: p.value }
-      axios.post(`${QUERY_URL}`, data)
+      const data = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: p.value }
+      var urlPath = this.state.content_type === "common data" ? QUERY_COMMON_URL : QUERY_URL
+      axios.post(`${urlPath}`, data)
       .then(res => {
         this.setState({
           approvalData: res.data,
-          contentType: "unique-data"
+          content_type: this.state.content_type
         })
       })
       .catch((err) => {
@@ -134,37 +142,23 @@ class HotelsApprovalPending extends Component {
       axios.get(`${_self.state.host}/approve/${item.id}`).then((response) => {
         if (response.status == 200) {
           return new Promise(function () {
-            if (_self.state.contentType === "common-data") {
-              axios.get(`${_self.state.host}/collect/${_self.state.contentType}`)
-              .then((resp) => {
-                _self.setState({
-                  approvalData: resp.data
-                })
-                if(item.is_approved){
-                  NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
-                }else{
-                  NotificationManager.success("Data Approved", "Approve", 1500);
-                }
-                return resolve(resp)
-
+            var data = { content_type: _self.state.content_type, domain_name: _self.state.domain_name, country_name: _self.state.country_name }
+            if (_self.state.content_type === "common data") {
+              data["page_type"] = _self.state.page_type
+            } 
+            var urlPath = _self.state.content_type === "common data" ? QUERY_COMMON_URL : QUERY_URL
+            axios.post(`${urlPath}`,data)
+             .then((resp) => {
+              _self.setState({
+                approvalData: resp.data
               })
-            } else if (_self.state.contentType === "unique-data") {
-              var data = { content_type: "unique data", domain_name: _self.state.domain_name, country_name: _self.state.country_name }
-              return new Promise(function (resolve) {
-               axios.post(`${QUERY_URL}`,data)
-               .then((resp) => {
-                _self.setState({
-                  approvalData: resp.data
-                })
-                if(item.is_approved){
-                  NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
-                }else{
-                  NotificationManager.success("Data Approved", "Approve", 1500);
-                }
-                return resolve(resp)
-              })
-             })
-            }
+              if(item.is_approved){
+                NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
+              }else{
+                NotificationManager.success("Data Approved", "Approve", 1500);
+              }
+              return resolve(resp)
+            })
           })
         }
       }).catch(function (error) {
@@ -174,29 +168,81 @@ class HotelsApprovalPending extends Component {
   }
 
   handleChange(e) {
-    var contentType = e.target.value;
-    if (contentType === 'common-data') {
-      axios.get(`${this.state.host}/collect/common-data`)
-      .then((response) => {
-        this.setState({
-          approvalData: response.data,
-          contentType: contentType,
-          isUniq: false
-        })
-      })
-    } else if (contentType === "unique-data") {
+    var content_type = e.target.value;
+    if (content_type === 'common data') {
       this.setState({
-        isUniq: true
+        isCommon: true,
+        isUniq: false,
+        domain_name: '',
+        country_name: '',
+        selectedCountry: null,
+        page_type: '',
+        approvalData: [],
+        content_type: 'common data'
+      })
+    } else if (content_type === "unique data") {
+      this.setState({
+        isUniq: true,
+        isCommon: false,
+        domain_name: '',
+        selectedCountry: null,
+        country_name: '',
+        page_type: '',
+        approvalData: [],
+        content_type: 'unique data'
       })
     }
   }
+
+  handleCommonChange(e) {
+    e.preventDefault();
+    this.setState({
+      [e.target.name]: e.target.value
+    }, function(){
+      if(this.state.domain_name !== '' &&  this.state.country_name !== '' && this.state.page_type !== '') {
+        const data = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
+        axios.post(`${QUERY_COMMON_URL}`, data)
+          .then(res => {
+              this.setState({
+                approvalData: res.data,
+                content_type: "common data"
+              })
+          })
+          .catch((err) => {
+              console.log(err);
+          })
+      }
+    });
+  }
+
+  // handleChange(e) {
+  //   var content_type = e.target.value;
+  //   if (content_type === 'common-data') {
+  //     this.setState({
+  //       content_type: content_type
+  //     })
+  //     axios.get(`${this.state.host}/collect/common-data`)
+  //     .then((response) => {
+  //       this.setState({
+  //         approvalData: response.data,
+  //         content_type: content_type,
+  //         isUniq: false
+  //       })
+  //     })
+  //   } else if (content_type === "unique-data") {
+  //     this.setState({
+  //       isUniq: true,
+  //       approvalData: []
+  //     })
+  //   }
+  // }
 
   render() {
     const data = {}
     let dataField;
     let uniqueDataField;
     let rows = []
-    const { approvalData, contentType, hotelData, isUniq } = this.state
+    const { approvalData, content_type, hotelData, isUniq, isCommon } = this.state
 
     if (isUniq) {
       uniqueDataField = (
@@ -234,8 +280,57 @@ class HotelsApprovalPending extends Component {
         )
     }
 
+    if (isCommon) {
+      uniqueDataField = (
+        <div className="top-wrapper">
+            <div className="filter-fileds">
+              <ul className="list-inline">
+                <li>
+                  <label>Domain Name</label>
+                  <select
+                    onChange={this.handleCommonChange}
+                    name="domain_name"
+                    value={this.state.domain_name}
+                  >
+                    <option value="" disabled={true} selected>
+                      Domain Type
+                    </option>
+                    {this.returnOptions(domainType)}
+                  </select>
+                </li>
+                <li>
+                  <label>Country</label>
+                  <Select1
+                      value={this.state.selectedCountry}
+                      name="country_name"
+                      onChange={p => this.handleSelectedInput(p, "country_name")}
+                      onInputChange={e => this.handleAutoSearch(e, "country_name")}
+                      options={this.state.options}
+                  />
+                </li>
+                <li>
+                  <label>Page Type</label>
+                  <select
+                    onChange={this.handleCommonChange}
+                    name="page_type"
+                    value={this.state.page_type}
+                  >
+                    <option value="" disabled={true} selected>
+                      Page Type
+                    </option>
+                    {this.state.country_name.toLowerCase() === "india" ? this.returnOptions(pageType) : this.returnOptions(localPageType)}
+                  </select>
+                </li>
+              </ul>
+              <div className="clearfix"></div>
+            </div>
+          <div className="clearfix"></div>
+        </div>
+        )
+    }
+
     if (approvalData.length > 0) {
-      if (contentType === "unique-data") {
+      if (content_type === "unique data") {
         data["columns"] = uniqueColoumn
         approvalData.map((item, idx) => {
           let obj = {}
@@ -251,7 +346,7 @@ class HotelsApprovalPending extends Component {
           rows.push(obj)
         })
         data["rows"] = rows
-      } else if (contentType === "common-data") {
+      } else if (content_type === "common data") {
         data["columns"] = commonColoumn
         approvalData.map((item, idx) => {
           let obj = {}
@@ -298,8 +393,8 @@ class HotelsApprovalPending extends Component {
       </Modal>
       <select name="content_type" onChange={this.handleChange} className="approval_table">
       <option value="" selected disabled={true}>Select Content</option>
-      <option value="unique-data">Unique Content Data</option>
-      <option value="common-data">Common Content Data</option>
+      <option value="unique data">Unique Content Data</option>
+      <option value="common data">Common Content Data</option>
       </select>
       {uniqueDataField}
       <div className="appovalTable">
