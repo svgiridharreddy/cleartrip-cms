@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import {
-  EditorState,
-  ContentState,
-  convertFromHTML,
-  convertFromRaw,
-  convertToRaw
-} from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import { stateToHTML } from "draft-js-export-html";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {Button} from "react-bootstrap";
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import "font-awesome/css/font-awesome.css";
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+import FroalaEditor from "react-froala-wysiwyg";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
+import FroalaEditorInput from "react-froala-wysiwyg/FroalaEditorInput";
+import $ from "jquery";
+window.jQuery = $;
+window.$ = $;
+global.jQuery = $;
 
 class AddCommonForm extends Component {
 	constructor(props) {
@@ -23,42 +23,35 @@ class AddCommonForm extends Component {
 			meta_title: '',
 			meta_description: '',
 			meta_keyword: '',
-			headerEditorState: '',
-  		footerEditorState: '',
-  		faqEditorState: ''
+			top_content: '',
+			bottom_content: '',
+			faq: ''
 		}
 		this.handleChange = this.handleChange.bind(this);
 	 	this.handleSubmit = this.handleSubmit.bind(this);
+	 	this.handleHeaderModelChange = this.handleHeaderModelChange.bind(this);
+    	this.handleFooterModelChange = this.handleFooterModelChange.bind(this);
+    	this.handleFaqModelChange = this.handleFaqModelChange.bind(this);
 	}
 
-	onHeaderEditorStateChange: Function = (headerEditorState) => {
-	    let convertedData = draftToHtml(
-	        convertToRaw(headerEditorState.getCurrentContent())
-	      );
-	      convertedData = convertedData.replace(/"/g, "'");
-	     this.setState({
-	       headerEditorState: convertedData
-	     });
-	  };
-
-	  onFooterEditorStateChange: Function = (footerEditorState) => {
-	    let convertedData = draftToHtml(
-	      convertToRaw(footerEditorState.getCurrentContent())
-	    );
-	    convertedData = convertedData.replace(/"/g, "'");
-	    this.setState({
-	      footerEditorState: convertedData
-	    });
-	  };
-	  onFaqEditorStateChange: Function = (faqEditorState) => {
-	    let convertedData = draftToHtml(
-	      convertToRaw(faqEditorState.getCurrentContent())
-	    );
-	    convertedData = convertedData.replace(/"/g, "'");
-	    this.setState({
-	      faqEditorState: convertedData
-	    });
-	  };
+	handleHeaderModelChange(model) {
+    let _self = this;
+    _self.setState({
+      top_content: model
+    });
+  }
+  handleFooterModelChange(model) {
+    let _self = this;
+    _self.setState({
+      bottom_content: model
+    });
+  }
+  handleFaqModelChange(model) {
+    let _self = this;
+    _self.setState({
+      faq: model
+    });
+  }
 
 	handleChange(e) {
 		this.setState({
@@ -105,29 +98,26 @@ class AddCommonForm extends Component {
             </li>
             <li>
               <label>Header Content</label>
-              <Editor
-                headerEditorState={headerEditorState}
-                wrapperClassName="demo-wrapper"
-                editorClassName="demo-editor"
-                onEditorStateChange={this.onHeaderEditorStateChange}
+              <FroalaEditor
+                model={this.state.top_content}
+                base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
+                onModelChange={this.handleHeaderModelChange}
               />
             </li>
             <li>
               <label>Footer Content</label>
-              <Editor
-                footerEditorState={footerEditorState}
-                wrapperClassName="demo-wrapper"
-                editorClassName="demo-editor"
-                onEditorStateChange={this.onFooterEditorStateChange}
+              <FroalaEditor
+                model={this.state.bottom_content}
+                base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
+                onModelChange={this.handleFooterModelChange}
               />
             </li>
             <li>
-              <label>Frequently Asked Questions</label>
-              <Editor
-                faqEditorState={faqEditorState}
-                wrapperClassName="demo-wrapper"
-                editorClassName="demo-editor"
-                onEditorStateChange={this.onFaqEditorStateChange}
+              <label>Freaquently Asked Questions</label>
+              <FroalaEditor
+                model={this.state.faq}
+                base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
+                onModelChange={this.handleFaqModelChange}
               />
             </li>
             <li>

@@ -3,21 +3,9 @@ import { FormControl } from 'react-bootstrap';
 import axios from 'axios';
 import Promise from "promise"
 import Select1 from 'react-select';
-import {
-	EditorState,
-	ContentState,
-	convertFromHTML,
-	convertFromRaw,
-	convertToRaw
-} from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import { stateToHTML } from "draft-js-export-html";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import TableContent from '../TableContent';
 import AddHotelUniqueContent from './AddHotelUniqueContent';
-import EditHotelUniqueData from './EditHotelUniqueData';
+import EditUniqueContent from './EditUnique';
 import { host } from "../../helper";
 import {
 	NotificationContainer,
@@ -43,9 +31,9 @@ class UniqueContentDataCollection extends Component {
 			meta_title: '',
 			meta_description: '',
 			meta_keyword: '',
-			headerEditorState: "",
-			footerEditorState: "",
-			faqEditorState: "",
+			top_content: '',
+			bottom_content: '',
+			faq: '',
 			content_type: props.content_type,
 			itemData: {},
 			isDataPresent: false,
@@ -145,7 +133,9 @@ class UniqueContentDataCollection extends Component {
 		this.setState({
 			query: this.search.value
 		}, () => {
-			if (this.state.query.length > 10) {
+			if (this.state.domain_name && this.state.country_name && this.state.query.length > 10) {
+				this.getInfo()
+			} else {
 				this.getInfo()
 			}
 		})
@@ -164,10 +154,10 @@ class UniqueContentDataCollection extends Component {
 		} else if (name === "delete") {
 			const alrt = window.confirm('Are you sure you wish to delete this item?')
 			if (alrt === true) {
-				axios.delete(`${host}/cmshotels/delete/${item.id}`)
+				axios.delete(`${this.state.host}/cmshotels/delete/${item.id}`)
 					.then(res => {
 						console.log(res.message);
-						axios.get(`${QUERY_URL}?prefix=${this.state.query}&content_type=${this.state.content_type}&domain_name=${this.state.domain_name}&country_name=${this.state.country_name}`)
+						axios.post(`${QUERY_URL}?prefix=${this.state.query}&content_type=${this.state.content_type}&domain_name=${this.state.domain_name}&country_name=${this.state.country_name}`)
 							.then((response) => {
 								this.setState({
 									isDataPresent: true,
@@ -184,12 +174,6 @@ class UniqueContentDataCollection extends Component {
 	}
 
 	handleChangeData(result) {
-		let headerState = result.headerEditorState;
-		let footerState = result.footerEditorState;
-		let faqState = result.faqEditorState;
-		headerState = typeof (headerState) == "string" ? headerState : ""
-		footerState = typeof (footerState) == "string" ? footerState : ""
-		faqState = typeof (faqState) == "string" ? faqState : ""
 		const data = {
 			domain_url: result.domain_url,
 			domain_name: result.domain_name,
@@ -202,9 +186,9 @@ class UniqueContentDataCollection extends Component {
 			meta_title: result.meta_title,
 			meta_description: result.meta_description,
 			meta_keyword: result.meta_keyword,
-			top_content: headerState,
-			bottom_content: footerState,
-			faq: faqState
+			top_content: result.top_content,
+			bottom_content: result.bottom_content,
+			faq: result.faq
 		}
 		axios.post(`${this.state.host}/cmshotels/content-section-data`, data)
 			.then(({ data }) => {
@@ -227,33 +211,6 @@ class UniqueContentDataCollection extends Component {
 	}
 
 	handleChangeEditData(result) {
-		let convertedHeaderData;
-		let convertedFooterData;
-		let convertedFaqData;
-		if (result.HeaderEditorState.getCurrentContent !== undefined) {
-			convertedHeaderData = draftToHtml(
-				convertToRaw(result.HeaderEditorState.getCurrentContent())
-			);
-			convertedHeaderData = convertedHeaderData.replace(/"/g, "'");
-		} else {
-			convertedHeaderData = this.state.headerEditorState;
-		}
-		if (result.FootereditorState.getCurrentContent !== undefined) {
-			convertedFooterData = draftToHtml(
-				convertToRaw(result.FootereditorState.getCurrentContent())
-			);
-			convertedFooterData = convertedFooterData.replace(/"/g, "'");
-		} else {
-			convertedFooterData = this.state.footerEditorState;
-		}
-		if (result.FaqeditorState.getCurrentContent !== undefined) {
-			convertedFaqData = draftToHtml(
-				convertToRaw(result.FaqeditorState.getCurrentContent())
-			);
-			convertedFaqData = convertedFaqData.replace(/"/g, "'");
-		} else {
-			convertedFaqData = this.state.faqEditorState;
-		}
 		const data = {
 			domain_url: result.domain_url,
 			content_type: result.content_type,
@@ -266,9 +223,9 @@ class UniqueContentDataCollection extends Component {
 			meta_title: result.meta_title,
 			meta_description: result.meta_description,
 			meta_keyword: result.meta_keyword,
-			top_content: convertedHeaderData,
-			bottom_content: convertedFooterData,
-			faq: convertedFaqData
+			top_content: result.top_content,
+			bottom_content: result.bottom_content,
+			faq: result.faq
 		};
 		axios
 			.post(
@@ -304,7 +261,7 @@ class UniqueContentDataCollection extends Component {
 			dataField = <AddHotelUniqueContent backBtnFun= {this.backBtnFun.bind(this)} domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeData={(result) => this.handleChangeData(result)} />
 		}
 		if (this.state.isEditForm) {
-			dataField = <EditHotelUniqueData backBtnFun= {this.backBtnFun.bind(this)} domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeEditData={(result) => this.handleChangeEditData(result)} contentRecord={this.state.itemData} />
+			dataField = <EditUniqueContent backBtnFun= {this.backBtnFun.bind(this)} domain_name={this.state.domain_name} country_name={this.state.country_name} handleChangeEditData={(result) => this.handleChangeEditData(result)} contentRecord={this.state.itemData} />
 		}
 
 		return (

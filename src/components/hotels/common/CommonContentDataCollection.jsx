@@ -2,18 +2,6 @@ import React, { Component } from 'react';
 import TableContent from '../TableContent';
 import axios from 'axios';
 import Select1 from 'react-select';
-import {
-  EditorState,
-  ContentState,
-  convertFromHTML,
-  convertFromRaw,
-  convertToRaw
-} from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import { stateToHTML } from "draft-js-export-html";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import AddCommonForm from '../AddCommonForm';
 import EditCommonForm from '../EditCommonForm';
 import { host } from "../../helper";
@@ -45,9 +33,9 @@ class CommonContentDataCollection extends Component {
       meta_title: '',
       meta_description: '',
       meta_keyword: '',
-      headerEditorState: "",
-      footerEditorState: "",
-      faqEditorState: "",
+      top_content: '',
+      bottom_content: '',
+      faq: '',
       content_result: [],
       isDataPresent: false,
       isAddForm: false,
@@ -112,12 +100,6 @@ class CommonContentDataCollection extends Component {
 	}
 
 	handleChangeData(result) {
-		let headerState = result.headerEditorState;
-    let footerState = result.footerEditorState;
-    let faqState = result.faqEditorState;
-    headerState = typeof(headerState) == "string" ? headerState : ""
-    footerState = typeof(footerState) == "string" ? footerState : ""
-    faqState = typeof(faqState) == "string" ? faqState : ""
     const data = {
       domain_name: this.state.domain_name,
       content_type: this.state.content_type,
@@ -129,9 +111,9 @@ class CommonContentDataCollection extends Component {
       meta_title: result.meta_title,
       meta_description: result.meta_description,
       meta_keyword: result.meta_keyword,
-      top_content: headerState,
-      bottom_content: footerState,
-      faq: faqState
+      top_content: result.top_content,
+      bottom_content: result.bottom_content,
+      faq: result.faq
     }
     axios.post(`${this.state.host}/cmshotels/common-content-section-data`, data)
     .then(({ data }) => {
@@ -153,33 +135,6 @@ class CommonContentDataCollection extends Component {
 	}
 
 	handleChangeEditData(result){
-		let convertedHeaderData;
-    let convertedFooterData;
-    let convertedFaqData;
-    if (result.HeaderEditorState.getCurrentContent !== undefined) {
-      convertedHeaderData = draftToHtml(
-        convertToRaw(result.HeaderEditorState.getCurrentContent())
-      );
-      convertedHeaderData = convertedHeaderData.replace(/"/g, "'");
-    } else {
-      convertedHeaderData = this.state.headerEditorState;
-    }
-    if (result.FootereditorState.getCurrentContent !== undefined) {
-      convertedFooterData = draftToHtml(
-        convertToRaw(result.FootereditorState.getCurrentContent())
-      );
-      convertedFooterData = convertedFooterData.replace(/"/g, "'");
-    } else {
-      convertedFooterData = this.state.footerEditorState;
-    }
-    if (result.FaqeditorState.getCurrentContent !== undefined) {
-      convertedFaqData = draftToHtml(
-        convertToRaw(result.FaqeditorState.getCurrentContent())
-      );
-      convertedFaqData = convertedFaqData.replace(/"/g, "'");
-    } else {
-      convertedFaqData = this.state.faqEditorState;
-    }
     const data = {
       domain_name: result.domain_name,
       content_type: result.content_type,
@@ -191,9 +146,9 @@ class CommonContentDataCollection extends Component {
       meta_title: result.meta_title,
       meta_description: result.meta_description,
       meta_keyword: result.meta_keyword,
-      top_content: convertedHeaderData,
-      bottom_content: convertedFooterData,
-      faq: convertedFaqData
+      top_content: result.top_content,
+      bottom_content: result.bottom_content,
+      faq: result.faq
     };
     axios
       .post(
