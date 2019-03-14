@@ -86,7 +86,7 @@ class FlightsHomePage extends PureComponent {
       keywords: "",
       content: "",
       h1Tag: "",
-      faq_object:"",
+      faq_object:[],
       showComponent: false,
       source: "",
       destination: "",
@@ -331,7 +331,8 @@ class FlightsHomePage extends PureComponent {
       destination,
       brandName,
       fromToCity,
-      backBtnClicked
+      backBtnClicked,
+      faq_object
     } = this.state;
     var url = this.state.host + "/fetch_details";
 
