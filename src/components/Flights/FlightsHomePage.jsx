@@ -128,7 +128,7 @@ class FlightsHomePage extends PureComponent {
         keywords: flightValues["keywords"],
         content: flightValues["content"].toString("html"),
         h1_title: flightValues["h1Tag"],
-        faq_object: JSON.stringify(flightValues["faq_object"]),
+        faq_object: flightValues["faq_object"],
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]

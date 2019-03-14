@@ -82,7 +82,7 @@ class MetaFields extends Component {
     let _self = this
     let faq_object = this.state.faq_object
     let index = parseInt(e.target.dataset.btnid)
-    faq_object.splice(faq_object[index], 1)
+    faq_object.splice(index, 1)
     _self.setState({
       faq_object: faq_object
     })
@@ -132,7 +132,6 @@ class MetaFields extends Component {
   }
 
   render() {
-    debugger
     const toolbarConfig = {
       // Optionally specify the groups to display (displayed in the order listed).
       display: [
@@ -251,8 +250,9 @@ class MetaFields extends Component {
                   <input type="text" onChange={this.onChageFaq.bind(i)} name="question" data-question={i} value={faq_object[i]["question"]} />
                   <label>Answer {i + 1}:</label>
                   <input type="text" onChange={this.onChageFaq.bind(i)} name="answer" data-answer={i} value={faq_object[i]["answer"]} />
-                  {i == faq_object.length - 1 ? <button type="button"
-                    className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button> : <button type="button"
+                  {i == faq_object.length - 1 ? <div><button type="button"
+                      className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button><button type="button"
+                    className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button></div> : <button type="button"
                       className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
                 </div>
               )
