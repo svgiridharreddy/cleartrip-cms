@@ -86,6 +86,7 @@ class FlightsHomePage extends PureComponent {
       keywords: "",
       content: "",
       h1Tag: "",
+      faq_object:"",
       showComponent: false,
       source: "",
       destination: "",
@@ -429,7 +430,8 @@ class FlightsHomePage extends PureComponent {
               description: "",
               content: "",
               h1Tag: "",
-              keyword: ""
+              keyword: "",
+              faq_object:""
             });
           }
         })
@@ -530,6 +532,7 @@ class FlightsHomePage extends PureComponent {
         readOnlyValue: true
       });
     } else {
+      debugger
       _self.setState({
         title:"",
         description:"",
@@ -540,7 +543,8 @@ class FlightsHomePage extends PureComponent {
         fromToCity:"",
         brandName:"",
         arrCityNameSelected:"",
-        airlineName:""
+        airlineName:"",
+        faq_object:""
       })
       setTimeout(function(){
         _self.setState({
@@ -557,6 +561,7 @@ class FlightsHomePage extends PureComponent {
           destination: result[pageType][subType][idx]["destination"],
           fromToCity: result[pageType][subType][idx]["city_name"],
           brandName: result[pageType][subType][idx]["airline_name"],
+          faq_object:result[pageType][subType][idx]["faq_object"],
           arrCityNameSelected:
           _self.state.arrCityNameSelected != ""
               ? _self.state.arrCityNameSelected
@@ -1015,11 +1020,13 @@ class FlightsHomePage extends PureComponent {
                   }
                   handleFormSubmit={this.handleFormSubmit.bind(this)}
                   pageType={this.state.pageType}
+                  subType ={this.state.subType}
                   title={this.state.title}
                   description={this.state.description}
                   content={this.state.content}
                   keywords={this.state.keywords}
                   h1Tag={this.state.h1Tag}
+                  faq_object={this.state.faq_object}
                   handleRTEchange={content => this.handleRTEchange(content)}
                   backBtnFun={this.backBtnFun.bind(this)}
                   handleChange={(e, fieldName) =>

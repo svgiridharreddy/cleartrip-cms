@@ -122,7 +122,6 @@ class FlightsTable extends Component {
           }
         }
       });
-      debugger
       obj["editbtn"] =
         <MDBBtn
           color="default"

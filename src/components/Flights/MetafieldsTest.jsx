@@ -3,6 +3,11 @@ import "froala-editor/js/froala_editor.pkgd.min.js";
 import RichTextEditor from "react-rte";
 import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
 import Select1 from "react-select";
+import "../../../node_modules/react-notifications/lib/notifications.css";
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
 import "font-awesome/css/font-awesome.css";
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import "froala-editor/css/froala_style.min.css";
@@ -19,6 +24,7 @@ class MetaFields extends Component {
     super(props);
     this.state = {
       pageType: this.props.pageType,
+      subType: this.props.subType,
       title: "",
       description: "",
       content: this.props.content,
@@ -34,9 +40,11 @@ class MetaFields extends Component {
       options_arr: [],
       depCityNameSelected: "",
       arrCityNameSelected: "",
-      editorState: ""
+      editorState: "",
+      faq_object:JSON.parse(this.props.faq_object)
     };
     this.handleModelChange = this.handleModelChange.bind(this);
+    this.onChageFaq = this.onChageFaq.bind(this)
   }
 
   onChange1 = content => {
@@ -50,6 +58,46 @@ class MetaFields extends Component {
     this.props.handleChange(content, "rte");
   };
 
+  addNewFaq(e) {
+    let _self = this
+    let faq_object = this.state.faq_object
+    let addNew = false
+    faq_object.map((faq, i) => {
+      if (faq["question"] != "" && faq["answer"] != "") {
+        addNew = true
+      } else {
+        addNew = false
+      }
+    })
+    if (addNew) {
+      faq_object.push({ question: "", answer: "" })
+      _self.setState({
+        faq_object: faq_object
+      })
+    } else {
+      NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", "3000")
+    }
+  }
+  removeFaq(e) {
+    let _self = this
+    let faq_object = this.state.faq_object
+    let index = parseInt(e.target.dataset.btnid)
+    faq_object.splice(faq_object[index], 1)
+    _self.setState({
+      faq_object: faq_object
+    })
+  };
+  onChageFaq(e) {
+    let _self = this
+    let faq_object = _self.state.faq_object
+    let qIndex = parseInt(e.target.dataset.question)
+    let aIndex = parseInt(e.target.dataset.answer)
+    let index = e.target.name === "question" ? qIndex : aIndex
+    faq_object[index][e.target.name] = e.target.value
+    _self.setState({
+      faq_object: faq_object
+    })
+  }
   // componentWillMount() {
   //   if (this.props.content) {
   //     this.setState({
@@ -66,7 +114,7 @@ class MetaFields extends Component {
       content: model
     });
     // _self.props.handleChange(_self.state.content.toString("html"), "rte");
-    _self.props.handleChange(_self.state.content,"rte");
+    _self.props.handleChange(_self.state.content, "rte");
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,6 +128,7 @@ class MetaFields extends Component {
   }
 
   render() {
+    debugger
     const toolbarConfig = {
       // Optionally specify the groups to display (displayed in the order listed).
       display: [
@@ -118,7 +167,7 @@ class MetaFields extends Component {
       index: "Index"
     };
     const { title, description, keywords, content, h1Tag } = this.props;
-
+    const { pageType, subType, faq_object } = this.state
     return (
       <ul>
         <li>
@@ -182,13 +231,29 @@ class MetaFields extends Component {
             model={this.state.content}
             base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
             onModelChange={this.handleModelChange}
-            config={{htmlAllowedTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']}}
+            config={{ htmlAllowedTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }}
           />
           <li>
             {/* <FroalaEditor
               base='https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4'
               value={this.state.florContent} /> */}
           </li>
+          {(pageType === "flight-schedule" && subType === "routes") ? <li>
+            {faq_object.map((val, i) => {
+              return (
+                <div className="faqData">
+                  <label>
+                    Question {i + 1}: </label>
+                  <input type="text" onChange={this.onChageFaq.bind(i)} name="question" data-question={i} value={faq_object[i]["question"]} />
+                  <label>Answer {i + 1}:</label>
+                  <input type="text" onChange={this.onChageFaq.bind(i)} name="answer" data-answer={i} value={faq_object[i]["answer"]} />
+                  {i == faq_object.length - 1 ? <button type="button"
+                    className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button> : <button type="button"
+                      className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
+                </div>
+              )
+            })}
+          </li> : ""}
           <button
             className="save-btn"
             type="submit"
