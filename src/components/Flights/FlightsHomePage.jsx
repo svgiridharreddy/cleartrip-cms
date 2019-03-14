@@ -203,6 +203,7 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleChange = (e, fieldName) => {
+    debugger
     if (fieldName === "section") {
       this.setState(
         {
@@ -216,7 +217,8 @@ class FlightsHomePage extends PureComponent {
           arrCityName: "",
           arrCityNameSelected: "",
           renderTables: false,
-          backBtnClicked: false
+          backBtnClicked: false,
+          brandName:""
         },
         this.state.categoryType != "" || this.state.subType === "index"
           ? () => this.fetchDetails()
