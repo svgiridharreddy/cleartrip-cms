@@ -203,7 +203,6 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleChange = (e, fieldName) => {
-    debugger
     if (fieldName === "section") {
       this.setState(
         {
@@ -514,9 +513,11 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleEdit = idx => {
+    debugger
+    let _self = this
     let { result, pageType, subType, categoryType } = this.state;
     if (categoryType === "common" || subType === "index") {
-      this.setState({
+      _self.setState({
         renderTables: false,
         showComponent: true,
         message: "",
@@ -529,27 +530,41 @@ class FlightsHomePage extends PureComponent {
         readOnlyValue: true
       });
     } else {
-      this.setState({
-        renderTables: false,
-        showComponent: true,
-        message: "",
-        showAddButton: false,
-        title: result[pageType][subType][idx]["title"],
-        description: result[pageType][subType][idx]["description"],
-        content: result[pageType][subType][idx]["content"],
-        h1Tag: result[pageType][subType][idx]["heading"],
-        keywords: result[pageType][subType][idx]["keyword"],
-        source: result[pageType][subType][idx]["source"],
-        destination: result[pageType][subType][idx]["destination"],
-        fromToCity: result[pageType][subType][idx]["city_name"],
-        brandName: result[pageType][subType][idx]["airline_name"],
-        arrCityNameSelected:
-          this.state.arrCityNameSelected != ""
-            ? this.state.arrCityNameSelected
-            : this.state.source,
-        editClicked: true,
-        readOnlyValue: true
-      });
+      _self.setState({
+        title:"",
+        description:"",
+        content:"",
+        keywords:"",
+        source:"",
+        destination:"",
+        fromToCity:"",
+        brandName:"",
+        arrCityNameSelected:"",
+        airlineName:""
+      })
+      setTimeout(function(){
+        _self.setState({
+          renderTables: false,
+          showComponent: true,
+          message: "",
+          showAddButton: false,
+          title: result[pageType][subType][idx]["title"],
+          description: result[pageType][subType][idx]["description"],
+          content: result[pageType][subType][idx]["content"],
+          h1Tag: result[pageType][subType][idx]["heading"],
+          keywords: result[pageType][subType][idx]["keyword"],
+          source: result[pageType][subType][idx]["source"],
+          destination: result[pageType][subType][idx]["destination"],
+          fromToCity: result[pageType][subType][idx]["city_name"],
+          brandName: result[pageType][subType][idx]["airline_name"],
+          arrCityNameSelected:
+          _self.state.arrCityNameSelected != ""
+              ? _self.state.arrCityNameSelected
+              : _self.state.source,
+          editClicked: true,
+          readOnlyValue: true
+        });
+      },100)
     }
   };
 

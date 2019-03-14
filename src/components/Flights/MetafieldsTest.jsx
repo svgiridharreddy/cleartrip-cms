@@ -65,7 +65,8 @@ class MetaFields extends Component {
     _self.setState({
       content: model
     });
-    _self.props.handleChange(_self.state.content.toString("html"), "rte");
+    // _self.props.handleChange(_self.state.content.toString("html"), "rte");
+    _self.props.handleChange(_self.state.content,"rte");
   }
 
   componentWillReceiveProps(nextProps) {
