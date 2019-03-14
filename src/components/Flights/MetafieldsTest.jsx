@@ -41,7 +41,7 @@ class MetaFields extends Component {
       depCityNameSelected: "",
       arrCityNameSelected: "",
       editorState: "",
-      faq_object:JSON.parse(this.props.faq_object)
+      faq_object:this.props.faq_object ? JSON.parse(this.props.faq_object) : []
     };
     this.handleModelChange = this.handleModelChange.bind(this);
     this.onChageFaq = this.onChageFaq.bind(this)
@@ -97,6 +97,9 @@ class MetaFields extends Component {
     _self.setState({
       faq_object: faq_object
     })
+    setTimeout(function(){
+      _self.props.faqOnchange(_self.state.faq_object,"faq_object")
+    },100)
   }
   // componentWillMount() {
   //   if (this.props.content) {
@@ -123,7 +126,8 @@ class MetaFields extends Component {
       description: nextProps.description,
       keywords: nextProps.keywords,
       h1Tag: nextProps.h1Tag,
-      conent: nextProps.content
+      conent: nextProps.content,
+      faq_object: nextProps.faq_object
     });
   }
 
@@ -238,7 +242,7 @@ class MetaFields extends Component {
               base='https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4'
               value={this.state.florContent} /> */}
           </li>
-          {(pageType === "flight-schedule" && subType === "routes") ? <li>
+          {(faq_object.length > 0 && pageType === "flight-schedule" && subType === "routes") ? <li>
             {faq_object.map((val, i) => {
               return (
                 <div className="faqData">

@@ -128,6 +128,7 @@ class FlightsHomePage extends PureComponent {
         keywords: flightValues["keywords"],
         content: flightValues["content"].toString("html"),
         h1_title: flightValues["h1Tag"],
+        faq_object: JSON.stringify(flightValues["faq_object"]),
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -202,6 +203,13 @@ class FlightsHomePage extends PureComponent {
       this.props.onChange(content.toString("html"));
     }
   };
+  faqOnchange(e,fieldName){
+    let _self = this
+    _self.setState({
+      [fieldName]: e
+    })
+    debugger
+  }
 
   handleChange = (e, fieldName) => {
     if (fieldName === "section") {
@@ -515,7 +523,6 @@ class FlightsHomePage extends PureComponent {
   };
 
   handleEdit = idx => {
-    debugger
     let _self = this
     let { result, pageType, subType, categoryType } = this.state;
     if (categoryType === "common" || subType === "index") {
@@ -532,7 +539,6 @@ class FlightsHomePage extends PureComponent {
         readOnlyValue: true
       });
     } else {
-      debugger
       _self.setState({
         title:"",
         description:"",
@@ -1029,6 +1035,7 @@ class FlightsHomePage extends PureComponent {
                   faq_object={this.state.faq_object}
                   handleRTEchange={content => this.handleRTEchange(content)}
                   backBtnFun={this.backBtnFun.bind(this)}
+                  faqOnchange = {this.faqOnchange.bind(this)}
                   handleChange={(e, fieldName) =>
                     this.handleChange(e, fieldName)
                   }
