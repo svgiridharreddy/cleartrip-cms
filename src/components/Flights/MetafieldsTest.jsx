@@ -97,9 +97,8 @@ class MetaFields extends Component {
     _self.setState({
       faq_object: faq_object
     })
-    setTimeout(function(){
-      _self.props.faqOnchange(_self.state.faq_object,"faq_object")
-    },100)
+      debugger
+      _self.props.faqOnchange(faq_object,"faq_object")
   }
   // componentWillMount() {
   //   if (this.props.content) {

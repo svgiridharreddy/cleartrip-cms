@@ -204,6 +204,7 @@ class FlightsHomePage extends PureComponent {
     }
   };
   faqOnchange(e,fieldName){
+    debugger
     let _self = this
     _self.setState({
       [fieldName]: e
