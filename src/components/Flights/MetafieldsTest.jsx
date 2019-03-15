@@ -265,8 +265,8 @@ class MetaFields extends Component {
                 </div>
               )
             })}
-          </li> : <div>No faq's present<button type="button"
-            className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></div>}
+          </li> : (pageType === "flight-schedule" && subType === "routes") ? <li>No faq's present<button type="button"
+            className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></li> : ""}
           <button
             className="save-btn"
             type="submit"
