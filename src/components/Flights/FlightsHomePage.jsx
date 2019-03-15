@@ -295,7 +295,19 @@ class FlightsHomePage extends PureComponent {
           message: "",
           showAddButton: true,
           renderTables: false,
-          backBtnClicked: false
+          backBtnClicked: false,
+          cityNameSelected: "",
+          cityName: "",
+          airlineName: "",
+          airlineNameSelected: "",
+          depCityName: "",
+          depCityNameSelected: "",
+          arrCityName: "",
+          arrCityNameSelected: "",
+          source: "",
+          destination: "",
+          brandName: "",
+          fromToCity: ""
         },
         () => this.fetchDetails()
       );

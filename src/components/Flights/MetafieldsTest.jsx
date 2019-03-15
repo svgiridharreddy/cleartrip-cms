@@ -248,7 +248,7 @@ class MetaFields extends Component {
               base='https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4'
               value={this.state.florContent} /> */}
           </li>
-          {(faq_object && faq_object.length > 0 && pageType === "flight-schedule" && subType === "routes") ? <li>
+          {(faq_object && faq_object.length > 0) ? <li>
             <b>Faq content</b>
             {faq_object.map((val, i) => {
               return (
@@ -265,8 +265,8 @@ class MetaFields extends Component {
                 </div>
               )
             })}
-          </li> : (pageType === "flight-schedule" && subType === "routes") ? <li>No faq's present<button type="button"
-            className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></li> : ""}
+          </li> : <li>No faq's present<button type="button"
+            className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></li> }
           <button
             className="save-btn"
             type="submit"
