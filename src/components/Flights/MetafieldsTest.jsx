@@ -41,7 +41,7 @@ class MetaFields extends Component {
       depCityNameSelected: "",
       arrCityNameSelected: "",
       editorState: "",
-      faq_object:this.props.faq_object ? JSON.parse(this.props.faq_object) : []
+      faq_object: this.props.faq_object ? JSON.parse(this.props.faq_object) : []
     };
     this.handleModelChange = this.handleModelChange.bind(this);
     this.onChageFaq = this.onChageFaq.bind(this)
@@ -86,6 +86,7 @@ class MetaFields extends Component {
     _self.setState({
       faq_object: faq_object
     })
+    _self.props.faqOnchange(faq_object, "faq_object")
   };
   onChageFaq(e) {
     let _self = this
@@ -97,8 +98,7 @@ class MetaFields extends Component {
     _self.setState({
       faq_object: faq_object
     })
-      debugger
-      _self.props.faqOnchange(faq_object,"faq_object")
+    _self.props.faqOnchange(faq_object, "faq_object")
   }
   // componentWillMount() {
   //   if (this.props.content) {
@@ -250,9 +250,9 @@ class MetaFields extends Component {
                   <label>Answer {i + 1}:</label>
                   <input type="text" onChange={this.onChageFaq.bind(i)} name="answer" data-answer={i} value={faq_object[i]["answer"]} />
                   {i == faq_object.length - 1 ? <div><button type="button"
-                      className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button><button type="button"
-                    className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button></div> : <button type="button"
-                      className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
+                    className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button><button type="button"
+                      className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button></div> : <button type="button"
+                        className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
                 </div>
               )
             })}
