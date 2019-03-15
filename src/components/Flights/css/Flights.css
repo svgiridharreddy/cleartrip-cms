@@ -402,3 +402,6 @@ input:checked + .slider:before {
   background-color: #224a91 !important;
   color: #fff;
 }
+p[data-f-id="pbf"] {
+  display: none;
+}

@@ -50,13 +50,18 @@ class FlightsApprovalPending extends Component {
         this.setState({ show: false });
     }
     handleShow(data) {
-        let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title"]
+        let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title", "faq_object"]
         let modelData = showArr.map((ele, i) => {
             if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
                 return (
-                    <li key={i}>
-                        <b className="showFieldName">{ele.replace("_", " ")}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
-                    </li>
+                    ele === "faq_object" && data[ele].length > 0 ? data[ele].map((v, k) => {
+                        return(<li key={k}>
+                             <b className="showFieldName">{k == 0 ? ele.replace("_", " ")+":" : ""}</b><br /><b>{v["question"]}</b><br />{v["answer"]}
+                        </li>)
+                    }) :
+                        <li key={i}>
+                            <b className="showFieldName">{ele.replace("_", " ")}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
+                        </li>
                 );
             }
         });
@@ -248,7 +253,7 @@ class FlightsApprovalPending extends Component {
 
     }
     handleChange(e) {
-       debugger
+        debugger
         let _self = this;
         _self.setState({
             [e.target.name]: e.target.value,

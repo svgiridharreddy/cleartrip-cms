@@ -115,7 +115,7 @@ class FlightsHomePage extends PureComponent {
     if (!user_data) {
       window.location.replace("/");
     }
-    let faq_obj = flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : []
+    
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -129,7 +129,7 @@ class FlightsHomePage extends PureComponent {
         keywords: flightValues["keywords"],
         content: flightValues["content"].toString("html"),
         h1_title: flightValues["h1Tag"],
-        faq_object: faq_obj,
+        faq_object:  flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -529,10 +529,10 @@ class FlightsHomePage extends PureComponent {
         arrCityName: "",
         arrCityNameSelected: ""
       });
-    }, 150);
+    }, 100);
     setTimeout(function() {
       _self.fetchDetails();
-    }, 300);
+    }, 100);
   };
 
   handleEdit = idx => {

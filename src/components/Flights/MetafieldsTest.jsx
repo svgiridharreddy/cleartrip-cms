@@ -82,7 +82,7 @@ class MetaFields extends Component {
       })
     } else {
       if (!faq_object.length == 0) {
-        NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", "3000")
+        NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", 3000)
       }
     }
   }

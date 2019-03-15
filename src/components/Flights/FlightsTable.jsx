@@ -149,7 +149,8 @@ class FlightsTable extends Component {
       }
       rows.push(obj);
     });
-    data["columns"] = columns;
+    debugger
+    data["columns"] = columns
     data["rows"] = rows;
     return (
       <div className="index-tables">
