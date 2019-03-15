@@ -47,6 +47,9 @@ class FlightsTable extends Component {
     tableTitlearray = tableTitlearray.concat(temparray);
     var actions = ["Edit", "Delete"];
     tableTitlearray = tableTitlearray.concat(actions);
+    if(subType == "overview"){
+      tableTitlearray = ["Domain", "Language", "Section", "AirlineName", "Page Type", "Sub Page Type", "URL", "Edit", "Delete"] 
+    }
     tableValuearray = Object.values(tableTitle);
     var tempValueArray =
       subType && subType != "index" ? Object.values(tableFields[subType]) : [];

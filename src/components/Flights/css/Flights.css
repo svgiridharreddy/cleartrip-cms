@@ -405,3 +405,6 @@ input:checked + .slider:before {
 p[data-f-id="pbf"] {
   display: none;
 }
+a[href="https://www.froala.com/wysiwyg-editor?k=u"]{
+  display: none!important;
+}
