@@ -109,12 +109,14 @@ class FlightsHomePage extends PureComponent {
   }
 
   handleFormSubmit = e => {
+    debugger
     e.preventDefault();
     const flightValues = this.state;
     let user_data = JSON.parse(localStorage.getItem("user_data"));
     if (!user_data) {
       window.location.replace("/");
     }
+    let faq_obj = JSON.stringify(flightValues["faq_object"])
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -128,7 +130,7 @@ class FlightsHomePage extends PureComponent {
         keywords: flightValues["keywords"],
         content: flightValues["content"].toString("html"),
         h1_title: flightValues["h1Tag"],
-        faq_object: flightValues["faq_object"],
+        faq_object: faq_obj,
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -204,12 +206,10 @@ class FlightsHomePage extends PureComponent {
     }
   };
   faqOnchange(e,fieldName){
-    debugger
     let _self = this
     _self.setState({
       [fieldName]: e
     })
-    debugger
   }
 
   handleChange = (e, fieldName) => {

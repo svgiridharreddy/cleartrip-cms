@@ -61,9 +61,15 @@ class MetaFields extends Component {
   addNewFaq(e) {
     let _self = this
     let faq_object = this.state.faq_object
+    if(faq_object.length == 0){
+      faq_object.push({ question: "", answer: "" })
+      _self.setState({
+        faq_object: faq_object
+      })
+    }
     let addNew = false
     faq_object.map((faq, i) => {
-      if (faq["question"] != "" && faq["answer"] != "") {
+      if ((faq["question"] != "" && faq["answer"] != "")) {
         addNew = true
       } else {
         addNew = false
@@ -75,7 +81,9 @@ class MetaFields extends Component {
         faq_object: faq_object
       })
     } else {
-      NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", "3000")
+      if(!faq_object.length == 0){
+        NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", "3000")
+      }
     }
   }
   removeFaq(e) {
@@ -131,6 +139,7 @@ class MetaFields extends Component {
   }
 
   render() {
+    debugger
     const toolbarConfig = {
       // Optionally specify the groups to display (displayed in the order listed).
       display: [
@@ -240,7 +249,7 @@ class MetaFields extends Component {
               base='https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4'
               value={this.state.florContent} /> */}
           </li>
-          {(faq_object.length > 0 && pageType === "flight-schedule" && subType === "routes") ? <li>
+          {(faq_object && faq_object.length > 0 && pageType === "flight-schedule" && subType === "routes") ? <li>
             {faq_object.map((val, i) => {
               return (
                 <div className="faqData">
@@ -256,7 +265,8 @@ class MetaFields extends Component {
                 </div>
               )
             })}
-          </li> : ""}
+          </li> : <div>No faq's present<button type="button"
+            className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></div>}
           <button
             className="save-btn"
             type="submit"
