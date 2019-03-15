@@ -249,6 +249,7 @@ class MetaFields extends Component {
               value={this.state.florContent} /> */}
           </li>
           {(faq_object && faq_object.length > 0 && pageType === "flight-schedule" && subType === "routes") ? <li>
+            <b>Faq content</b>
             {faq_object.map((val, i) => {
               return (
                 <div className="faqData">

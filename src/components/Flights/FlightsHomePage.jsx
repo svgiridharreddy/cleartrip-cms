@@ -109,7 +109,6 @@ class FlightsHomePage extends PureComponent {
   }
 
   handleFormSubmit = e => {
-    debugger
     e.preventDefault();
     const flightValues = this.state;
     let user_data = JSON.parse(localStorage.getItem("user_data"));
