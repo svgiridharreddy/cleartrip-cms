@@ -61,7 +61,7 @@ class MetaFields extends Component {
   addNewFaq(e) {
     let _self = this
     let faq_object = this.state.faq_object
-    if(faq_object.length == 0){
+    if (faq_object.length == 0) {
       faq_object.push({ question: "", answer: "" })
       _self.setState({
         faq_object: faq_object
@@ -81,7 +81,7 @@ class MetaFields extends Component {
         faq_object: faq_object
       })
     } else {
-      if(!faq_object.length == 0){
+      if (!faq_object.length == 0) {
         NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", "3000")
       }
     }
@@ -176,7 +176,7 @@ class MetaFields extends Component {
       "web-checkin": "Web Checkin",
       index: "Index"
     };
-        const { title, description, keywords, content, h1Tag } = this.props;
+    const { title, description, keywords, content, h1Tag } = this.props;
     const { pageType, subType, faq_object } = this.state
     return (
       <ul>
