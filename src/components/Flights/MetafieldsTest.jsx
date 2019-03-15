@@ -41,7 +41,7 @@ class MetaFields extends Component {
       depCityNameSelected: "",
       arrCityNameSelected: "",
       editorState: "",
-      faq_object: this.props.faq_object ? JSON.parse(this.props.faq_object) : []
+      faq_object: this.props.faq_object
     };
     this.handleModelChange = this.handleModelChange.bind(this);
     this.onChageFaq = this.onChageFaq.bind(this)
@@ -139,7 +139,6 @@ class MetaFields extends Component {
   }
 
   render() {
-    debugger
     const toolbarConfig = {
       // Optionally specify the groups to display (displayed in the order listed).
       display: [
@@ -177,7 +176,7 @@ class MetaFields extends Component {
       "web-checkin": "Web Checkin",
       index: "Index"
     };
-    const { title, description, keywords, content, h1Tag } = this.props;
+        const { title, description, keywords, content, h1Tag } = this.props;
     const { pageType, subType, faq_object } = this.state
     return (
       <ul>
