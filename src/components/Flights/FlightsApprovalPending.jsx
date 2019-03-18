@@ -44,23 +44,32 @@ class FlightsApprovalPending extends Component {
         this.approveRoute = this.approveRoute.bind(this)
         this.getApprovelPendingRecord = this.getApprovelPendingRecord.bind(this)
         this.processTable = this.processTable.bind(this)
+        this.handleEdit = this.handleEdit.bind(this)
     }
 
     handleClose() {
         this.setState({ show: false });
     }
     handleShow(data) {
-        let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title"]
+        let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title", "faq_object"]
         let modelData = showArr.map((ele, i) => {
             if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
                 return (
-                    <li key={i}>
-                        <b className="showFieldName">{ele.replace("_", " ")}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
-                    </li>
+                    ele === "faq_object" && data[ele].length > 0 ? data[ele].map((v, k) => {
+                        return(<li key={k}>
+                             <b className="showFieldName">{k == 0 ? ele.replace("_", " ")+":" : ""}</b><br /><b>{v["question"]}</b><br />{v["answer"]}
+                        </li>)
+                    }) :
+                        <li key={i}>
+                            <b className="showFieldName">{ele.replace("_", " ")}:</b>{ele === "content" ? ReactHtmlParser(data[ele]) : data[ele]}
+                        </li>
                 );
             }
         });
         this.setState({ show: true, modelData: modelData });
+    }
+    handleEdit(data){
+        debugger
     }
     createTable(type, thead, data) {
         let _self = this
@@ -101,6 +110,7 @@ class FlightsApprovalPending extends Component {
             })
             tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
             // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
+            // tabObj["edit"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
             tabObj["view"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
@@ -248,7 +258,6 @@ class FlightsApprovalPending extends Component {
 
     }
     handleChange(e) {
-       debugger
         let _self = this;
         _self.setState({
             [e.target.name]: e.target.value,

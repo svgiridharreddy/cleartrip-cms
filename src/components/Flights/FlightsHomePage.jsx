@@ -86,7 +86,7 @@ class FlightsHomePage extends PureComponent {
       keywords: "",
       content: "",
       h1Tag: "",
-      faq_object:"",
+      faq_object:[],
       showComponent: false,
       source: "",
       destination: "",
@@ -115,6 +115,7 @@ class FlightsHomePage extends PureComponent {
     if (!user_data) {
       window.location.replace("/");
     }
+    debugger
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -126,8 +127,9 @@ class FlightsHomePage extends PureComponent {
         title: flightValues["title"],
         description: flightValues["description"],
         keywords: flightValues["keywords"],
-        content: flightValues["content"].toString("html"),
+        content: flightValues["content"] ? flightValues["content"].toString("html") : "",
         h1_title: flightValues["h1Tag"],
+        faq_object:  flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -202,6 +204,12 @@ class FlightsHomePage extends PureComponent {
       this.props.onChange(content.toString("html"));
     }
   };
+  faqOnchange(e,fieldName){
+    let _self = this
+    _self.setState({
+      [fieldName]: e
+    })
+  }
 
   handleChange = (e, fieldName) => {
     if (fieldName === "section") {
@@ -287,7 +295,19 @@ class FlightsHomePage extends PureComponent {
           message: "",
           showAddButton: true,
           renderTables: false,
-          backBtnClicked: false
+          backBtnClicked: false,
+          cityNameSelected: "",
+          cityName: "",
+          airlineName: "",
+          airlineNameSelected: "",
+          depCityName: "",
+          depCityNameSelected: "",
+          arrCityName: "",
+          arrCityNameSelected: "",
+          source: "",
+          destination: "",
+          brandName: "",
+          fromToCity: ""
         },
         () => this.fetchDetails()
       );
@@ -322,7 +342,8 @@ class FlightsHomePage extends PureComponent {
       destination,
       brandName,
       fromToCity,
-      backBtnClicked
+      backBtnClicked,
+      faq_object
     } = this.state;
     var url = this.state.host + "/fetch_details";
 
@@ -431,7 +452,7 @@ class FlightsHomePage extends PureComponent {
               content: "",
               h1Tag: "",
               keyword: "",
-              faq_object:""
+              faq_object:[]
             });
           }
         })
@@ -508,14 +529,13 @@ class FlightsHomePage extends PureComponent {
         arrCityName: "",
         arrCityNameSelected: ""
       });
-    }, 150);
+    }, 100);
     setTimeout(function() {
       _self.fetchDetails();
-    }, 300);
+    }, 100);
   };
 
   handleEdit = idx => {
-    debugger
     let _self = this
     let { result, pageType, subType, categoryType } = this.state;
     if (categoryType === "common" || subType === "index") {
@@ -532,7 +552,6 @@ class FlightsHomePage extends PureComponent {
         readOnlyValue: true
       });
     } else {
-      debugger
       _self.setState({
         title:"",
         description:"",
@@ -544,7 +563,7 @@ class FlightsHomePage extends PureComponent {
         brandName:"",
         arrCityNameSelected:"",
         airlineName:"",
-        faq_object:""
+        faq_object:[]
       })
       setTimeout(function(){
         _self.setState({
@@ -1029,6 +1048,7 @@ class FlightsHomePage extends PureComponent {
                   faq_object={this.state.faq_object}
                   handleRTEchange={content => this.handleRTEchange(content)}
                   backBtnFun={this.backBtnFun.bind(this)}
+                  faqOnchange = {this.faqOnchange.bind(this)}
                   handleChange={(e, fieldName) =>
                     this.handleChange(e, fieldName)
                   }

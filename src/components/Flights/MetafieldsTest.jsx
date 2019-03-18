@@ -41,7 +41,7 @@ class MetaFields extends Component {
       depCityNameSelected: "",
       arrCityNameSelected: "",
       editorState: "",
-      faq_object:JSON.parse(this.props.faq_object)
+      faq_object: this.props.faq_object
     };
     this.handleModelChange = this.handleModelChange.bind(this);
     this.onChageFaq = this.onChageFaq.bind(this)
@@ -61,9 +61,15 @@ class MetaFields extends Component {
   addNewFaq(e) {
     let _self = this
     let faq_object = this.state.faq_object
+    if (faq_object.length == 0) {
+      faq_object.push({ question: "", answer: "" })
+      _self.setState({
+        faq_object: faq_object
+      })
+    }
     let addNew = false
     faq_object.map((faq, i) => {
-      if (faq["question"] != "" && faq["answer"] != "") {
+      if ((faq["question"] != "" && faq["answer"] != "")) {
         addNew = true
       } else {
         addNew = false
@@ -75,17 +81,20 @@ class MetaFields extends Component {
         faq_object: faq_object
       })
     } else {
-      NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", "3000")
+      if (!faq_object.length == 0) {
+        NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", 3000)
+      }
     }
   }
   removeFaq(e) {
     let _self = this
     let faq_object = this.state.faq_object
     let index = parseInt(e.target.dataset.btnid)
-    faq_object.splice(faq_object[index], 1)
+    faq_object.splice(index, 1)
     _self.setState({
       faq_object: faq_object
     })
+    _self.props.faqOnchange(faq_object, "faq_object")
   };
   onChageFaq(e) {
     let _self = this
@@ -97,6 +106,7 @@ class MetaFields extends Component {
     _self.setState({
       faq_object: faq_object
     })
+    _self.props.faqOnchange(faq_object, "faq_object")
   }
   // componentWillMount() {
   //   if (this.props.content) {
@@ -123,12 +133,12 @@ class MetaFields extends Component {
       description: nextProps.description,
       keywords: nextProps.keywords,
       h1Tag: nextProps.h1Tag,
-      conent: nextProps.content
+      conent: nextProps.content,
+      faq_object: nextProps.faq_object
     });
   }
 
   render() {
-    debugger
     const toolbarConfig = {
       // Optionally specify the groups to display (displayed in the order listed).
       display: [
@@ -238,7 +248,8 @@ class MetaFields extends Component {
               base='https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4'
               value={this.state.florContent} /> */}
           </li>
-          {(pageType === "flight-schedule" && subType === "routes") ? <li>
+          {(faq_object && faq_object.length > 0) ? <li>
+            <b>Faq content</b>
             {faq_object.map((val, i) => {
               return (
                 <div className="faqData">
@@ -247,13 +258,15 @@ class MetaFields extends Component {
                   <input type="text" onChange={this.onChageFaq.bind(i)} name="question" data-question={i} value={faq_object[i]["question"]} />
                   <label>Answer {i + 1}:</label>
                   <input type="text" onChange={this.onChageFaq.bind(i)} name="answer" data-answer={i} value={faq_object[i]["answer"]} />
-                  {i == faq_object.length - 1 ? <button type="button"
-                    className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button> : <button type="button"
-                      className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
+                  {i == faq_object.length - 1 ? <div><button type="button"
+                    className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button><button type="button"
+                      className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button></div> : <button type="button"
+                        className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
                 </div>
               )
             })}
-          </li> : ""}
+          </li> : <li>No faq's present<button type="button"
+            className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></li> }
           <button
             className="save-btn"
             type="submit"
