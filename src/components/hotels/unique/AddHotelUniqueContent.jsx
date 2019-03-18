@@ -141,11 +141,11 @@ class HotelUniqueContent extends Component {
 							<input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />
 						</li>
 						<li>
-							<label>H2 Title</label>
+							<label>H2 Title(Search widget tag line)</label>
 							<input type="text" name="h2_tag" onChange={this.handleChange} value={this.state.h2_tag} />
 						</li>
 						<li>
-							<label>H3 Title</label>
+							<label>H3 Title(Search widget tag line)</label>
 							<input type="text" name="h3_tag" onChange={this.handleChange} value={this.state.h3_tag} />
 						</li>
 						<li>

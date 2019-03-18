@@ -157,11 +157,11 @@ class EditCommonForm extends Component {
               <input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />
             </li>
             <li>
-              <label>H2 Title</label>
+              <label>H2 Title(Search widget tag line)</label>
               <input type="text" name="h2_tag" onChange={this.handleChange} value={this.state.h2_tag} />
             </li>
             <li>
-              <label>H3 Title</label>
+              <label>H3 Title(Search widget tag line)</label>
               <input type="text" name="h3_tag" onChange={this.handleChange} value={this.state.h3_tag} />
             </li>
             <li>
@@ -192,14 +192,14 @@ class EditCommonForm extends Component {
                 onModelChange={this.handleFooterModelChange}
               />
             </li>
-            <li>
+            {/*<li>
               <label>Freaquently Asked Questions</label>
               <FroalaEditor
                 model={this.state.faq}
                 base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
                 onModelChange={this.handleFaqModelChange}
               />
-            </li>
+            </li>*/}
             <li>
               <label>Faq Content</label>
               {

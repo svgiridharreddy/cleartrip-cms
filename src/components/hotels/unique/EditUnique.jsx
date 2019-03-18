@@ -205,11 +205,11 @@ class EditUniqueContent extends Component {
               <input type="text" value={h1_tag} name="h1_tag" onChange={this.handleChange} />
             </li>
             <li>
-              <label>H2 Title</label>
+              <label>H2 Title(Search widget tag line)</label>
               <input type="text" value={h2_tag} name="h2_tag" onChange={this.handleChange} />
             </li>
             <li>
-              <label>H3 Title</label>
+              <label>H3 Title(Search widget tag line)</label>
               <input type="text" value={h3_tag} name="h3_tag" onChange={this.handleChange} />
             </li>
             <li>
