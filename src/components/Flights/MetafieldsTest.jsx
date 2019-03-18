@@ -53,6 +53,7 @@ class MetaFields extends Component {
       // Send the changes up to the parent component as an HTML string.
       // This is here to demonstrate using `.toString()` but in a real app it
       // would be better to avoid generating a string on each change.
+      // this.props.onChange(content.toString("html"));
       this.props.onChange(content.toString("html"));
     }
     this.props.handleChange(content, "rte");
@@ -241,7 +242,6 @@ class MetaFields extends Component {
             model={this.state.content}
             base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
             onModelChange={this.handleModelChange}
-            config={{ htmlAllowedTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }}
           />
           <li>
             {/* <FroalaEditor
