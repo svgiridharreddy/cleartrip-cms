@@ -34,6 +34,7 @@ class UniqueContentDataCollection extends Component {
 			top_content: '',
 			bottom_content: '',
 			faq: '',
+			faqs: JSON.stringify([]),
 			content_type: props.content_type,
 			itemData: {},
 			isDataPresent: false,
@@ -94,7 +95,7 @@ class UniqueContentDataCollection extends Component {
 			selectedCountry: p
 		})
 		if(this.state.domain_name !== '' &&  p.value !== '') {
-			const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: p.value }
+			const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: p.value, prefix: this.state.query }
 			axios.post(`${QUERY_URL}`, data)
 	      .then(res => {
 	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
@@ -174,6 +175,7 @@ class UniqueContentDataCollection extends Component {
 	}
 
 	handleChangeData(result) {
+		var faqContent = JSON.stringify(result.faqs)
 		const data = {
 			domain_url: result.domain_url,
 			domain_name: result.domain_name,
@@ -188,7 +190,7 @@ class UniqueContentDataCollection extends Component {
 			meta_keyword: result.meta_keyword,
 			top_content: result.top_content,
 			bottom_content: result.bottom_content,
-			faq: result.faq
+			faqs: faqContent
 		}
 		axios.post(`${this.state.host}/cmshotels/content-section-data`, data)
 			.then(({ data }) => {
@@ -211,6 +213,7 @@ class UniqueContentDataCollection extends Component {
 	}
 
 	handleChangeEditData(result) {
+		var faqContent = JSON.stringify(result.faqs)
 		const data = {
 			domain_url: result.domain_url,
 			content_type: result.content_type,
@@ -225,7 +228,7 @@ class UniqueContentDataCollection extends Component {
 			meta_keyword: result.meta_keyword,
 			top_content: result.top_content,
 			bottom_content: result.bottom_content,
-			faq: result.faq
+			faqs: faqContent
 		};
 		axios
 			.post(
