@@ -36,6 +36,7 @@ class CommonContentDataCollection extends Component {
       top_content: '',
       bottom_content: '',
       faq: '',
+      faqs: JSON.stringify([]),
       content_result: [],
       isDataPresent: false,
       isAddForm: false,
@@ -100,6 +101,7 @@ class CommonContentDataCollection extends Component {
 	}
 
 	handleChangeData(result) {
+		var faqContent = JSON.stringify(result.faqs)
     const data = {
       domain_name: this.state.domain_name,
       content_type: this.state.content_type,
@@ -113,7 +115,7 @@ class CommonContentDataCollection extends Component {
       meta_keyword: result.meta_keyword,
       top_content: result.top_content,
       bottom_content: result.bottom_content,
-      faq: result.faq
+      faqs: faqContent
     }
     axios.post(`${this.state.host}/cmshotels/common-content-section-data`, data)
     .then(({ data }) => {
@@ -135,6 +137,7 @@ class CommonContentDataCollection extends Component {
 	}
 
 	handleChangeEditData(result){
+		var faqContent = JSON.stringify(result.faqs)
     const data = {
       domain_name: result.domain_name,
       content_type: result.content_type,
@@ -148,7 +151,7 @@ class CommonContentDataCollection extends Component {
       meta_keyword: result.meta_keyword,
       top_content: result.top_content,
       bottom_content: result.bottom_content,
-      faq: result.faq
+      faqs: faqContent
     };
     axios
       .post(
