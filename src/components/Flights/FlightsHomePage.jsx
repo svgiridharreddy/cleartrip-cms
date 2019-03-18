@@ -115,7 +115,7 @@ class FlightsHomePage extends PureComponent {
     if (!user_data) {
       window.location.replace("/");
     }
-    
+    debugger
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -127,7 +127,7 @@ class FlightsHomePage extends PureComponent {
         title: flightValues["title"],
         description: flightValues["description"],
         keywords: flightValues["keywords"],
-        content: flightValues["content"].toString("html"),
+        content: flightValues["content"] ? flightValues["content"].toString("html") : "",
         h1_title: flightValues["h1Tag"],
         faq_object:  flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
         airline_name:
