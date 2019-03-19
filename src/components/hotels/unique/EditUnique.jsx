@@ -47,6 +47,16 @@ class EditUniqueContent extends Component {
     this.handleFooterModelChange = this.handleFooterModelChange.bind(this);
     this.handleFaqModelChange = this.handleFaqModelChange.bind(this);
     this.onChageFaq = this.onChageFaq.bind(this);
+    this.checkBackBtnFun = this.checkBackBtnFun.bind(this);
+  }
+
+  checkBackBtnFun(){
+    const alrt = window.confirm('Do you want to save the changes you made?')
+    if (alrt === true) {
+      this.props.handleChangeEditData(this.state)
+    } else {
+      this.props.backBtnFun()
+    }
   }
 
   addNewFaq(e) {
@@ -179,7 +189,7 @@ class EditUniqueContent extends Component {
         <div className="filter-fileds">
           <ul className="list-inline">
             <li>
-                  <Button variant="secondary" onClick ={() => this.props.backBtnFun()}>Back</Button>
+                  <Button variant="secondary" onClick ={() => this.checkBackBtnFun()}>Back</Button>
                 </li>
             <li>
               <label>Domain Url</label>

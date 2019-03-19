@@ -97,3 +97,6 @@
   a[href="https://www.froala.com/wysiwyg-editor?k=u"]{
     display: none!important;
   }
+  .approveTag {
+    margin: 5px;
+  }

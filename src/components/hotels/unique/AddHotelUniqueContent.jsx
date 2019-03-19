@@ -46,7 +46,17 @@ class HotelUniqueContent extends Component {
 		this.handleFooterModelChange = this.handleFooterModelChange.bind(this);
 		this.handleFaqModelChange = this.handleFaqModelChange.bind(this);
 		this.onChageFaq = this.onChageFaq.bind(this);
+		this.checkBackBtnFun = this.checkBackBtnFun.bind(this);
 	}
+
+	checkBackBtnFun(){
+    const alrt = window.confirm('Do you want to save the changes you made?')
+    if (alrt === true) {
+      this.props.handleChangeData(this.state)
+    } else {
+      this.props.backBtnFun()
+    }
+  }
 
 	addNewFaq(e) {
 		let _self = this
@@ -126,7 +136,7 @@ class HotelUniqueContent extends Component {
 				<div className="common-hotel-content">
 					<ul className="common-hotels-field">
 						<li>
-        					<Button variant="secondary" onClick ={() => this.props.backBtnFun()}>Back</Button>
+        					<Button variant="secondary" onClick ={() => this.checkBackBtnFun()}>Back</Button>
        					</li>
 						<li>
 							<label>Domain Url</label>

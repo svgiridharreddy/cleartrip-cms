@@ -119,12 +119,20 @@ class HotelsApprovalPending extends Component {
       if (response.status == 200) {
         let recordData = response.data
         return new Promise(function () {
-          let showArr = ["country_name", "domain_name", "domain_url", "content_type", "page_type", "meta_title", "meta_description", "canonical_tag", "meta_keyword", "header_tag", "h1_tag", "h2_tag", "h3_tag", "top_content", "bottom_content", "faq"]
+          let showArr = ["country_name", "domain_name", "domain_url", "content_type", "page_type", "meta_title", "meta_description", "canonical_tag", "meta_keyword", "header_tag", "h1_tag", "h2_tag", "h3_tag", "top_content", "bottom_content", "faqs"]
           let hotelData = showArr.map((ele, i) => {
             if (showArr.indexOf(ele) > -1 && recordData[ele] && recordData[ele] != "") {
+              if (ele === "faqs") {
+                var faqContent = (recordData.faqs === null || recordData.faqs === "") ? [] : JSON.parse(recordData.faqs) || []
+              }
               return (
+                ele === "faqs" && faqContent.length > 0 ? faqContent.map((v, k) => {
+                        return(<li key={k}>
+                             <b className="showFieldName">{k == 0 ? ele.replace("_", " ")+":" : ""}</b><br /><b>{v["question"]}</b><br />{v["answer"]}
+                        </li>)
+                    }) :
                 <li key={i}>
-                <b>{ele}:</b>{ele == "top_content" || ele === "bottom_content" || ele === "faq" ? ReactHtmlParser(recordData[ele]) : recordData[ele]}
+                <b>{ele}:</b>{(ele == "top_content" || ele === "bottom_content")&&(ele !== "faqs") ? ReactHtmlParser(recordData[ele]) : recordData[ele]}
                 </li>
                 );
             }
@@ -138,28 +146,46 @@ class HotelsApprovalPending extends Component {
   }
   approveFunction(item) {
     let _self = this
+    let updatedList = _self.state.approvalData.map(obj => {
+       if(obj.id === item.id) {
+         return Object.assign({}, obj, {
+            is_approved:!item.is_approved
+         });
+       }
+       return obj;
+    });
+    _self.setState({
+      approvalData : updatedList
+    });
     return new Promise(function (resolve) {
       axios.get(`${_self.state.host}/approve/${item.id}`).then((response) => {
         if (response.status == 200) {
-          return new Promise(function () {
-            var data = { content_type: _self.state.content_type, domain_name: _self.state.domain_name, country_name: _self.state.country_name }
-            if (_self.state.content_type === "common data") {
-              data["page_type"] = _self.state.page_type
-            } 
-            var urlPath = _self.state.content_type === "common data" ? QUERY_COMMON_URL : QUERY_URL
-            axios.post(`${urlPath}`,data)
-             .then((resp) => {
-              _self.setState({
-                approvalData: resp.data
-              })
               if(item.is_approved){
                 NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
               }else{
                 NotificationManager.success("Data Approved", "Approve", 1500);
               }
-              return resolve(resp)
-            })
-          })
+              return resolve(response)
+
+          // return new Promise(function () {
+          //   var data = { content_type: _self.state.content_type, domain_name: _self.state.domain_name, country_name: _self.state.country_name }
+          //   if (_self.state.content_type === "common data") {
+          //     data["page_type"] = _self.state.page_type
+          //   } 
+          //   var urlPath = _self.state.content_type === "common data" ? QUERY_COMMON_URL : QUERY_URL
+          //   axios.post(`${urlPath}`,data)
+          //    .then((resp) => {
+          //     _self.setState({
+          //       approvalData: resp.data
+          //     })
+          //     if(item.is_approved){
+          //       NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
+          //     }else{
+          //       NotificationManager.success("Data Approved", "Approve", 1500);
+          //     }
+          //     return resolve(resp)
+          //   })
+          // })
         }
       }).catch(function (error) {
         console.log(error);
@@ -334,8 +360,6 @@ class HotelsApprovalPending extends Component {
         data["columns"] = uniqueColoumn
         approvalData.map((item, idx) => {
           let obj = {}
-          let textName;
-          textName = item.is_approved ? "Approved" : "Approve"
           obj["domain_url"] = item.domain_url
           obj["content_type"] = item.content_type
           obj["country_name"] = item.country_name
@@ -391,6 +415,7 @@ class HotelsApprovalPending extends Component {
       </ul>
       </Modal.Body>
       </Modal>
+      <h3 className="approveTag">Please select content section to approve data</h3>
       <select name="content_type" onChange={this.handleChange} className="approval_table">
       <option value="" selected disabled={true}>Select Content</option>
       <option value="unique data">Unique Content Data</option>
