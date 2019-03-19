@@ -63,7 +63,7 @@ class AddCommonForm extends Component {
 		let _self = this
 		let faqs = this.state.faqs
 		let index = parseInt(e.target.dataset.btnid)
-		faqs.splice(faqs[index], 1)
+		faqs.splice(index, 1)
 		_self.setState({
 			faqs: faqs
 		})
