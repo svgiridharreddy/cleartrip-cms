@@ -196,6 +196,7 @@ class FlightsHomePage extends PureComponent {
       });
   };
   handleMetaChanges = (e, fieldName) => {
+    debugger
     this.setState({ [fieldName]: e.target.value,
     updatedInEditForm: true });
   };
@@ -211,7 +212,8 @@ class FlightsHomePage extends PureComponent {
   faqOnchange(e, fieldName) {
     let _self = this
     _self.setState({
-      [fieldName]: e
+      [fieldName]: e,
+      updatedInEditForm: this.state.editClicked ? true : false
     })
   }
 
@@ -565,7 +567,8 @@ class FlightsHomePage extends PureComponent {
         keywords: result["common"][idx]["keyword"],
         content: result["common"][idx]["content"],
         h1Tag: result["common"][idx]["heading"],
-        readOnlyValue: true
+        readOnlyValue: true,
+        editClicked: true
       });
     } else {
       _self.setState({
