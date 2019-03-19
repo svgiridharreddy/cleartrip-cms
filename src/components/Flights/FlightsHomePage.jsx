@@ -86,7 +86,7 @@ class FlightsHomePage extends PureComponent {
       keywords: "",
       content: "",
       h1Tag: "",
-      faq_object:[],
+      faq_object: [],
       showComponent: false,
       source: "",
       destination: "",
@@ -94,7 +94,8 @@ class FlightsHomePage extends PureComponent {
       fromToCity: "",
       editClicked: false,
       host: host(),
-      backBtnClicked: false
+      backBtnClicked: false,
+      updatedInEditForm: false
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleMetaChanges = this.handleMetaChanges.bind(this);
@@ -109,13 +110,14 @@ class FlightsHomePage extends PureComponent {
   }
 
   handleFormSubmit = e => {
-    e.preventDefault();
+    if(e){
+      e.preventDefault();
+    }
     const flightValues = this.state;
     let user_data = JSON.parse(localStorage.getItem("user_data"));
     if (!user_data) {
       window.location.replace("/");
     }
-    debugger
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -129,24 +131,24 @@ class FlightsHomePage extends PureComponent {
         keywords: flightValues["keywords"],
         content: flightValues["content"] ? flightValues["content"].toString("html") : "",
         h1_title: flightValues["h1Tag"],
-        faq_object:  flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
+        faq_object: flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
             : this.state.brandName,
         city_name:
           flightValues["cityNameSelected"] &&
-          flightValues["cityNameSelected"]["value"]
+            flightValues["cityNameSelected"]["value"]
             ? flightValues["cityNameSelected"]["value"]
             : this.state.fromToCity,
         dep_city_name:
           flightValues["depCityNameSelected"] &&
-          flightValues["depCityNameSelected"]["value"]
+            flightValues["depCityNameSelected"]["value"]
             ? flightValues["depCityNameSelected"]["value"]
             : this.state.source,
         arr_city_name:
           flightValues["arrCityNameSelected"] &&
-          flightValues["arrCityNameSelected"]["value"]
+            flightValues["arrCityNameSelected"]["value"]
             ? flightValues["arrCityNameSelected"]["value"]
             : this.state.destination,
         readOnlyValue: true
@@ -183,7 +185,8 @@ class FlightsHomePage extends PureComponent {
           destination: "",
           brandName: "",
           fromToCity: "",
-          options: []
+          options: [],
+          updatedInEditForm: false
         });
 
         this.fetchDetails();
@@ -193,7 +196,8 @@ class FlightsHomePage extends PureComponent {
       });
   };
   handleMetaChanges = (e, fieldName) => {
-    this.setState({ [fieldName]: e.target.value });
+    this.setState({ [fieldName]: e.target.value,
+    updatedInEditForm: true });
   };
   handleRTEchange = content => {
     this.setState({ content });
@@ -204,7 +208,7 @@ class FlightsHomePage extends PureComponent {
       this.props.onChange(content.toString("html"));
     }
   };
-  faqOnchange(e,fieldName){
+  faqOnchange(e, fieldName) {
     let _self = this
     _self.setState({
       [fieldName]: e
@@ -212,6 +216,9 @@ class FlightsHomePage extends PureComponent {
   }
 
   handleChange = (e, fieldName) => {
+    if (this.state.editClicked) {
+      this.setState({ updatedInEditForm: true })
+    }
     if (fieldName === "section") {
       this.setState(
         {
@@ -226,7 +233,7 @@ class FlightsHomePage extends PureComponent {
           arrCityNameSelected: "",
           renderTables: false,
           backBtnClicked: false,
-          brandName:""
+          brandName: ""
         },
         this.state.categoryType != "" || this.state.subType === "index"
           ? () => this.fetchDetails()
@@ -452,7 +459,7 @@ class FlightsHomePage extends PureComponent {
               content: "",
               h1Tag: "",
               keyword: "",
-              faq_object:[]
+              faq_object: []
             });
           }
         })
@@ -511,7 +518,11 @@ class FlightsHomePage extends PureComponent {
 
   backBtnFun = () => {
     let _self = this;
-    setTimeout(function() {
+    let updated = false
+    if(_self.state.editClicked && _self.state.updatedInEditForm){
+       updated = window.confirm("Do you want to save save your changes?")
+    }
+    setTimeout(function () {
       _self.setState({
         showComponent: false,
         renderTables: true,
@@ -527,12 +538,17 @@ class FlightsHomePage extends PureComponent {
         depCityName: "",
         depCityNameSelected: "",
         arrCityName: "",
-        arrCityNameSelected: ""
+        arrCityNameSelected: "",
+        updatedInEditForm:false
       });
     }, 100);
-    setTimeout(function() {
+    if(updated){
+      _self.handleFormSubmit()
+    }else{
+    setTimeout(function () {
       _self.fetchDetails();
     }, 100);
+  }
   };
 
   handleEdit = idx => {
@@ -553,19 +569,19 @@ class FlightsHomePage extends PureComponent {
       });
     } else {
       _self.setState({
-        title:"",
-        description:"",
-        content:"",
-        keywords:"",
-        source:"",
-        destination:"",
-        fromToCity:"",
-        brandName:"",
-        arrCityNameSelected:"",
-        airlineName:"",
-        faq_object:[]
+        title: "",
+        description: "",
+        content: "",
+        keywords: "",
+        source: "",
+        destination: "",
+        fromToCity: "",
+        brandName: "",
+        arrCityNameSelected: "",
+        airlineName: "",
+        faq_object: []
       })
-      setTimeout(function(){
+      setTimeout(function () {
         _self.setState({
           renderTables: false,
           showComponent: true,
@@ -580,15 +596,15 @@ class FlightsHomePage extends PureComponent {
           destination: result[pageType][subType][idx]["destination"],
           fromToCity: result[pageType][subType][idx]["city_name"],
           brandName: result[pageType][subType][idx]["airline_name"],
-          faq_object:result[pageType][subType][idx]["faq_object"],
+          faq_object: result[pageType][subType][idx]["faq_object"],
           arrCityNameSelected:
-          _self.state.arrCityNameSelected != ""
+            _self.state.arrCityNameSelected != ""
               ? _self.state.arrCityNameSelected
               : _self.state.source,
           editClicked: true,
           readOnlyValue: true
         });
-      },100)
+      }, 100)
     }
   };
 
@@ -810,11 +826,11 @@ class FlightsHomePage extends PureComponent {
             />
           </li>
         ) : (
-          <li>
-            <label>Airline Name</label>
-            <input type="text" value={this.state.brandName} disabled />
-          </li>
-        );
+            <li>
+              <label>Airline Name</label>
+              <input type="text" value={this.state.brandName} disabled />
+            </li>
+          );
       }
     } else if (pageType === "flight-schedule") {
       if (categoryType === "uniq" && (subType === "from" || subType === "to")) {
@@ -834,11 +850,11 @@ class FlightsHomePage extends PureComponent {
             />
           </li>
         ) : (
-          <li>
-            <label>City Name</label>
-            <input type="text" value={this.state.fromToCity} disabled />
-          </li>
-        );
+            <li>
+              <label>City Name</label>
+              <input type="text" value={this.state.fromToCity} disabled />
+            </li>
+          );
       }
     }
 
@@ -909,96 +925,96 @@ class FlightsHomePage extends PureComponent {
                   </select>
                 </li>
               ) : (
-                ""
-              )}
+                  ""
+                )}
 
               {domain != "" &&
-              language != "" &&
-              pageType != "" &&
-              subType != "" ? (
-                <li>
-                  <label>Section</label>
-                  <select
-                    name="section"
-                    value={this.state.section}
-                    onChange={e => this.handleChange(e, "section")}
-                    disabled={this.state.readOnlyValue}
-                  >
-                    {" "}
-                    <option value="" disabled={true} selected>
-                      section
+                language != "" &&
+                pageType != "" &&
+                subType != "" ? (
+                  <li>
+                    <label>Section</label>
+                    <select
+                      name="section"
+                      value={this.state.section}
+                      onChange={e => this.handleChange(e, "section")}
+                      disabled={this.state.readOnlyValue}
+                    >
+                      {" "}
+                      <option value="" disabled={true} selected>
+                        section
                     </option>
-                    {this.returnOptions(sections)}
-                  </select>
-                </li>
-              ) : (
-                ""
-              )}
+                      {this.returnOptions(sections)}
+                    </select>
+                  </li>
+                ) : (
+                  ""
+                )}
 
               {category}
 
               {checkfields}
 
               {categoryType === "uniq" &&
-              subType === "routes" &&
-              (pageType === "flight-booking" ||
-                pageType === "flight-schedule" ||
-                pageType === "flight-tickets") ? (
-                <div>
-                  <ul className={editClicked ? "hidden" : ""}>
-                    <li>
-                      <label>Dep City Name</label>
-                      <Select1
-                        // isDisabled = {readOnlyValue}
-                        value={depCityNameSelected}
-                        onChange={p =>
-                          this.handleSelectedInput(p, "depCityName")
-                        }
-                        options={options_dep}
-                        name="depCityName"
-                        required
-                        placeholder="Search Departure City"
-                        // onInputChange={this.handleAirlineSearch}
-                        onInputChange={e =>
-                          this.handleAutoSearch(e, "depCityName")
-                        }
-                      />
-                    </li>
-                    <li>
-                      <label>Arr City Name</label>
-                      <Select1
-                        // isDisabled = {readOnlyValue}
-                        value={arrCityNameSelected}
-                        onChange={p =>
-                          this.handleSelectedInput(p, "arrCityName")
-                        }
-                        options={options_arr}
-                        name="arrCityName"
-                        placeholder="Search Arrival City"
-                        required
-                        // onInputChange={this.handleAirlineSearch}
-                        onInputChange={e =>
-                          this.handleAutoSearch(e, "arrCityName")
-                        }
-                      />
-                    </li>
-                  </ul>
-                  <ul className={editClicked ? "" : "hidden"}>
-                    <li>
-                      <label>Dep City Name</label>
-                      <input type="text" value={this.state.source} disabled />
-                    </li>
-                    <li>
-                      <label>Arr City Name</label>
-                      <input
-                        type="text"
-                        value={this.state.destination}
-                        disabled
-                      />
-                    </li>
-                  </ul>
-                </div>
-              ) : null}
+                subType === "routes" &&
+                (pageType === "flight-booking" ||
+                  pageType === "flight-schedule" ||
+                  pageType === "flight-tickets") ? (
+                  <div>
+                    <ul className={editClicked ? "hidden" : ""}>
+                      <li>
+                        <label>Dep City Name</label>
+                        <Select1
+                          // isDisabled = {readOnlyValue}
+                          value={depCityNameSelected}
+                          onChange={p =>
+                            this.handleSelectedInput(p, "depCityName")
+                          }
+                          options={options_dep}
+                          name="depCityName"
+                          required
+                          placeholder="Search Departure City"
+                          // onInputChange={this.handleAirlineSearch}
+                          onInputChange={e =>
+                            this.handleAutoSearch(e, "depCityName")
+                          }
+                        />
+                      </li>
+                      <li>
+                        <label>Arr City Name</label>
+                        <Select1
+                          // isDisabled = {readOnlyValue}
+                          value={arrCityNameSelected}
+                          onChange={p =>
+                            this.handleSelectedInput(p, "arrCityName")
+                          }
+                          options={options_arr}
+                          name="arrCityName"
+                          placeholder="Search Arrival City"
+                          required
+                          // onInputChange={this.handleAirlineSearch}
+                          onInputChange={e =>
+                            this.handleAutoSearch(e, "arrCityName")
+                          }
+                        />
+                      </li>
+                    </ul>
+                    <ul className={editClicked ? "" : "hidden"}>
+                      <li>
+                        <label>Dep City Name</label>
+                        <input type="text" value={this.state.source} disabled />
+                      </li>
+                      <li>
+                        <label>Arr City Name</label>
+                        <input
+                          type="text"
+                          value={this.state.destination}
+                          disabled
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                ) : null}
             </ul>
             <div className="clearfix" />
           </div>
@@ -1019,43 +1035,43 @@ class FlightsHomePage extends PureComponent {
               handleEdit={this.handleEdit.bind(this)}
             />
           ) : (
-            <div className={this.state.showAddButton ? "hidden" : ""}>
-              {this.state.message}
-              {this.state.showComponent ? null : (
-                <button
-                  className="add-btn"
-                  type="button"
-                  data-method="create"
-                  onClick={this.handleAdd}
-                >
-                  Add New
+              <div className={this.state.showAddButton ? "hidden" : ""}>
+                {this.state.message}
+                {this.state.showComponent ? null : (
+                  <button
+                    className="add-btn"
+                    type="button"
+                    data-method="create"
+                    onClick={this.handleAdd}
+                  >
+                    Add New
                 </button>
-              )}
+                )}
 
-              {this.state.showComponent ? (
-                <MetaFields
-                  handleMetaChanges={(e, fieldName) =>
-                    this.handleMetaChanges(e, fieldName)
-                  }
-                  handleFormSubmit={this.handleFormSubmit.bind(this)}
-                  pageType={this.state.pageType}
-                  subType ={this.state.subType}
-                  title={this.state.title}
-                  description={this.state.description}
-                  content={this.state.content}
-                  keywords={this.state.keywords}
-                  h1Tag={this.state.h1Tag}
-                  faq_object={this.state.faq_object}
-                  handleRTEchange={content => this.handleRTEchange(content)}
-                  backBtnFun={this.backBtnFun.bind(this)}
-                  faqOnchange = {this.faqOnchange.bind(this)}
-                  handleChange={(e, fieldName) =>
-                    this.handleChange(e, fieldName)
-                  }
-                />
-              ) : null}
-            </div>
-          )}
+                {this.state.showComponent ? (
+                  <MetaFields
+                    handleMetaChanges={(e, fieldName) =>
+                      this.handleMetaChanges(e, fieldName)
+                    }
+                    handleFormSubmit={this.handleFormSubmit.bind(this)}
+                    pageType={this.state.pageType}
+                    subType={this.state.subType}
+                    title={this.state.title}
+                    description={this.state.description}
+                    content={this.state.content}
+                    keywords={this.state.keywords}
+                    h1Tag={this.state.h1Tag}
+                    faq_object={this.state.faq_object}
+                    handleRTEchange={content => this.handleRTEchange(content)}
+                    backBtnFun={this.backBtnFun.bind(this)}
+                    faqOnchange={this.faqOnchange.bind(this)}
+                    handleChange={(e, fieldName) =>
+                      this.handleChange(e, fieldName)
+                    }
+                  />
+                ) : null}
+              </div>
+            )}
         </div>
         <NotificationContainer />
       </div>

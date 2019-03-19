@@ -158,7 +158,6 @@ class FlightsTable extends Component {
       }
       rows.push(obj);
     });
-    debugger
     data["columns"] = columns
     data["rows"] = rows;
     return (

@@ -38,7 +38,9 @@ class FlightsApprovalPending extends Component {
             modelData: "",
             approvedVal: false,
             loading: true,
-            id: ""
+            id: "",
+            showEditModel:false,
+            editData:""
         }
         this.createTable = this.createTable.bind(this)
         this.approveRoute = this.approveRoute.bind(this)
@@ -47,9 +49,18 @@ class FlightsApprovalPending extends Component {
         this.handleEdit = this.handleEdit.bind(this)
     }
 
+    handleEditClose(){
+        this.setState({
+            showEditModel: false
+        })
+    }
+
+
     handleClose() {
         this.setState({ show: false });
     }
+
+
     handleShow(data) {
         let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title", "faq_object"]
         let modelData = showArr.map((ele, i) => {
@@ -69,7 +80,19 @@ class FlightsApprovalPending extends Component {
         this.setState({ show: true, modelData: modelData });
     }
     handleEdit(data){
-        debugger
+        let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title", "faq_object"]
+        let editFields =["title","description","heading"]
+        let editData = showArr.map((ele,i) => {
+            if(showArr.indexOf(ele) > -1 && data[ele] && data[ele] != ""){
+                if(editFields.indexOf(ele) > -1){
+                    debugger
+                    return (<li key={i}><input type="text" value={data[ele]}/></li>)
+                }else{
+
+                }
+            }
+        })
+        this.setState({ showEditModel: true, editData: editData });
     }
     createTable(type, thead, data) {
         let _self = this
@@ -234,7 +257,7 @@ class FlightsApprovalPending extends Component {
         let data = { id: id, table_name: table_name, approval_status: approval_status }
         return new Promise(function (resolve) {
             axios.get(host() + "/route-approval", { params: data }).then(function (json) {
-                _self.getTableData(_self.state.approval_table)
+                 _self.getTableData(_self.state.approval_table)
                 setTimeout(function () {
                     if (approval_status) {
                         NotificationManager.success(
@@ -279,7 +302,7 @@ class FlightsApprovalPending extends Component {
             }, 2300);
         }
 
-        const { data, tabData, is_admin, approval_table, modelData, loading } = this.state;
+        const { data, tabData, is_admin, approval_table, modelData, loading,editData } = this.state;
         return (
             <div>
                 <p>Select table to approve </p>
@@ -329,6 +352,23 @@ class FlightsApprovalPending extends Component {
                     <Modal.Body>
                         <ul className="showModel">
                             {modelData}
+                        </ul>
+                    </Modal.Body>
+                </Modal>
+
+                <Modal
+                    size="lg"
+                    onHide={this.handleEditClose.bind(this)}
+                    dialogClassName="modal-90w preview-content"
+                    aria-labelledby="example-modal-sizes-title-lg"
+                    show={this.state.showEditModel} onHide={this.handleEditClose.bind(this)} centered
+                >
+                    <Modal.Header closeButton>
+                       Edit route
+                    </Modal.Header>
+                    <Modal.Body>
+                        <ul className="showModel">
+                            {editData}
                         </ul>
                     </Modal.Body>
                 </Modal>
