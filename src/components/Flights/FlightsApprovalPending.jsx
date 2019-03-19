@@ -15,7 +15,13 @@ import "../../../node_modules/react-notifications/lib/notifications.css";
 import Loader from 'react-loader-spinner'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import queryString from 'query-string'
-import { func } from "prop-types";
+import FroalaEditor from "react-froala-wysiwyg";
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import "font-awesome/css/font-awesome.css";
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+
 
 class FlightsApprovalPending extends Component {
     constructor(props) {
@@ -39,27 +45,51 @@ class FlightsApprovalPending extends Component {
             approvedVal: false,
             loading: true,
             id: "",
-            showEditModel:false,
-            editData:""
+            showEditModel: false,
+            editData: "",
+            postData: {}
         }
         this.createTable = this.createTable.bind(this)
         this.approveRoute = this.approveRoute.bind(this)
         this.getApprovelPendingRecord = this.getApprovelPendingRecord.bind(this)
         this.processTable = this.processTable.bind(this)
         this.handleEdit = this.handleEdit.bind(this)
+        this.editHandleChange = this.editHandleChange.bind(this)
+        this.handleModelChange = this.handleModelChange.bind(this)
+        this.createEditForm = this.createEditForm.bind(this)
+        this.updateRoute = this.updateRoute.bind(this)
     }
 
-    handleEditClose(){
+    handleEditClose() {
         this.setState({
             showEditModel: false
         })
     }
-
-
+    updateRoute() {
+        let _self = this
+        return new Promise(function (resolve) {
+            let data = { postData: _self.state.postData, id: _self.state.id, table_name: _self.state.approval_table }
+            axios.get(host() + "/tableUpdate", { params: data }).then(function (json) {
+                _self.setState({
+                    showEditModel: false,
+                    id:''
+                })
+                NotificationManager.success("Record successfully updated", "Success", 3000)
+                setTimeout(function () {
+                    _self.getTableData(_self.state.approval_table)
+                }, 100)
+                return resolve(json);
+            }).catch(error => {
+                _self.setState({
+                    showEditModel: false
+                })
+                NotificationManager.error("", "Please try again", 3000)
+            })
+        })
+    }
     handleClose() {
         this.setState({ show: false });
     }
-
 
     handleShow(data) {
         let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title", "faq_object"]
@@ -67,8 +97,8 @@ class FlightsApprovalPending extends Component {
             if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
                 return (
                     ele === "faq_object" && data[ele].length > 0 ? data[ele].map((v, k) => {
-                        return(<li key={k}>
-                             <b className="showFieldName">{k == 0 ? ele.replace("_", " ")+":" : ""}</b><br /><b>{v["question"]}</b><br />{v["answer"]}
+                        return (<li key={k}>
+                            <b className="showFieldName">{k == 0 ? ele.replace("_", " ") + ":" : ""}</b><br /><b>{v["question"]}</b><br />{v["answer"]}
                         </li>)
                     }) :
                         <li key={i}>
@@ -79,21 +109,70 @@ class FlightsApprovalPending extends Component {
         });
         this.setState({ show: true, modelData: modelData });
     }
-    handleEdit(data){
-        let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title", "faq_object"]
-        let editFields =["title","description","heading"]
-        let editData = showArr.map((ele,i) => {
-            if(showArr.indexOf(ele) > -1 && data[ele] && data[ele] != ""){
-                if(editFields.indexOf(ele) > -1){
-                    debugger
-                    return (<li key={i}><input type="text" value={data[ele]}/></li>)
-                }else{
 
+    editHandleChange(field_name, e) {
+        let _self = this
+        let postData = _self.state.postData
+        postData[field_name] = e.target.value
+        _self.setState({
+            [postData[field_name]]: e.target.value
+        })
+        let editData = _self.createEditForm()
+        _self.setState({
+            editData: editData
+        })
+    }
+
+    handleModelChange(model) {
+        let _self = this
+        let postData = _self.state.postData
+        postData["content"] = model
+        _self.setState({
+            [postData["content"]]: model
+        })
+        let editData = _self.createEditForm()
+        _self.setState({
+            editData: editData
+        })
+    }
+    createEditForm() {
+        let _self = this
+        let editData = Object.keys(_self.state.postData).map((v, i) => {
+            if (v === "content") {
+                return (<li key={i}><b>Content</b>
+                    <FroalaEditor
+                        model={_self.state.postData[v]}
+                        base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
+                        onModelChange={this.handleModelChange}
+                    /></li>)
+            } else {
+                return (<li key={i}><label>{v}</label><input type="text" value={_self.state.postData[v]} onChange={this.editHandleChange.bind(this, v)} /></li>)
+            }
+        })
+        return editData
+    }
+
+    handleEdit(data) {
+        let _self = this
+        let obj = {}
+        let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title", "faq_object"]
+        let editFields = ["title", "description", "keyword", "heading"]
+        showArr.map((ele, i) => {
+            if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
+                if (editFields.indexOf(ele) > -1) {
+                    obj[ele] = data[ele]
                 }
             }
         })
-        this.setState({ showEditModel: true, editData: editData });
+        _self.setState({ showEditModel: true, postData: obj, id: data["id"] });
+        setTimeout(function () {
+            if (Object.keys(_self.state.postData).length > 0) {
+                let editData = _self.createEditForm()
+                _self.setState({ editData: editData })
+            }
+        }, 50)
     }
+
     createTable(type, thead, data) {
         let _self = this
         let obj_data = _self.state
@@ -133,7 +212,7 @@ class FlightsApprovalPending extends Component {
             })
             tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
             // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
-            // tabObj["edit"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
+            tabObj["edit"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
             tabObj["view"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
@@ -153,9 +232,13 @@ class FlightsApprovalPending extends Component {
                     });
                     _self.processTable(table_name)
                     return resolve(json);
+                }).catch(error => {
+                    NotificationManager.error("Record Not found", "Please try again", 3000)
+                    setTimeout(function () {
+                        window.location.replace("/")
+                    }, 800)
                 })
             }
-
         }).catch(function (e) {
             console.log(e)
         })
@@ -245,8 +328,10 @@ class FlightsApprovalPending extends Component {
         })
 
         setTimeout(function () {
-            _self.getApprovelPendingRecord(_self.state.approval_table, _self.state.id)
-        }, 300)
+            if (_self.state.approval_table && _self.state.approval_table != "") {
+                _self.getApprovelPendingRecord(_self.state.approval_table, _self.state.id)
+            }
+        }, 1000)
     }
     approveRoute(rdata, table_name) {
         let id = rdata.id
@@ -257,7 +342,7 @@ class FlightsApprovalPending extends Component {
         let data = { id: id, table_name: table_name, approval_status: approval_status }
         return new Promise(function (resolve) {
             axios.get(host() + "/route-approval", { params: data }).then(function (json) {
-                 _self.getTableData(_self.state.approval_table)
+                _self.getTableData(_self.state.approval_table)
                 setTimeout(function () {
                     if (approval_status) {
                         NotificationManager.success(
@@ -294,7 +379,7 @@ class FlightsApprovalPending extends Component {
             unique_flight_ticket_route: { columns: [], rows: [] },
             common: { columns: [], rows: [] },
             tabData: { columns: [], rows: [] },
-            data:[]
+            data: []
         });
         this.getTableData(e.target.value);
     }
@@ -311,8 +396,7 @@ class FlightsApprovalPending extends Component {
                 window.location.replace("/");
             }, 2300);
         }
-
-        const { data, tabData, is_admin, approval_table, modelData, loading,editData } = this.state;
+        const { data, tabData, is_admin, approval_table, modelData, loading, editData } = this.state;
         return (
             <div>
                 <p>Select table to approve </p>
@@ -374,11 +458,12 @@ class FlightsApprovalPending extends Component {
                     show={this.state.showEditModel} onHide={this.handleEditClose.bind(this)} centered
                 >
                     <Modal.Header closeButton>
-                       Edit route
+                        Edit route
                     </Modal.Header>
                     <Modal.Body>
                         <ul className="showModel">
                             {editData}
+                            <li><button type="button"  className="save-btn" onClick={this.updateRoute.bind(this)}>Save</button></li>
                         </ul>
                     </Modal.Body>
                 </Modal>
