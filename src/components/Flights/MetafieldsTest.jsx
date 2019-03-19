@@ -271,6 +271,7 @@ class MetaFields extends Component {
             className="save-btn"
             type="submit"
             onClick={this.props.handleFormSubmit}
+            ref={input => this.inputElement = input}
           >
             Save{" "}
           </button>
