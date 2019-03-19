@@ -284,7 +284,17 @@ class FlightsApprovalPending extends Component {
         let _self = this;
         _self.setState({
             [e.target.name]: e.target.value,
-            id: ''
+            id: '',
+            uniq_flight_schedule_routes: { columns: [], rows: [] },
+            uniq_flight_to: { columns: [], rows: [] },
+            uniq_flight_from: { columns: [], rows: [] },
+            uniq_flight_booking_overview: { columns: [], rows: [] },
+            uniq_flight_booking_pnrweb: { columns: [], rows: [] },
+            uniq_flight_booking_routes: { columns: [], rows: [] },
+            unique_flight_ticket_route: { columns: [], rows: [] },
+            common: { columns: [], rows: [] },
+            tabData: { columns: [], rows: [] },
+            data:[]
         });
         this.getTableData(e.target.value);
     }
