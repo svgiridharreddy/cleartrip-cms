@@ -87,6 +87,7 @@ class FlightsHomePage extends PureComponent {
       content: "",
       h1Tag: "",
       faq_object: [],
+      reviews_object:[{avg_review_rating:4.5,total_reviews_count:16,reviews_list:[{rating:4,review_text:"Last month, I booked a flight with Air India through Cleartrip to travel from Bangalore to Hyderabad. The crew was also so supportive and attentive and it was just a one-hour long flight that departed and arrived on time. After landing, we took a cab to hotel. It was a family vacation and we had the great traveling experience on flight. Both Bangalore and Hyderabad airports are nice in terms of infrastructure and cleanliness",reviewer_name:"Shekhar Mehta"},{rating:5,review_text:"Last week, I booked a SpiceJet flight from Bangalore to Hyderabad online with Cleartrip. However it was overall a nice experience, but SpiceJet usually does not offer any meals on short-distance flights. Thanks to Cleartrip for helping me find cheap Bangalore to Hyderabad flight.",reviewer_name:"Arup Ghoshal"}]}],
       showComponent: false,
       source: "",
       destination: "",
@@ -132,6 +133,7 @@ class FlightsHomePage extends PureComponent {
         content: flightValues["content"] ? flightValues["content"].toString("html") : "",
         h1_title: flightValues["h1Tag"],
         faq_object: flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
+        reviews_object: flightValues["reviews_object"] && flightValues["reviews_object"].length > 0 ? flightValues["reviews_object"] : [],
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -352,7 +354,8 @@ class FlightsHomePage extends PureComponent {
       brandName,
       fromToCity,
       backBtnClicked,
-      faq_object
+      faq_object,
+      reviews_object
     } = this.state;
     var url = this.state.host + "/fetch_details";
 
@@ -1065,6 +1068,7 @@ class FlightsHomePage extends PureComponent {
                     keywords={this.state.keywords}
                     h1Tag={this.state.h1Tag}
                     faq_object={this.state.faq_object}
+                    reviews_object={this.state.reviews_object}
                     handleRTEchange={content => this.handleRTEchange(content)}
                     backBtnFun={this.backBtnFun.bind(this)}
                     faqOnchange={this.faqOnchange.bind(this)}

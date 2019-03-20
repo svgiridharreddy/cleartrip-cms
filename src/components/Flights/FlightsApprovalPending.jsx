@@ -72,7 +72,7 @@ class FlightsApprovalPending extends Component {
             axios.get(host() + "/tableUpdate", { params: data }).then(function (json) {
                 _self.setState({
                     showEditModel: false,
-                    id:''
+                    id: ''
                 })
                 NotificationManager.success("Record successfully updated", "Success", 3000)
                 setTimeout(function () {
@@ -213,6 +213,7 @@ class FlightsApprovalPending extends Component {
             tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
             // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
             tabObj["edit"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
+            // tabObj["edit"] = <a href={'/flights?table_name=' + _self.state.approval_table + '&id=' + data["id"]} target="blank">Edit</a>
             tabObj["view"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
@@ -463,7 +464,7 @@ class FlightsApprovalPending extends Component {
                     <Modal.Body>
                         <ul className="showModel">
                             {editData}
-                            <li><button type="button"  className="save-btn" onClick={this.updateRoute.bind(this)}>Save</button></li>
+                            <li><button type="button" className="save-btn" onClick={this.updateRoute.bind(this)}>Save</button></li>
                         </ul>
                     </Modal.Body>
                 </Modal>
