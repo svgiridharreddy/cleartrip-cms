@@ -353,7 +353,6 @@ class MetaFields extends Component {
           >
             Save{" "}
           </button>
-          {JSON.stringify(reviews_object)}
         </li>
       </ul>
     );
