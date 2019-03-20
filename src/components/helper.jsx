@@ -32,7 +32,7 @@ const loginHelpers = {
     let user_data = localStorage.getItem("user_data");
     if (user_data) {
       let user = JSON.parse(user_data)
-      if (user.user_type == "superadmin") {
+      if (user.user_type === "superadmin") {
         return true
       }
     } else {

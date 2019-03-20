@@ -6,6 +6,7 @@ import Promise from "promise"
 import { host } from "../helper";
 import loginHelpers from "../helper";
 import { Modal } from "react-bootstrap";
+import queryString from 'query-string'
 import Select1 from 'react-select';
 import {
   NotificationContainer,
@@ -24,6 +25,7 @@ const localPageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Am
 
 const QUERY_URL = host() + "/cmshotels/unique-content-data-collection"
 const QUERY_COMMON_URL = host()+"/cmshotels/common-content-data-collection"
+const QUERY_APPROVE = host() + "/collect_approve_data/"
 
 class HotelsApprovalPending extends Component {
   constructor(props) {
@@ -35,7 +37,7 @@ class HotelsApprovalPending extends Component {
       page_type: '',
       approvalData: [],
       content_type: '',
-      selectedCountry:null,
+      selectedCountry: null,
       show: false,
       isUniq: false,
       isCommon: false,
@@ -57,6 +59,66 @@ class HotelsApprovalPending extends Component {
         );
     });
   }
+
+  componentDidMount() {
+        let _self = this;
+        if (loginHelpers.check_usertype()) {
+            this.setState({ is_admin: true });
+        } else {
+            sessionStorage.removeItem("user_data");
+            loginHelpers.check_usertype();
+        }
+        let search_params = queryString.parse(this.props.location.search)
+        if (search_params) {
+          if (search_params["content_type"] === "common data") {
+            this.setState({
+              isCommon: true,
+              isUniq: false,
+              domain_name: search_params["domain_name"],
+              country_name: search_params["country_name"],
+              selectedCountry: search_params["country_name"],
+              page_type: search_params["page_type"],
+              content_type: 'common data'
+            })
+            axios.get(`${QUERY_APPROVE}${search_params["id"]}`)
+            .then(res => {
+              this.setState({
+                approvalData: res.data,
+                content_type: this.state.content_type
+              })
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+          } else if (search_params["content_type"] === "unique data") {
+            this.setState({
+              isCommon: false,
+              isUniq: true,
+              domain_name: search_params["domain_name"],
+              country_name: search_params["country_name"],
+              selectedCountry: search_params["country_name"],
+              content_type: 'unique data'
+            })
+            axios.get(`${QUERY_APPROVE}${search_params["id"]}`)
+            .then(res => {
+              this.setState({
+                approvalData: res.data,
+                content_type: this.state.content_type
+              })
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+          } else {
+            this.setState({
+              isUniq: false,
+              isCommon: false,
+              content_type: '',
+              approvalData: []
+            })
+          }
+        }
+    }
 
   handleChangeUniqueData(e){
     e.preventDefault();
@@ -85,6 +147,9 @@ class HotelsApprovalPending extends Component {
     })
     if(this.state.domain_name !== '' &&  p.value !== '') {
       const data = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: p.value }
+      if (this.state.content_type === "common data") {
+        data["page_type"] = this.state.page_type
+      }
       var urlPath = this.state.content_type === "common data" ? QUERY_COMMON_URL : QUERY_URL
       axios.post(`${urlPath}`, data)
       .then(res => {
@@ -241,28 +306,6 @@ class HotelsApprovalPending extends Component {
     });
   }
 
-  // handleChange(e) {
-  //   var content_type = e.target.value;
-  //   if (content_type === 'common-data') {
-  //     this.setState({
-  //       content_type: content_type
-  //     })
-  //     axios.get(`${this.state.host}/collect/common-data`)
-  //     .then((response) => {
-  //       this.setState({
-  //         approvalData: response.data,
-  //         content_type: content_type,
-  //         isUniq: false
-  //       })
-  //     })
-  //   } else if (content_type === "unique-data") {
-  //     this.setState({
-  //       isUniq: true,
-  //       approvalData: []
-  //     })
-  //   }
-  // }
-
   render() {
     const data = {}
     let dataField;
@@ -416,7 +459,7 @@ class HotelsApprovalPending extends Component {
       </Modal.Body>
       </Modal>
       <h3 className="approveTag">Please select content section to approve data</h3>
-      <select name="content_type" onChange={this.handleChange} className="approval_table">
+      <select name="content_type" onChange={this.handleChange}  value={this.state.content_type} className="approval_table">
       <option value="" selected disabled={true}>Select Content</option>
       <option value="unique data">Unique Content Data</option>
       <option value="common data">Common Content Data</option>
