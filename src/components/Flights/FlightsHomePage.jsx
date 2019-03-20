@@ -87,6 +87,7 @@ class FlightsHomePage extends PureComponent {
       content: "",
       h1Tag: "",
       faq_object: [],
+      reviews_object:[],
       showComponent: false,
       source: "",
       destination: "",
@@ -118,6 +119,7 @@ class FlightsHomePage extends PureComponent {
     if (!user_data) {
       window.location.replace("/");
     }
+    debugger
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -132,6 +134,7 @@ class FlightsHomePage extends PureComponent {
         content: flightValues["content"] ? flightValues["content"].toString("html") : "",
         h1_title: flightValues["h1Tag"],
         faq_object: flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
+        reviews_object: flightValues["reviews_object"] && flightValues["reviews_object"].length > 0 ? flightValues["reviews_object"] : [],
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -210,12 +213,20 @@ class FlightsHomePage extends PureComponent {
     }
   };
   faqOnchange(e, fieldName) {
+    debugger
     let _self = this
     _self.setState({
       [fieldName]: e,
       updatedInEditForm: this.state.editClicked ? true : false
     })
   }
+  // reviewObjectOnChange(e,fieldName){
+  //   let _self = this
+  //   _self.setState({
+  //     [fieldName]: e,
+  //     updatedInEditForm: this.state.editClicked ? true : false
+  //   })
+  // }
 
   handleChange = (e, fieldName) => {
     if (this.state.editClicked) {
@@ -352,7 +363,8 @@ class FlightsHomePage extends PureComponent {
       brandName,
       fromToCity,
       backBtnClicked,
-      faq_object
+      faq_object,
+      reviews_object
     } = this.state;
     var url = this.state.host + "/fetch_details";
 
@@ -582,7 +594,8 @@ class FlightsHomePage extends PureComponent {
         brandName: "",
         arrCityNameSelected: "",
         airlineName: "",
-        faq_object: []
+        faq_object: [],
+        reviews_object:[]
       })
       setTimeout(function () {
         _self.setState({
@@ -599,7 +612,8 @@ class FlightsHomePage extends PureComponent {
           destination: result[pageType][subType][idx]["destination"],
           fromToCity: result[pageType][subType][idx]["city_name"],
           brandName: result[pageType][subType][idx]["airline_name"],
-          faq_object: result[pageType][subType][idx]["faq_object"],
+          faq_object: result[pageType][subType][idx]["faq_object"] ? result[pageType][subType][idx]["faq_object"] : [],
+          reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [] ,
           arrCityNameSelected:
             _self.state.arrCityNameSelected != ""
               ? _self.state.arrCityNameSelected
@@ -1065,6 +1079,7 @@ class FlightsHomePage extends PureComponent {
                     keywords={this.state.keywords}
                     h1Tag={this.state.h1Tag}
                     faq_object={this.state.faq_object}
+                    reviews_object={this.state.reviews_object}
                     handleRTEchange={content => this.handleRTEchange(content)}
                     backBtnFun={this.backBtnFun.bind(this)}
                     faqOnchange={this.faqOnchange.bind(this)}
