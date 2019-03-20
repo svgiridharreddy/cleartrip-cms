@@ -384,18 +384,7 @@ class FlightsApprovalPending extends Component {
         this.getTableData(e.target.value);
     }
     render() {
-        if (loginHelpers.check_usertype()) {
-            console.log("super");
-        } else {
-            NotificationManager.info(
-                "Forbidden",
-                "You are not eligible to access this page",
-                2000
-            );
-            setTimeout(function () {
-                window.location.replace("/");
-            }, 2300);
-        }
+      
         const { data, tabData, is_admin, approval_table, modelData, loading, editData } = this.state;
         return (
             <div>

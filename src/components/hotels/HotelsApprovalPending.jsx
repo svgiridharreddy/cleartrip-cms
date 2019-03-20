@@ -31,6 +31,7 @@ class HotelsApprovalPending extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      is_admin:false,
       host: host(),
       domain_name: '',
       country_name: '',
@@ -67,6 +68,7 @@ class HotelsApprovalPending extends Component {
         } else {
             sessionStorage.removeItem("user_data");
             loginHelpers.check_usertype();
+             window.location.replace("/")
         }
         let search_params = queryString.parse(this.props.location.search)
         if (search_params) {
@@ -311,7 +313,19 @@ class HotelsApprovalPending extends Component {
     let dataField;
     let uniqueDataField;
     let rows = []
-    const { approvalData, content_type, hotelData, isUniq, isCommon } = this.state
+    const { approvalData, content_type, hotelData, isUniq, isCommon,is_admin } = this.state
+         if (loginHelpers.check_usertype()) {
+            console.log("super");
+        } else {
+            NotificationManager.info(
+                "Forbidden",
+                "You are not eligible to access this page",
+                2000
+            );
+            setTimeout(function () {
+                window.location.replace("/");
+            }, 2300);
+        }
 
     if (isUniq) {
       uniqueDataField = (
