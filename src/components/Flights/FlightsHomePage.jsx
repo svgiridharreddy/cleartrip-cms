@@ -87,7 +87,7 @@ class FlightsHomePage extends PureComponent {
       content: "",
       h1Tag: "",
       faq_object: [],
-      reviews_object:[{avg_review_rating:4.5,total_reviews_count:16,reviews_list:[{rating:4,review_text:"Last month, I booked a flight with Air India through Cleartrip to travel from Bangalore to Hyderabad. The crew was also so supportive and attentive and it was just a one-hour long flight that departed and arrived on time. After landing, we took a cab to hotel. It was a family vacation and we had the great traveling experience on flight. Both Bangalore and Hyderabad airports are nice in terms of infrastructure and cleanliness",reviewer_name:"Shekhar Mehta"},{rating:5,review_text:"Last week, I booked a SpiceJet flight from Bangalore to Hyderabad online with Cleartrip. However it was overall a nice experience, but SpiceJet usually does not offer any meals on short-distance flights. Thanks to Cleartrip for helping me find cheap Bangalore to Hyderabad flight.",reviewer_name:"Arup Ghoshal"}]}],
+      reviews_object:[],
       showComponent: false,
       source: "",
       destination: "",
@@ -119,6 +119,7 @@ class FlightsHomePage extends PureComponent {
     if (!user_data) {
       window.location.replace("/");
     }
+    debugger
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -212,12 +213,20 @@ class FlightsHomePage extends PureComponent {
     }
   };
   faqOnchange(e, fieldName) {
+    debugger
     let _self = this
     _self.setState({
       [fieldName]: e,
       updatedInEditForm: this.state.editClicked ? true : false
     })
   }
+  // reviewObjectOnChange(e,fieldName){
+  //   let _self = this
+  //   _self.setState({
+  //     [fieldName]: e,
+  //     updatedInEditForm: this.state.editClicked ? true : false
+  //   })
+  // }
 
   handleChange = (e, fieldName) => {
     if (this.state.editClicked) {
@@ -585,7 +594,8 @@ class FlightsHomePage extends PureComponent {
         brandName: "",
         arrCityNameSelected: "",
         airlineName: "",
-        faq_object: []
+        faq_object: [],
+        reviews_object:[]
       })
       setTimeout(function () {
         _self.setState({
@@ -602,7 +612,8 @@ class FlightsHomePage extends PureComponent {
           destination: result[pageType][subType][idx]["destination"],
           fromToCity: result[pageType][subType][idx]["city_name"],
           brandName: result[pageType][subType][idx]["airline_name"],
-          faq_object: result[pageType][subType][idx]["faq_object"],
+          faq_object: result[pageType][subType][idx]["faq_object"] ? result[pageType][subType][idx]["faq_object"] : [],
+          reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [] ,
           arrCityNameSelected:
             _self.state.arrCityNameSelected != ""
               ? _self.state.arrCityNameSelected

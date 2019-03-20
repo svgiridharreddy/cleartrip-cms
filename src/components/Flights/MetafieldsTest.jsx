@@ -115,7 +115,6 @@ class MetaFields extends Component {
     let _self = this
     let reviews_object = _self.state.reviews_object
     if (Object.keys(e.target.dataset).length > 1) {
-      debugger
       reviews_object[parseInt(e.target.dataset["listreviewid"])]["reviews_list"][parseInt(e.target.dataset.listid)][e.target.name] = e.target.value
     } else {
       reviews_object[parseInt(e.target.dataset["listreviewid"])][e.target.name] = e.target.value
@@ -123,6 +122,7 @@ class MetaFields extends Component {
     _self.setState({
       reviews_object: reviews_object
     })
+    _self.props.faqOnchange(reviews_object, "reviews_object")
   }
 
   removeReview(e) {
@@ -133,10 +133,14 @@ class MetaFields extends Component {
     _self.setState({
       reviewsObject: reviews_object
     })
+    _self.props.faqOnchange(reviews_object, "reviews_object")
   }
   addReview(e) {
     let _self = this
     let reviews_object = _self.state.reviews_object
+    if(reviews_object.length == 0){
+      reviews_object.push({avg_review_rating:'',total_reviews_count:'',reviews_list:[]})
+    }
     if (reviews_object[0]["reviews_list"].length == 0) {
       reviews_object[0]["reviews_list"].push({ rating: "", review_text: "", reviewer_name: "" })
     } else {
@@ -344,7 +348,6 @@ class MetaFields extends Component {
               })}
             </li> : <li>No faq's present<button type="button"
               className="plusButton" onClick={this.addReview.bind(this)} data-btnid="0">+</button></li> : ""}
-
           <button
             className="save-btn"
             type="submit"
