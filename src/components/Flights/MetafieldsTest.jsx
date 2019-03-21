@@ -130,8 +130,11 @@ class MetaFields extends Component {
     let reviews_object = _self.state.reviews_object
     let index = parseInt(e.target.dataset["btnid"])
     reviews_object[0]["reviews_list"].splice(index, 1)
+    if(reviews_object.lenght == 0 || reviews_object[0]["reviews_list"].length == 0){
+      reviews_object = []
+    }
     _self.setState({
-      reviewsObject: reviews_object
+      reviews_object: reviews_object
     })
     _self.props.faqOnchange(reviews_object, "reviews_object")
   }
@@ -346,7 +349,7 @@ class MetaFields extends Component {
                   </div>
                 </div>)
               })}
-            </li> : <li>No faq's present<button type="button"
+            </li> : <li>No reviews are present for this page<button type="button"
               className="plusButton" onClick={this.addReview.bind(this)} data-btnid="0">+</button></li> : ""}
           <button
             className="save-btn"

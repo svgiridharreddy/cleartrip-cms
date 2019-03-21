@@ -532,7 +532,9 @@ class FlightsHomePage extends PureComponent {
       description: "",
       keywords: "",
       content: "",
-      h1Tag: ""
+      h1Tag: "",
+      faq_object:[],
+      reviews_object:[]
     });
   };
 
