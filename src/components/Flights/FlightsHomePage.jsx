@@ -5,6 +5,7 @@ import FlightsTable from "./FlightsTable";
 import Select1 from "react-select";
 import MetaFields from "./MetafieldsTest";
 import "./css/Flights.css";
+import queryString from 'query-string'
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import {
   NotificationContainer,
@@ -110,6 +111,11 @@ class FlightsHomePage extends PureComponent {
     this.handleSelectedInput = this.handleSelectedInput.bind(this);
   }
 
+  componentDidMount(){
+    let _self = this
+    let search_params = queryString.parse(this.props.location.search)
+  }
+
   handleFormSubmit = e => {
     if(e){
       e.preventDefault();
@@ -213,7 +219,6 @@ class FlightsHomePage extends PureComponent {
     }
   };
   faqOnchange(e, fieldName) {
-    debugger
     let _self = this
     _self.setState({
       [fieldName]: e,
@@ -473,7 +478,8 @@ class FlightsHomePage extends PureComponent {
               content: "",
               h1Tag: "",
               keyword: "",
-              faq_object: []
+              faq_object: [],
+              reviews_object:[]
             });
           }
         })
