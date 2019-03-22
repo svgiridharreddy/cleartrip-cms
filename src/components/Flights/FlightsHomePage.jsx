@@ -150,6 +150,22 @@ class FlightsHomePage extends PureComponent {
     if (!user_data) {
       window.location.replace("/");
     }
+    if (flightValues["reviews_object"] && flightValues["reviews_object"][0] && flightValues["reviews_object"][0]["reviews_list"].length == 1) {
+      if (flightValues["reviews_object"][0]["avg_review_rating"] === "" && flightValues["reviews_object"][0]["total_reviews_count"] === "") {
+        this.setState({
+          reviews_object: []
+        })
+        flightValues["reviews_object"] = []
+      }
+    } else if (flightValues["reviews_object"] && flightValues["reviews_object"][0] && flightValues["reviews_object"][0]["reviews_list"].length > 1) {
+      flightValues["reviews_object"][0]["reviews_list"].map((r, i) => {
+        if(r["rating"] !=""  && r["review_text"] !="" && r["review_text"] !=""){
+          return true
+        }else{
+          flightValues["reviews_object"][0]["reviews_list"].splice(i,1)
+        }
+      })
+    }
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -199,13 +215,13 @@ class FlightsHomePage extends PureComponent {
         if (search_params["id"] && search_params["table_name"]) {
           window.location.replace("/flights-approve")
         }
-        setTimeout(function(){
+        setTimeout(function () {
           NotificationManager.success(
             "Approval required",
             "Admin Need to approve ",
             2000
           );
-        },10)
+        }, 10)
         this.setState({
           editClicked: false,
           depCityName: "",

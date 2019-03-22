@@ -294,10 +294,12 @@ class FlightsApprovalPending extends Component {
                                 }
                             })
                         }
+                        if (data.length == 0) {
+                            NotificationManager.info("Please edit any route to approve", "No data to approve", 3000);
+                        }
                         _self.setState({
                             data: data
                         });
-
                         if (_self.state.data.length > 0) {
                             _self.processTable(table_name)
                         }
@@ -385,7 +387,7 @@ class FlightsApprovalPending extends Component {
         this.getTableData(e.target.value);
     }
     render() {
-      
+
         const { data, tabData, is_admin, approval_table, modelData, loading, editData } = this.state;
         return (
             <div>
