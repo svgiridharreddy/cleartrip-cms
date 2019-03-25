@@ -150,7 +150,14 @@ class FlightsHomePage extends PureComponent {
     if (!user_data) {
       window.location.replace("/");
     }
-    if (flightValues["reviews_object"] && flightValues["reviews_object"][0] && flightValues["reviews_object"][0]["reviews_list"].length == 1) {
+    if (flightValues["reviews_object"] &&flightValues["reviews_object"].length >0 ){
+      if(flightValues["reviews_object"][0]["avg_review_rating"] === "" ||flightValues["reviews_object"][0]["total_reviews_count"] === ""){
+        this.setState({
+          reviews_object: []
+        })
+        flightValues["reviews_object"] = []
+      }
+    if(flightValues["reviews_object"][0] && flightValues["reviews_object"][0]["reviews_list"].length == 1) {
       if (flightValues["reviews_object"][0]["avg_review_rating"] === "" && flightValues["reviews_object"][0]["total_reviews_count"] === "") {
         this.setState({
           reviews_object: []
@@ -166,6 +173,7 @@ class FlightsHomePage extends PureComponent {
         }
       })
     }
+  }
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
