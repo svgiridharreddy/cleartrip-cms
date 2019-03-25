@@ -624,6 +624,7 @@ class FlightsHomePage extends PureComponent {
   handleEdit = idx => {
     let _self = this
     let { result, pageType, subType, categoryType } = this.state;
+    debugger
     if (categoryType === "common" || subType === "index") {
       _self.setState({
         renderTables: false,
@@ -635,6 +636,7 @@ class FlightsHomePage extends PureComponent {
         keywords: result["common"][idx]["keyword"],
         content: result["common"][idx]["content"],
         h1Tag: result["common"][idx]["heading"],
+        faq_object:result["common"][idx]["faq_object"] ? result["common"][idx]["faq_object"] : [],
         readOnlyValue: true,
         editClicked: true
       });
