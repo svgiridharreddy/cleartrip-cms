@@ -1126,6 +1126,7 @@ class FlightsHomePage extends PureComponent {
                     handleMetaChanges={(e, fieldName) =>
                       this.handleMetaChanges(e, fieldName)
                     }
+                    categoryType={this.state.categoryType}
                     handleFormSubmit={this.handleFormSubmit.bind(this)}
                     pageType={this.state.pageType}
                     subType={this.state.subType}

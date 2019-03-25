@@ -42,7 +42,8 @@ class MetaFields extends Component {
       arrCityNameSelected: "",
       editorState: "",
       faq_object: this.props.faq_object,
-      reviews_object: this.props.reviews_object
+      reviews_object: this.props.reviews_object,
+      categoryType:""
     };
     this.handleModelChange = this.handleModelChange.bind(this);
     this.onChageFaq = this.onChageFaq.bind(this)
@@ -220,10 +221,11 @@ class MetaFields extends Component {
       "web-checkin": "Web Checkin",
       index: "Index"
     };
-    const { title, description, keywords, content, h1Tag } = this.props;
+    const { title, description, keywords, content, h1Tag ,categoryType} = this.props;
     const { pageType, subType, faq_object, reviews_object } = this.state
     let showReviews = false
-    if (pageType === "flight-booking" || pageType === "flight-schedule") {
+    debugger
+    if ((pageType === "flight-booking" || pageType === "flight-schedule") && categoryType !="common") {
       if (pageType === "flight-booking" && subType == "overview") {
         showReviews = true
       } else if (pageType === "flight-schedule" && subType == "routes") {
