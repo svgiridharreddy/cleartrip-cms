@@ -99,7 +99,8 @@ class FlightsHomePage extends PureComponent {
       editClicked: false,
       host: host(),
       backBtnClicked: false,
-      updatedInEditForm: false
+      updatedInEditForm: false,
+      loading:false
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleMetaChanges = this.handleMetaChanges.bind(this);
@@ -394,6 +395,17 @@ class FlightsHomePage extends PureComponent {
   };
 
   fetchDetails = () => {
+    let _self = this
+    if(_self.state.domain !== ""  && _self.state.language !== "" && _self.state.pageType !== "" && _self.state.subType != ""){
+      if(_self.state.subType === "index"){
+        _self.setState({loading: true})
+      }else if(_self.state.categoryType !== ""){
+        _self.setState({loading: true})
+      }
+    }else{
+      _self.setState({loading: false})
+      return false
+    }
     const {
       result,
       pageType,
@@ -420,7 +432,6 @@ class FlightsHomePage extends PureComponent {
       reviews_object
     } = this.state;
     var url = this.state.host + "/fetch_details";
-
     var parameters = {
       page_type: pageType,
       domain: domain,
@@ -455,7 +466,8 @@ class FlightsHomePage extends PureComponent {
           this.setState({
             renderTables: false,
             showAddButton: false,
-            showComponent: false
+            showComponent: false,
+            loading:false
           });
           if (
             categoryType === "uniq" &&
@@ -468,7 +480,8 @@ class FlightsHomePage extends PureComponent {
                 result: result,
                 renderTables: true,
                 showAddButton: false,
-                showComponent: false
+                showComponent: false,
+                loading:false
               });
             } else {
               this.setState({
@@ -496,7 +509,8 @@ class FlightsHomePage extends PureComponent {
                   : this.state.brandName,
                 cityNameSelected: this.state.cityNameSelected
                   ? this.state.cityNameSelected
-                  : this.state.fromToCity
+                  : this.state.fromToCity,
+                  loading:false
                 // brandName: this.state.airlineNameSelected ? this.state.airlineNameSelected: ""
               });
             }
@@ -509,7 +523,8 @@ class FlightsHomePage extends PureComponent {
             this.setState({
               result: result,
               renderTables: true,
-              showAddButton: false
+              showAddButton: false,
+              loading:false
             });
           } else {
             NotificationManager.info(
@@ -527,12 +542,13 @@ class FlightsHomePage extends PureComponent {
               h1Tag: "",
               keyword: "",
               faq_object: [],
-              reviews_object: []
+              reviews_object: [],
+              loading:false
             });
           }
         })
         .catch(response => {
-          this.setState({ renderTables: false, showAddButton: true });
+          this.setState({ renderTables: false, showAddButton: true,loading:false });
         });
     }
   };
@@ -815,7 +831,8 @@ class FlightsHomePage extends PureComponent {
       source,
       destination,
       brandName,
-      fromToCity
+      fromToCity,
+      loading
     } = this.state;
     let category;
     let checkfields;
@@ -935,6 +952,7 @@ class FlightsHomePage extends PureComponent {
 
     return (
       <div>
+         <div class={loading ? "loading" : ""}></div>
         <div className="top-wrapper">
           <div className="filter-fileds">
             <ul className="list-inline">
