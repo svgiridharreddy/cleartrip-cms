@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import FlightsTable from "./FlightsTable";
 import Select1 from "react-select";
-import MetaFields from "./MetafieldsTest";
+import MetaFields from "./MetafieldsTest1";
 import "./css/Flights.css";
 import queryString from 'query-string'
 import "../../../node_modules/react-notifications/lib/notifications.css";

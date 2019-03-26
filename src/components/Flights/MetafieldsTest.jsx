@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "froala-editor/js/froala_editor.pkgd.min.js";
-import RichTextEditor from "react-rte";
-import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
-import Select1 from "react-select";
+import { Button } from "react-bootstrap";
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import {
   NotificationContainer,
