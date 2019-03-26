@@ -12,7 +12,6 @@ import {
     NotificationManager
 } from "react-notifications";
 import "../../../node_modules/react-notifications/lib/notifications.css";
-import Loader from 'react-loader-spinner'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import queryString from 'query-string'
 import FroalaEditor from "react-froala-wysiwyg";
@@ -43,7 +42,7 @@ class FlightsApprovalPending extends Component {
             show: false,
             modelData: "",
             approvedVal: false,
-            loading: true,
+            loading: false,
             id: "",
             showEditModel: false,
             editData: "",
@@ -212,8 +211,8 @@ class FlightsApprovalPending extends Component {
             })
             tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
             // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
-            tabObj["edit"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
-            // tabObj["edit"] = <a href={'/flights?table_name=' + _self.state.approval_table + '&id=' + data["id"]} target="blank">Edit</a>
+            // tabObj["edit"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
+            // tabObj["edit"] = <a className="editBtn"  href={'/flights?table_name=' + _self.state.approval_table + '&id=' + data["id"]}>Edit</a>
             tabObj["view"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
@@ -294,10 +293,12 @@ class FlightsApprovalPending extends Component {
                                 }
                             })
                         }
+                        if (data.length == 0) {
+                            NotificationManager.info("Please edit any route to approve", "No data to approve", 3000);
+                        }
                         _self.setState({
                             data: data
                         });
-
                         if (_self.state.data.length > 0) {
                             _self.processTable(table_name)
                         }
@@ -338,33 +339,42 @@ class FlightsApprovalPending extends Component {
         let id = rdata.id
         let approval_status = !rdata.is_approved
         let _self = this
+        let data = _self.state.data
         _self.setState({ loading: true })
         let tabData = _self.state.tabData
-        let data = { id: id, table_name: table_name, approval_status: approval_status }
+        let pdata = { id: id, table_name: table_name, approval_status: approval_status }
+        data.map((v, i) => {
+            if (v["id"] === id) {
+                v["is_approved"] = true
+            }
+        })
+        _self.setState({data: data})
+        _self.processTable(table_name)
         return new Promise(function (resolve) {
-            axios.get(host() + "/route-approval", { params: data }).then(function (json) {
-                _self.getTableData(_self.state.approval_table)
-                setTimeout(function () {
-                    if (approval_status) {
-                        NotificationManager.success(
-                            "successfully approved",
-                            "success",
-                            2000
-                        );
-                    } else {
-                        NotificationManager.info(
-                            "successfully un-approved",
-                            "un-approved",
-                            2000
-                        );
-                    }
-                }, 1500)
-                _self.setState({ apiResponse: true, tabData: tabData, loading: false })
+            axios.get(host() + "/route-approval", { params: pdata }).then(function (json) {
+                //  _self.getTableData(_self.state.approval_table)
+                if (approval_status) {
+                    NotificationManager.success(
+                        "successfully approved",
+                        "success",
+                        2000
+                    );
+                } else {
+                    NotificationManager.info(
+                        "successfully un-approved",
+                        "un-approved",
+                        2000
+                    );
+                }
+                _self.setState({loading: false})
                 resolve(json)
-            }).catch({
+            }).catch(err => {
+                debugger
+                _self.setState({
+                    loading:false
+                })
             })
         })
-
     }
     handleChange(e) {
         let _self = this;
@@ -385,10 +395,11 @@ class FlightsApprovalPending extends Component {
         this.getTableData(e.target.value);
     }
     render() {
-      
+
         const { data, tabData, is_admin, approval_table, modelData, loading, editData } = this.state;
         return (
             <div>
+                <div class={loading ? "loading" : ""}></div>
                 <p>Select table to approve </p>
                 <select
                     name="approval_table"
@@ -417,12 +428,6 @@ class FlightsApprovalPending extends Component {
           </option>
                     <option value="common">Common</option>
                 </select>
-                {/* {loading ? <Loader
-                    type="Watch"
-                    color="#e16f4b"
-                    height="15%"
-                    width="5%"
-                /> : ""} */}
                 <Modal
                     size="lg"
                     onHide={this.handleClose.bind(this)}

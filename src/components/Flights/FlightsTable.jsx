@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Button, Table } from "react-bootstrap";
 import "./css/Flights.css";
 import { MDBBtn, MDBDataTable } from "mdbreact";
 class FlightsTable extends Component {

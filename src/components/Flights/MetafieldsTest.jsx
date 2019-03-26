@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "froala-editor/js/froala_editor.pkgd.min.js";
-import RichTextEditor from "react-rte";
-import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
-import Select1 from "react-select";
+import { Button } from "react-bootstrap";
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import {
   NotificationContainer,
@@ -42,7 +40,8 @@ class MetaFields extends Component {
       arrCityNameSelected: "",
       editorState: "",
       faq_object: this.props.faq_object,
-      reviews_object: this.props.reviews_object
+      reviews_object: this.props.reviews_object,
+      categoryType:""
     };
     this.handleModelChange = this.handleModelChange.bind(this);
     this.onChageFaq = this.onChageFaq.bind(this)
@@ -130,8 +129,11 @@ class MetaFields extends Component {
     let reviews_object = _self.state.reviews_object
     let index = parseInt(e.target.dataset["btnid"])
     reviews_object[0]["reviews_list"].splice(index, 1)
+    if(reviews_object.lenght == 0 || reviews_object[0]["reviews_list"].length == 0){
+      reviews_object = []
+    }
     _self.setState({
-      reviewsObject: reviews_object
+      reviews_object: reviews_object
     })
     _self.props.faqOnchange(reviews_object, "reviews_object")
   }
@@ -217,10 +219,11 @@ class MetaFields extends Component {
       "web-checkin": "Web Checkin",
       index: "Index"
     };
-    const { title, description, keywords, content, h1Tag } = this.props;
+    const { title, description, keywords, content, h1Tag ,categoryType} = this.props;
     const { pageType, subType, faq_object, reviews_object } = this.state
     let showReviews = false
-    if (pageType === "flight-booking" || pageType === "flight-schedule") {
+    debugger
+    if ((pageType === "flight-booking" || pageType === "flight-schedule") && categoryType !="common") {
       if (pageType === "flight-booking" && subType == "overview") {
         showReviews = true
       } else if (pageType === "flight-schedule" && subType == "routes") {
@@ -346,7 +349,7 @@ class MetaFields extends Component {
                   </div>
                 </div>)
               })}
-            </li> : <li>No faq's present<button type="button"
+            </li> : <li>No reviews are present for this page<button type="button"
               className="plusButton" onClick={this.addReview.bind(this)} data-btnid="0">+</button></li> : ""}
           <button
             className="save-btn"

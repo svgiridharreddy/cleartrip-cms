@@ -3,8 +3,9 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import FlightsTable from "./FlightsTable";
 import Select1 from "react-select";
-import MetaFields from "./MetafieldsTest";
+import MetaFields from "./MetafieldsTest1";
 import "./css/Flights.css";
+import queryString from 'query-string'
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import {
   NotificationContainer,
@@ -12,6 +13,8 @@ import {
 } from "react-notifications";
 import { host } from "../helper";
 import loginHelpers from "../helper";
+import Promise from "promise"
+import { debug } from "util";
 
 const pageTypes = ["flight-booking", "flight-schedule", "flight-tickets"];
 const languages = ["en", "ar"];
@@ -87,7 +90,7 @@ class FlightsHomePage extends PureComponent {
       content: "",
       h1Tag: "",
       faq_object: [],
-      reviews_object:[],
+      reviews_object: [],
       showComponent: false,
       source: "",
       destination: "",
@@ -96,7 +99,8 @@ class FlightsHomePage extends PureComponent {
       editClicked: false,
       host: host(),
       backBtnClicked: false,
-      updatedInEditForm: false
+      updatedInEditForm: false,
+      loading:false
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleMetaChanges = this.handleMetaChanges.bind(this);
@@ -110,8 +114,36 @@ class FlightsHomePage extends PureComponent {
     this.handleSelectedInput = this.handleSelectedInput.bind(this);
   }
 
+  componentDidMount() {
+    let _self = this
+    let search_params = queryString.parse(this.props.location.search)
+    if (search_params["id"] && search_params["table_name"]) {
+      return new Promise(function (resolve) {
+        let data = { id: search_params["id"], table_name: search_params["table_name"] }
+        axios.get(host() + "/edit-from-approval", { params: data }).then(function (json) {
+         
+          let record = json.data.record
+          let result = json.data.result
+          _self.setState({
+            result: json.data.result,
+            pageType: record["page_type"],
+            domain: record["domain"],
+            subType: record["page_subtype"],
+            language: record["language"],
+            categoryType: result["common"].length > 0 ? "common" : "uniq",
+            section: record["section"],
+            renderTables: true
+          })
+          return resolve(json)
+        }).catch(error => {
+          NotificationManager.error("Record Not found", "Please try again", 3000)
+        })
+      })
+    }
+  }
+
   handleFormSubmit = e => {
-    if(e){
+    if (e) {
       e.preventDefault();
     }
     const flightValues = this.state;
@@ -119,7 +151,30 @@ class FlightsHomePage extends PureComponent {
     if (!user_data) {
       window.location.replace("/");
     }
-    debugger
+    if (flightValues["reviews_object"] &&flightValues["reviews_object"].length >0 ){
+      if(flightValues["reviews_object"][0]["avg_review_rating"] === "" ||flightValues["reviews_object"][0]["total_reviews_count"] === ""){
+        this.setState({
+          reviews_object: []
+        })
+        flightValues["reviews_object"] = []
+      }
+    if(flightValues["reviews_object"][0] && flightValues["reviews_object"][0]["reviews_list"].length == 1) {
+      if (flightValues["reviews_object"][0]["avg_review_rating"] === "" && flightValues["reviews_object"][0]["total_reviews_count"] === "") {
+        this.setState({
+          reviews_object: []
+        })
+        flightValues["reviews_object"] = []
+      }
+    } else if (flightValues["reviews_object"] && flightValues["reviews_object"][0] && flightValues["reviews_object"][0]["reviews_list"].length > 1) {
+      flightValues["reviews_object"][0]["reviews_list"].map((r, i) => {
+        if(r["rating"] !=""  && r["review_text"] !="" && r["review_text"] !=""){
+          return true
+        }else{
+          flightValues["reviews_object"][0]["reviews_list"].splice(i,1)
+        }
+      })
+    }
+  }
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -165,11 +220,17 @@ class FlightsHomePage extends PureComponent {
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
-        NotificationManager.success(
-          "Approval required",
-          "Admin Need to approve ",
-          2000
-        );
+        let search_params = queryString.parse(this.props.location.search)
+        if (search_params["id"] && search_params["table_name"]) {
+          window.location.replace("/flights-approve")
+        }
+        setTimeout(function () {
+          NotificationManager.success(
+            "Approval required",
+            "Admin Need to approve ",
+            2000
+          );
+        }, 10)
         this.setState({
           editClicked: false,
           depCityName: "",
@@ -199,9 +260,11 @@ class FlightsHomePage extends PureComponent {
       });
   };
   handleMetaChanges = (e, fieldName) => {
-    debugger
-    this.setState({ [fieldName]: e.target.value,
-    updatedInEditForm: true });
+   
+    this.setState({
+      [fieldName]: e.target.value,
+      updatedInEditForm: true
+    });
   };
   handleRTEchange = content => {
     this.setState({ content });
@@ -213,21 +276,12 @@ class FlightsHomePage extends PureComponent {
     }
   };
   faqOnchange(e, fieldName) {
-    debugger
     let _self = this
     _self.setState({
       [fieldName]: e,
       updatedInEditForm: this.state.editClicked ? true : false
     })
   }
-  // reviewObjectOnChange(e,fieldName){
-  //   let _self = this
-  //   _self.setState({
-  //     [fieldName]: e,
-  //     updatedInEditForm: this.state.editClicked ? true : false
-  //   })
-  // }
-
   handleChange = (e, fieldName) => {
     if (this.state.editClicked) {
       this.setState({ updatedInEditForm: true })
@@ -341,6 +395,17 @@ class FlightsHomePage extends PureComponent {
   };
 
   fetchDetails = () => {
+    let _self = this
+    if(_self.state.domain !== ""  && _self.state.language !== "" && _self.state.pageType !== "" && _self.state.subType != ""){
+      if(_self.state.subType === "index"){
+        _self.setState({loading: true})
+      }else if(_self.state.categoryType !== ""){
+        _self.setState({loading: true})
+      }
+    }else{
+      _self.setState({loading: false})
+      return false
+    }
     const {
       result,
       pageType,
@@ -367,7 +432,6 @@ class FlightsHomePage extends PureComponent {
       reviews_object
     } = this.state;
     var url = this.state.host + "/fetch_details";
-
     var parameters = {
       page_type: pageType,
       domain: domain,
@@ -402,7 +466,8 @@ class FlightsHomePage extends PureComponent {
           this.setState({
             renderTables: false,
             showAddButton: false,
-            showComponent: false
+            showComponent: false,
+            loading:false
           });
           if (
             categoryType === "uniq" &&
@@ -415,7 +480,8 @@ class FlightsHomePage extends PureComponent {
                 result: result,
                 renderTables: true,
                 showAddButton: false,
-                showComponent: false
+                showComponent: false,
+                loading:false
               });
             } else {
               this.setState({
@@ -443,7 +509,8 @@ class FlightsHomePage extends PureComponent {
                   : this.state.brandName,
                 cityNameSelected: this.state.cityNameSelected
                   ? this.state.cityNameSelected
-                  : this.state.fromToCity
+                  : this.state.fromToCity,
+                  loading:false
                 // brandName: this.state.airlineNameSelected ? this.state.airlineNameSelected: ""
               });
             }
@@ -456,7 +523,8 @@ class FlightsHomePage extends PureComponent {
             this.setState({
               result: result,
               renderTables: true,
-              showAddButton: false
+              showAddButton: false,
+              loading:false
             });
           } else {
             NotificationManager.info(
@@ -473,12 +541,14 @@ class FlightsHomePage extends PureComponent {
               content: "",
               h1Tag: "",
               keyword: "",
-              faq_object: []
+              faq_object: [],
+              reviews_object: [],
+              loading:false
             });
           }
         })
         .catch(response => {
-          this.setState({ renderTables: false, showAddButton: true });
+          this.setState({ renderTables: false, showAddButton: true,loading:false });
         });
     }
   };
@@ -526,15 +596,17 @@ class FlightsHomePage extends PureComponent {
       description: "",
       keywords: "",
       content: "",
-      h1Tag: ""
+      h1Tag: "",
+      faq_object: [],
+      reviews_object: []
     });
   };
 
   backBtnFun = () => {
     let _self = this;
     let updated = false
-    if(_self.state.editClicked && _self.state.updatedInEditForm){
-       updated = window.confirm("Do you want to save save your changes?")
+    if (_self.state.editClicked && _self.state.updatedInEditForm) {
+      updated = window.confirm("Do you want to save save your changes?")
     }
     setTimeout(function () {
       _self.setState({
@@ -553,21 +625,22 @@ class FlightsHomePage extends PureComponent {
         depCityNameSelected: "",
         arrCityName: "",
         arrCityNameSelected: "",
-        updatedInEditForm:false
+        updatedInEditForm: false
       });
     }, 100);
-    if(updated){
+    if (updated) {
       _self.handleFormSubmit()
-    }else{
-    setTimeout(function () {
-      _self.fetchDetails();
-    }, 100);
-  }
+    } else {
+      setTimeout(function () {
+        _self.fetchDetails();
+      }, 100);
+    }
   };
 
   handleEdit = idx => {
     let _self = this
     let { result, pageType, subType, categoryType } = this.state;
+   
     if (categoryType === "common" || subType === "index") {
       _self.setState({
         renderTables: false,
@@ -579,6 +652,7 @@ class FlightsHomePage extends PureComponent {
         keywords: result["common"][idx]["keyword"],
         content: result["common"][idx]["content"],
         h1Tag: result["common"][idx]["heading"],
+        faq_object:result["common"][idx]["faq_object"] ? result["common"][idx]["faq_object"] : [],
         readOnlyValue: true,
         editClicked: true
       });
@@ -595,7 +669,7 @@ class FlightsHomePage extends PureComponent {
         arrCityNameSelected: "",
         airlineName: "",
         faq_object: [],
-        reviews_object:[]
+        reviews_object: []
       })
       setTimeout(function () {
         _self.setState({
@@ -613,7 +687,7 @@ class FlightsHomePage extends PureComponent {
           fromToCity: result[pageType][subType][idx]["city_name"],
           brandName: result[pageType][subType][idx]["airline_name"],
           faq_object: result[pageType][subType][idx]["faq_object"] ? result[pageType][subType][idx]["faq_object"] : [],
-          reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [] ,
+          reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [],
           arrCityNameSelected:
             _self.state.arrCityNameSelected != ""
               ? _self.state.arrCityNameSelected
@@ -757,7 +831,8 @@ class FlightsHomePage extends PureComponent {
       source,
       destination,
       brandName,
-      fromToCity
+      fromToCity,
+      loading
     } = this.state;
     let category;
     let checkfields;
@@ -877,6 +952,7 @@ class FlightsHomePage extends PureComponent {
 
     return (
       <div>
+         <div class={loading ? "loading" : ""}></div>
         <div className="top-wrapper">
           <div className="filter-fileds">
             <ul className="list-inline">
@@ -1070,6 +1146,7 @@ class FlightsHomePage extends PureComponent {
                     handleMetaChanges={(e, fieldName) =>
                       this.handleMetaChanges(e, fieldName)
                     }
+                    categoryType={this.state.categoryType}
                     handleFormSubmit={this.handleFormSubmit.bind(this)}
                     pageType={this.state.pageType}
                     subType={this.state.subType}
