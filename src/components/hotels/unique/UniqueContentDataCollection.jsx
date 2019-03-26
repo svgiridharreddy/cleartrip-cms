@@ -4,8 +4,8 @@ import axios from 'axios';
 import Promise from "promise"
 import Select1 from 'react-select';
 import TableContent from '../TableContent';
-import AddHotelUniqueContent from './AddHotelUniqueContent';
-import EditUniqueContent from './EditUnique';
+import AddHotelUniqueContent from './AddHotelUniqueContent1';
+import EditUniqueContent from './EditUnique1';
 import { host } from "../../helper";
 import {
 	NotificationContainer,
@@ -164,7 +164,7 @@ class UniqueContentDataCollection extends Component {
 									isDataPresent: true,
 									content_result: response.data
 								})
-								NotificationManager.info("Unique content data deleted successfully", "Unique Data deleted", 1500);
+								NotificationManager.warning("Unique content data deleted successfully", "Unique Data deleted", 1500);
 							})
 					})
 					.catch((err) => {
@@ -245,7 +245,7 @@ class UniqueContentDataCollection extends Component {
 								isEditForm: false,
 								content_result: response.data
 							})
-							NotificationManager.info("Unique content data updation done successfully", "Updation", 1500);
+							NotificationManager.success("Unique content data updation done successfully", "Updation", 1500);
 						})
 				}
 			})

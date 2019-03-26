@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import TableContent from '../TableContent';
 import axios from 'axios';
 import Select1 from 'react-select';
-import AddCommonForm from '../AddCommonForm';
-import EditCommonForm from '../EditCommonForm';
+import AddCommonForm from './AddCommonForm1';
+import EditCommonForm from './EditCommonForm1';
 import { host } from "../../helper";
 import {
   NotificationContainer,
@@ -87,7 +87,7 @@ class CommonContentDataCollection extends Component {
 									axios.post(`${QUERY_URL}`, data)
 							      .then(res => {
 							          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false,content_result: res.data })
-							          NotificationManager.info("Common content data deleted successfully", "Common Data deleted", 2000);
+							          NotificationManager.warning("Common content data deleted successfully", "Common Data deleted", 2000);
 							      })
 							      .catch((err) => {
 							          console.log(err);
@@ -124,7 +124,7 @@ class CommonContentDataCollection extends Component {
 					axios.post(`${QUERY_URL}`, hdata)
 			      .then(res => {
 			          this.setState({ isDataPresent: true, isAddForm: false, content_result: res.data })
-			          NotificationManager.info("Common content data added successfully", "Common Data Added", 2000);
+			          NotificationManager.success("Common content data added successfully", "Common Data Added", 2000);
 			      })
 			      .catch((err) => {
 			          console.log(err);
@@ -164,7 +164,7 @@ class CommonContentDataCollection extends Component {
 					axios.post(`${QUERY_URL}`, hdata)
 			      .then(res => {
 			          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
-			          NotificationManager.info("Common content data updation done successfully", "Updation", 2000);
+			          NotificationManager.success("Common content data updation done successfully", "Updation", 2000);
 			      })
 			      .catch((err) => {
 			          console.log(err);
