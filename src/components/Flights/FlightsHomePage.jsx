@@ -143,8 +143,15 @@ class FlightsHomePage extends PureComponent {
   }
 
   handleFormSubmit = e => {
+    let _self = this
     if (e) {
       e.preventDefault();
+    }
+    if (_self.state.editClicked && _self.state.updatedInEditForm) {
+      console.log("changed")
+    }else{
+      this.backBtnFun()
+      return false
     }
     const flightValues = this.state;
     let user_data = JSON.parse(localStorage.getItem("user_data"));
@@ -260,7 +267,6 @@ class FlightsHomePage extends PureComponent {
       });
   };
   handleMetaChanges = (e, fieldName) => {
-   
     this.setState({
       [fieldName]: e.target.value,
       updatedInEditForm: true
@@ -952,7 +958,7 @@ class FlightsHomePage extends PureComponent {
 
     return (
       <div>
-         <div class={loading ? "loading" : ""}></div>
+         <div className={loading ? "loading" : ""}></div>
         <div className="top-wrapper">
           <div className="filter-fileds">
             <ul className="list-inline">
