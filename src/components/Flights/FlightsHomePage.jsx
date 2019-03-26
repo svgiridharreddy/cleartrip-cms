@@ -120,7 +120,7 @@ class FlightsHomePage extends PureComponent {
       return new Promise(function (resolve) {
         let data = { id: search_params["id"], table_name: search_params["table_name"] }
         axios.get(host() + "/edit-from-approval", { params: data }).then(function (json) {
-          debugger
+         
           let record = json.data.record
           let result = json.data.result
           _self.setState({
@@ -259,7 +259,7 @@ class FlightsHomePage extends PureComponent {
       });
   };
   handleMetaChanges = (e, fieldName) => {
-    debugger
+   
     this.setState({
       [fieldName]: e.target.value,
       updatedInEditForm: true
@@ -281,14 +281,6 @@ class FlightsHomePage extends PureComponent {
       updatedInEditForm: this.state.editClicked ? true : false
     })
   }
-  // reviewObjectOnChange(e,fieldName){
-  //   let _self = this
-  //   _self.setState({
-  //     [fieldName]: e,
-  //     updatedInEditForm: this.state.editClicked ? true : false
-  //   })
-  // }
-
   handleChange = (e, fieldName) => {
     if (this.state.editClicked) {
       this.setState({ updatedInEditForm: true })
@@ -632,7 +624,7 @@ class FlightsHomePage extends PureComponent {
   handleEdit = idx => {
     let _self = this
     let { result, pageType, subType, categoryType } = this.state;
-    debugger
+   
     if (categoryType === "common" || subType === "index") {
       _self.setState({
         renderTables: false,
