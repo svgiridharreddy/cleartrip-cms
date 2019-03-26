@@ -41,7 +41,8 @@ class CommonContentDataCollection extends Component {
       isDataPresent: false,
       isAddForm: false,
       isEditForm: false,
-      host: host()
+      host: host(),
+      is_loaded: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.returnOptions = this.returnOptions.bind(this);
@@ -55,10 +56,11 @@ class CommonContentDataCollection extends Component {
 			[e.target.name]: e.target.value
 		}, function(){
 			if(this.state.domain_name !== '' &&  this.state.country_name !== '' && this.state.page_type !== '') {
+				this.setState({ is_loaded: true })
 				const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
 				axios.post(`${QUERY_URL}`, data)
 		      .then(res => {
-		          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+		          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, is_loaded: false, content_result: res.data })
 		      })
 		      .catch((err) => {
 		          console.log(err);
@@ -69,12 +71,13 @@ class CommonContentDataCollection extends Component {
 
 	handleChangeFunction = (name,item) => {
 		if (name === "add") {
-			this.setState({isAddForm: true, isDataPresent: false, isEditForm: false})
+			this.setState({isAddForm: true, isDataPresent: false, isEditForm: false, is_loaded: false})
 		}	else if (name === "edit") {
 			this.setState({
 				isEditForm: true,
 				isAddForm: false,
 				isDataPresent: false,
+				is_loaded: false,
 				itemData: item
 			})
 		} else if (name === "delete") {
@@ -82,12 +85,13 @@ class CommonContentDataCollection extends Component {
 				if (alrt === true) {
 				    axios.delete(`${this.state.host}/cmshotels/delete/${item.id}`)
 				      .then(res => {
+							    NotificationManager.warning("Common content data deleted successfully", "Common Data deleted", 2000);
 				          console.log(res.message);
+				          this.setState({ is_loaded: true })
 				          const data = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
 									axios.post(`${QUERY_URL}`, data)
 							      .then(res => {
-							          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false,content_result: res.data })
-							          NotificationManager.warning("Common content data deleted successfully", "Common Data deleted", 2000);
+							          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, is_loaded: false, content_result: res.data })
 							      })
 							      .catch((err) => {
 							          console.log(err);
@@ -119,12 +123,13 @@ class CommonContentDataCollection extends Component {
     }
     axios.post(`${this.state.host}/cmshotels/common-content-section-data`, data)
     .then(({ data }) => {
+			          NotificationManager.success("Common content data added successfully", "Common Data Added", 2000);
         if(data.message) {
+			          this.setState({ is_loaded: true, isAddForm: false })
 					const hdata = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
 					axios.post(`${QUERY_URL}`, hdata)
 			      .then(res => {
-			          this.setState({ isDataPresent: true, isAddForm: false, content_result: res.data })
-			          NotificationManager.success("Common content data added successfully", "Common Data Added", 2000);
+			          this.setState({ isDataPresent: true, isAddForm: false, is_loaded: false, content_result: res.data })
 			      })
 			      .catch((err) => {
 			          console.log(err);
@@ -159,12 +164,13 @@ class CommonContentDataCollection extends Component {
         data
       )
       .then(({ data }) => {
+			          NotificationManager.success("Common content data updation done successfully", "Updation", 2000);
         if(data.message) {
+        	this.setState({ is_loaded: true, isAddForm: false, isEditForm: false })
 					const hdata = { content_type: this.state.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name, page_type: this.state.page_type }
 					axios.post(`${QUERY_URL}`, hdata)
 			      .then(res => {
-			          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
-			          NotificationManager.success("Common content data updation done successfully", "Updation", 2000);
+			          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, is_loaded: false, content_result: res.data })
 			      })
 			      .catch((err) => {
 			          console.log(err);
@@ -178,10 +184,11 @@ class CommonContentDataCollection extends Component {
 
 	backBtnFun = () =>{
 		let _self =this
+		this.setState({ is_loaded: true, isAddForm: false, isEditForm: false })
 		var backData = { content_type: _self.state.content_type, domain_name: _self.state.domain_name, country_name: _self.state.country_name, page_type: _self.state.page_type }
 		axios.post(`${QUERY_URL}`, backData)
       .then(res => {
-          _self.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+          _self.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, is_loaded: false, content_result: res.data })
       })
       .catch((err) => {
           console.log(err);
@@ -194,10 +201,11 @@ class CommonContentDataCollection extends Component {
 			selectedCountry: p
 		})
 		if(this.state.domain_name !== '' &&  p.value !== '' && this.state.page_type !== '') {
+			this.setState({ is_loaded: true })
 			const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: p.value, page_type: this.state.page_type }
 			axios.post(`${QUERY_URL}`, data)
 	      .then(res => {
-	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, is_loaded: false, content_result: res.data })
 	      })
 	      .catch((err) => {
 	          console.log(err);
@@ -285,6 +293,7 @@ class CommonContentDataCollection extends Component {
 		      <div className="clearfix"></div>
 		    </div>
 				<div className="common-hotel-content">
+					<div className={this.state.is_loaded ? "loading" : ""}></div>
 					{ dataField }
 				</div>
 			</div>

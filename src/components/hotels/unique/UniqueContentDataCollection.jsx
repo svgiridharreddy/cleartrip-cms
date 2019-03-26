@@ -37,6 +37,7 @@ class UniqueContentDataCollection extends Component {
 			faqs: JSON.stringify([]),
 			content_type: props.content_type,
 			itemData: {},
+			is_loaded: false,
 			isDataPresent: false,
 			isAddForm: false,
 			isEditForm: false,
@@ -54,10 +55,11 @@ class UniqueContentDataCollection extends Component {
 	handleChange(e) {
 		e.preventDefault();
 		if(this.state.domain_name !== '' &&  this.state.country_name !== '') {
+			this.setState({is_loaded: true})
 			const data = { content_type: this.state.content_type, domain_name: e.target.value, country_name: this.state.country_name, prefix: this.state.query }
 			axios.post(`${QUERY_URL}`, data)
 	      .then(res => {
-	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, is_loaded: false, content_result: res.data })
 	      })
 	      .catch((err) => {
 	          console.log(err);
@@ -69,11 +71,13 @@ class UniqueContentDataCollection extends Component {
 	}
 
 	getInfo = () => {
+		this.setState({is_loaded: true})
 		const params = {prefix: this.state.query, content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: this.state.country_name }
 		axios.post(`${QUERY_URL}`, params)
 			.then((response) => {
 				this.setState({
 					isDataPresent: true,
+					is_loaded: false,
 					content_result: response.data
 				})
 			})
@@ -95,10 +99,11 @@ class UniqueContentDataCollection extends Component {
 			selectedCountry: p
 		})
 		if(this.state.domain_name !== '' &&  p.value !== '') {
+			this.setState({ is_loaded: true})
 			const data = { content_type: this.props.content_type, domain_name: this.state.domain_name, country_name: p.value, prefix: this.state.query }
 			axios.post(`${QUERY_URL}`, data)
 	      .then(res => {
-	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, content_result: res.data })
+	          this.setState({ isDataPresent: true, isAddForm: false, isEditForm: false, is_loaded: false, content_result: res.data })
 	      })
 	      .catch((err) => {
 	          console.log(err);
@@ -119,12 +124,14 @@ class UniqueContentDataCollection extends Component {
 
 	backBtnFun = () =>{
     let _self =this
+    this.setState({is_loaded: true})
     axios.post(`${QUERY_URL}?prefix=${_self.state.query}&content_type=${_self.state.content_type}&domain_name=${_self.state.domain_name}&country_name=${_self.state.country_name}`)
 		.then((response) => {
 			_self.setState({
 				isDataPresent: true,
 				isAddForm: false,
 				isEditForm: false,
+				is_loaded: false,
 				content_result: response.data
 			})
 		})
@@ -144,12 +151,13 @@ class UniqueContentDataCollection extends Component {
 
 	handleChangeFunction = (name, item) => {
 		if (name === "add") {
-			this.setState({ isAddForm: true, isDataPresent: false, isEditForm: false })
+			this.setState({ isAddForm: true, isDataPresent: false, isEditForm: false, is_loaded: false, })
 		} else if (name === "edit") {
 			this.setState({
 				isEditForm: true,
 				isAddForm: false,
 				isDataPresent: false,
+				is_loaded: false,
 				itemData: item
 			})
 		} else if (name === "delete") {
@@ -157,14 +165,16 @@ class UniqueContentDataCollection extends Component {
 			if (alrt === true) {
 				axios.delete(`${this.state.host}/cmshotels/delete/${item.id}`)
 					.then(res => {
+								NotificationManager.warning("Unique content data deleted successfully", "Unique Data deleted", 1500);
 						console.log(res.message);
+						this.setState({is_loaded: true})
 						axios.post(`${QUERY_URL}?prefix=${this.state.query}&content_type=${this.state.content_type}&domain_name=${this.state.domain_name}&country_name=${this.state.country_name}`)
 							.then((response) => {
 								this.setState({
 									isDataPresent: true,
+									is_loaded: false,
 									content_result: response.data
 								})
-								NotificationManager.warning("Unique content data deleted successfully", "Unique Data deleted", 1500);
 							})
 					})
 					.catch((err) => {
@@ -194,16 +204,22 @@ class UniqueContentDataCollection extends Component {
 		}
 		axios.post(`${this.state.host}/cmshotels/content-section-data`, data)
 			.then(({ data }) => {
+							NotificationManager.success("Unique content data added successfully", "Unique Data Added", 1500);
 				if (data.message) {
+					this.setState({
+						is_loaded: true,
+						isAddForm: false,
+						isEditForm: false
+					})
 					axios.post(`${QUERY_URL}?prefix=${this.state.query}&content_type=${this.state.content_type}&domain_name=${this.state.domain_name}&country_name=${this.state.country_name}`)
 						.then((response) => {
 							this.setState({
 								isDataPresent: true,
 								isAddForm: false,
 								isEditForm: false,
+								is_loaded: false,
 								content_result: response.data
 							})
-							NotificationManager.success("Unique content data added successfully", "Unique Data Added", 1500);
 						})
 				}
 			})
@@ -236,16 +252,22 @@ class UniqueContentDataCollection extends Component {
 				data
 			)
 			.then(({ data }) => {
+							NotificationManager.success("Unique content data updation done successfully", "Updation", 1500);
 				if (data.message) {
+					this.setState({
+						is_loaded: true,
+						isAddForm: false,
+						isEditForm: false
+					})
 					axios.post(`${QUERY_URL}?prefix=${this.state.query}&content_type=${this.state.content_type}&domain_name=${this.state.domain_name}&country_name=${this.state.country_name}`)
 						.then((response) => {
 							this.setState({
 								isDataPresent: true,
 								isAddForm: false,
 								isEditForm: false,
+								is_loaded: false,
 								content_result: response.data
 							})
-							NotificationManager.success("Unique content data updation done successfully", "Updation", 1500);
 						})
 				}
 			})
@@ -306,6 +328,7 @@ class UniqueContentDataCollection extends Component {
 		      <div className="clearfix"></div>
 		    </div>
 				<div className="common-hotel-content">
+					<div className={this.state.is_loaded ? "loading" : ""}></div>
 					{ dataField }
 				</div>
 			</div>

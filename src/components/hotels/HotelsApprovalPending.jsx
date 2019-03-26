@@ -37,7 +37,8 @@ class HotelsApprovalPending extends Component {
       content_type: '',
       show: false,
       dataMessage: '',
-      hotelData: ''
+      hotelData: '',
+      is_loaded: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.approveFunction = this.approveFunction.bind(this);
@@ -68,17 +69,20 @@ class HotelsApprovalPending extends Component {
       let search_params = queryString.parse(this.props.location.search)
       if (["common data", "unique data"].indexOf(search_params["content_type"]) !== -1) {
         var content_type = search_params["content_type"]
+        this.setState({is_loaded: true})
         axios.get(`${QUERY_APPROVE}${search_params["id"]}`).then((response) => {
           if (response.data.length > 0) {
             this.setState({
               approvalData: response.data,
               content_type: content_type,
-              dataMessage: ''
+              dataMessage: '',
+              is_loaded: false
             })
           } else {
             this.setState({
               dataMessage: "******** There is no data to approve ********",
-              content_type: content_type
+              content_type: content_type,
+              is_loaded: false
             })
           }
         }).catch(function (error) {
@@ -227,18 +231,21 @@ class HotelsApprovalPending extends Component {
 
   handleChange(e) {
     var content_type = e.target.value;
+    this.setState({is_loaded: true})
     axios.get(`${QUERY_URL}${content_type}`).then((response) => {
       if (response.data.length > 0) {
         this.setState({
           approvalData: response.data,
           content_type: content_type,
-          dataMessage: ''
+          dataMessage: '',
+          is_loaded: false
         })
       } else {
         this.setState({
           dataMessage: "******** There is no data to approve ********",
           approvalData: [],
-          content_type: content_type
+          content_type: content_type,
+          is_loaded: false
         })
       }
     }).catch(function (error) {
@@ -438,6 +445,7 @@ class HotelsApprovalPending extends Component {
       <option value="common data">Common Content Data</option>
       </select>
       <div className="appovalTable">
+      <div className={this.state.is_loaded ? "loading" : ""}></div>
       { dataMessage }
       {
         dataField
