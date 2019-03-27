@@ -100,7 +100,8 @@ class FlightsHomePage extends PureComponent {
       host: host(),
       backBtnClicked: false,
       updatedInEditForm: false,
-      loading: false
+      loading: false,
+      last_modified_list: []
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleMetaChanges = this.handleMetaChanges.bind(this);
@@ -121,7 +122,6 @@ class FlightsHomePage extends PureComponent {
       return new Promise(function (resolve) {
         let data = { id: search_params["id"], table_name: search_params["table_name"] }
         axios.get(host() + "/edit-from-approval", { params: data }).then(function (json) {
-
           let record = json.data.record
           let result = json.data.result
           _self.setState({
@@ -149,7 +149,7 @@ class FlightsHomePage extends PureComponent {
     }
     if (_self.state.editClicked && _self.state.updatedInEditForm) {
       console.log("changed")
-    } else if(!(_self.state.editClicked && _self.state.updatedInEditForm)) {
+    } else if (!(_self.state.editClicked && _self.state.updatedInEditForm)) {
       console.log("new route")
     }
     else {
@@ -185,6 +185,7 @@ class FlightsHomePage extends PureComponent {
         })
       }
     }
+    
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -200,6 +201,7 @@ class FlightsHomePage extends PureComponent {
         h1_title: flightValues["h1Tag"],
         faq_object: flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
         reviews_object: flightValues["reviews_object"] && flightValues["reviews_object"].length > 0 ? flightValues["reviews_object"] : [],
+        last_modified_list: flightValues['last_modified_list'] && flightValues["last_modified_list"].length > 0 ? flightValues["last_modified_list"] : [],
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -270,6 +272,14 @@ class FlightsHomePage extends PureComponent {
       });
   };
   handleMetaChanges = (e, fieldName) => {
+    let _self = this
+    let arr = []
+    arr.push(fieldName)
+    if (_self.state.last_modified_list.indexOf(fieldName) == -1) {
+      _self.setState({
+        last_modified_list: this.state.last_modified_list.concat(arr)
+      })
+    }
     this.setState({
       [fieldName]: e.target.value,
       updatedInEditForm: true
@@ -286,6 +296,13 @@ class FlightsHomePage extends PureComponent {
   };
   faqOnchange(e, fieldName) {
     let _self = this
+    let arr = []
+    arr.push(fieldName)
+    if (_self.state.last_modified_list.indexOf(fieldName) == -1) {
+      _self.setState({
+        last_modified_list: _self.state.last_modified_list.concat(arr)
+      })
+    }
     _self.setState({
       [fieldName]: e,
       updatedInEditForm: this.state.editClicked ? true : false
@@ -293,6 +310,15 @@ class FlightsHomePage extends PureComponent {
   }
   handleChange = (e, fieldName) => {
     if (this.state.editClicked) {
+      if (fieldName === 'rte') {
+        if (this.state.last_modified_list.indexOf("content") == -1) {
+          let arr = []
+          arr.push("content")
+          this.setState({
+            last_modified_list: this.state.last_modified_list.concat(arr)
+          })
+        }
+      }
       this.setState({ updatedInEditForm: true })
     }
     if (fieldName === "section") {
@@ -552,6 +578,7 @@ class FlightsHomePage extends PureComponent {
               keyword: "",
               faq_object: [],
               reviews_object: [],
+              last_modified_list:[],
               loading: false
             });
           }
@@ -607,7 +634,8 @@ class FlightsHomePage extends PureComponent {
       content: "",
       h1Tag: "",
       faq_object: [],
-      reviews_object: []
+      reviews_object: [],
+      last_modified_list:[]
     });
   };
 
@@ -649,7 +677,6 @@ class FlightsHomePage extends PureComponent {
   handleEdit = idx => {
     let _self = this
     let { result, pageType, subType, categoryType } = this.state;
-
     if (categoryType === "common" || subType === "index") {
       _self.setState({
         renderTables: false,
@@ -662,6 +689,7 @@ class FlightsHomePage extends PureComponent {
         content: result["common"][idx]["content"],
         h1Tag: result["common"][idx]["heading"],
         faq_object: result["common"][idx]["faq_object"] ? result["common"][idx]["faq_object"] : [],
+        last_modified_list: result["last_modified_list"][idx]["last_modified_list"] ? result["last_modified_list"][idx]["last_modified_list"] : [],
         readOnlyValue: true,
         editClicked: true
       });
@@ -678,7 +706,8 @@ class FlightsHomePage extends PureComponent {
         arrCityNameSelected: "",
         airlineName: "",
         faq_object: [],
-        reviews_object: []
+        reviews_object: [],
+        last_modified_list:[]
       })
       setTimeout(function () {
         _self.setState({
@@ -697,6 +726,7 @@ class FlightsHomePage extends PureComponent {
           brandName: result[pageType][subType][idx]["airline_name"],
           faq_object: result[pageType][subType][idx]["faq_object"] ? result[pageType][subType][idx]["faq_object"] : [],
           reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [],
+          last_modified_list:result[pageType][subType][idx]["last_modified_list"] ? result[pageType][subType][idx]["last_modified_list"] : [],
           arrCityNameSelected:
             _self.state.arrCityNameSelected != ""
               ? _self.state.arrCityNameSelected
