@@ -556,3 +556,6 @@ textarea {
     transform: rotate(360deg);
   }
 }
+/* table.dataTable th:nth-last-child(-n+2) {
+  color: transparent;
+} */

@@ -14,13 +14,11 @@ import {
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import queryString from 'query-string'
-import FroalaEditor from "react-froala-wysiwyg";
-import "froala-editor/js/froala_editor.pkgd.min.js";
-import "font-awesome/css/font-awesome.css";
-import "froala-editor/js/froala_editor.pkgd.min.js";
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-
+import JoditEditor from "jodit-react";
+import $ from "jquery";
+window.jQuery = $;
+window.$ = $;
+global.jQuery = $;
 
 class FlightsApprovalPending extends Component {
     constructor(props) {
@@ -134,16 +132,23 @@ class FlightsApprovalPending extends Component {
             editData: editData
         })
     }
+    jodit;
+    setRef = jodit => this.jodit = jodit;
+    config = {
+        readonly: false
+    }
     createEditForm() {
         let _self = this
         let editData = Object.keys(_self.state.postData).map((v, i) => {
             if (v === "content") {
+                debugger
                 return (<li key={i}><b>Content</b>
-                    <FroalaEditor
-                        model={_self.state.postData[v]}
-                        base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
-                        onModelChange={this.handleModelChange}
-                    /></li>)
+                    (<JoditEditor
+                        editorRef={this.setRef}
+                        value={_self.state.postData[v]}
+                        config={this.config}
+                        onChange={this.handleModelChange} />
+                </li>)
             } else {
                 return (<li key={i}><label>{v}</label><input type="text" value={_self.state.postData[v]} onChange={this.editHandleChange.bind(this, v)} /></li>)
             }
@@ -155,7 +160,7 @@ class FlightsApprovalPending extends Component {
         let _self = this
         let obj = {}
         let showArr = ["domain", "page_type", "language", "page_subtype", "section", "url", "title", "description", "keyword", "heading", "source", "destination", "content", "h2_schedule_title", "h2_calendar_title", "h2_lowest_fare_title", "faq_object"]
-        let editFields = ["title", "description", "keyword", "heading"]
+        let editFields = ["title", "description", "keyword", "heading", "content"]
         showArr.map((ele, i) => {
             if (showArr.indexOf(ele) > -1 && data[ele] && data[ele] != "") {
                 if (editFields.indexOf(ele) > -1) {
@@ -193,7 +198,7 @@ class FlightsApprovalPending extends Component {
             columns = ["Domain-Section-Language", "page_type", "page_subtype"]
         }
 
-        columns.push("Last modified","Approval status")
+        columns.push("Last modified", "Approval status")
         if (type == "columns") {
             columns.map(col => {
                 let obj = { label: col, field: col, width: 150 }
@@ -206,16 +211,25 @@ class FlightsApprovalPending extends Component {
             columns.map(col => {
                 if (col === "Domain-Section-Language") {
                     tabObj["Domain-Section-Language"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
-                }else if(col ==="Last modified"){
-                    tabObj["Last modified"] = data["last_modified_list"].join(",")
-                }else {
+                } else if (col === "Last modified") {
+                    let lastModifiedArray = []
+                    let mapFields = { title: "Title", heading: "H1 tag", keyword: "Keywords", description: "Description", faq_object: "Faq data", reviews_object: "Reviews" }
+                    if (data["last_modified_list"] && data["last_modified_list"].length > 0) {
+                        data["last_modified_list"].map((v, k) => {
+                            if (mapFields[v]) {
+                                lastModifiedArray.push(mapFields[v])
+                            }
+                        })
+                    }
+                    tabObj["Last modified"] = lastModifiedArray.join(",")
+                } else {
                     tabObj[col] = data[col]
                 }
             })
             tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
             // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
             // tabObj["edit"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
-             tabObj["edit"] = <a className="editBtn"  href={'/flights?table_name=' + _self.state.approval_table + '&id=' + data["id"]}>Edit</a>
+            //  tabObj["edit"] = <a className="editBtn"  href={'/flights?table_name=' + _self.state.approval_table + '&id=' + data["id"]}>Edit</a>
             tabObj["view"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }
@@ -351,7 +365,7 @@ class FlightsApprovalPending extends Component {
                 v["is_approved"] = true
             }
         })
-        _self.setState({data: data})
+        _self.setState({ data: data })
         _self.processTable(table_name)
         return new Promise(function (resolve) {
             axios.get(host() + "/route-approval", { params: pdata }).then(function (json) {
@@ -369,11 +383,11 @@ class FlightsApprovalPending extends Component {
                         2000
                     );
                 }
-                _self.setState({loading: false})
+                _self.setState({ loading: false })
                 resolve(json)
             }).catch(err => {
                 _self.setState({
-                    loading:false
+                    loading: false
                 })
             })
         })
