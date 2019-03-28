@@ -151,8 +151,7 @@ class FlightsHomePage extends PureComponent {
       console.log("changed")
     } else if (!(_self.state.editClicked && _self.state.updatedInEditForm)) {
       console.log("new route")
-    }
-    else {
+    }else {
       this.backBtnFun()
       return false
     }

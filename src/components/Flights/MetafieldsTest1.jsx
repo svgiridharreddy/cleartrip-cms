@@ -303,7 +303,7 @@ class MetaFields extends Component {
               value={this.state.florContent} /> */}
                     </li>
                     {(faq_object && faq_object.length > 0) ? <li>
-                        <b>Faq content</b>
+                        <h3>Faq content</h3>
                         {faq_object.map((val, i) => {
                             return (
                                 <div className="faqData">
@@ -312,7 +312,7 @@ class MetaFields extends Component {
                                     <input type="text" onChange={this.onChageFaq.bind(i)} name="question" data-question={i} value={faq_object[i]["question"]} />
                                     <label>Answer {i + 1}:</label>
                                     <input type="text" onChange={this.onChageFaq.bind(i)} name="answer" data-answer={i} value={faq_object[i]["answer"]} />
-                                    {i == faq_object.length - 1 ? <div><button type="button"
+                                    {i == faq_object.length - 1 ? <div className="add-btns"><button type="button"
                                         className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button><button type="button"
                                             className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button></div> : <button type="button"
                                                 className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
@@ -323,7 +323,7 @@ class MetaFields extends Component {
                         className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></li>}
                     {showReviews ? (reviews_object && reviews_object.length > 0) ?
                         <li>
-                            <b>User reviews</b>
+                            <h3>User reviews</h3>
                             {reviews_object.map((rev, i) => {
                                 return (<div className="reviews">
                                     <label>Average review rating</label>
@@ -331,7 +331,7 @@ class MetaFields extends Component {
                                     <label>Total number of reviews</label>
                                     <input type="text" onChange={this.reviewsObject.bind(this)} data-listreviewid={i} name="total_reviews_count" value={this.state.reviews_object[i]["total_reviews_count"]} />
                                     <div className="reviewsList">
-                                        <p>Reviews List</p>
+                                        <h3>Reviews List</h3>
                                         {this.state.reviews_object[i]["reviews_list"] && this.state.reviews_object[i]["reviews_list"].length > 0 ?
                                             this.state.reviews_object[i]["reviews_list"].map((list, k) => {
                                                 return (<div>
@@ -342,7 +342,7 @@ class MetaFields extends Component {
                                                     <label>Review Text</label>
                                                     <textarea value={this.state.reviews_object[i]["reviews_list"][k]["review_text"]}
                                                         onChange={this.reviewsObject.bind(this)} data-listid={k} data-listreviewid={i} name="review_text" />
-                                                    {k == reviews_object[i]["reviews_list"].length - 1 ? <div><button type="button"
+                                                    {k == reviews_object[i]["reviews_list"].length - 1 ? <div className="add-btns"><button type="button"
                                                         className="plusButton" onClick={this.removeReview.bind(this)} data-btnid={k}>-</button><button type="button"
                                                             className="plusButton" onClick={this.addReview.bind(this)} data-btnid={k}>+</button></div> : <button type="button"
                                                                 className="plusButton" onClick={this.removeReview.bind(this)} data-btnid={k}>-</button>}
