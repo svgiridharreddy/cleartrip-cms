@@ -192,7 +192,8 @@ class FlightsApprovalPending extends Component {
         else if (thead == "common") {
             columns = ["Domain-Section-Language", "page_type", "page_subtype"]
         }
-        columns.push("Approval status")
+
+        columns.push("Last modified","Approval status")
         if (type == "columns") {
             columns.map(col => {
                 let obj = { label: col, field: col, width: 150 }
@@ -205,7 +206,9 @@ class FlightsApprovalPending extends Component {
             columns.map(col => {
                 if (col === "Domain-Section-Language") {
                     tabObj["Domain-Section-Language"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
-                } else {
+                }else if(col ==="Last modified"){
+                    tabObj["Last modified"] = data["last_modified_list"].join(",")
+                }else {
                     tabObj[col] = data[col]
                 }
             })
@@ -369,7 +372,6 @@ class FlightsApprovalPending extends Component {
                 _self.setState({loading: false})
                 resolve(json)
             }).catch(err => {
-                debugger
                 _self.setState({
                     loading:false
                 })
