@@ -162,14 +162,14 @@ class FlightsHomePage extends PureComponent {
       window.location.replace("/");
     }
     if (flightValues["reviews_object"] && flightValues["reviews_object"].length > 0) {
-      if (flightValues["reviews_object"][0]["avg_review_rating"] === "" || flightValues["reviews_object"][0]["total_reviews_count"] === "") {
+      if (flightValues["reviews_object"][0]["avg_review_rating"] === "") {
         this.setState({
           reviews_object: []
         })
         flightValues["reviews_object"] = []
       }
       if (flightValues["reviews_object"][0] && flightValues["reviews_object"][0]["reviews_list"].length == 1) {
-        if (flightValues["reviews_object"][0]["avg_review_rating"] === "" && flightValues["reviews_object"][0]["total_reviews_count"] === "") {
+        if (flightValues["reviews_object"][0]["avg_review_rating"] === "") {
           this.setState({
             reviews_object: []
           })
