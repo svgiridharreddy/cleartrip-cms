@@ -197,7 +197,6 @@ class FlightsApprovalPending extends Component {
         else if (thead == "common") {
             columns = ["Domain-Section-Language", "page_type", "page_subtype"]
         }
-
         columns.push("Last modified", "Approval status")
         if (type == "columns") {
             columns.map(col => {
@@ -213,7 +212,7 @@ class FlightsApprovalPending extends Component {
                     tabObj["Domain-Section-Language"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
                 } else if (col === "Last modified") {
                     let lastModifiedArray = []
-                    let mapFields = { title: "Title", heading: "H1 tag", keyword: "Keywords", description: "Description", faq_object: "Faq data", reviews_object: "Reviews" }
+                    let mapFields = { title: "Title", heading: "H1 tag",h1Tag:"H1 tag", keyword: "Keywords",keywords: "Keywords", description: "Description", faq_object: "Faq data", reviews_object: "Reviews",content:"Content" }
                     if (data["last_modified_list"] && data["last_modified_list"].length > 0) {
                         data["last_modified_list"].map((v, k) => {
                             if (mapFields[v]) {
@@ -415,7 +414,7 @@ class FlightsApprovalPending extends Component {
         const { data, tabData, is_admin, approval_table, modelData, loading, editData } = this.state;
         return (
             <div>
-                <div class={loading ? "loading" : ""}></div>
+                <div className={loading ? "loading" : ""}></div>
                 <p>Select table to approve </p>
                 <select
                     name="approval_table"

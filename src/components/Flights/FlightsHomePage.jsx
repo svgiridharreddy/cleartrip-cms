@@ -261,9 +261,9 @@ class FlightsHomePage extends PureComponent {
           brandName: "",
           fromToCity: "",
           options: [],
-          updatedInEditForm: false
+          updatedInEditForm: false,
+          last_modified_list:[]
         });
-
         this.fetchDetails();
       })
       .catch(response => {

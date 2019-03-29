@@ -97,7 +97,7 @@ class FlightsTable extends Component {
           columns.push(obj);
         }
       });
-      columns.push({ label: "editbtn", field: "editbtn", width: 150 },{ label: "deletebtn", field: "deletebtn", width: 150 })
+      columns.push({ label: "Edit", field: "editbtn", width: 150 },{ label: "Delete", field: "deletebtn", width: 150 })
     }
     let obj_data = [];
     if (subType == "index" || categoryType == "common") {
