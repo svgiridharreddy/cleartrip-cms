@@ -688,7 +688,7 @@ class FlightsHomePage extends PureComponent {
         content: result["common"][idx]["content"],
         h1Tag: result["common"][idx]["heading"],
         faq_object: result["common"][idx]["faq_object"] ? result["common"][idx]["faq_object"] : [],
-        last_modified_list: result["last_modified_list"][idx]["last_modified_list"] ? result["last_modified_list"][idx]["last_modified_list"] : [],
+        last_modified_list: result["common"][idx]["last_modified_list"] ? result["common"][idx]["last_modified_list"] : [],
         readOnlyValue: true,
         editClicked: true
       });
