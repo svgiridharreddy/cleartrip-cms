@@ -9,7 +9,7 @@ import Layout from "./components/layout";
 // import Flights from "./components/Flights/Flights";
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/Flights/FlightsHomePage";
-import FlightsApprovalPending from './components/Flights/FlightsApprovalPending'
+import FlightsApprovalPending from './components/Flights/FlightsApprovalPending1'
 import LandingPage from "./components/LandingPage"
 import "typeface-roboto";
 import loginHelpers from "./components/helper";

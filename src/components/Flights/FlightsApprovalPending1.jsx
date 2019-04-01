@@ -94,33 +94,18 @@ class FlightsApprovalPending extends Component {
         this.setState({ show: true, modelData: modelData });
     }
 
-    createTable(type, thead, data) {
+    createTable(type,thead, data) {
         let _self = this
         let obj_data = _self.state
         let columns_data = []
         let columns = []
-        if (thead === "uniq_flight_schedule_routes" || thead == "unique_flight_ticket_route") {
-            columns = ["Domain-Section-Language", "page_type", "page_subtype", "url", "source", "destination"]
-        }
-        else if (thead == "uniq_flight_to" || thead == "uniq_flight_from") {
-            columns = ["Domain-Section-Language", "page_type", "page_subtype", "url", "city_name"]
-        }
-        else if (thead == "uniq_flight_booking_overview" || thead == "uniq_flight_booking_pnrweb" || thead == "uniq_flight_booking_routes") {
-            columns = ["Domain-Section-Language", "page_type", "page_subtype", "url", "airline_name"]
-            if (thead == "uniq_flight_booking_routes") {
-                columns.push("source", "destination")
-            }
-        }
-        else if (thead == "common") {
-            columns = ["Domain-Section-Language", "page_type", "page_subtype"]
-        }
+        columns =  ["Domain-Section-Language", "page_type", "page_subtype","url"]
         columns.push("Last modified", "Approval status")
         if (type == "columns") {
             columns.map(col => {
                 let obj = { label: col, field: col, width: 150 }
                 columns_data.push(obj)
             })
-            obj_data[thead][type] = columns_data
             return columns_data
         } else {
             let tabObj = {}
@@ -142,7 +127,7 @@ class FlightsApprovalPending extends Component {
                     tabObj[col] = data[col]
                 }
             })
-            tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
+            tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data,thead)} /><span className="slider round" /></label>
             // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
             // tabObj["edit"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
             //  tabObj["edit"] = <a className="editBtn"  href={'/flights?table_name=' + _self.state.approval_table + '&id=' + data["id"]}>Edit</a>
@@ -161,11 +146,15 @@ class FlightsApprovalPending extends Component {
                 userdata["table_name"] = table_name;
                 axios.get(host() + "/flights-approvaldata", { params: userdata }).then(function (json) {
                     _self.setState({
+                        loading:false,
                         data: json.data.data
                     });
                     _self.processTable(table_name)
                     return resolve(json);
                 }).catch(error => {
+                    _self.setState({
+                        loading:false
+                    })
                     NotificationManager.error("Record Not found", "Please try again", 3000)
                     setTimeout(function () {
                         window.location.replace("/")
@@ -179,22 +168,28 @@ class FlightsApprovalPending extends Component {
 
     processTable(table_name) {
         let _self = this
-        let thead = table_name;
         let obj = {};
         let columns_data = [];
         let rows_data = [];
-        let cols = _self.createTable("columns", thead, {});
+        let cols = _self.createTable("columns","",{});
         if (cols) {
             columns_data = cols;
         }
-        _self.state.data.map(row => {
-            let rowdata = _self.createTable("rows", thead, row);
-            if (rowdata) {
-                rows_data.push(rowdata);
-            }
-        });
-        obj["columns"] = columns_data;
-        obj["rows"] = rows_data;
+        if(Object.keys(_self.state.data).length > 0){
+            let keys = Object.keys(_self.state.data)
+            keys.map((val,i) => {
+                if(_self.state.data[val] && _self.state.data[val].length > 0){
+                    _self.state.data[val].map((row,j) =>{
+                        let rowdata = _self.createTable("rows",val,row);
+                        if (rowdata) {
+                            rows_data.push(rowdata);
+                        }
+                    })
+                }
+            })
+            obj["columns"] = columns_data;
+            obj["rows"] = rows_data;
+        }   
         if (
             obj["columns"] &&
             obj["columns"].length > 0 &&
@@ -202,9 +197,15 @@ class FlightsApprovalPending extends Component {
             obj["rows"].length > 0
         ) {
             _self.setState({
-                tabData: obj
+                tabData: obj,
+                loading:false
             });
+        }else{
+            NotificationManager.info("Please edit any route to approve", "No data to approve", 3000);
         }
+        _self.setState({
+            loading:false
+        })
     }
     getTableData(table_name) {
         let _self = this;
@@ -257,26 +258,25 @@ class FlightsApprovalPending extends Component {
             loginHelpers.check_usertype();
         }
         let search_params = queryString.parse(this.props.location.search)
-        if(search_params){
+        if(Object.keys(search_params).length > 0){
             _self.setState({
+                loading: true,
                 approval_table: search_params["table_name"],
                 id: search_params["id"]
             })
-    
             setTimeout(function () {
                 if (_self.state.approval_table && _self.state.approval_table != "") {
                     _self.getApprovelPendingRecord(_self.state.approval_table, _self.state.id)
                 }
             }, 1000)
         }else{
+            _self.setState({loading: true})
             return new Promise(function (resolve) {
-                debugger
                 axios.get(host() + "/approval-data").then(function (json) {
-                    debugger
                     _self.setState({
                         data: json.data.data
                     });
-                    // _self.processTable()
+                     _self.processTable()
                     return resolve(json);
                 }).catch(error => {
                     NotificationManager.error("Record Not found", "Please try again", 3000)
@@ -295,15 +295,16 @@ class FlightsApprovalPending extends Component {
         _self.setState({ loading: true })
         let tabData = _self.state.tabData
         let pdata = { id: id, table_name: table_name, approval_status: approval_status }
-        data.map((v, i) => {
+        data[table_name].map((v, i) => {
             if (v["id"] === id) {
-                v["is_approved"] = true
+                v["is_approved"] = !v["is_approved"]
             }
         })
+        debugger
         _self.setState({ data: data })
         _self.processTable(table_name)
         return new Promise(function (resolve) {
-            axios.get(host() + "/route-approval", { params: pdata }).then(function (json) {
+            axios.get(host() + "/bulk-approval", { params: pdata }).then(function (json) {
                 //  _self.getTableData(_self.state.approval_table)
                 if (approval_status) {
                     NotificationManager.success(
@@ -329,12 +330,28 @@ class FlightsApprovalPending extends Component {
     }
    
     render() {
-        const { data, tabData, is_admin, loading } = this.state;
+        const { data, tabData, is_admin, loading,modelData } = this.state;
         return (
             <div>
                 <div className={loading ? "loading" : ""}></div>
+                <Modal
+                    size="lg"
+                    onHide={this.handleClose.bind(this)}
+                    dialogClassName="modal-90w preview-content"
+                    aria-labelledby="example-modal-sizes-title-lg"
+                    show={this.state.show} onHide={this.handleClose.bind(this)} centered
+                >
+                    <Modal.Header closeButton>
+                        Route information
+                    </Modal.Header>
+                    <Modal.Body>
+                        <ul className="showModel">
+                            {modelData}
+                        </ul>
+                    </Modal.Body>
+                </Modal>
                 <h2>List of data need to approve in flights</h2>
-                <div className={is_admin && data.length > 0 ? "" : "hidden"}>
+                <div className={is_admin && Object.keys(data).length > 0 ? "" : "hidden"}>
                     {tabData["columns"] &&
                         tabData["columns"].length > 0 &&
                         tabData["rows"] &&
