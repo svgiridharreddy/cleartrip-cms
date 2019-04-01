@@ -147,13 +147,13 @@ class FlightsHomePage extends PureComponent {
     if (e) {
       e.preventDefault();
     }
-    if (_self.state.editClicked && _self.state.updatedInEditForm) {
-      console.log("changed")
-    } else if (!(_self.state.editClicked && _self.state.updatedInEditForm)) {
-      console.log("new route")
-    }else {
-      this.backBtnFun()
-      return false
+    if(_self.state.editClicked){
+      if(_self.state.updatedInEditForm){
+        console.log("changed")
+      }else{
+        this.backBtnFun()
+        return false
+      }
     }
     const flightValues = this.state;
     let user_data = JSON.parse(localStorage.getItem("user_data"));
