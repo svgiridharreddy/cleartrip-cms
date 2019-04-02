@@ -4,41 +4,58 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Index from './components/hotels/index';
-import HotelUniqueContent from './components/hotels/unique/AddHotelUniqueContent';
-import EditUniqueContent from './components/hotels/unique/EditHotelUniqueData';
-import HotelCommonContent from './components/hotels/common/HotelCommonContent';
-// import ViewUniqueHotelData from './components/hotels/unique/ViewHotelUniqueData';
-// import ViewCommonHotelData from './components/hotels/common/ViewCommonHotelData';
-// import EditCommonContent from './components/hotels/common/EditCommonContent';
-
+import HotelsApprovalPending from './components/hotels/HotelsApprovalPending';
 import Layout from "./components/layout";
-import Flights from "./components/Flights/Flights";
+// import Flights from "./components/Flights/Flights";
 import Banner from "./components/banner/BannerLanding";
 import FlightsHomePage from "./components/Flights/FlightsHomePage";
-
+import FlightsApprovalPending from './components/Flights/FlightsApprovalPending1'
+import LandingPage from "./components/LandingPage"
 import "typeface-roboto";
+import loginHelpers from "./components/helper";
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
+
+import "../node_modules/react-notifications/lib/notifications.css";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loginStatus: false
+    };
+  }
+  componentDidMount = () => {
+    if (loginHelpers.checkUser()) {
+      this.setState({
+        loginStatus: true
+      });
+    }
+  };
   render() {
+    let { loginStatus } = this.state;
     return (
-      <Router>
-        <Layout>
-          <Switch>
-            <Route exact path="/" component={FlightsHomePage} />
-            <Route exact path="/flights" component={Flights} />
-            <Route exact path="/flights/home" component={FlightsHomePage} />
-            <Route exact path="/hotels" component={Index} />
-            <Route exact path="/banners" component={Banner} />
-            
-            <Route exact path="/cmshotels/addUniqueData" component = { HotelUniqueContent } />
-            <Route path="/cmshotels/edit/:id" component = { EditUniqueContent } />
-            <Route exact path="/cmshotels/addCommonData" component = { HotelCommonContent } />
-            {/*<Route path="/hotels/show/uniquedata/:id" component = { ViewUniqueHotelData } /> */}
-            {/* <Route path="/hotels/show/commondata/:id" component = { ViewCommonHotelData } /> */ }
-            {/*  <Route path="/hotels/edit/commondata/:id" component = { EditCommonContent } /> */}
-          </Switch>
-        </Layout>
-      </Router>
+      <div>
+        <Router>
+          <Layout>
+            {loginStatus ? (
+              <Switch>
+                <Route exact path="/" component={LandingPage} />
+                <Route exact path="/flights" component={FlightsHomePage} />
+                <Route exact path="/hotels" component={Index} />
+                {/* <Route exact path="/banners" component={Banner} /> */}
+                <Route exact path="/flights-approve" component={FlightsApprovalPending} />
+                <Route exact path="/hotels-approve" component={HotelsApprovalPending} />
+              </Switch>
+            ) : (
+                ""
+              )}
+          </Layout>
+        </Router>
+        <NotificationContainer />
+      </div>
     );
   }
 }

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { host } from '../../helper';
-import { Alert, Button } from 'react-bootstrap';
+import {Button} from "react-bootstrap";
 import {
   NotificationContainer,
   NotificationManager
@@ -19,17 +17,10 @@ window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
 
-const API_URL = host()
-const AUTO_COMPLETE = host() + "/country_autocomplete"
-
-class HotelUniqueContent extends Component {
+class AddCommonForm extends Component {
 	constructor(props) {
-		super(props);
+		super(props)
 		this.state = {
-			domain_url: '',
-			content_type: 'Unique Data',
-			domain_name: this.props.domain_name,
-			country_name: this.props.country_name,
 			h1_tag: '',
 			h2_tag: '',
 			h3_tag: '',
@@ -39,17 +30,17 @@ class HotelUniqueContent extends Component {
 			top_content: '',
 			bottom_content: '',
 			faqs: []
-		};
-		this.handleSubmit = this.handleSubmit.bind(this);
+		}
 		this.handleChange = this.handleChange.bind(this);
-		this.handleHeaderModelChange = this.handleHeaderModelChange.bind(this);
-		this.handleFooterModelChange = this.handleFooterModelChange.bind(this);
-		this.handleFaqModelChange = this.handleFaqModelChange.bind(this);
-		this.onChageFaq = this.onChageFaq.bind(this);
-		this.checkBackBtnFun = this.checkBackBtnFun.bind(this);
+	 	this.handleSubmit = this.handleSubmit.bind(this);
+	 	this.handleHeaderModelChange = this.handleHeaderModelChange.bind(this);
+    	this.handleFooterModelChange = this.handleFooterModelChange.bind(this);
+    	this.handleFaqModelChange = this.handleFaqModelChange.bind(this);
+    	this.onChageFaq = this.onChageFaq.bind(this);
+      this.checkBackBtnFun = this.checkBackBtnFun.bind(this);
 	}
 
-	checkBackBtnFun(){
+  checkBackBtnFun(){
     const alrt = window.confirm('Do you want to save the changes you made?')
     if (alrt === true) {
       this.props.handleChangeData(this.state)
@@ -100,77 +91,68 @@ class HotelUniqueContent extends Component {
 	}
 
 	handleHeaderModelChange(model) {
-	    let _self = this;
-	    _self.setState({
-	      top_content: model
-	    });
-	  }
-
-	  handleFooterModelChange(model) {
-	    let _self = this;
-	    _self.setState({
-	      bottom_content: model
-	    });
-	  }
-	  
-	  handleFaqModelChange(model) {
-	    let _self = this;
-	    _self.setState({
-	      faq: model
-	    });
-	  }
+    let _self = this;
+    _self.setState({
+      top_content: model
+    });
+  }
+  handleFooterModelChange(model) {
+    let _self = this;
+    _self.setState({
+      bottom_content: model
+    });
+  }
+  handleFaqModelChange(model) {
+    let _self = this;
+    _self.setState({
+      faq: model
+    });
+  }
 
 	handleChange(e) {
 		this.setState({
 			[e.target.name]: e.target.value
 		});
-	}
+	}	
+
 	handleSubmit(e) {
 		this.props.handleChangeData(this.state)
 	}
 
 	render() {
 		const { faqs } = this.state
-		return (
+		return(
 			<div className="common-hotel-wrapper">
-				<div className="common-hotel-content">
-					<ul className="common-hotels-field">
+			<div className="common-hotel-content">
+					<ul>
+					<li>
+    					<Button variant="secondary" onClick ={() => this.checkBackBtnFun()}>Back</Button>
+   					</li>
 						<li>
-        					<Button variant="secondary" onClick ={() => this.checkBackBtnFun()}>Back</Button>
-       					</li>
-						<li>
-							<label>Domain Url</label>
-							<input type="text" name="domain_url" onChange={this.handleChange} value={this.state.domain_url} />
-						</li>
-						<li>
-							<label>Content Section</label>
-							<input value={this.state.content_type} name="content_type" />
-						</li>
-						<li>
-							<label>H1 Title</label>
-							<input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />
-						</li>
-						<li>
-							<label>H2 Title(Search widget tag line)</label>
-							<input type="text" name="h2_tag" onChange={this.handleChange} value={this.state.h2_tag} />
-						</li>
-						<li>
-							<label>H3 Title(Search widget tag line)</label>
-							<input type="text" name="h3_tag" onChange={this.handleChange} value={this.state.h3_tag} />
-						</li>
-						<li>
-							<label>Meta Title</label>
-							<input type="text" name="meta_title" onChange={this.handleChange} value={this.state.meta_title} />
-						</li>
-						<li>
-							<label>Meta Description</label>
-							<input type="text" name="meta_description" onChange={this.handleChange} value={this.state.meta_description} />
-						</li>
-						<li>
-							<label>Meta Keywords</label>
-							<input type="text" name="meta_keyword" onChange={this.handleChange} value={this.state.meta_keyword} />
-						</li>
-						<li>
+              <label>H1 Title</label>
+              <input type="text" name="h1_tag" onChange={this.handleChange} value={this.state.h1_tag} />
+            </li>
+            <li>
+              <label>H2 Title(Search widget tag line)</label>
+              <input type="text" name="h2_tag" onChange={this.handleChange} value={this.state.h2_tag} />
+            </li>
+            <li>
+              <label>H3 Title(Search widget tag line)</label>
+              <input type="text" name="h3_tag" onChange={this.handleChange} value={this.state.h3_tag} />
+            </li>
+            <li>
+              <label>Meta Title</label>
+              <input type="text" name="meta_title" onChange={this.handleChange} value={this.state.meta_title} />
+            </li>
+            <li>
+              <label>Meta Description</label>
+              <input type="text" name="meta_description" onChange={this.handleChange} value={this.state.meta_description} />
+            </li>
+            <li>
+              <label>Meta Keywords</label>
+              <input type="text" name="meta_keyword" onChange={this.handleChange} value={this.state.meta_keyword} />
+            </li>
+            <li>
               <label>Header Content</label>
               <FroalaEditor
                 model={this.state.top_content}
@@ -224,19 +206,20 @@ class HotelUniqueContent extends Component {
                         className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={0}>+</button> : ""
               }
             </li>
-						<button
-							type="button"
-							onClick={this.handleSubmit}
-							className="button">
-							Submit
-	          			</button>
+            <li>
+	            <button
+	              type="button"
+	              onClick={this.handleSubmit}
+	              className="button">
+	              Submit
+	            </button>
+            </li>
 					</ul>
+					<div className="clearfix"></div>
+					</div>
 				</div>
-
-				<div className="clearfix"></div>
-			</div>
-		)
+			)
 	}
 }
 
-export default HotelUniqueContent;
+export default AddCommonForm;

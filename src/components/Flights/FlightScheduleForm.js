@@ -14,6 +14,12 @@ import { stateToHTML } from "draft-js-export-html";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "../../../node_modules/react-notifications/lib/notifications.css";
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
+
 class FlightScheduleForm extends Component {
   constructor(props) {
     super(props);

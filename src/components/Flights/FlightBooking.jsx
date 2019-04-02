@@ -227,8 +227,8 @@ class FlightBookingFields1 extends Component {
     );
     return (
       <div>
-        {subTypeField}
-        {category}
+        {/* {subTypeField}
+        {category} */}
         {currentSubType !== "" ? fields : null}
       </div>
     );

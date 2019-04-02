@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import RichTextEditor from "react-rte";
-import { Button, Form, Col, ButtonToolbar, InputGroup } from "react-bootstrap";
 import Select1 from "react-select";
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+import "../../../node_modules/react-notifications/lib/notifications.css";
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
 class FlightScheduleFields extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +31,8 @@ class FlightScheduleFields extends Component {
       arrCityNameSelected: "",
       cityNameSelected: "",
       editorState: "",
-      content: RichTextEditor.createEmptyValue()
+      content: RichTextEditor.createEmptyValue(),
+      backBtnFun: this.props.backBtnFun()
     };
   }
   onChange1 = content => {
@@ -53,7 +56,6 @@ class FlightScheduleFields extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    debugger;
     this.setState({
       currentSubType: nextProps.currentSubType,
       categoryType: nextProps.categoryType,
@@ -69,15 +71,7 @@ class FlightScheduleFields extends Component {
     });
   }
 
-  // onEditorStateChange: Function = editorState => {
-  //   debugger;
-  //   this.setState({
-  //     editorState: editorState
-  //   });
-  // };
-
   render() {
-    debugger;
     let subTypeField, category, fields;
     const subtypeOptions = {
       "select sub page type": "select sub page type",
@@ -211,7 +205,6 @@ class FlightScheduleFields extends Component {
         </li>
         <li>
           <label>Description</label>
-
           <input
             type="text"
             name="description"
@@ -255,12 +248,6 @@ class FlightScheduleFields extends Component {
           onChange={this.onChange1}
           toolbarConfig={toolbarConfig}
         />
-        {/*<Editor
-            editorState={this.state.editorState}
-            wrapperClassName="demo-wrapper"
-            editorClassName="editer-content"
-            onEditorStateChange={this.onChange}
-          /> */}
 
         {categoryType === "uniq" &&
         (currentSubType === "flights-from" ||
@@ -308,6 +295,7 @@ class FlightScheduleFields extends Component {
             />
           </div>
         ) : null}
+        <NotificationContainer />
       </div>
     );
     return (

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Form, Col } from "react-bootstrap";
-
+import './css/Hotels.css';
 import UniqueContentDataCollection from './unique/UniqueContentDataCollection';
 import CommonContentDataCollection from './common/CommonContentDataCollection';
-
+import loginHelpers from "../helper";
 
 const contentType = ["Common Data", "Unique Data"];
 
@@ -20,6 +20,7 @@ class Index extends Component {
   };
 
   render() {
+    loginHelpers.checkUser()
     let contentFields;
     const { content_type } = this.state;
     if (content_type === "Unique Data") {

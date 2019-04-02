@@ -12,7 +12,16 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { Button } from "@material-ui/core";
+import loginHelpers from "./helper";
+import Login from "./Login";
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
+
+import "../../node_modules/react-notifications/lib/notifications.css";
 
 const drawerWidth = 240;
 
@@ -47,87 +56,137 @@ const styles = theme => ({
 
 class Layout extends React.Component {
   state = {
-    mobileOpen: false
+    mobileOpen: false,
+    loginStatus: false,
+    is_admin: false
   };
 
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
+  logout() {
+    let _self = this;
+    loginHelpers.logout();
+    _self.setState({
+      loginStatus: false
+    });
+    NotificationManager.info("logged out successfully", "logout", 1500);
+    setTimeout(function() {
+      window.location = "/";
+    }, 1000);
+  }
+
+  componentDidMount() {
+    if (loginHelpers.checkUser()) {
+      let is_admin = false;
+      if (loginHelpers.check_usertype()) {
+        is_admin = true;
+      }
+      this.setState({
+        loginStatus: true,
+        is_admin: is_admin
+      });
+    }
+  }
+  changeState() {
+    this.setState({
+      loginStatus: true
+    });
+  }
+
   render() {
+    let { loginStatus, is_admin } = this.state;
     const { classes, children } = this.props;
     const { mobileOpen } = this.state;
+
     const drawer = (
       <div>
-        <div className={classes.toolbar} />
-        <div>
-          <List>
-            <ListItem button key={"Flights"} component={Link} to="/flights">
-              <ListItemText primary={"Flights"} />
-            </ListItem>
-            <ListItem button key={"Hotels"} component={Link} to="/hotels">
-              <ListItemText primary={"Hotels"} />
-            </ListItem>
-            <ListItem button key={"Trains"} component={Link} to="/trains">
-              <ListItemText primary={"Trains"} />
-            </ListItem>
-            <ListItem button key={"Banners"} component={Link} to="/banners">
-              <ListItemText primary={"Banner"} />
-            </ListItem>
-          </List>
+        <div className={classes.toolbar}>
+          {loginStatus ? (
+            <ul>
+              <li>
+                <NavLink to="/flights" activeClassName="current sidebarLinks">
+                  Flights
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/hotels" activeClassName="current sidebarLinks">
+                  Hotels
+                </NavLink>
+              </li>
+              <li>
+                {is_admin ? (
+                  <NavLink
+                    to="/flights-approve"
+                    activeClassName="current sidebarLinks"
+                  >
+                    Approve Flights
+                  </NavLink>
+                ) : (
+                  ""
+                )}
+              </li>
+              <li>
+                {is_admin ? (
+                  <NavLink
+                    to="/hotels-approve"
+                    activeClassName="current sidebarLinks"
+                  >
+                    Approve Hotels
+                  </NavLink>
+                ) : (
+                  ""
+                )}
+              </li>
+              <li>
+                <a
+                  href="http://54.255.195.145/seo-banner-api/manager/"
+                  target="blank"
+                  className="sidebarLinks"
+                >
+                  Banner
+                </a>
+              </li>
+              <li>
+                <a
+                  href="http://52.77.239.110/"
+                  target="blank"
+                  className="sidebarLinks"
+                >
+                  Interlinking
+                </a>
+              </li>
+            </ul>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     );
 
     return (
-      <React.Fragment>
-        <CssBaseline />
-        <div className={classes.root}>
-          <AppBar position="absolute" className={classes.appBar}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                className={classes.menuButton}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" color="inherit" noWrap>
-                Cleartrip CMS
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <nav className={classes.drawer}>
-            <Hidden smUp implementation="css">
-              <Drawer
-                container={this.props.container}
-                variant="temporary"
-                open={mobileOpen}
-                onClose={this.handleDrawerToggle}
-                classes={{
-                  paper: classes.drawerPaper
-                }}
-              />
-            </Hidden>
-            <Hidden xsDown implementation="css">
-              <Drawer
-                classes={{
-                  paper: classes.drawerPaper
-                }}
-                variant="permanent"
-                open
-              >
-                {drawer}
-              </Drawer>
-            </Hidden>
-          </nav>
-
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            {children}
-          </main>
+      <div>
+        <div>
+          <header>
+            <div className="cleartripLogo " />
+            {loginStatus ? (
+              <div className="nav-right">
+                <span className="nav-user">{is_admin ? "Super Admin" : "Admin"}</span>
+                <span onClick={this.logout.bind(this)}>Log Out</span>
+              </div>
+            ) : (
+              <div className="nav-right">
+                <Login changeState={this.changeState.bind(this)} />
+              </div>
+            )}
+          </header>
         </div>
-      </React.Fragment>
+        <div className="content-wrapper">
+          <div className="sidebar">{drawer}</div>
+          <div className="main-content">{children}</div>
+        </div>
+      </div>
     );
   }
 }

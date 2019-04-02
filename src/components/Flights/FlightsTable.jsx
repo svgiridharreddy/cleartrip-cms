@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Button, Form, Col, ButtonToolbar, Table } from "react-bootstrap";
-
+import "./css/Flights.css";
+import { MDBBtn, MDBDataTable } from "mdbreact";
 class FlightsTable extends Component {
   constructor(props) {
     super(props);
@@ -27,104 +26,153 @@ class FlightsTable extends Component {
   };
 
   render() {
+    const data = {};
     const {
-      classes,
       response,
       pageType,
       subType,
       tableFields,
       tableTitle,
-      categoryType
+      categoryType,
+      renderTables
     } = this.props;
     var tableTitlearray = [];
     var tableValuearray = [];
     tableTitlearray = Object.keys(tableTitle);
-    var temparray = Object.keys(tableFields[subType]);
+    var temparray =
+      subType != "index" && subType != ""
+        ? Object.keys(tableFields[subType])
+        : ["h1Tag", "keywords"];
     tableTitlearray = tableTitlearray.concat(temparray);
     var actions = ["Edit", "Delete"];
     tableTitlearray = tableTitlearray.concat(actions);
+    if (subType == "overview") {
+      tableTitlearray = ["Domain", "Language", "Section", "AirlineName", "Page Type", "Sub Page Type", "URL", "Edit", "Delete"]
+    }
+    if (pageType == "flight-schedule" && subType == "routes" && categoryType == "uniq") {
+      tableTitlearray =  ["Domain", "Language", "Section", "source", "destination", "URL", "Page Type", "Sub Page Type", "Edit", "Delete"]
+    }
+    if(pageType == "flight-booking" && subType =="routes" && categoryType == "uniq"){
+      tableTitlearray = ["Domain", "Language", "Section", "AirlineName", "source", "destination","URL","Page Type", "Sub Page Type","Edit", "Delete"]
+    }
     tableValuearray = Object.values(tableTitle);
-    var tempValueArray = Object.values(tableFields[subType]);
+    var tempValueArray =
+      subType && subType != "index" ? Object.values(tableFields[subType]) : [];
     tableValuearray = tableValuearray.concat(tempValueArray);
-    var flight = [];
-    let result;
-    debugger;
+    let columns = [];
+    let rows = [];
+    if (subType === "index") {
+      columns = [
+        {
+          label: "Domain-Language-Section",
+          field: "Domain-Language-Section",
+          width: 150
+        },
+        { label: "Page Type", field: "Page Type", width: 150 },
+        { label: "Sub Type", field: "Sub Type", width: 150 }
+      ];
+    } else {
+      tableTitlearray.map(heading => {
+        let pword =
+          heading == "Section"
+            ? "Domain-Language-Section"
+            : heading != "Domain" &&
+              heading != "Language" &&
+              heading != "Delete" &&
+              heading != "Edit"
+              ? categoryType === "common" &&
+                heading != "source" &&
+                heading != "destination"
+                ? heading
+                : categoryType == "uniq"
+                  ? heading
+                  : ""
+              : "";
+        if (pword != "") {
+          let obj = {
+            label: pword,
+            field: pword,
+            width: 150
+          };
+          columns.push(obj);
+        }
+      });
+      columns.push({ label: "Edit", field: "editbtn", width: 150 },{ label: "Delete", field: "deletebtn", width: 150 })
+    }
+    let obj_data = [];
+    if (subType == "index" || categoryType == "common") {
+      obj_data = response["common"];
+    } else if (categoryType == "uniq") {
+      obj_data = response[pageType][subType];
+    }
+    obj_data.map((resp, idx) => {
+      let obj = {};
+      columns.map(col => {
+        let tabObj = {};
+        tabObj["field"] = typeof col === "object" ? col["field"] : col;
+        if (tabObj["field"] === "Domain-Language-Section") {
+          obj[tabObj["field"]] =
+            resp["domain"] + "-" + resp["language"] + "-" + resp["section"];
+        } else {
+          if (
+            tabObj["field"] === "Sub Page Type" ||
+            tabObj["field"] === "Sub Type"
+          ) {
+            obj["page_subtype"] = resp["page_subtype"];
+          } else if (tabObj["field"] == "From City") {
+            obj["from_city"] = resp["city_name"];
+          } else if (tabObj["field"] == "To City") {
+            obj["to_city"] = resp["city_name"];
+          } else if (tabObj["field"] == "AirlineName") {
+            obj["AirlineName"] = resp["airline_name"];
+          } else {
+            obj[tabObj["field"].toLowerCase().replace(" ", "_")] =
+              resp[tabObj["field"].toLowerCase().replace(" ", "_")];
+          }
+        }
+      });
+      obj["editbtn"] =
+        <MDBBtn
+          color="default"
+          className="editBtn"
+          rounded
+          size="sm"
+          onClick={() => this.props.handleEdit(idx)}
+        >
+          Edit
+        </MDBBtn>
+      let user_type = JSON.parse(localStorage.getItem("user_data"))
+      if (user_type && user_type.user_type == "superadmin") {
+        obj["deletebtn"] =
+          <MDBBtn
+            color="default"
+            rounded
+            size="sm"
+            className="deleteBtn"
+            onClick={() => {
+              this.props.handleDelete(idx, resp.id);
+            }}
+          >
+            Delete
+        </MDBBtn>
+      }
+      rows.push(obj);
+    });
+    data["columns"] = columns
+    data["rows"] = rows;
     return (
-      <div>
-        <Table key={subType} responsive>
-          <thead>
-            <tr>
-              {tableTitlearray.map(title => (
-                <td key={title} align="center">
-                  {title}
-                </td>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-
-            { categoryType === "uniq" ? response[pageType][subType].map((resp, idx) => (
-              <tr key={resp.id}>
-                {tableValuearray.map(a => (
-                  <td key={a} align="center">
-                    {resp[a]}
-                  </td>
-                ))}
-
-                <td align="center">
-                  <Link
-                    to={{
-                      pathname: "/flights",
-                      state: { flight: resp }
-                    }}
-                  >
-                    <Button as="input" type="button" value="Edit" />
-                  </Link>{" "}
-                </td>
-                <td>
-                  <Button
-                    as="input"
-                    type="button"
-                    value="Delete"
-                    onClick={() => {
-                      this.props.handleDelete(idx, resp.id);
-                    }}
-                  />
-                </td>
-              </tr>
-            )):   
-            response["common"].map((resp, idx) => (
-              <tr key={resp.id}>
-                {tableValuearray.map(a => (
-                  <td key={a} align="center">
-                    {resp[a]}
-                  </td>
-                ))}
-
-                <td align="center">
-                  <Link
-                    to={{
-                      pathname: "/flights",
-                      state: { flight: resp }
-                    }}
-                  >
-                    <Button as="input" type="button" value="Edit" />
-                  </Link>{" "}
-                </td>
-                <td>
-                  <Button
-                    as="input"
-                    type="button"
-                    value="Delete"
-                    onClick={() => {
-                      this.props.handleDelete(idx, resp.id);
-                    }}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+      <div className="index-tables">
+        {renderTables ? (
+          <MDBDataTable
+            btn
+            striped
+            bordered
+            autoWidth
+            data={data}
+          />
+        ) : (
+            ""
+          )}
       </div>
     );
   }

@@ -1,131 +1,67 @@
 import React, { Component } from 'react';
 import { Table, Button, Alert } from 'react-bootstrap';
-import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import {MDBBtn, MDBDataTable} from 'mdbreact';
 
-const API_URL = "http://localhost:3000"
+const uniqueColoumn = [{label: "Domain Url", field: "domain_url", width: 150}, {label: "Content Type", field: "content_type", width: 150}, {label: "Counry Name", field: "counry_name", width: 150}, {label: "Meta Title", field: "meta_title", width: 150}]
+
+const commonColoumn = [{label: "Domain Name", field: "domain_name", width: 150}, {label: "Content Type", field: "content_type", width: 150}, {label: "Counry Name", field: "counry_name", width: 150}, {label: "Meta Title", field: "meta_title", width: 150}]
 
 
 class TableContent extends Component {
 	constructor(props){
-			super(props)
-			this.state = {
-				tableResult: props.tableResult,
-				content_type: props.content_type,
-				isDataPresent: props.isDataPresent,
-				linkURl: props.linkURl,
-				isDeleted: false
-			}
-	}
-
-	handleDelete(item){
-      	var contentList = this.state.tableResult.filter(function(content) { return content.id != item.id });
-		this.setState({ tableResult: contentList });
-		const alrt = window.confirm('Are you sure you wish to delete this item?')
-		if (alrt == true) {
-		    axios.delete(`${API_URL}/cmshotels/delete/${item.id}`)
-		      .then(res => {
-		          console.log(res.message);
-		          this.setState({ isDeleted: true })
-		      })
-		      .catch((err) => {
-		          console.log(err);
-		      })
-		}
+		super(props)
 	}
 
 	render() {
+		const data = {}
 		let dataField;
-		const { isDeleted, tableResult, content_type, isDataPresent, linkURl } = this.state
-		// if (isDeleted) {
-		// 	return <Redirect to="/hotels" />
-		// }
-		if ((content_type === "Common Data") && (isDataPresent) && (tableResult.length > 0)) {
-			dataField = (
-			  <Table striped bordered>
-			  	<thead>
-			  		<tr>
-			  			<th>Domain Name</th>
-			  			<th>Country Name</th>
-			  			<th>Meta Title</th>
-			  			<th>Meta Description</th>
-			  			<th colSpan="2"></th>
-			  		</tr>
-			  	</thead>
-			    <tbody>
-			      {
-        			tableResult.map((item, i) => {
-        				return(
-        					<tr key={i}>
-			        			<td>{item.domain_name}</td>
-			        			<td>{item.country_name}</td>
-			        			<td>{item.meta_title}</td>
-			        			<td>{item.meta_description}</td>
-			        			{/*<td>
-			        				<Button variant="success" size="sm" block>
-			        					<Link to={`hotels/show/commondata/${item.id}`}>View</Link>
-										  </Button>
-			        			</td>*/}
-			        			<td>
-			        				<Button variant="info" size="sm" block><Link to={`/cmshotels/edit/${item.id}`}>Edit</Link></Button>
-			        			</td>
-			        			<td>
-			        				<Button variant="danger" size="sm" block onClick={this.handleDelete.bind(this, item)}>Delete</Button>
-			        			</td>
-			        		</tr>
-        					)
-        			})
-        		}
-			    </tbody>
-			  </Table>
-			)
-		} else if ((content_type === "Unique Data") && (isDataPresent) && (tableResult.length > 0)) {
-			dataField = (
-				  <Table striped bordered>
-				  	<thead>
-				  		<tr>
-				  			<th>Client Path</th>
-				  			<th>Country Name</th>
-				  			<th>Meta Title</th>
-				  			<th>Meta Description</th>
-				  			<th colSpan="2"></th>
-				  		</tr>
-				  	</thead>
-				    <tbody>
-				      {
-	        			tableResult.map((item, i) => {
-	        				return(
-	        					<tr key={i}>
-				        			<td>{item.domain_url}</td>
-				        			<td>{item.country_name}</td>
-				        			<td>{item.meta_title}</td>
-				        			<td>{item.meta_description}</td>
-				        			{/*<td>
-				        				<Button variant="success" size="sm" block>
-				        					<Link to={`hotels/show/uniquedata/${item.id}`}>View</Link>
-											  </Button>
-				        			</td>*/}
-				        			<td>
-				        				<Button variant="info" size="sm" block><Link to={`/cmshotels/edit/${item.id}`}>Edit</Link></Button>
-				        			</td>
-				        			<td>
-				        				<Button variant="danger" size="sm" block onClick={this.handleDelete.bind(this, item)}>Delete</Button>
-				        			</td>
-				        		</tr>
-	        					)
-	        			})
-	        		}
-				    </tbody>
-				  </Table>
-			)
+		let rows = []
+		const { tableResult, contentType } = this.props
+		if (contentType === "Unique Data") {
+				data["columns"] = uniqueColoumn
+				tableResult.map((item, idx) => {
+		      let obj = {}
+		      obj["domain_url"] = item.domain_url
+		      obj["content_type"] = item.content_type
+		      obj["country_name"] = item.country_name
+		      obj['meta_title'] = item.meta_title
+		      obj["editbtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.props.changeFunction("edit",item)}>Edit</MDBBtn>
+		      obj["deletebtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.props.changeFunction("delete",item)}>Delete</MDBBtn>
+		      rows.push(obj)
+		    })
+		    data["rows"] = rows
+		} else if (contentType === "Common Data") {
+				data["columns"] = commonColoumn
+				tableResult.map((item, idx) => {
+		      let obj = {}
+		      obj["domain_name"] = item.domain_name
+		      obj["content_type"] = item.content_type
+		      obj["country_name"] = item.country_name
+		      obj['meta_title'] = item.meta_title
+		      obj["editbtn"] = <MDBBtn color='default' className ="editBtn" rounded size='sm' onClick={() => this.props.changeFunction("edit",item)}>Edit</MDBBtn>
+		      obj["deletebtn"] = <MDBBtn color='default' rounded size='sm' className ="deleteBtn"  onClick={() => this.props.changeFunction("delete",item)}>Delete</MDBBtn>
+		      rows.push(obj)
+		    })
+		    data["rows"] = rows
+		}
+		if (tableResult.length > 0) {
+				dataField = (
+				  <MDBDataTable btn
+          striped
+          bordered 
+          autoWidth 
+          orderable={false} 
+          data={data}
+        />
+				)
 		} else {
 			dataField = (
 					<div>
 						<Alert variant="info">
 					   		Your searched result not found, you can add by clicking Add button here.
 					  	</Alert>
-						<Button variant="info" size="lg">
-							<Link to={`cmshotels/${linkURl}`}>Add</Link>
+						<Button variant="info" name="add" size="lg" onClick={() => this.props.changeFunction("add",'')}>
+							Add
 						</Button>
 					</div>
 				)

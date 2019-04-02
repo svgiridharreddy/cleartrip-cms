@@ -6,14 +6,9 @@ import {
   NotificationContainer,
   NotificationManager
 } from "react-notifications";
-import "froala-editor/js/froala_editor.pkgd.min.js";
-import "font-awesome/css/font-awesome.css";
-import "froala-editor/js/froala_editor.pkgd.min.js";
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-import FroalaEditor from "react-froala-wysiwyg";
-import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
-import FroalaEditorInput from "react-froala-wysiwyg/FroalaEditorInput";
+import 'jodit';
+import 'jodit/build/jodit.min.css';
+import JoditEditor from "jodit-react";
 import $ from "jquery";
 window.jQuery = $;
 window.$ = $;
@@ -42,11 +37,10 @@ class HotelUniqueContent extends Component {
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
-		this.handleHeaderModelChange = this.handleHeaderModelChange.bind(this);
-		this.handleFooterModelChange = this.handleFooterModelChange.bind(this);
-		this.handleFaqModelChange = this.handleFaqModelChange.bind(this);
 		this.onChageFaq = this.onChageFaq.bind(this);
 		this.checkBackBtnFun = this.checkBackBtnFun.bind(this);
+		this.updateHeaderContent = this.updateHeaderContent.bind(this);
+    this.updateFooterContent = this.updateFooterContent.bind(this);
 	}
 
 	checkBackBtnFun(){
@@ -99,26 +93,19 @@ class HotelUniqueContent extends Component {
 		})
 	}
 
-	handleHeaderModelChange(model) {
-	    let _self = this;
-	    _self.setState({
-	      top_content: model
-	    });
-	  }
-
-	  handleFooterModelChange(model) {
-	    let _self = this;
-	    _self.setState({
-	      bottom_content: model
-	    });
-	  }
-	  
-	  handleFaqModelChange(model) {
-	    let _self = this;
-	    _self.setState({
-	      faq: model
-	    });
-	  }
+	updateHeaderContent(value) {
+      let _self = this;
+      _self.setState({ top_content: value })
+  }
+  updateFooterContent(value) {
+      let _self = this;
+      _self.setState({ bottom_content: value })
+  }
+  jodit;
+  setRef = jodit => this.jodit = jodit;
+  config = {
+      readonly: false
+  }
 
 	handleChange(e) {
 		this.setState({
@@ -172,28 +159,22 @@ class HotelUniqueContent extends Component {
 						</li>
 						<li>
               <label>Header Content</label>
-              <FroalaEditor
-                model={this.state.top_content}
-                base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
-                onModelChange={this.handleHeaderModelChange}
+              <JoditEditor
+                  editorRef={this.setRef}
+                  value={this.state.top_content}
+                  config={this.config}
+                  onChange={this.updateHeaderContent}
               />
             </li>
             <li>
               <label>Footer Content</label>
-              <FroalaEditor
-                model={this.state.bottom_content}
-                base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
-                onModelChange={this.handleFooterModelChange}
+              <JoditEditor
+                  editorRef={this.setRef}
+                  value={this.state.bottom_content}
+                  config={this.config}
+                  onChange={this.updateFooterContent}
               />
             </li>
-            {/*<li>
-              <label>Freaquently Asked Questions</label>
-              <FroalaEditor
-                model={this.state.faq}
-                base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
-                onModelChange={this.handleFaqModelChange}
-              />
-            </li>*/}
             <li>
               <label>Faq Content</label>
               {
