@@ -78,25 +78,30 @@ class FlightsApprovalPending extends Component {
 
     handleShow(data) {
         let modelData = ""
-        let mapFields = { title: "Title", heading: "H1 tag", h1Tag: "H1 tag", keyword: "Keywords", keywords: "Keywords", description: "Description", faq_object: "Faq data", reviews_object: "Reviews", content: "Content" }
         if (data["last_modified_list"].length > 0) {
             modelData = data["last_modified_list"].map((el, i) => {
+                let oldvalue = ''
+                let newValue = ''
                 el = el === "keywords" ? "keyword" : el
-                if (data["prev_version"] && data["prev_version"][el]) {
-                    let oldvalue =''
-                    let newValue =''
-                    if(el === "faq_object" || el === "reviews_object"){
+                if (el === "h1Tag") {
+                    oldvalue = data["prev_version"]["heading"] || ''
+                    newValue = data["heading"] || ''
+                } else {
+                    oldvalue = data["prev_version"][el] || ''
+                    newValue = data[el] || ''
+                }
+                if (data["prev_version"]) {
+                    if (el === "faq_object" || el === "reviews_object") {
                         oldvalue = JSON.stringify(data["prev_version"][el])
-                        newValue =  JSON.stringify(data[el])
-                    }else{
-                        oldvalue = data["prev_version"][el]
-                        newValue = data[el]
+                        newValue = JSON.stringify(data[el])
                     }
-                    return (<div key={i}><span className="diffHeading">{el}</span><ReactDiffViewer
-                        oldValue={oldvalue}
-                        newValue={newValue}
-                        splitView={true}
-                    /></div>)
+                    if (oldvalue && newValue) {
+                        return (<div key={i}><span className="diffHeading">{el}</span><ReactDiffViewer
+                            oldValue={oldvalue}
+                            newValue={newValue}
+                            splitView={true}
+                        /></div>)
+                    }
                 }
             })
         } else {
