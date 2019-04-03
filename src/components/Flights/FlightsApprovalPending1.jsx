@@ -82,11 +82,19 @@ class FlightsApprovalPending extends Component {
         if (data["last_modified_list"].length > 0) {
             modelData = data["last_modified_list"].map((el, i) => {
                 el = el === "keywords" ? "keyword" : el
-                debugger
                 if (data["prev_version"] && data["prev_version"][el]) {
+                    let oldvalue =''
+                    let newValue =''
+                    if(el === "faq_object" || el === "reviews_object"){
+                        oldvalue = JSON.stringify(data["prev_version"][el])
+                        newValue =  JSON.stringify(data[el])
+                    }else{
+                        oldvalue = data["prev_version"][el]
+                        newValue = data[el]
+                    }
                     return (<div key={i}><span className="diffHeading">{el}</span><ReactDiffViewer
-                        oldValue={data["prev_version"][el]}
-                        newValue={data[el]}
+                        oldValue={oldvalue}
+                        newValue={newValue}
                         splitView={true}
                     /></div>)
                 }
