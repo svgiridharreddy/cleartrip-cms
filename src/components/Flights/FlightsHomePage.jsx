@@ -308,9 +308,6 @@ class FlightsHomePage extends PureComponent {
     })
   }
   handleChange = (e, fieldName) => {
-<<<<<<< HEAD
-    debugger
-=======
     if (this.state.editClicked) {
       if (fieldName === 'rte') {
         if (this.state.last_modified_list.indexOf("content") == -1) {
@@ -323,7 +320,6 @@ class FlightsHomePage extends PureComponent {
       }
       this.setState({ updatedInEditForm: true })
     }
->>>>>>> testing
     if (fieldName === "section") {
       this.setState(
         {
@@ -400,16 +396,6 @@ class FlightsHomePage extends PureComponent {
         },
         () => this.fetchDetails()
       );
-<<<<<<< HEAD
-       }
-
-      else if (fieldName=="pageType"){
-        this.setState({ 
-          [fieldName]: e.target.value
-
-        })
-
-=======
     } else if (fieldName === "categoryType") {
       this.setState(
         {
@@ -435,7 +421,6 @@ class FlightsHomePage extends PureComponent {
       );
     } else if ([fieldName] == "rte") {
       this.handleRTEchange(e);
->>>>>>> testing
     } else {
       this.setState({ [fieldName]: e.target.value, categoryType: "" }, () =>
         this.fetchDetails()

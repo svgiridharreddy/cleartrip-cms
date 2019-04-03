@@ -437,6 +437,11 @@ textarea {
   margin: 0 0 15px;
 }
 
+.diffHeading{
+  font-weight: bold;
+  text-transform:capitalize;
+}
+
 /* Absolute Center Spinner */
 .loading {
   position: fixed;
