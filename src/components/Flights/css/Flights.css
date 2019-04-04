@@ -561,6 +561,9 @@ textarea {
     transform: rotate(360deg);
   }
 }
-/* table.dataTable th:nth-last-child(-n+2) {
-  color: transparent;
-} */
+.modal-90w {
+  width: 95%;
+  max-width: none!important;
+  margin-top: 5%;
+}
+

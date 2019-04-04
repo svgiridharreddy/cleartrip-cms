@@ -82,13 +82,15 @@ class FlightsApprovalPending extends Component {
             modelData = data["last_modified_list"].map((el, i) => {
                 let oldvalue = ''
                 let newValue = ''
-                el = el === "keywords" ? "keyword" : el
                 if (el === "h1Tag") {
                     oldvalue = data["prev_version"]["heading"] || ''
                     newValue = data["heading"] || ''
+                } else if (el === "keywords") {
+                    oldvalue = data["prev_version"]["keyword"] || ''
+                    newValue = data["keyword"] || ''
                 } else {
-                    oldvalue = data["prev_version"][el] || ''
-                    newValue = data[el] || ''
+                    oldvalue = data["prev_version"][el]
+                    newValue = data[el]
                 }
                 if (data["prev_version"]) {
                     if (el === "faq_object" || el === "reviews_object") {
@@ -352,18 +354,17 @@ class FlightsApprovalPending extends Component {
                 <Modal
                     size="lg"
                     onHide={this.handleClose.bind(this)}
-                    dialogClassName="modal-120w preview-content"
+                    dialogClassName="modal-90w"
                     aria-labelledby="example-modal-sizes-title-lg"
-                    show={this.state.show} onHide={this.handleClose.bind(this)} centered
+                    show={this.state.show} onHide={this.handleClose.bind(this)}
                 >
                     <Modal.Header closeButton>
-                        Route information
+                        <Modal.Title id="example-modal-sizes-title-lg">
+                            Route information
+            </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
-                        {/* <ul className="showModel"> */}
-                        {modelData}
-                        {/* </ul> */}
-                    </Modal.Body>
+                    {modelData}
+                    <Modal.Body></Modal.Body>
                 </Modal>
                 <h2>List of data need to approve in flights</h2>
                 <div className={is_admin && Object.keys(data).length > 0 ? "" : "hidden"}>
