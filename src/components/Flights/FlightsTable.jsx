@@ -55,6 +55,9 @@ class FlightsTable extends Component {
     if(pageType == "flight-booking" && subType =="routes" && categoryType == "uniq"){
       tableTitlearray = ["Domain", "Language", "Section", "AirlineName", "source", "destination","URL","Page Type", "Sub Page Type","Edit", "Delete"]
     }
+    if(categoryType == "common"){
+      tableTitlearray =  ["Domain", "Language", "Section", "Page Type", "Sub Page Type","Edit", "Delete"]
+    }
     tableValuearray = Object.values(tableTitle);
     var tempValueArray =
       subType && subType != "index" ? Object.values(tableFields[subType]) : [];
@@ -69,7 +72,9 @@ class FlightsTable extends Component {
           width: 150
         },
         { label: "Page Type", field: "Page Type", width: 150 },
-        { label: "Sub Type", field: "Sub Type", width: 150 }
+        { label: "Sub Type", field: "Sub Type", width: 150 },
+        { label: "Edit", field: "editbtn", width: 150 },
+        { label: "Delete", field: "deletebtn", width: 150 }
       ];
     } else {
       tableTitlearray.map(heading => {
