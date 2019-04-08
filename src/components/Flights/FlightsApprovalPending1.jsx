@@ -142,7 +142,7 @@ class FlightsApprovalPending extends Component {
                     }
                     tabObj["Last modified"] = lastModifiedArray.join(",")
                 } else {
-                    tabObj[col] = data[col]
+                    tabObj[col] = data[col] ? data[col] : ""
                 }
             })
             tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
