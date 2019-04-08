@@ -89,8 +89,8 @@ class FlightsApprovalPending extends Component {
                     oldvalue = data["prev_version"]["keyword"] || ''
                     newValue = data["keyword"] || ''
                 } else {
-                    oldvalue = data["prev_version"][el]
-                    newValue = data[el]
+                    oldvalue = data["prev_version"][el] || ''
+                    newValue = data[el] || ''
                 }
                 if (data["prev_version"]) {
                     if (el === "faq_object" || el === "reviews_object") {
