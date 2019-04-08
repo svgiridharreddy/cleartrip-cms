@@ -22,7 +22,7 @@ class MetaFields extends Component {
             subType: this.props.subType,
             title: "",
             description: "",
-            content: this.props.content,
+            content: this.props.content ? this.props.content : "",
             h1Tag: "",
             keywords: "",
             airlinName: "",
@@ -174,7 +174,7 @@ class MetaFields extends Component {
             description: nextProps.description,
             keywords: nextProps.keywords,
             h1Tag: nextProps.h1Tag,
-            conent: nextProps.content,
+            content: nextProps.content,
             faq_object: nextProps.faq_object
         });
     }
@@ -217,7 +217,7 @@ class MetaFields extends Component {
             "web-checkin": "Web Checkin",
             index: "Index"
         };
-        const { title, description, keywords, content, h1Tag, categoryType } = this.props;
+        const { title, description, keywords, h1Tag, categoryType } = this.props;
         const { pageType, subType, faq_object, reviews_object } = this.state
         let showReviews = false
         if ((pageType === "flight-booking" || pageType === "flight-schedule") && categoryType != "common") {
@@ -286,22 +286,12 @@ class MetaFields extends Component {
                 </li>
                 <label>Content</label>
                 <li>
-                    {/* <FroalaEditor
-            model={this.state.content}
-            base="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4"
-            onModelChange={this.handleModelChange}
-          /> */}
                     <JoditEditor
                         editorRef={this.setRef}
                         value={this.state.content}
                         config={this.config}
                         onChange={this.updateContent}
                     />
-                    <li>
-                        {/* <FroalaEditor
-              base='https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.4'
-              value={this.state.florContent} /> */}
-                    </li>
                     {(faq_object && faq_object.length > 0) ? <li>
                         <h3>Faq content</h3>
                         {faq_object.map((val, i) => {
