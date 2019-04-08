@@ -97,7 +97,7 @@ class FlightsApprovalPending extends Component {
                         oldvalue = JSON.stringify(data["prev_version"][el])
                         newValue = JSON.stringify(data[el])
                     }
-                    if (oldvalue && newValue) {
+                    if (newValue) {
                         return (<div key={i}><span className="diffHeading">{el}</span><ReactDiffViewer
                             oldValue={oldvalue}
                             newValue={newValue}
