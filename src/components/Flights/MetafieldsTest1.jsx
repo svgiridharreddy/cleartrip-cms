@@ -38,18 +38,22 @@ class MetaFields extends Component {
             editorState: "",
             faq_object: this.props.faq_object,
             reviews_object: this.props.reviews_object,
-            categoryType: ""
+            categoryType: "",
+            content_tabs_data: this.props.content_tabs_data && this.props.content_tabs_data.length > 0 ? this.props.content_tabs_data : []
         };
         this.onChageFaq = this.onChageFaq.bind(this)
         this.reviewsObject = this.reviewsObject.bind(this)
         this.updateContent = this.updateContent.bind(this)
+        this.updateTabContent = this.updateTabContent.bind(this)
+        this.addNewTabCotnent = this.addNewTabCotnent.bind(this)
+        this.removeTabCotnent = this.removeTabCotnent.bind(this)
     }
 
     onChange1 = content => {
         this.setState({ content });
         if (this.props.onChange) {
             // Send the changes up to the parent component as an HTML string.
-            // This is here to demonstrate using `.toString()` but in a real app it
+            // This is here to demonstrate using `.toStringTouchListal app it
             // would be better to avoid generating a string on each change.
             // this.props.onChange(content.toString("html"));
             this.props.onChange(content.toString("html"));
@@ -126,7 +130,7 @@ class MetaFields extends Component {
         let reviews_object = _self.state.reviews_object
         let index = parseInt(e.target.dataset["btnid"])
         reviews_object[0]["reviews_list"].splice(index, 1)
-        if (reviews_object.lenght == 0 || reviews_object[0]["reviews_list"].length == 0) {
+        if (reviews_object.length == 0 || reviews_object[0]["reviews_list"].length == 0) {
             reviews_object = []
         }
         _self.setState({
@@ -156,6 +160,59 @@ class MetaFields extends Component {
         _self.setState({
             reviews_object: reviews_object
         })
+    }
+
+    updateTabContent(field, e) {
+        let _self = this
+        let content_tabs_data = _self.state.content_tabs_data
+        let index = field.target && field.target.name === "heading" ? parseInt(field.target.dataset.heading) : parseInt(field)
+        let key_name = field.target && field.target.name ? field.target.name : "content"
+        content_tabs_data[index][key_name] = field.target && field.target.value ? field.target.value : e
+        _self.setState({
+            content_tabs_data: content_tabs_data
+        })
+        _self.props.faqOnchange(content_tabs_data, "content_tabs_data")
+
+    }
+
+    addNewTabCotnent(e) {
+        let _self = this
+        let noTabData = false
+        let content_tabs_data = _self.state.content_tabs_data
+        if (content_tabs_data && content_tabs_data.length === 0) {
+            noTabData = true
+            content_tabs_data.push({ heading: "", content: "" })
+            _self.setState({
+                content_tabs_data: content_tabs_data
+            })
+        }
+        let addNew = false
+        content_tabs_data.map((obj, k) => {
+            if (obj["heading"] !== "" && obj["content"] != "") {
+                addNew = true
+            } else {
+                addNew = false
+            }
+        })
+        if (addNew) {
+            content_tabs_data.push({ heading: "", content: "" })
+            _self.setState({
+                content_tabs_data: content_tabs_data
+            })
+        } else {
+            if (!noTabData) {
+                NotificationManager.error("Please Enter content and heading  Properly", "Field Missing", 3000)
+            }
+        }
+    }
+    removeTabCotnent(e) {
+        debugger
+        let _self = this
+        let content_tabs_data = _self.state.content_tabs_data
+        let index = parseInt(e.target.dataset.btnid)
+        content_tabs_data.splice(index, 1)
+        _self.setState({ content_tabs_data: content_tabs_data })
+        _self.props.faqOnchange(content_tabs_data, "content_tabs_data")
     }
 
     updateContent(value) {
@@ -218,15 +275,18 @@ class MetaFields extends Component {
             index: "Index"
         };
         const { title, description, keywords, h1Tag, categoryType } = this.props;
-        const { pageType, subType, faq_object, reviews_object } = this.state
+        const { pageType, subType, faq_object, reviews_object, content_tabs_data } = this.state
         let showReviews = false
+        let show_content_tabs = false
         if ((pageType === "flight-booking" || pageType === "flight-schedule") && categoryType != "common") {
             if (pageType === "flight-booking" && subType == "overview") {
                 showReviews = true
+                show_content_tabs = true
             } else if (pageType === "flight-schedule" && subType == "routes") {
                 showReviews = true
             }
         }
+
         return (
             <ul>
                 <li>
@@ -284,7 +344,29 @@ class MetaFields extends Component {
                         placeholder="Enter H1 Title"
                     />
                 </li>
-                <label>Content</label>
+                {show_content_tabs ? (content_tabs_data.length > 0 ? <div><li><label>Content tabs</label></li>
+                    <li>{(content_tabs_data.map((value, key) => {
+                        return (
+                            <div key={key} className="contentTabs">
+                                <label>Tab Heading</label>
+                                <input type="text" name="heading" data-heading={key} value={content_tabs_data[key]['heading']} onChange={this.updateTabContent.bind(this)} />
+                                <label>Tab Content</label>
+                                <JoditEditor data-content={key}
+                                    editorRef={this.setRef}
+                                    value={content_tabs_data[key]['content']}
+                                    config={this.config}
+                                    name="content"
+                                    onChange={this.updateTabContent.bind(this, key)}
+                                />
+                                {key == content_tabs_data.length - 1 ? <div className="add-btns"><button type="button"
+                                    className="plusButton" onClick={this.removeTabCotnent.bind(this)} data-btnid={key}>-</button><button type="button"
+                                        className="plusButton" onClick={this.addNewTabCotnent.bind(this)} data-btnid={key}>+</button></div> : <button type="button"
+                                            className="plusButton" onClick={this.removeTabCotnent.bind(this)} data-btnid={key}>-</button>}
+                            </div>)
+                    }))}
+                    </li></div> : <li>No Tab content is present<button type="button"
+                        className="plusButton" onClick={this.addNewTabCotnent.bind(this)} data-btnid="0">+</button></li>) : ''}
+                <li><label>Content</label></li>
                 <li>
                     <JoditEditor
                         editorRef={this.setRef}

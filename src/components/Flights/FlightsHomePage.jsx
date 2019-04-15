@@ -101,7 +101,9 @@ class FlightsHomePage extends PureComponent {
       backBtnClicked: false,
       updatedInEditForm: false,
       loading: false,
-      last_modified_list: []
+      last_modified_list: [],
+      content_tabs_data: []
+
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleMetaChanges = this.handleMetaChanges.bind(this);
@@ -147,10 +149,10 @@ class FlightsHomePage extends PureComponent {
     if (e) {
       e.preventDefault();
     }
-    if(_self.state.editClicked){
-      if(_self.state.updatedInEditForm){
+    if (_self.state.editClicked) {
+      if (_self.state.updatedInEditForm) {
         console.log("changed")
-      }else{
+      } else {
         this.backBtnFun()
         return false
       }
@@ -159,7 +161,7 @@ class FlightsHomePage extends PureComponent {
     let user_data = JSON.parse(localStorage.getItem("user_data"));
     if (!user_data) {
       window.location.replace("/");
-    }
+    }    
     if (flightValues["reviews_object"] && flightValues["reviews_object"].length > 0) {
       if (flightValues["reviews_object"][0]["avg_review_rating"] === "") {
         this.setState({
@@ -184,7 +186,7 @@ class FlightsHomePage extends PureComponent {
         })
       }
     }
-    
+
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -201,6 +203,7 @@ class FlightsHomePage extends PureComponent {
         faq_object: flightValues["faq_object"] && flightValues["faq_object"].length > 0 ? flightValues["faq_object"] : [],
         reviews_object: flightValues["reviews_object"] && flightValues["reviews_object"].length > 0 ? flightValues["reviews_object"] : [],
         last_modified_list: flightValues['last_modified_list'] && flightValues["last_modified_list"].length > 0 ? flightValues["last_modified_list"] : [],
+        content_tabs_data: flightValues["content_tabs_data"] && flightValues["content_tabs_data"].length > 0 ? JSON.stringify(flightValues["content_tabs_data"]) : "",
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -262,7 +265,8 @@ class FlightsHomePage extends PureComponent {
           fromToCity: "",
           options: [],
           updatedInEditForm: false,
-          last_modified_list:[]
+          last_modified_list: [],
+          content_tabs_data:[]
         });
         this.fetchDetails();
       })
@@ -319,6 +323,13 @@ class FlightsHomePage extends PureComponent {
         }
       }
       this.setState({ updatedInEditForm: true })
+    }
+    if(this.state.domain === "IN" || e.target.value === "IN"){
+        if(this.state.language === "ar"){
+          this.setState({
+            language:"en"
+          })
+        }
     }
     if (fieldName === "section") {
       this.setState(
@@ -577,7 +588,8 @@ class FlightsHomePage extends PureComponent {
               keyword: "",
               faq_object: [],
               reviews_object: [],
-              last_modified_list:[],
+              last_modified_list: [],
+              content_tabs_data:[],
               loading: false
             });
           }
@@ -634,7 +646,8 @@ class FlightsHomePage extends PureComponent {
       h1Tag: "",
       faq_object: [],
       reviews_object: [],
-      last_modified_list:[]
+      last_modified_list: [],
+      content_tabs_data:[]
     });
   };
 
@@ -689,6 +702,7 @@ class FlightsHomePage extends PureComponent {
         h1Tag: result["common"][idx]["heading"],
         faq_object: result["common"][idx]["faq_object"] ? result["common"][idx]["faq_object"] : [],
         last_modified_list: result["common"][idx]["last_modified_list"] ? result["common"][idx]["last_modified_list"] : [],
+        content_tabs_data:[],
         readOnlyValue: true,
         editClicked: true
       });
@@ -706,9 +720,11 @@ class FlightsHomePage extends PureComponent {
         airlineName: "",
         faq_object: [],
         reviews_object: [],
-        last_modified_list:[]
+        last_modified_list: [],
+        content_tabs_data:[]
       })
       setTimeout(function () {
+        debugger
         _self.setState({
           renderTables: false,
           showComponent: true,
@@ -725,7 +741,8 @@ class FlightsHomePage extends PureComponent {
           brandName: result[pageType][subType][idx]["airline_name"],
           faq_object: result[pageType][subType][idx]["faq_object"] ? result[pageType][subType][idx]["faq_object"] : [],
           reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [],
-          last_modified_list:result[pageType][subType][idx]["last_modified_list"] ? result[pageType][subType][idx]["last_modified_list"] : [],
+          last_modified_list: result[pageType][subType][idx]["last_modified_list"] ? result[pageType][subType][idx]["last_modified_list"] : [],
+          content_tabs_data: result[pageType][subType][idx]["content_tabs_data"] ? JSON.parse(result[pageType][subType][idx]["content_tabs_data"]) : [],
           arrCityNameSelected:
             _self.state.arrCityNameSelected != ""
               ? _self.state.arrCityNameSelected
@@ -1023,7 +1040,9 @@ class FlightsHomePage extends PureComponent {
                   <option value="" disabled={true} selected>
                     Language
                   </option>
-                  {this.returnOptions(languages)}}
+                  <option value="en">En</option>
+                  <option value="ar" className={this.state.domain && this.state.domain == 'IN'
+                    ? 'hidden' : ''}>Ar</option>
                 </select>
               </li>
               <li>
@@ -1195,6 +1214,7 @@ class FlightsHomePage extends PureComponent {
                     h1Tag={this.state.h1Tag}
                     faq_object={this.state.faq_object}
                     reviews_object={this.state.reviews_object}
+                    content_tabs_data={this.state.content_tabs_data}
                     handleRTEchange={content => this.handleRTEchange(content)}
                     backBtnFun={this.backBtnFun.bind(this)}
                     faqOnchange={this.faqOnchange.bind(this)}
