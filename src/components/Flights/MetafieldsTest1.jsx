@@ -47,6 +47,7 @@ class MetaFields extends Component {
         this.updateTabContent = this.updateTabContent.bind(this)
         this.addNewTabCotnent = this.addNewTabCotnent.bind(this)
         this.removeTabCotnent = this.removeTabCotnent.bind(this)
+        this.removeObjData = this.removeObjData.bind(this)
     }
 
     onChange1 = content => {
@@ -64,7 +65,9 @@ class MetaFields extends Component {
     addNewFaq(e) {
         let _self = this
         let faq_object = this.state.faq_object
+        let noTabData = false
         if (faq_object.length == 0) {
+            noTabData = true
             faq_object.push({ question: "", answer: "" })
             _self.setState({
                 faq_object: faq_object
@@ -84,7 +87,7 @@ class MetaFields extends Component {
                 faq_object: faq_object
             })
         } else {
-            if (!faq_object.length == 0) {
+            if (!noTabData) {
                 NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", 3000)
             }
         }
@@ -93,11 +96,7 @@ class MetaFields extends Component {
         let _self = this
         let faq_object = this.state.faq_object
         let index = parseInt(e.target.dataset.btnid)
-        faq_object.splice(index, 1)
-        _self.setState({
-            faq_object: faq_object
-        })
-        _self.props.faqOnchange(faq_object, "faq_object")
+        _self.removeObjData(faq_object, index, "faq_object")
     };
     onChageFaq(e) {
         let _self = this
@@ -206,13 +205,19 @@ class MetaFields extends Component {
         }
     }
     removeTabCotnent(e) {
-        debugger
         let _self = this
         let content_tabs_data = _self.state.content_tabs_data
         let index = parseInt(e.target.dataset.btnid)
-        content_tabs_data.splice(index, 1)
-        _self.setState({ content_tabs_data: content_tabs_data })
-        _self.props.faqOnchange(content_tabs_data, "content_tabs_data")
+        _self.removeObjData(content_tabs_data, index, "content_tabs_data")
+    }
+
+    removeObjData(data, index, col) {
+        let _self = this
+        data.splice(index, 1)
+        _self.setState({
+            [col]: data
+        })
+        _self.props.faqOnchange(data, col)
     }
 
     updateContent(value) {
