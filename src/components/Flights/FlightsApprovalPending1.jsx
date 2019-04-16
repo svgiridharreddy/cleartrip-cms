@@ -146,9 +146,7 @@ class FlightsApprovalPending extends Component {
                 }
             })
             tabObj["Approval status"] = <label className="toggleswitch"><input type="checkbox" checked={data.is_approved ? true : false} onClick={() => this.approveRoute(data, thead)} /><span className="slider round" /></label>
-            // tabObj["approve"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.approveRoute(data.id, thead)} disabled={data.is_approved ? true : false}>{data.is_approved ? "Approved" : "Approve"}</MDBBtn>
-            // tabObj["edit"] = <MDBBtn key={data.id} color='default' className="editBtn" rounded size='sm' onClick={() => this.handleEdit(data)} >Edit</MDBBtn>
-            // tabObj["edit"] = <a className="editBtn"  href={'/flights?table_name=' + thead + '&id=' + data["id"]}>Edit</a>
+            tabObj["edit"] = <button key={data.id} type="button" className="btn btn-default btn-sm btn-rounded Ripple-parent"><a className="editButton"  href={'/flights?table_name=' + thead + '&id=' + data["id"]}>Edit</a></button>
             tabObj["view"] = <MDBBtn key={data.id} color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(data)} >show</MDBBtn>
             return tabObj
         }

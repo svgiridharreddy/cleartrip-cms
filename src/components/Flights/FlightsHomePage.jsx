@@ -234,17 +234,21 @@ class FlightsHomePage extends PureComponent {
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
-        let search_params = queryString.parse(this.props.location.search)
-        if (search_params["id"] && search_params["table_name"]) {
-          window.location.replace("/flights-approve")
-        }
+        // let search_params = queryString.parse(this.props.location.search)
+        // if (search_params["id"] && search_params["table_name"]) {
+        //   window.location.replace("/flights-approve")
+        // }
         setTimeout(function () {
+          if(window.location.search){
+            window.history.replaceState({},'Title',"/flights")
+          }
           NotificationManager.success(
             "Approval required",
             "Admin Need to approve ",
             2000
           );
         }, 10)
+       
         this.setState({
           editClicked: false,
           depCityName: "",
@@ -656,6 +660,9 @@ class FlightsHomePage extends PureComponent {
     let updated = false
     if (_self.state.editClicked && _self.state.updatedInEditForm) {
       updated = window.confirm("Do you want to save save your changes?")
+    }
+    if(window.location.search){
+      window.history.replaceState({},'Cms',"/flights")
     }
     setTimeout(function () {
       _self.setState({

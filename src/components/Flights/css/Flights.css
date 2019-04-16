@@ -118,6 +118,14 @@ header {
   padding: 3px 15px;
   border-radius: 3px;
 }
+.editButton,.editButton:active,.editButton:hover{
+color: white;
+background-color: #e8702e;
+padding: 10px 14px 8px 21px;
+font-weight: bolder;
+border-radius: 9%;
+text-decoration: none;
+}
 .list-inline {
   padding-left: 0;
   margin-left: -5px;
