@@ -39,11 +39,13 @@ class MetaFields extends Component {
             faq_object: this.props.faq_object,
             reviews_object: this.props.reviews_object,
             categoryType: "",
-            content_tabs_data: this.props.content_tabs_data && this.props.content_tabs_data.length > 0 ? this.props.content_tabs_data : []
+            content_tabs_data: this.props.content_tabs_data && this.props.content_tabs_data.length > 0 ? this.props.content_tabs_data : [],
+            bottom_content: this.props.bottom_content && this.props.bottom_content !== "" ? this.props.bottom_content : ""
         };
         this.onChageFaq = this.onChageFaq.bind(this)
         this.reviewsObject = this.reviewsObject.bind(this)
         this.updateContent = this.updateContent.bind(this)
+        this.updateBottomContent = this.updateBottomContent.bind(this)
         this.updateTabContent = this.updateTabContent.bind(this)
         this.addNewTabCotnent = this.addNewTabCotnent.bind(this)
         this.removeTabCotnent = this.removeTabCotnent.bind(this)
@@ -225,6 +227,13 @@ class MetaFields extends Component {
         _self.setState({ content: value })
         _self.props.handleChange(_self.state.content, "rte");
     }
+    updateBottomContent(val){
+        let _self = this
+        _self.setState({
+            bottom_content: val
+        })
+        _self.props.faqOnchange(_self.state.bottom_content,"bottom_content")
+    }
     jodit;
     setRef = jodit => this.jodit = jodit;
     config = {
@@ -349,13 +358,13 @@ class MetaFields extends Component {
                         placeholder="Enter H1 Title"
                     />
                 </li>
-                {show_content_tabs ? (content_tabs_data.length > 0 ? <div><li><label>Content tabs</label></li>
+                {show_content_tabs ? (content_tabs_data.length > 0 ? <div><li><label>Tab Content</label></li>
                     <li>{(content_tabs_data.map((value, key) => {
                         return (
                             <div key={key} className="contentTabs">
-                                <label>Tab Heading</label>
+                                <label>Heading</label>
                                 <input type="text" name="heading" data-heading={key} value={content_tabs_data[key]['heading']} onChange={this.updateTabContent.bind(this)} />
-                                <label>Tab Content</label>
+                                <label>Content </label>
                                 <JoditEditor data-content={key}
                                     editorRef={this.setRef}
                                     value={content_tabs_data[key]['content']}
@@ -371,75 +380,83 @@ class MetaFields extends Component {
                     }))}
                     </li></div> : <li>No Tab content is present<button type="button"
                         className="plusButton" onClick={this.addNewTabCotnent.bind(this)} data-btnid="0">+</button></li>) : ''}
-                <li><label>Content</label></li>
+                <li><label>{show_content_tabs ? 'Top Content' : 'Content'}</label></li>
                 <li>
                     <JoditEditor
                         editorRef={this.setRef}
                         value={this.state.content}
                         config={this.config}
                         onChange={this.updateContent}
+                    /></li>
+                    {show_content_tabs ? 
+                    <li><label>Bottom Content</label>
+                        <JoditEditor
+                        editorRef={this.setRef}
+                        value={this.state.bottom_content}
+                        config={this.config}
+                        onChange={this.updateBottomContent}
                     />
-                    {(faq_object && faq_object.length > 0) ? <li>
-                        <h3>Faq content</h3>
-                        {faq_object.map((val, i) => {
-                            return (
-                                <div className="faqData">
-                                    <label>
-                                        Question {i + 1}: </label>
-                                    <input type="text" onChange={this.onChageFaq.bind(i)} name="question" data-question={i} value={faq_object[i]["question"]} />
-                                    <label>Answer {i + 1}:</label>
-                                    <input type="text" onChange={this.onChageFaq.bind(i)} name="answer" data-answer={i} value={faq_object[i]["answer"]} />
-                                    {i == faq_object.length - 1 ? <div className="add-btns"><button type="button"
-                                        className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button><button type="button"
-                                            className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button></div> : <button type="button"
-                                                className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
+                    </li> : ''}
+                {(faq_object && faq_object.length > 0) ? <li>
+                    <h3>Faq content</h3>
+                    {faq_object.map((val, i) => {
+                        return (
+                            <div className="faqData">
+                                <label>
+                                    Question {i + 1}: </label>
+                                <input type="text" onChange={this.onChageFaq.bind(i)} name="question" data-question={i} value={faq_object[i]["question"]} />
+                                <label>Answer {i + 1}:</label>
+                                <input type="text" onChange={this.onChageFaq.bind(i)} name="answer" data-answer={i} value={faq_object[i]["answer"]} />
+                                {i == faq_object.length - 1 ? <div className="add-btns"><button type="button"
+                                    className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button><button type="button"
+                                        className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={i}>+</button></div> : <button type="button"
+                                            className="plusButton" onClick={this.removeFaq.bind(this)} data-btnid={i}>-</button>}
+                            </div>
+                        )
+                    })}
+                </li> : <li>No faq's present<button type="button"
+                    className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></li>}
+                {showReviews ? (reviews_object && reviews_object.length > 0) ?
+                    <li>
+                        <h3>User reviews</h3>
+                        {reviews_object.map((rev, i) => {
+                            return (<div className="reviews">
+                                <label>Average review rating</label>
+                                <input type="text" onChange={this.reviewsObject.bind(this)} data-listreviewid={i} name="avg_review_rating" value={this.state.reviews_object[i]["avg_review_rating"]} />
+                                <label>Total number of reviews</label>
+                                <input type="text" onChange={this.reviewsObject.bind(this)} data-listreviewid={i} name="total_reviews_count" value={this.state.reviews_object[i]["total_reviews_count"]} />
+                                <div className="reviewsList">
+                                    <h3>Reviews List</h3>
+                                    {this.state.reviews_object[i]["reviews_list"] && this.state.reviews_object[i]["reviews_list"].length > 0 ?
+                                        this.state.reviews_object[i]["reviews_list"].map((list, k) => {
+                                            return (<div>
+                                                <label>Rating</label>
+                                                <input type="text" value={this.state.reviews_object[i]["reviews_list"][k]["rating"]} onChange={this.reviewsObject.bind(this)} data-listid={k} data-listreviewid={i} name="rating" />
+                                                <label>Reviewer Name</label>
+                                                <input type="text" value={this.state.reviews_object[i]["reviews_list"][k]["reviewer_name"]} onChange={this.reviewsObject.bind(this)} data-listid={k} data-listreviewid={i} name="reviewer_name" />
+                                                <label>Review Text</label>
+                                                <textarea value={this.state.reviews_object[i]["reviews_list"][k]["review_text"]}
+                                                    onChange={this.reviewsObject.bind(this)} data-listid={k} data-listreviewid={i} name="review_text" />
+                                                {k == reviews_object[i]["reviews_list"].length - 1 ? <div className="add-btns"><button type="button"
+                                                    className="plusButton" onClick={this.removeReview.bind(this)} data-btnid={k}>-</button><button type="button"
+                                                        className="plusButton" onClick={this.addReview.bind(this)} data-btnid={k}>+</button></div> : <button type="button"
+                                                            className="plusButton" onClick={this.removeReview.bind(this)} data-btnid={k}>-</button>}
+                                            </div>)
+                                        })
+                                        : ""}
                                 </div>
-                            )
+                            </div>)
                         })}
-                    </li> : <li>No faq's present<button type="button"
-                        className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid="0">+</button></li>}
-                    {showReviews ? (reviews_object && reviews_object.length > 0) ?
-                        <li>
-                            <h3>User reviews</h3>
-                            {reviews_object.map((rev, i) => {
-                                return (<div className="reviews">
-                                    <label>Average review rating</label>
-                                    <input type="text" onChange={this.reviewsObject.bind(this)} data-listreviewid={i} name="avg_review_rating" value={this.state.reviews_object[i]["avg_review_rating"]} />
-                                    <label>Total number of reviews</label>
-                                    <input type="text" onChange={this.reviewsObject.bind(this)} data-listreviewid={i} name="total_reviews_count" value={this.state.reviews_object[i]["total_reviews_count"]} />
-                                    <div className="reviewsList">
-                                        <h3>Reviews List</h3>
-                                        {this.state.reviews_object[i]["reviews_list"] && this.state.reviews_object[i]["reviews_list"].length > 0 ?
-                                            this.state.reviews_object[i]["reviews_list"].map((list, k) => {
-                                                return (<div>
-                                                    <label>Rating</label>
-                                                    <input type="text" value={this.state.reviews_object[i]["reviews_list"][k]["rating"]} onChange={this.reviewsObject.bind(this)} data-listid={k} data-listreviewid={i} name="rating" />
-                                                    <label>Reviewer Name</label>
-                                                    <input type="text" value={this.state.reviews_object[i]["reviews_list"][k]["reviewer_name"]} onChange={this.reviewsObject.bind(this)} data-listid={k} data-listreviewid={i} name="reviewer_name" />
-                                                    <label>Review Text</label>
-                                                    <textarea value={this.state.reviews_object[i]["reviews_list"][k]["review_text"]}
-                                                        onChange={this.reviewsObject.bind(this)} data-listid={k} data-listreviewid={i} name="review_text" />
-                                                    {k == reviews_object[i]["reviews_list"].length - 1 ? <div className="add-btns"><button type="button"
-                                                        className="plusButton" onClick={this.removeReview.bind(this)} data-btnid={k}>-</button><button type="button"
-                                                            className="plusButton" onClick={this.addReview.bind(this)} data-btnid={k}>+</button></div> : <button type="button"
-                                                                className="plusButton" onClick={this.removeReview.bind(this)} data-btnid={k}>-</button>}
-                                                </div>)
-                                            })
-                                            : ""}
-                                    </div>
-                                </div>)
-                            })}
-                        </li> : <li>No reviews are present for this page<button type="button"
-                            className="plusButton" onClick={this.addReview.bind(this)} data-btnid="0">+</button></li> : ""}
-                    <button
-                        className="save-btn"
-                        type="submit"
-                        onClick={this.props.handleFormSubmit}
-                        ref={input => this.inputElement = input}
-                    >
-                        Save{" "}
-                    </button>
-                </li>
+                    </li> : <li>No reviews are present for this page<button type="button"
+                        className="plusButton" onClick={this.addReview.bind(this)} data-btnid="0">+</button></li> : ""}
+                <button
+                    className="save-btn"
+                    type="submit"
+                    onClick={this.props.handleFormSubmit}
+                    ref={input => this.inputElement = input}
+                >
+                    Save{" "}
+                </button>
             </ul>
         );
     }

@@ -102,7 +102,8 @@ class FlightsHomePage extends PureComponent {
       updatedInEditForm: false,
       loading: false,
       last_modified_list: [],
-      content_tabs_data: []
+      content_tabs_data: [],
+      bottom_content:""
 
     };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -204,6 +205,7 @@ class FlightsHomePage extends PureComponent {
         reviews_object: flightValues["reviews_object"] && flightValues["reviews_object"].length > 0 ? flightValues["reviews_object"] : [],
         last_modified_list: flightValues['last_modified_list'] && flightValues["last_modified_list"].length > 0 ? flightValues["last_modified_list"] : [],
         content_tabs_data: flightValues["content_tabs_data"] && flightValues["content_tabs_data"].length > 0 ? JSON.stringify(flightValues["content_tabs_data"]) : "",
+        bottom_content: flightValues["bottom_content"] && flightValues["bottom_content"] !== "" ? flightValues["bottom_content"] : "",
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
             ? flightValues["airlineName"]
@@ -270,7 +272,8 @@ class FlightsHomePage extends PureComponent {
           options: [],
           updatedInEditForm: false,
           last_modified_list: [],
-          content_tabs_data:[]
+          content_tabs_data:[],
+          bottom_content:""
         });
         this.fetchDetails();
       })
@@ -594,6 +597,7 @@ class FlightsHomePage extends PureComponent {
               reviews_object: [],
               last_modified_list: [],
               content_tabs_data:[],
+              bottom_content:"",
               loading: false
             });
           }
@@ -651,7 +655,8 @@ class FlightsHomePage extends PureComponent {
       faq_object: [],
       reviews_object: [],
       last_modified_list: [],
-      content_tabs_data:[]
+      content_tabs_data:[],
+      bottom_content:"",
     });
   };
 
@@ -710,6 +715,7 @@ class FlightsHomePage extends PureComponent {
         faq_object: result["common"][idx]["faq_object"] ? result["common"][idx]["faq_object"] : [],
         last_modified_list: result["common"][idx]["last_modified_list"] ? result["common"][idx]["last_modified_list"] : [],
         content_tabs_data:[],
+        bottom_content: "",
         readOnlyValue: true,
         editClicked: true
       });
@@ -728,7 +734,8 @@ class FlightsHomePage extends PureComponent {
         faq_object: [],
         reviews_object: [],
         last_modified_list: [],
-        content_tabs_data:[]
+        content_tabs_data:[],
+        bottom_content:""
       })
       setTimeout(function () {
         debugger
@@ -750,6 +757,7 @@ class FlightsHomePage extends PureComponent {
           reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [],
           last_modified_list: result[pageType][subType][idx]["last_modified_list"] ? result[pageType][subType][idx]["last_modified_list"] : [],
           content_tabs_data: result[pageType][subType][idx]["content_tabs_data"] ? JSON.parse(result[pageType][subType][idx]["content_tabs_data"]) : [],
+          bottom_content: result[pageType][subType][idx]["bottom_content"] ? result[pageType][subType][idx]["bottom_content"] : "",
           arrCityNameSelected:
             _self.state.arrCityNameSelected != ""
               ? _self.state.arrCityNameSelected
@@ -1222,6 +1230,7 @@ class FlightsHomePage extends PureComponent {
                     faq_object={this.state.faq_object}
                     reviews_object={this.state.reviews_object}
                     content_tabs_data={this.state.content_tabs_data}
+                    bottom_content={this.state.bottom_content}
                     handleRTEchange={content => this.handleRTEchange(content)}
                     backBtnFun={this.backBtnFun.bind(this)}
                     faqOnchange={this.faqOnchange.bind(this)}
