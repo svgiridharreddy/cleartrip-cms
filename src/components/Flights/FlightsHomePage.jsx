@@ -158,6 +158,18 @@ class FlightsHomePage extends PureComponent {
         return false
       }
     }
+    let content_tabs_data = _self.state.content_tabs_data
+    content_tabs_data.map((val,i) => {
+      if(val["heading"] && val["content"]){
+        return true
+      }else{
+        content_tabs_data.splice(i,1)
+      }
+    })
+    _self.setState({
+      content_tabs_data: content_tabs_data
+    })
+    debugger
     const flightValues = this.state;
     let user_data = JSON.parse(localStorage.getItem("user_data"));
     if (!user_data) {

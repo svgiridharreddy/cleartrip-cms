@@ -358,7 +358,7 @@ class MetaFields extends Component {
                         placeholder="Enter H1 Title"
                     />
                 </li>
-                {show_content_tabs ? (content_tabs_data.length > 0 ? <div><li><label>Tab Content</label></li>
+                {show_content_tabs ? (content_tabs_data.length > 0 ? <div><li><h3>Tab Content</h3></li>
                     <li>{(content_tabs_data.map((value, key) => {
                         return (
                             <div key={key} className="contentTabs">
@@ -380,7 +380,7 @@ class MetaFields extends Component {
                     }))}
                     </li></div> : <li>No Tab content is present<button type="button"
                         className="plusButton" onClick={this.addNewTabCotnent.bind(this)} data-btnid="0">+</button></li>) : ''}
-                <li><label>{show_content_tabs ? 'Top Content' : 'Content'}</label></li>
+                <li><h3>{show_content_tabs ? 'Top Content' : 'Content'}</h3></li>
                 <li>
                     <JoditEditor
                         editorRef={this.setRef}
@@ -389,7 +389,7 @@ class MetaFields extends Component {
                         onChange={this.updateContent}
                     /></li>
                     {show_content_tabs ? 
-                    <li><label>Bottom Content</label>
+                    <li><h3>Bottom Content</h3>
                         <JoditEditor
                         editorRef={this.setRef}
                         value={this.state.bottom_content}
