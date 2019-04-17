@@ -343,7 +343,7 @@ class FlightsHomePage extends PureComponent {
       }
       this.setState({ updatedInEditForm: true })
     }
-    if(this.state.domain === "IN" || e.target.value === "IN"){
+    if(e.target && (this.state.domain === "IN" || e.target.value === "IN")){
         if(this.state.language === "ar"){
           this.setState({
             language:"en"
