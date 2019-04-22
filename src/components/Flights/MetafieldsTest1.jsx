@@ -40,6 +40,7 @@ class MetaFields extends Component {
             reviews_object: this.props.reviews_object,
             categoryType: "",
             content_tabs_data: this.props.content_tabs_data && this.props.content_tabs_data.length > 0 ? this.props.content_tabs_data : [],
+            h2_lowest_fare_title: this.props.h2_lowest_fare_title ? this.props.h2_lowest_fare_title : "",
             bottom_content: this.props.bottom_content && this.props.bottom_content !== "" ? this.props.bottom_content : ""
         };
         this.onChageFaq = this.onChageFaq.bind(this)
@@ -288,16 +289,18 @@ class MetaFields extends Component {
             "web-checkin": "Web Checkin",
             index: "Index"
         };
-        const { title, description, keywords, h1Tag, categoryType } = this.props;
+        const { title, description, keywords, h1Tag, categoryType,h2_lowest_fare_title } = this.props;
         const { pageType, subType, faq_object, reviews_object, content_tabs_data } = this.state
         let showReviews = false
         let show_content_tabs = false
+        let show_h2_lowest_fare_title = false
         if ((pageType === "flight-booking" || pageType === "flight-schedule") && categoryType != "common") {
             if (pageType === "flight-booking" && subType == "overview") {
                 showReviews = true
                 show_content_tabs = true
             } else if (pageType === "flight-schedule" && subType == "routes") {
                 showReviews = true
+                show_h2_lowest_fare_title = true
             }
         }
 
@@ -355,9 +358,13 @@ class MetaFields extends Component {
                         required
                         onChange={e => this.props.handleMetaChanges(e, "h1Tag")}
                         name="h1Tag"
+    
                         placeholder="Enter H1 Title"
                     />
                 </li>
+                {show_h2_lowest_fare_title ? <li><label>Lowest fare title(H2)</label>
+                <input type="text" aria-label="Lowest fare title" value={h2_lowest_fare_title} onChange={e => this.props.handleMetaChanges(e,"h2_lowest_fare_title")}
+                name="h2_lowest_fare_title" required placeholder="Lowest fare title"/></li>:''}
                 {show_content_tabs ? (content_tabs_data.length > 0 ? <div><li><h3>Tab Content</h3></li>
                     <li>{(content_tabs_data.map((value, key) => {
                         return (

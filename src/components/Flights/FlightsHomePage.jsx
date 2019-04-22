@@ -103,6 +103,7 @@ class FlightsHomePage extends PureComponent {
       loading: false,
       last_modified_list: [],
       content_tabs_data: [],
+      h2_lowest_fare_title:"",
       bottom_content:""
 
     };
@@ -169,7 +170,6 @@ class FlightsHomePage extends PureComponent {
     _self.setState({
       content_tabs_data: content_tabs_data
     })
-    debugger
     const flightValues = this.state;
     let user_data = JSON.parse(localStorage.getItem("user_data"));
     if (!user_data) {
@@ -199,7 +199,6 @@ class FlightsHomePage extends PureComponent {
         })
       }
     }
-
     let postData = {
       flights_data: {
         domain: flightValues["domain"],
@@ -217,6 +216,7 @@ class FlightsHomePage extends PureComponent {
         reviews_object: flightValues["reviews_object"] && flightValues["reviews_object"].length > 0 ? flightValues["reviews_object"] : [],
         last_modified_list: flightValues['last_modified_list'] && flightValues["last_modified_list"].length > 0 ? flightValues["last_modified_list"] : [],
         content_tabs_data: flightValues["content_tabs_data"] && flightValues["content_tabs_data"].length > 0 ? JSON.stringify(flightValues["content_tabs_data"]) : "",
+        h2_lowest_fare_title: flightValues["h2_lowest_fare_title"] ? flightValues["h2_lowest_fare_title"] : "",
         bottom_content: flightValues["bottom_content"] && flightValues["bottom_content"] !== "" ? flightValues["bottom_content"] : "",
         airline_name:
           flightValues["airlineName"] && flightValues["airlineName"] != ""
@@ -285,6 +285,7 @@ class FlightsHomePage extends PureComponent {
           updatedInEditForm: false,
           last_modified_list: [],
           content_tabs_data:[],
+          h2_lowest_fare_title:"",
           bottom_content:""
         });
         this.fetchDetails();
@@ -609,6 +610,7 @@ class FlightsHomePage extends PureComponent {
               reviews_object: [],
               last_modified_list: [],
               content_tabs_data:[],
+              h2_lowest_fare_title:"",
               bottom_content:"",
               loading: false
             });
@@ -668,6 +670,7 @@ class FlightsHomePage extends PureComponent {
       reviews_object: [],
       last_modified_list: [],
       content_tabs_data:[],
+      h2_lowest_fare_title:"",
       bottom_content:"",
     });
   };
@@ -727,6 +730,7 @@ class FlightsHomePage extends PureComponent {
         faq_object: result["common"][idx]["faq_object"] ? result["common"][idx]["faq_object"] : [],
         last_modified_list: result["common"][idx]["last_modified_list"] ? result["common"][idx]["last_modified_list"] : [],
         content_tabs_data:[],
+        h2_lowest_fare_title:"",
         bottom_content: "",
         readOnlyValue: true,
         editClicked: true
@@ -747,10 +751,10 @@ class FlightsHomePage extends PureComponent {
         reviews_object: [],
         last_modified_list: [],
         content_tabs_data:[],
+        h2_lowest_fare_title:"",
         bottom_content:""
       })
       setTimeout(function () {
-        debugger
         _self.setState({
           renderTables: false,
           showComponent: true,
@@ -769,6 +773,7 @@ class FlightsHomePage extends PureComponent {
           reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [],
           last_modified_list: result[pageType][subType][idx]["last_modified_list"] ? result[pageType][subType][idx]["last_modified_list"] : [],
           content_tabs_data: result[pageType][subType][idx]["content_tabs_data"] ? JSON.parse(result[pageType][subType][idx]["content_tabs_data"]) : [],
+          h2_lowest_fare_title: result[pageType][subType][idx]["h2_lowest_fare_title"] ? result[pageType][subType][idx]["h2_lowest_fare_title"] : "",
           bottom_content: result[pageType][subType][idx]["bottom_content"] ? result[pageType][subType][idx]["bottom_content"] : "",
           arrCityNameSelected:
             _self.state.arrCityNameSelected != ""
@@ -1242,6 +1247,7 @@ class FlightsHomePage extends PureComponent {
                     faq_object={this.state.faq_object}
                     reviews_object={this.state.reviews_object}
                     content_tabs_data={this.state.content_tabs_data}
+                    h2_lowest_fare_title={this.state.h2_lowest_fare_title}
                     bottom_content={this.state.bottom_content}
                     handleRTEchange={content => this.handleRTEchange(content)}
                     backBtnFun={this.backBtnFun.bind(this)}
