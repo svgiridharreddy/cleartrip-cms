@@ -33,12 +33,14 @@ class EditUniqueContent extends Component {
       meta_title: "",
       meta_description: "",
       meta_keyword: "",
-      faqs: []
+      faqs: [],
+      reviews: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.returnOptions = this.returnOptions.bind(this);
-    this.onChageFaq = this.onChageFaq.bind(this);
+    this.onChangeFaq = this.onChangeFaq.bind(this);
+    this.onChangeReview = this.onChangeReview.bind(this);
     this.checkBackBtnFun = this.checkBackBtnFun.bind(this);
     this.updateHeaderContent = this.updateHeaderContent.bind(this);
     this.updateFooterContent = this.updateFooterContent.bind(this);
@@ -73,6 +75,26 @@ class EditUniqueContent extends Component {
       NotificationManager.error("Please Fill All Faq's Properly", "Field Missing", "3000")
     }
   }
+  addNewReview(e) {
+    let _self = this
+    let reviews = _self.state.reviews
+    let addReview = true
+    reviews.map( (review, i) => {
+      if (review["user_name"] != "" && review["review"] != "" && review["rating"] != "") {
+        addReview = true
+      } else {
+        addReview = false
+      }
+    })
+    if (addReview) {
+      reviews.push({ user_name: "", review: "", rating: "" })
+      _self.setState({
+        reviews: reviews
+      })
+    } else {
+      NotificationManager.error("Please Fill All Review's Properly", "Field Missing", "3000")
+    }
+  }
   removeFaq(e) {
     let _self = this
     let faqs = this.state.faqs
@@ -82,7 +104,16 @@ class EditUniqueContent extends Component {
       faqs: faqs
     })
   };
-  onChageFaq(e) {
+  removeReview(e) {
+    let _self = this
+    let reviews = _self.state.reviews
+    let index = parseInt(e.target.dataset.btnid)
+    reviews.splice(index, 1)
+    _self.setState({
+      reviews: reviews
+    })
+  };
+  onChangeFaq(e) {
     let _self = this
     let faqs = _self.state.faqs
     let qIndex = parseInt(e.target.dataset.question)
@@ -93,6 +124,25 @@ class EditUniqueContent extends Component {
       faqs: faqs
     })
   }
+  onChangeReview(e) {
+    let _self = this
+    let reviews = _self.state.reviews
+    let uNIndex = parseInt(e.target.dataset.user_name)
+    let rIndex = parseInt(e.target.dataset.review)
+    let raIndex = parseInt(e.target.dataset.rating)
+    let index;
+    if (e.target.name === "user_name") {
+      index =  uNIndex
+    } else if (e.target.name === "review") {
+      index =  rIndex
+    } else if (e.target.name === "rating") {
+      index =  raIndex
+    }
+    reviews[index][e.target.name] = e.target.value
+    _self.setState({
+      reviews: reviews
+    })
+  }
 
   componentDidMount() {
     var pathName = API_URL + this.props.contentRecord.id;
@@ -100,6 +150,7 @@ class EditUniqueContent extends Component {
       .then(response => response.json())
       .then(resData => {
       var faqContent = (resData.faqs === null || resData.faqs === "") ? [] : JSON.parse(resData.faqs) || []
+      var reviewSection = (resData.reviews === null || resData.reviews === "") ? [] : JSON.parse(resData.reviews) || []
       this.setState({
         id: resData.id,
         domain_url: resData.domain_url,
@@ -113,7 +164,8 @@ class EditUniqueContent extends Component {
         meta_keyword: resData.meta_keyword,
         top_content: resData.top_content || '',
         bottom_content: resData.bottom_content || '',
-        faqs: faqContent
+        faqs: faqContent,
+        reviews: reviewSection
       });
     });
   }
@@ -155,6 +207,7 @@ class EditUniqueContent extends Component {
   render() {
     const {
       faqs,
+      reviews,
       top_content,
       bottom_content,
       domain_url,
@@ -245,9 +298,9 @@ class EditUniqueContent extends Component {
                   return (
                     <div className="faqData">
                       <label>Question {i + 1}: </label>
-                        <input type="text" onChange={this.onChageFaq.bind(i)} name="question" data-question={i} value={faqs[i]["question"]} />
+                        <input type="text" onChange={this.onChangeFaq.bind(i)} name="question" data-question={i} value={faqs[i]["question"]} />
                       <label>Answer {i + 1}:</label>
-                        <input type="text" onChange={this.onChageFaq.bind(i)} name="answer" data-answer={i} value={faqs[i]["answer"]} />
+                        <input type="text" onChange={this.onChangeFaq.bind(i)} name="answer" data-answer={i} value={faqs[i]["answer"]} />
                       {
                         i == faqs.length - 1 ? 
                         <div>
@@ -266,6 +319,38 @@ class EditUniqueContent extends Component {
               {
                 faqs.length === 0 ? <button type="button"
                         className="plusButton" onClick={this.addNewFaq.bind(this)} data-btnid={0}>+</button> : ""
+              }
+            </li>
+            <li>
+              <label>Reviews Section</label>
+              {
+                reviews.map((val, i) => {
+                  return (
+                    <div className="faqData">
+                      <label>User Name {i + 1}: </label>
+                        <input type="text" onChange={this.onChangeReview.bind(i)} name="user_name" data-user_name={i} value={reviews[i]["user_name"]} />
+                      <label>Review {i + 1}:</label>
+                        <input type="text" onChange={this.onChangeReview.bind(i)} name="review" data-review={i} value={reviews[i]["review"]} />
+                      <label>Rating {i + 1}:</label>
+                        <input type="text" onChange={this.onChangeReview.bind(i)} name="rating" data-rating={i} value={reviews[i]["rating"]} />
+                      {
+                        i == reviews.length - 1 ? 
+                        <div>
+                          <button type="button" className="plusButton" onClick={this.removeReview.bind(this)} data-btnid={i}>-</button>
+                          <button type="button" className="plusButton" onClick={this.addNewReview.bind(this)} data-btnid={i}>+</button> 
+                        </div>
+                          : 
+                        <div>
+                          <button type="button" className="plusButton" onClick={this.removeReview.bind(this)} data-btnid={i}>-</button>
+                        </div>
+                      }
+                    </div>
+                  )
+                })
+              }
+              {
+                reviews.length === 0 ? <button type="button"
+                        className="plusButton" onClick={this.addNewReview.bind(this)} data-btnid={0}>+</button> : ""
               }
             </li>
             <li>
