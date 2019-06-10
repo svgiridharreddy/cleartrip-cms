@@ -35,6 +35,7 @@ class UniqueContentDataCollection extends Component {
 			bottom_content: '',
 			faq: '',
 			faqs: JSON.stringify([]),
+			reviews: JSON.stringify([]),
 			content_type: props.content_type,
 			itemData: {},
 			is_loaded: false,
@@ -186,6 +187,7 @@ class UniqueContentDataCollection extends Component {
 
 	handleChangeData(result) {
 		var faqContent = JSON.stringify(result.faqs)
+		var reviewSection = JSON.stringify(result.reviews)
 		const data = {
 			domain_url: result.domain_url,
 			domain_name: result.domain_name,
@@ -200,7 +202,8 @@ class UniqueContentDataCollection extends Component {
 			meta_keyword: result.meta_keyword,
 			top_content: result.top_content,
 			bottom_content: result.bottom_content,
-			faqs: faqContent
+			faqs: faqContent,
+			reviews: reviewSection
 		}
 		axios.post(`${this.state.host}/cmshotels/content-section-data`, data)
 			.then(({ data }) => {
@@ -230,6 +233,7 @@ class UniqueContentDataCollection extends Component {
 
 	handleChangeEditData(result) {
 		var faqContent = JSON.stringify(result.faqs)
+		var reviewSection = JSON.stringify(result.reviews)
 		const data = {
 			domain_url: result.domain_url,
 			content_type: result.content_type,
@@ -244,7 +248,8 @@ class UniqueContentDataCollection extends Component {
 			meta_keyword: result.meta_keyword,
 			top_content: result.top_content,
 			bottom_content: result.bottom_content,
-			faqs: faqContent
+			faqs: faqContent,
+			reviews: reviewSection
 		};
 		axios
 			.post(
