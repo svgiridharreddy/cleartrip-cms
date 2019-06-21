@@ -171,7 +171,7 @@ class HotelUniqueContent extends Component {
 	}
 
 
-  addEmoji = (e) => {
+  addEmojiTitle = (e) => {
     //console.log(e.unified)
     if (e.unified.length <= 5){
       let emojiPic = String.fromCodePoint(`0x${e.unified}`)
@@ -191,6 +191,25 @@ class HotelUniqueContent extends Component {
     }
   }
 
+  addEmojiDescription = (e) => {
+    //console.log(e.unified)
+    if (e.unified.length <= 5){
+      let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+      this.setState({
+        meta_description: this.state.meta_description + emojiPic
+      })
+    }else {
+      let sym = e.unified.split('-')
+      let codesArray = []
+      sym.forEach(el => codesArray.push('0x' + el))
+      //console.log(codesArray.length)
+      //console.log(codesArray)  // ["0x1f3f3", "0xfe0f"]
+      let emojiPic = String.fromCodePoint(...codesArray)
+      this.setState({
+        meta_description: this.state.meta_description + emojiPic
+      })
+    }
+  }
 
 	handleSubmit(e) {
 		this.props.handleChangeData(this.state)
@@ -229,12 +248,15 @@ class HotelUniqueContent extends Component {
 							<label>Meta Title</label>
 							<input type="text" name="meta_title" onChange={this.handleChange} value={this.state.meta_title} />
               <span>
-                <Picker onSelect={this.addEmoji} />
+                <Picker onSelect={this.addEmojiTitle} />
               </span>
 						</li>
 						<li>
 							<label>Meta Description</label>
 							<input type="text" name="meta_description" onChange={this.handleChange} value={this.state.meta_description} />
+              <span>
+                <Picker onSelect={this.addEmojiDescription} />
+              </span>
 						</li>
 						<li>
 							<label>Meta Keywords</label>

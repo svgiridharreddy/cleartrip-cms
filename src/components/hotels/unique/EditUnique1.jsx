@@ -192,7 +192,7 @@ class EditUniqueContent extends Component {
     });
   }
 
-  addEmoji = (e) => {
+  addEmojiTitle = (e) => {
     //console.log(e.unified)
     if (e.unified.length <= 5){
       let emojiPic = String.fromCodePoint(`0x${e.unified}`)
@@ -208,6 +208,26 @@ class EditUniqueContent extends Component {
       let emojiPic = String.fromCodePoint(...codesArray)
       this.setState({
         meta_title: this.state.meta_title + emojiPic
+      })
+    }
+  }
+
+  addEmojiDescription = (e) => {
+    //console.log(e.unified)
+    if (e.unified.length <= 5){
+      let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+      this.setState({
+        meta_description: this.state.meta_description + emojiPic
+      })
+    }else {
+      let sym = e.unified.split('-')
+      let codesArray = []
+      sym.forEach(el => codesArray.push('0x' + el))
+      //console.log(codesArray.length)
+      //console.log(codesArray)  // ["0x1f3f3", "0xfe0f"]
+      let emojiPic = String.fromCodePoint(...codesArray)
+      this.setState({
+        meta_description: this.state.meta_description + emojiPic
       })
     }
   }
@@ -287,12 +307,15 @@ class EditUniqueContent extends Component {
               <label>Meta Title</label>
               <input type="text" value={meta_title} name="meta_title" onChange={this.handleChange} />
               <span>
-                <Picker onSelect={this.addEmoji} />
+                <Picker onSelect={this.addEmojiTitle} />
               </span>
             </li>
             <li>
               <label>Meta Description</label>
               <input type="text" value={meta_description} name="meta_description" onChange={this.handleChange} />
+              <span>
+                <Picker onSelect={this.addEmojiDescription} />
+              </span>
             </li>
             <li>
               <label>Meta Keywords</label>
