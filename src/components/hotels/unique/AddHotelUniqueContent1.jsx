@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { host } from '../../helper';
 import { Alert, Button } from 'react-bootstrap';
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 import {
   NotificationContainer,
   NotificationManager
@@ -167,6 +169,29 @@ class HotelUniqueContent extends Component {
 			[e.target.name]: e.target.value
 		});
 	}
+
+
+  addEmoji = (e) => {
+    //console.log(e.unified)
+    if (e.unified.length <= 5){
+      let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+      this.setState({
+        meta_title: this.state.meta_title + emojiPic
+      })
+    }else {
+      let sym = e.unified.split('-')
+      let codesArray = []
+      sym.forEach(el => codesArray.push('0x' + el))
+      //console.log(codesArray.length)
+      //console.log(codesArray)  // ["0x1f3f3", "0xfe0f"]
+      let emojiPic = String.fromCodePoint(...codesArray)
+      this.setState({
+        meta_title: this.state.meta_title + emojiPic
+      })
+    }
+  }
+
+
 	handleSubmit(e) {
 		this.props.handleChangeData(this.state)
 	}
@@ -203,6 +228,9 @@ class HotelUniqueContent extends Component {
 						<li>
 							<label>Meta Title</label>
 							<input type="text" name="meta_title" onChange={this.handleChange} value={this.state.meta_title} />
+              <span>
+                <Picker onSelect={this.addEmoji} />
+              </span>
 						</li>
 						<li>
 							<label>Meta Description</label>

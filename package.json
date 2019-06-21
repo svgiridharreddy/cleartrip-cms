@@ -11,6 +11,7 @@
     "draft-js": "^0.10.5",
     "draft-js-export-html": "^1.3.0",
     "draftjs-to-html": "^0.8.4",
+    "emoji-mart": "^2.11.1",
     "fetch": "^1.1.0",
     "jodit-react": "^1.0.26",
     "mdbreact": "^4.9.0",

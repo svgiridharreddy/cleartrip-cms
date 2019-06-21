@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { host } from '../../helper';
 import {Button} from "react-bootstrap";
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 import {
   NotificationContainer,
   NotificationManager
@@ -190,6 +192,26 @@ class EditUniqueContent extends Component {
     });
   }
 
+  addEmoji = (e) => {
+    //console.log(e.unified)
+    if (e.unified.length <= 5){
+      let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+      this.setState({
+        meta_title: this.state.meta_title + emojiPic
+      })
+    }else {
+      let sym = e.unified.split('-')
+      let codesArray = []
+      sym.forEach(el => codesArray.push('0x' + el))
+      //console.log(codesArray.length)
+      //console.log(codesArray)  // ["0x1f3f3", "0xfe0f"]
+      let emojiPic = String.fromCodePoint(...codesArray)
+      this.setState({
+        meta_title: this.state.meta_title + emojiPic
+      })
+    }
+  }
+
   returnOptions(optData) {
     return optData.map((country, i) => {
       return (
@@ -264,6 +286,9 @@ class EditUniqueContent extends Component {
             <li>
               <label>Meta Title</label>
               <input type="text" value={meta_title} name="meta_title" onChange={this.handleChange} />
+              <span>
+                <Picker onSelect={this.addEmoji} />
+              </span>
             </li>
             <li>
               <label>Meta Description</label>
