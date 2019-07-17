@@ -26,6 +26,7 @@ class MetaFields extends Component {
             h1Tag: "",
             keywords: "",
             airlinName: "",
+            airlineTagName: "",
             depCityName: "",
             arrCityName: "",
             readOnlyValue: "",
@@ -247,7 +248,8 @@ class MetaFields extends Component {
             keywords: nextProps.keywords,
             h1Tag: nextProps.h1Tag,
             content: nextProps.content,
-            faq_object: nextProps.faq_object
+            faq_object: nextProps.faq_object,
+            airlineTagName: nextProps.airlineTagName
         });
     }
 
@@ -289,15 +291,17 @@ class MetaFields extends Component {
             "web-checkin": "Web Checkin",
             index: "Index"
         };
-        const { title, description, keywords, h1Tag, categoryType,h2_lowest_fare_title } = this.props;
+        const { title, description, keywords, h1Tag, categoryType,h2_lowest_fare_title, airlineTagName } = this.props;
         const { pageType, subType, faq_object, reviews_object, content_tabs_data } = this.state
         let showReviews = false
         let show_content_tabs = false
         let show_h2_lowest_fare_title = false
+        let show_airline_tag_name = false
         if ((pageType === "flight-booking" || pageType === "flight-schedule") && categoryType != "common") {
             if (pageType === "flight-booking" && subType == "overview") {
                 showReviews = true
                 show_content_tabs = true
+                show_airline_tag_name = true
             } else if (pageType === "flight-schedule" && subType == "routes") {
                 showReviews = true
                 show_h2_lowest_fare_title = true
@@ -362,6 +366,19 @@ class MetaFields extends Component {
                         placeholder="Enter H1 Title"
                     />
                 </li>
+                {show_airline_tag_name ?  <li>
+                    <label>Airline Tag Name</label>
+                    <input
+                        type="text"
+                        aria-label="Airline Tag Name"
+                        value={airlineTagName}
+                        required
+                        onChange={e => this.props.handleMetaChanges(e, "airlineTagName")}
+                        name="airlineTagName"
+                        placeholder="Enter the airline tag name"
+                    />
+                </li> : ""}
+                
                 {show_h2_lowest_fare_title ? <li><label>Lowest fare title(H2)</label>
                 <input type="text" aria-label="Lowest fare title" value={h2_lowest_fare_title} onChange={e => this.props.handleMetaChanges(e,"h2_lowest_fare_title")}
                 name="h2_lowest_fare_title" required placeholder="Lowest fare title"/></li>:''}

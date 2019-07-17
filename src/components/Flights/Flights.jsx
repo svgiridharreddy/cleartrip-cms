@@ -120,6 +120,7 @@ class Flights extends Component {
     });
   };
   handleAutoSearch = (e, fieldName) => {
+    debugger
     let target_value = e;
     if (target_value !== "" && target_value.length >= -1) {
       let url = "";
@@ -164,10 +165,11 @@ class Flights extends Component {
   };
 
   handleFormSubmit = e => {
+    debugger
     e.preventDefault();
-    debugger;
+    debugger
     const flightValues = this.state;
-
+    debugger
     let postData = {
       flights_data: {
         domain: flightValues["currentDomain"],
