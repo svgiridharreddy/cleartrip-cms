@@ -78,6 +78,7 @@ class FlightsApprovalPending extends Component {
 
     handleShow(data) {
         let modelData = ""
+        debugger
         if (data["last_modified_list"].length > 0) {
             modelData = data["last_modified_list"].map((el, i) => {
                 let oldvalue = ''
@@ -132,7 +133,8 @@ class FlightsApprovalPending extends Component {
                     tabObj["Domain-Section-Language"] = data["domain"] + "-" + data["section"] + "-" + data["language"]
                 } else if (col === "Last modified") {
                     let lastModifiedArray = []
-                    let mapFields = { title: "Title", heading: "H1 tag", h1Tag: "H1 tag", keyword: "Keywords", keywords: "Keywords", description: "Description", faq_object: "Faq data", reviews_object: "Reviews", content: "Content",content_tabs_data:"Content tabs data",bottom_content:"Bottom Content",h2_lowest_fare_title:"H2 lowest fare title" }
+                    let mapFields = { title: "Title", heading: "H1 tag", h1Tag: "H1 tag", keyword: "Keywords", keywords: "Keywords", description: "Description", faq_object: "Faq data", reviews_object: "Reviews", content: "Content",content_tabs_data:"Content tabs data",bottom_content:"Bottom Content",h2_lowest_fare_title:"H2 lowest fare title",airlineTagName: "Airline Tag Name" }
+                    debugger
                     if (data["last_modified_list"] && data["last_modified_list"].length > 0) {
                         data["last_modified_list"].map((v, k) => {
                             if (mapFields[v]) {

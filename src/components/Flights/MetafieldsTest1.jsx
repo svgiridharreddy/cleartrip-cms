@@ -10,6 +10,8 @@ import "font-awesome/css/font-awesome.css";
 import 'jodit';
 import 'jodit/build/jodit.min.css';
 import JoditEditor from "jodit-react";
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 import $ from "jquery";
 window.jQuery = $;
 window.$ = $;
@@ -17,11 +19,12 @@ global.jQuery = $;
 class MetaFields extends Component {
     constructor(props) {
         super(props);
+        debugger
         this.state = {
             pageType: this.props.pageType,
             subType: this.props.subType,
-            title: "",
-            description: "",
+            title: this.props.title,
+            description: this.props.description,
             content: this.props.content ? this.props.content : "",
             h1Tag: "",
             keywords: "",
@@ -52,6 +55,8 @@ class MetaFields extends Component {
         this.addNewTabCotnent = this.addNewTabCotnent.bind(this)
         this.removeTabCotnent = this.removeTabCotnent.bind(this)
         this.removeObjData = this.removeObjData.bind(this)
+        this.addEmojiTitle =  this.addEmojiTitle.bind(this)
+        this.addEmojiDescription =  this.addEmojiDescription.bind(this)
     }
 
     onChange1 = content => {
@@ -241,6 +246,46 @@ class MetaFields extends Component {
     config = {
         readonly: false
     }
+
+    addEmojiTitle = (e) => {
+    //console.log(e.unified)
+    if (e.unified.length <= 5){
+      let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+      this.setState({
+        title: this.state.title + emojiPic
+      })
+    }else {
+      let sym = e.unified.split('-')
+      let codesArray = []
+      sym.forEach(el => codesArray.push('0x' + el))
+      //console.log(codesArray.length)
+      //console.log(codesArray)  // ["0x1f3f3", "0xfe0f"]
+      let emojiPic = String.fromCodePoint(...codesArray)
+      this.setState({
+        title: this.state.title + emojiPic
+      })
+    }
+  }
+
+  addEmojiDescription = (e) => {
+    //console.log(e.unified)
+    if (e.unified.length <= 5){
+      let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+      this.setState({
+        description: this.state.description + emojiPic
+      })
+    }else {
+      let sym = e.unified.split('-')
+      let codesArray = []
+      sym.forEach(el => codesArray.push('0x' + el))
+      //console.log(codesArray.length)
+      //console.log(codesArray)  // ["0x1f3f3", "0xfe0f"]
+      let emojiPic = String.fromCodePoint(...codesArray)
+      this.setState({
+        description: this.state.description + emojiPic
+      })
+    }
+  }
     componentWillReceiveProps(nextProps) {
         this.setState({
             title: nextProps.title,
@@ -323,10 +368,13 @@ class MetaFields extends Component {
                         name="title"
                         placeholder="Title"
                         aria-label="Title"
-                        value={title}
+                        value={this.state.title}
                         required
                         onChange={e => this.props.handleMetaChanges(e, "title")}
                     />
+                    <span>
+                    <Picker onSelect={this.addEmojiTitle} />
+                    </span>
                 </li>
                 <li>
                     <label>Description</label>
@@ -336,10 +384,13 @@ class MetaFields extends Component {
                         placeholder="Description"
                         aria-label="Description"
                         aria-describedby="basic-addon1"
-                        value={description}
+                        value={this.state.description}
                         required
                         onChange={e => this.props.handleMetaChanges(e, "description")}
                     />
+                    <span>
+                    <Picker onSelect={this.addEmojiDescription} />
+                    </span>
                 </li>
                 <li>
                     <label>Keywords</label>
