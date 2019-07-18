@@ -89,6 +89,9 @@ class FlightsApprovalPending extends Component {
                 } else if (el === "keywords") {
                     oldvalue = data["prev_version"]["keyword"] || ''
                     newValue = data["keyword"] || ''
+                }else if(el === "airlineTagName"){
+                    oldvalue = data["prev_version"]["airline_tag_name"] || ''
+                    newValue = data["airline_tag_name"] || ''
                 } else {
                     oldvalue = data["prev_version"][el] || ''
                     newValue = data[el] || ''
