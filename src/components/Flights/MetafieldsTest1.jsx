@@ -13,6 +13,7 @@ import JoditEditor from "jodit-react";
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import $ from "jquery";
+import { func } from "prop-types";
 window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
@@ -55,8 +56,8 @@ class MetaFields extends Component {
         this.addNewTabCotnent = this.addNewTabCotnent.bind(this)
         this.removeTabCotnent = this.removeTabCotnent.bind(this)
         this.removeObjData = this.removeObjData.bind(this)
-        this.addEmojiTitle =  this.addEmojiTitle.bind(this)
-        this.addEmojiDescription =  this.addEmojiDescription.bind(this)
+        this.addEmojiTitle = this.addEmojiTitle.bind(this)
+        this.addEmojiDescription = this.addEmojiDescription.bind(this)
     }
 
     onChange1 = content => {
@@ -234,12 +235,12 @@ class MetaFields extends Component {
         _self.setState({ content: value })
         _self.props.handleChange(_self.state.content, "rte");
     }
-    updateBottomContent(val){
+    updateBottomContent(val) {
         let _self = this
         _self.setState({
             bottom_content: val
         })
-        _self.props.faqOnchange(_self.state.bottom_content,"bottom_content")
+        _self.props.faqOnchange(_self.state.bottom_content, "bottom_content")
     }
     jodit;
     setRef = jodit => this.jodit = jodit;
@@ -248,45 +249,56 @@ class MetaFields extends Component {
     }
 
     addEmojiTitle = (e) => {
-    //console.log(e.unified)
-    if (e.unified.length <= 5){
-      let emojiPic = String.fromCodePoint(`0x${e.unified}`)
-      this.setState({
-        title: this.state.title + emojiPic
-      })
-    }else {
-      let sym = e.unified.split('-')
-      let codesArray = []
-      sym.forEach(el => codesArray.push('0x' + el))
-      //console.log(codesArray.length)
-      //console.log(codesArray)  // ["0x1f3f3", "0xfe0f"]
-      let emojiPic = String.fromCodePoint(...codesArray)
-      this.setState({
-        title: this.state.title + emojiPic
-      })
+        let _self = this
+        let current_title = _self.state.title
+        if (e.unified.length <= 5) {
+            let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+            setTimeout(function () {
+                _self.setState({
+                    title: current_title + emojiPic
+                })
+                _self.props.handleMetaChanges(_self.state.title, "title")
+            }, 10)
+        } else {
+            let sym = e.unified.split('-')
+            let codesArray = []
+            sym.forEach(el => codesArray.push('0x' + el))
+            let emojiPic = String.fromCodePoint(...codesArray)
+            setTimeout(function () {
+                _self.setState({
+                    title: current_title + emojiPic
+                })
+                _self.props.handleMetaChanges(_self.state.title, "title")
+            }, 10)
+        }
     }
-  }
 
-  addEmojiDescription = (e) => {
-    //console.log(e.unified)
-    if (e.unified.length <= 5){
-      let emojiPic = String.fromCodePoint(`0x${e.unified}`)
-      this.setState({
-        description: this.state.description + emojiPic
-      })
-    }else {
-      let sym = e.unified.split('-')
-      let codesArray = []
-      sym.forEach(el => codesArray.push('0x' + el))
-      //console.log(codesArray.length)
-      //console.log(codesArray)  // ["0x1f3f3", "0xfe0f"]
-      let emojiPic = String.fromCodePoint(...codesArray)
-      this.setState({
-        description: this.state.description + emojiPic
-      })
+    addEmojiDescription = (e) => {
+        let _self = this
+        let current_description = _self.state.description
+        if (e.unified.length <= 5) {
+            let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+            setTimeout(function(){
+                _self.setState({
+                    description: current_description + emojiPic
+                })
+                _self.props.handleMetaChanges(_self.state.description, "description")
+            },10)
+        } else {
+            let sym = e.unified.split('-')
+            let codesArray = []
+            sym.forEach(el => codesArray.push('0x' + el))
+            let emojiPic = String.fromCodePoint(...codesArray)
+            setTimeout(function(){
+                _self.setState({
+                    description: current_description + emojiPic
+                })
+            },10)
+            _self.props.handleMetaChanges(_self.state.description, "description")
+        }
     }
-  }
     componentWillReceiveProps(nextProps) {
+        debugger
         this.setState({
             title: nextProps.title,
             description: nextProps.description,
@@ -336,7 +348,7 @@ class MetaFields extends Component {
             "web-checkin": "Web Checkin",
             index: "Index"
         };
-        const { title, description, keywords, h1Tag, categoryType,h2_lowest_fare_title, airlineTagName } = this.props;
+        const { title, description, keywords, h1Tag, categoryType, h2_lowest_fare_title, airlineTagName } = this.props;
         const { pageType, subType, faq_object, reviews_object, content_tabs_data } = this.state
         let showReviews = false
         let show_content_tabs = false
@@ -370,10 +382,10 @@ class MetaFields extends Component {
                         aria-label="Title"
                         value={this.state.title}
                         required
-                        onChange={e => this.props.handleMetaChanges(e, "title")}
+                        onChange={e => this.state.addEmojiTitle(e, "title")}
                     />
                     <span>
-                    <Picker onSelect={this.addEmojiTitle} />
+                        <Picker onSelect={this.addEmojiTitle} />
                     </span>
                 </li>
                 <li>
@@ -389,7 +401,7 @@ class MetaFields extends Component {
                         onChange={e => this.props.handleMetaChanges(e, "description")}
                     />
                     <span>
-                    <Picker onSelect={this.addEmojiDescription} />
+                        <Picker onSelect={this.addEmojiDescription} />
                     </span>
                 </li>
                 <li>
@@ -413,11 +425,11 @@ class MetaFields extends Component {
                         required
                         onChange={e => this.props.handleMetaChanges(e, "h1Tag")}
                         name="h1Tag"
-    
+
                         placeholder="Enter H1 Title"
                     />
                 </li>
-                {show_airline_tag_name ?  <li>
+                {show_airline_tag_name ? <li>
                     <label>Airline Tag Name</label>
                     <input
                         type="text"
@@ -429,10 +441,10 @@ class MetaFields extends Component {
                         placeholder="Enter the airline tag name"
                     />
                 </li> : ""}
-                
+
                 {show_h2_lowest_fare_title ? <li><label>Lowest fare title(H2)</label>
-                <input type="text" aria-label="Lowest fare title" value={h2_lowest_fare_title} onChange={e => this.props.handleMetaChanges(e,"h2_lowest_fare_title")}
-                name="h2_lowest_fare_title" required placeholder="Lowest fare title"/></li>:''}
+                    <input type="text" aria-label="Lowest fare title" value={h2_lowest_fare_title} onChange={e => this.props.handleMetaChanges(e, "h2_lowest_fare_title")}
+                        name="h2_lowest_fare_title" required placeholder="Lowest fare title" /></li> : ''}
                 {show_content_tabs ? (content_tabs_data.length > 0 ? <div><li><h3>Tab Content</h3></li>
                     <li>{(content_tabs_data.map((value, key) => {
                         return (
@@ -463,14 +475,14 @@ class MetaFields extends Component {
                         config={this.config}
                         onChange={this.updateContent}
                     /></li>
-                    {show_content_tabs ? 
+                {show_content_tabs ?
                     <li><h3>Bottom Content</h3>
                         <JoditEditor
-                        editorRef={this.setRef}
-                        value={this.state.bottom_content}
-                        config={this.config}
-                        onChange={this.updateBottomContent}
-                    />
+                            editorRef={this.setRef}
+                            value={this.state.bottom_content}
+                            config={this.config}
+                            onChange={this.updateBottomContent}
+                        />
                     </li> : ''}
                 {(faq_object && faq_object.length > 0) ? <li>
                     <h3>Faq content</h3>

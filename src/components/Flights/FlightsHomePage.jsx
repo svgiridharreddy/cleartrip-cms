@@ -306,10 +306,17 @@ class FlightsHomePage extends PureComponent {
         last_modified_list: this.state.last_modified_list.concat(arr)
       })
     }
-    this.setState({
-      [fieldName]: e.target.value,
-      updatedInEditForm: true
-    });
+    if(fieldName == "title" || fieldName =="description"){
+      this.setState({
+        [fieldName]: e,
+        updatedInEditForm: true
+      });
+    }else{
+      this.setState({
+        [fieldName]: e.target.value,
+        updatedInEditForm: true
+      });
+    }
   };
   handleRTEchange = content => {
     this.setState({ content });
