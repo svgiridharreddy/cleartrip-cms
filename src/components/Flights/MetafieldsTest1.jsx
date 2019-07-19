@@ -20,7 +20,6 @@ global.jQuery = $;
 class MetaFields extends Component {
     constructor(props) {
         super(props);
-        debugger
         this.state = {
             pageType: this.props.pageType,
             subType: this.props.subType,
@@ -251,51 +250,62 @@ class MetaFields extends Component {
     addEmojiTitle = (e) => {
         let _self = this
         let current_title = _self.state.title
-        if (e.unified.length <= 5) {
-            let emojiPic = String.fromCodePoint(`0x${e.unified}`)
-            setTimeout(function () {
-                _self.setState({
-                    title: current_title + emojiPic
-                })
-                _self.props.handleMetaChanges(_self.state.title, "title")
-            }, 10)
+        if (e.unified) {
+            if (e.unified.length <= 5) {
+                let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+                setTimeout(function () {
+                    _self.setState({
+                        title: current_title + emojiPic
+                    })
+                }, 10)
+            } else {
+                let sym = e.unified.split('-')
+                let codesArray = []
+                sym.forEach(el => codesArray.push('0x' + el))
+                let emojiPic = String.fromCodePoint(...codesArray)
+                setTimeout(function () {
+                    _self.setState({
+                        title: current_title + emojiPic
+                    })
+
+                }, 10)
+            }
         } else {
-            let sym = e.unified.split('-')
-            let codesArray = []
-            sym.forEach(el => codesArray.push('0x' + el))
-            let emojiPic = String.fromCodePoint(...codesArray)
-            setTimeout(function () {
-                _self.setState({
-                    title: current_title + emojiPic
-                })
-                _self.props.handleMetaChanges(_self.state.title, "title")
-            }, 10)
+            _self.setState({ title: e.target.value })
         }
+        setTimeout(function () {
+            _self.props.handleMetaChanges(_self.state.title, "title")
+        }, 10)
     }
 
     addEmojiDescription = (e) => {
         let _self = this
         let current_description = _self.state.description
-        if (e.unified.length <= 5) {
-            let emojiPic = String.fromCodePoint(`0x${e.unified}`)
-            setTimeout(function(){
-                _self.setState({
-                    description: current_description + emojiPic
-                })
-                _self.props.handleMetaChanges(_self.state.description, "description")
-            },10)
+        if (e.unified) {
+            if (e.unified.length <= 5) {
+                let emojiPic = String.fromCodePoint(`0x${e.unified}`)
+                setTimeout(function () {
+                    _self.setState({
+                        description: current_description + emojiPic
+                    })
+                }, 10)
+            } else {
+                let sym = e.unified.split('-')
+                let codesArray = []
+                sym.forEach(el => codesArray.push('0x' + el))
+                let emojiPic = String.fromCodePoint(...codesArray)
+                setTimeout(function () {
+                    _self.setState({
+                        description: current_description + emojiPic
+                    })
+                }, 10)
+            }
         } else {
-            let sym = e.unified.split('-')
-            let codesArray = []
-            sym.forEach(el => codesArray.push('0x' + el))
-            let emojiPic = String.fromCodePoint(...codesArray)
-            setTimeout(function(){
-                _self.setState({
-                    description: current_description + emojiPic
-                })
-            },10)
-            _self.props.handleMetaChanges(_self.state.description, "description")
+            _self.setState({ description: e.target.value })
         }
+        setTimeout(function () {
+            _self.props.handleMetaChanges(_self.state.description, "description")
+        }, 10)
     }
     componentWillReceiveProps(nextProps) {
         debugger
@@ -382,7 +392,7 @@ class MetaFields extends Component {
                         aria-label="Title"
                         value={this.state.title}
                         required
-                        onChange={e => this.state.addEmojiTitle(e, "title")}
+                        onChange={e => this.addEmojiTitle(e, "title")}
                     />
                     <span>
                         <Picker onSelect={this.addEmojiTitle} />
@@ -398,7 +408,7 @@ class MetaFields extends Component {
                         aria-describedby="basic-addon1"
                         value={this.state.description}
                         required
-                        onChange={e => this.props.handleMetaChanges(e, "description")}
+                        onChange={e => this.addEmojiDescription(e, "description")}
                     />
                     <span>
                         <Picker onSelect={this.addEmojiDescription} />
