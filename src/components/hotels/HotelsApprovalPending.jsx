@@ -157,13 +157,8 @@ class HotelsApprovalPending extends Component {
       hotelModelData = data.last_modified.map((el, i) => {
         let oldValue = ''
         let newValue = ''
-        if (el === "faqs" || el === "reviews") {
-          oldValue = JSON.stringify(data["prev_version"][el])
-          newValue = JSON.stringify(data[el])
-        } else {
-          oldValue = data["prev_version"][el] || ''
-          newValue = data[el]
-        }
+        oldValue = data["prev_version"][el] || ''
+        newValue = data[el]
         if (oldValue && newValue) {
           return (<div key={i}><span className="diffHeading">{el}</span><ReactDiffViewer
             oldValue={oldValue}
