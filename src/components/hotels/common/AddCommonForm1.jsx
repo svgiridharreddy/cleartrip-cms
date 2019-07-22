@@ -24,7 +24,8 @@ class AddCommonForm extends Component {
 			meta_keyword: '',
 			top_content: '',
 			bottom_content: '',
-			faqs: []
+			faqs: [],
+			last_modified: []
 		}
 		this.handleChange = this.handleChange.bind(this);
 	 	this.handleSubmit = this.handleSubmit.bind(this);

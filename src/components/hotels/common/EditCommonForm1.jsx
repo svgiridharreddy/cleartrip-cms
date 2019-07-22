@@ -32,7 +32,8 @@ class EditCommonForm extends Component {
       meta_keyword: '',
       top_content: '',
       bottom_content: '',
-      faqs: []
+      faqs: [],
+      last_modified: []
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -133,8 +134,13 @@ class EditCommonForm extends Component {
   }
 
   handleChange(e) {
+    let lastModifiedArray = this.state.last_modified
+    if (lastModifiedArray.indexOf(e.target.name) == -1) {
+      lastModifiedArray.push(e.target.name)
+    }
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      last_modified: lastModifiedArray
     });
   }
 

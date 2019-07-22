@@ -249,7 +249,8 @@ class UniqueContentDataCollection extends Component {
 			top_content: result.top_content,
 			bottom_content: result.bottom_content,
 			faqs: faqContent,
-			reviews: reviewSection
+			reviews: reviewSection,
+			last_modified: result.last_modified
 		};
 		axios
 			.post(

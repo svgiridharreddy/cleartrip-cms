@@ -36,7 +36,8 @@ class HotelUniqueContent extends Component {
 			top_content: '',
 			bottom_content: '',
 			faqs: [],
-			reviews: []
+			reviews: [],
+      last_modified: []
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
