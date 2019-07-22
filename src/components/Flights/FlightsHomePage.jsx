@@ -86,6 +86,7 @@ class FlightsHomePage extends PureComponent {
       airlineName: "",
       title: "",
       description: "",
+      airlineTagName: "",
       keywords: "",
       content: "",
       h1Tag: "",
@@ -171,6 +172,7 @@ class FlightsHomePage extends PureComponent {
       content_tabs_data: content_tabs_data
     })
     const flightValues = this.state;
+    debugger
     let user_data = JSON.parse(localStorage.getItem("user_data"));
     if (!user_data) {
       window.location.replace("/");
@@ -208,6 +210,7 @@ class FlightsHomePage extends PureComponent {
         category: flightValues["categoryType"],
         section: flightValues["section"],
         title: flightValues["title"],
+        airline_tag_name: flightValues["airlineTagName"],
         description: flightValues["description"],
         keywords: flightValues["keywords"],
         content: flightValues["content"] ? flightValues["content"].toString("html") : "",
@@ -303,10 +306,17 @@ class FlightsHomePage extends PureComponent {
         last_modified_list: this.state.last_modified_list.concat(arr)
       })
     }
-    this.setState({
-      [fieldName]: e.target.value,
-      updatedInEditForm: true
-    });
+    if(fieldName == "title" || fieldName =="description"){
+      this.setState({
+        [fieldName]: e,
+        updatedInEditForm: true
+      });
+    }else{
+      this.setState({
+        [fieldName]: e.target.value,
+        updatedInEditForm: true
+      });
+    }
   };
   handleRTEchange = content => {
     this.setState({ content });
@@ -494,6 +504,7 @@ class FlightsHomePage extends PureComponent {
       fromToCity,
       backBtnClicked,
       faq_object,
+      airlineTagName,
       reviews_object
     } = this.state;
     var url = this.state.host + "/fetch_details";
@@ -606,6 +617,7 @@ class FlightsHomePage extends PureComponent {
               content: "",
               h1Tag: "",
               keyword: "",
+              airlineTagName:"",
               faq_object: [],
               reviews_object: [],
               last_modified_list: [],
@@ -663,6 +675,7 @@ class FlightsHomePage extends PureComponent {
       showAddButton: false,
       title: "",
       description: "",
+      airlineTagName:"",
       keywords: "",
       content: "",
       h1Tag: "",
@@ -724,6 +737,7 @@ class FlightsHomePage extends PureComponent {
         showAddButton: false,
         title: result["common"][idx]["title"],
         description: result["common"][idx]["description"],
+        airlineTagName: "",
         keywords: result["common"][idx]["keyword"],
         content: result["common"][idx]["content"],
         h1Tag: result["common"][idx]["heading"],
@@ -748,6 +762,7 @@ class FlightsHomePage extends PureComponent {
         arrCityNameSelected: "",
         airlineName: "",
         faq_object: [],
+        airlineTagName: "",
         reviews_object: [],
         last_modified_list: [],
         content_tabs_data:[],
@@ -768,6 +783,7 @@ class FlightsHomePage extends PureComponent {
           source: result[pageType][subType][idx]["source"],
           destination: result[pageType][subType][idx]["destination"],
           fromToCity: result[pageType][subType][idx]["city_name"],
+          airlineTagName: result[pageType][subType][idx]["airline_tag_name"] ? result[pageType][subType][idx]["airline_tag_name"] : "",
           brandName: result[pageType][subType][idx]["airline_name"],
           faq_object: result[pageType][subType][idx]["faq_object"] ? result[pageType][subType][idx]["faq_object"] : [],
           reviews_object: result[pageType][subType][idx]["reviews_object"] ? result[pageType][subType][idx]["reviews_object"] : [],
@@ -1243,6 +1259,7 @@ class FlightsHomePage extends PureComponent {
                     description={this.state.description}
                     content={this.state.content}
                     keywords={this.state.keywords}
+                    airlineTagName={this.state.airlineTagName}
                     h1Tag={this.state.h1Tag}
                     faq_object={this.state.faq_object}
                     reviews_object={this.state.reviews_object}
