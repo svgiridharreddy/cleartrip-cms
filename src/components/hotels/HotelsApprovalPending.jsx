@@ -8,6 +8,7 @@ import loginHelpers from "../helper";
 import { Modal } from "react-bootstrap";
 import queryString from 'query-string'
 import Select1 from 'react-select';
+import ReactDiffViewer from 'react-diff-viewer'
 import {
   NotificationContainer,
   NotificationManager
@@ -15,30 +16,31 @@ import {
 import "../../../node_modules/react-notifications/lib/notifications.css";
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import { debug } from 'util';
-const uniqueColoumn = [{ label: "Domain Url", field: "domain_url", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 },{ label: "Approval status", field: "Approval status", width: 150 }]
+const uniqueColoumn = [{ label: "Domain Url", field: "domain_url", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 }, { label: "Last modified", field: "last_modified", width: 150 }, { label: "Approval status", field: "Approval status", width: 150 }]
 
-const commonColoumn = [{ label: "Domain Name", field: "domain_name", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 },{ label: "Approval status", field: "Approval status", width: 150 }]
+const commonColoumn = [{ label: "Domain Name", field: "domain_name", width: 150 }, { label: "Content Type", field: "content_type", width: 150 }, { label: "Counry Name", field: "counry_name", width: 150 }, { label: "Meta Title", field: "meta_title", width: 150 }, { label: "Last modified", field: "last_modified", width: 150 }, { label: "Approval status", field: "Approval status", width: 150 }]
 
 const domainType = ["IN", "AE", "SA", "QA", "OM", "BH", "KW"]
-const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "PropertyInLocality","Region"]
+const pageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget", "Landmark", "Hospital", "PropertyInLocality", "Region"]
 const localPageType = ["City", "Stars", "Locality", "Chain", "PropertyType", "Amenity", "Budget"]
 
 const QUERY_URL = host() + "/collect/"
-const QUERY_COMMON_URL = host()+"/cmshotels/common-content-data-collection"
+const QUERY_COMMON_URL = host() + "/cmshotels/common-content-data-collection"
 const QUERY_APPROVE = host() + "/collect_approve_data/"
 
 class HotelsApprovalPending extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      is_admin:false,
+      is_admin: false,
       host: host(),
       approvalData: [],
       content_type: '',
       show: false,
       dataMessage: '',
       hotelData: '',
-      is_loaded: false
+      is_loaded: false,
+      hotelModelData: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.approveFunction = this.approveFunction.bind(this);
@@ -51,45 +53,45 @@ class HotelsApprovalPending extends Component {
     return optData.map((dmName, i) => {
       return (
         <option key={i} value={dmName}>
-        {dmName}
+          {dmName}
         </option>
-        );
+      );
     });
   }
 
   componentDidMount() {
-      let _self = this;
-      if (loginHelpers.check_usertype()) {
-          this.setState({ is_admin: true });
-      } else {
-          sessionStorage.removeItem("user_data");
-          loginHelpers.check_usertype();
-           window.location.replace("/")
-      }
-      let search_params = queryString.parse(this.props.location.search)
-      if (["common data", "unique data"].indexOf(search_params["content_type"]) !== -1) {
-        var content_type = search_params["content_type"]
-        this.setState({is_loaded: true})
-        axios.get(`${QUERY_APPROVE}${search_params["id"]}`).then((response) => {
-          if (response.data.length > 0) {
-            this.setState({
-              approvalData: response.data,
-              content_type: content_type,
-              dataMessage: '',
-              is_loaded: false
-            })
-          } else {
-            this.setState({
-              dataMessage: "******** There is no data to approve ********",
-              content_type: content_type,
-              is_loaded: false
-            })
-          }
-        }).catch(function (error) {
-          console.log(error);
-        });
-      }
+    let _self = this;
+    if (loginHelpers.check_usertype()) {
+      this.setState({ is_admin: true });
+    } else {
+      sessionStorage.removeItem("user_data");
+      loginHelpers.check_usertype();
+      window.location.replace("/")
     }
+    let search_params = queryString.parse(this.props.location.search)
+    if (["common data", "unique data"].indexOf(search_params["content_type"]) !== -1) {
+      var content_type = search_params["content_type"]
+      this.setState({ is_loaded: true })
+      axios.get(`${QUERY_APPROVE}${search_params["id"]}`).then((response) => {
+        if (response.data.length > 0) {
+          this.setState({
+            approvalData: response.data,
+            content_type: content_type,
+            dataMessage: '',
+            is_loaded: false
+          })
+        } else {
+          this.setState({
+            dataMessage: "******** There is no data to approve ********",
+            content_type: content_type,
+            is_loaded: false
+          })
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }
 
   // handleChangeUniqueData(e){
   //   e.preventDefault();
@@ -150,58 +152,54 @@ class HotelsApprovalPending extends Component {
     this.setState({ show: false });
   }
   handleShow(data) {
-    let _self = this
-    axios.get(`${_self.state.host}/cmshotels/edit/${data.id}`).then((response) => {
-      if (response.status == 200) {
-        let recordData = response.data
-        return new Promise(function () {
-          let showArr = ["country_name", "domain_name", "domain_url", "content_type", "page_type", "meta_title", "meta_description", "canonical_tag", "meta_keyword", "header_tag", "h1_tag", "h2_tag", "h3_tag", "top_content", "bottom_content", "faqs"]
-          let hotelData = showArr.map((ele, i) => {
-            if (showArr.indexOf(ele) > -1 && recordData[ele] && recordData[ele] != "") {
-              if (ele === "faqs") {
-                var faqContent = (recordData.faqs === null || recordData.faqs === "") ? [] : JSON.parse(recordData.faqs) || []
-              }
-              return (
-                ele === "faqs" && faqContent.length > 0 ? faqContent.map((v, k) => {
-                        return(<li key={k}>
-                             <b className="showFieldName">{k == 0 ? ele.replace("_", " ")+":" : ""}</b><br /><b>{v["question"]}</b><br />{v["answer"]}
-                        </li>)
-                    }) :
-                <li key={i}>
-                <b>{ele}:</b>{(ele == "top_content" || ele === "bottom_content")&&(ele !== "faqs") ? ReactHtmlParser(recordData[ele]) : recordData[ele]}
-                </li>
-                );
-            }
-          });
-          _self.setState({ show: true, hotelData: hotelData });
-        })
-      }
-    }).catch(function (error) {
-      console.log(error);
-    });
+    let hotelModelData = ""
+    if (data.last_modified.length > 0 && data["prev_version"]) {
+      hotelModelData = data.last_modified.map((el, i) => {
+        let oldValue = ''
+        let newValue = ''
+        if (el === "faqs" || el === "reviews") {
+          oldValue = JSON.stringify(data["prev_version"][el])
+          newValue = JSON.stringify(data[el])
+        } else {
+          oldValue = data["prev_version"][el] || ''
+          newValue = data[el]
+        }
+        if (oldValue && newValue) {
+          return (<div key={i}><span className="diffHeading">{el}</span><ReactDiffViewer
+            oldValue={oldValue}
+            newValue={newValue}
+            splitView={true}
+          /></div>)
+        }
+      })
+    } else {
+      hotelModelData = "<p>No data changed to view</p>"
+    }
+    this.setState({ show: true, hotelModelData: hotelModelData });
+
   }
   approveFunction(item) {
     let _self = this
     let updatedList = _self.state.approvalData.map(obj => {
-       if(obj.id === item.id) {
-         return Object.assign({}, obj, {
-            is_approved:!item.is_approved
-         });
-       }
-       return obj;
+      if (obj.id === item.id) {
+        return Object.assign({}, obj, {
+          is_approved: !item.is_approved
+        });
+      }
+      return obj;
     });
     _self.setState({
-      approvalData : updatedList
+      approvalData: updatedList
     });
     return new Promise(function (resolve) {
       axios.get(`${_self.state.host}/approve/${item.id}`).then((response) => {
         if (response.status == 200) {
-              if(item.is_approved){
-                NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
-              }else{
-                NotificationManager.success("Data Approved", "Approve", 1500);
-              }
-              return resolve(response)
+          if (item.is_approved) {
+            NotificationManager.info("Data UN-Approved", "UN-Approve", 1500);
+          } else {
+            NotificationManager.success("Data Approved", "Approve", 1500);
+          }
+          return resolve(response)
 
           // return new Promise(function () {
           //   var data = { content_type: _self.state.content_type, domain_name: _self.state.domain_name, country_name: _self.state.country_name }
@@ -231,7 +229,7 @@ class HotelsApprovalPending extends Component {
 
   handleChange(e) {
     var content_type = e.target.value;
-    this.setState({is_loaded: true})
+    this.setState({ is_loaded: true })
     axios.get(`${QUERY_URL}${content_type}`).then((response) => {
       if (response.data.length > 0) {
         this.setState({
@@ -279,18 +277,18 @@ class HotelsApprovalPending extends Component {
     let dataField;
     // let uniqueDataField;
     let rows = []
-    const { approvalData, content_type, hotelData, is_admin, dataMessage } = this.state
+    const { approvalData, content_type, hotelModelData, is_admin, dataMessage } = this.state
     if (loginHelpers.check_usertype()) {
-        console.log("super");
+      console.log("super");
     } else {
-        NotificationManager.info(
-            "Forbidden",
-            "You are not eligible to access this page",
-            2000
-        );
-        setTimeout(function () {
-            window.location.replace("/");
-        }, 2300);
+      NotificationManager.info(
+        "Forbidden",
+        "You are not eligible to access this page",
+        2000
+      );
+      setTimeout(function () {
+        window.location.replace("/");
+      }, 2300);
     }
 
     // if (isUniq) {
@@ -387,6 +385,7 @@ class HotelsApprovalPending extends Component {
           obj["content_type"] = item.content_type
           obj["country_name"] = item.country_name
           obj['meta_title'] = item.meta_title
+          obj["last_modified"] = item.last_modified && item.last_modified.length > 0 ? item.last_modified.join(",") : '' || ''
           // obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className="deleteBtn" onClick={() => this.approveFunction(item)} disabled={item.is_approved}>{textName}</MDBBtn>
           obj["on/off"] = <label className="toggleswitch"><input type="checkbox" checked={item.is_approved} onClick={() => this.approveFunction(item)} /><span className="slider round" /></label>
           obj["show"] = <MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(item)} >show</MDBBtn>
@@ -401,6 +400,7 @@ class HotelsApprovalPending extends Component {
           obj["content_type"] = item.content_type
           obj["country_name"] = item.country_name
           obj['meta_title'] = item.meta_title
+          obj["last_modified"] = item.last_modified && item.last_modified.length > 0 ? item.last_modified.join(",") : '' || ''
           // obj["approveBtn"] = <MDBBtn color='default' rounded size='sm' className="deleteBtn" onClick={() => this.approveFunction(item)} disabled={item.is_approved}>Approve</MDBBtn>
           obj["on/off"] = <label className="toggleswitch"><input type="checkbox" checked={item.is_approved} onClick={() => this.approveFunction(item)} /><span className="slider round" /></label>
           obj["show"] = <MDBBtn color='default' className="showBtn" rounded size='sm' onClick={() => this.handleShow(item)} >show</MDBBtn>
@@ -412,48 +412,45 @@ class HotelsApprovalPending extends Component {
     if (approvalData.length > 0) {
       dataField = (
         <MDBDataTable btn
-        striped
-        bordered
-        autoWidth
-        orderable={false}
-        data={data}
+          striped
+          bordered
+          autoWidth
+          orderable={false}
+          data={data}
         />
-        )
+      )
     }
     return (
       <div>
-      <Modal
-      size="lg"
-      onHide={this.handleClose.bind(this)}
-      dialogClassName="modal-90w"
-      aria-labelledby="example-modal-sizes-title-lg"
-      show={this.state.show} onHide={this.handleClose.bind(this)} centered
-      >
-      <Modal.Header closeButton>
-
-      </Modal.Header>
-      <Modal.Body>
-      <ul className="showModel">
-      {hotelData}
-      </ul>
-      </Modal.Body>
-      </Modal>
-      <h3 className="approveTag">Please select content section to approve data</h3>
-      <select name="content_type" onChange={this.handleChange}  value={this.state.content_type} className="approval_table">
-      <option value="" selected disabled={true}>Select Content</option>
-      <option value="unique data">Unique Content Data</option>
-      <option value="common data">Common Content Data</option>
-      </select>
-      <div className="appovalTable">
-      <div className={this.state.is_loaded ? "loading" : ""}></div>
-      { dataMessage }
-      {
-        dataField
-      }
-      <NotificationContainer />
+        <Modal
+          size="lg"
+          onHide={this.handleClose.bind(this)}
+          dialogClassName="modal-90w"
+          aria-labelledby="example-modal-sizes-title-lg"
+          show={this.state.show} onHide={this.handleClose.bind(this)} centered
+        >
+          <Modal.Header closeButton>
+          </Modal.Header>
+          <Modal.Body>
+            {hotelModelData}
+          </Modal.Body>
+        </Modal>
+        <h3 className="approveTag">Please select content section to approve data</h3>
+        <select name="content_type" onChange={this.handleChange} value={this.state.content_type} className="approval_table">
+          <option value="" selected disabled={true}>Select Content</option>
+          <option value="unique data">Unique Content Data</option>
+          <option value="common data">Common Content Data</option>
+        </select>
+        <div className="appovalTable">
+          <div className={this.state.is_loaded ? "loading" : ""}></div>
+          {dataMessage}
+          {
+            dataField
+          }
+          <NotificationContainer />
+        </div>
       </div>
-      </div>
-      )
+    )
   }
 }
 export default HotelsApprovalPending
