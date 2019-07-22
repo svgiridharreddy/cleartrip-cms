@@ -156,7 +156,8 @@ class CommonContentDataCollection extends Component {
       meta_keyword: result.meta_keyword,
       top_content: result.top_content,
       bottom_content: result.bottom_content,
-      faqs: faqContent
+      faqs: faqContent,
+      last_modified: result.last_modified
     };
     axios
       .post(

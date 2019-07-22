@@ -103,8 +103,13 @@ class EditCommonForm extends Component {
     let faqs = this.state.faqs
     let index = parseInt(e.target.dataset.btnid)
     faqs.splice(index, 1)
+    let lastModifiedArray = _self.state.last_modified
+    if (lastModifiedArray.indexOf("faqs") == -1) {
+      lastModifiedArray.push("faqs")
+    }
     _self.setState({
-      faqs: faqs
+      faqs: faqs,
+      last_modified: lastModifiedArray
     })
   };
   onChageFaq(e) {
@@ -114,18 +119,31 @@ class EditCommonForm extends Component {
     let aIndex = parseInt(e.target.dataset.answer)
     let index = e.target.name === "question" ? qIndex : aIndex
     faqs[index][e.target.name] = e.target.value
+    let lastModifiedArray = _self.state.last_modified
+    if (lastModifiedArray.indexOf("faqs") == -1) {
+      lastModifiedArray.push("faqs")
+    }
     _self.setState({
-      faqs: faqs
+      faqs: faqs,
+      last_modified: lastModifiedArray
     })
   }
 
   updateHeaderContent(value) {
       let _self = this;
-      _self.setState({ top_content: value })
+      let lastModifiedArray = _self.state.last_modified
+      if (lastModifiedArray.indexOf("top_content") == -1) {
+        lastModifiedArray.push("top_content")
+      }
+      _self.setState({ top_content: value, last_modified: lastModifiedArray })
   }
   updateFooterContent(value) {
       let _self = this;
-      _self.setState({ bottom_content: value })
+      let lastModifiedArray = _self.state.last_modified
+      if (lastModifiedArray.indexOf("bottom_content") == -1) {
+        lastModifiedArray.push("bottom_content")
+      }
+      _self.setState({ bottom_content: value, last_modified: lastModifiedArray })
   }
   jodit;
   setRef = jodit => this.jodit = jodit;
