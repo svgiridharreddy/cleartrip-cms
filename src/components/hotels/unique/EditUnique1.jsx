@@ -249,7 +249,6 @@ class EditUniqueContent extends Component {
   }
 
   handleSubmit(e) {
-    debugger;
     this.props.handleChangeEditData(this.state)
   }
 
