@@ -103,8 +103,13 @@ class EditUniqueContent extends Component {
     let faqs = this.state.faqs
     let index = parseInt(e.target.dataset.btnid)
     faqs.splice(index, 1)
+    let lastModifiedArray = _self.state.last_modified
+    if (lastModifiedArray.indexOf("faqs") == -1) {
+      lastModifiedArray.push("faqs")
+    }
     _self.setState({
-      faqs: faqs
+      faqs: faqs,
+      last_modified: lastModifiedArray
     })
   };
   removeReview(e) {
@@ -112,8 +117,13 @@ class EditUniqueContent extends Component {
     let reviews = _self.state.reviews
     let index = parseInt(e.target.dataset.btnid)
     reviews.splice(index, 1)
+    let lastModifiedArray = _self.state.last_modified
+    if (lastModifiedArray.indexOf("reviews") == -1) {
+      lastModifiedArray.push("reviews")
+    }
     _self.setState({
-      reviews: reviews
+      reviews: reviews,
+      last_modified: lastModifiedArray
     })
   };
   onChangeFaq(e) {
@@ -123,8 +133,13 @@ class EditUniqueContent extends Component {
     let aIndex = parseInt(e.target.dataset.answer)
     let index = e.target.name === "question" ? qIndex : aIndex
     faqs[index][e.target.name] = e.target.value
+    let lastModifiedArray = _self.state.last_modified
+    if (lastModifiedArray.indexOf("faqs") == -1) {
+      lastModifiedArray.push("faqs")
+    }
     _self.setState({
-      faqs: faqs
+      faqs: faqs,
+      last_modified: lastModifiedArray
     })
   }
   onChangeReview(e) {
@@ -142,8 +157,13 @@ class EditUniqueContent extends Component {
       index =  raIndex
     }
     reviews[index][e.target.name] = e.target.value
+    let lastModifiedArray = _self.state.last_modified
+    if (lastModifiedArray.indexOf("reviews") == -1) {
+      lastModifiedArray.push("reviews")
+    }
     _self.setState({
-      reviews: reviews
+      reviews: reviews,
+      last_modified: lastModifiedArray
     })
   }
 
@@ -175,11 +195,19 @@ class EditUniqueContent extends Component {
 
   updateHeaderContent(value) {
       let _self = this;
-      _self.setState({ top_content: value })
+      let lastModifiedArray = _self.state.last_modified
+      if (lastModifiedArray.indexOf("top_content") == -1) {
+        lastModifiedArray.push("top_content")
+      }
+      _self.setState({ top_content: value, last_modified: lastModifiedArray })
   }
   updateFooterContent(value) {
       let _self = this;
-      _self.setState({ bottom_content: value })
+      let lastModifiedArray = _self.state.last_modified
+      if (lastModifiedArray.indexOf("bottom_content") == -1) {
+        lastModifiedArray.push("bottom_content")
+      }
+      _self.setState({ bottom_content: value, last_modified: lastModifiedArray })
   }
   jodit;
   setRef = jodit => this.jodit = jodit;
