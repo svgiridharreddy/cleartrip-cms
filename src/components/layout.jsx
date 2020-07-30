@@ -116,6 +116,11 @@ class Layout extends React.Component {
                 </NavLink>
               </li>
               <li>
+                <NavLink to="/mother-offer" activeClassName="current sidebarLinks">
+                  Mother offer
+                </NavLink>
+              </li>
+              <li>
                 {is_admin ? (
                   <NavLink
                     to="/flights-approve"

@@ -19,6 +19,7 @@ import {
 } from "react-notifications";
 
 import "../node_modules/react-notifications/lib/notifications.css";
+import MotherOffer from "./components/Flights/MotherOffer";
 
 class App extends Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class App extends Component {
                 <Route exact path="/" component={LandingPage} />
                 <Route exact path="/flights" component={FlightsHomePage} />
                 <Route exact path="/hotels" component={Index} />
+                <Route exact path="/mother-offer" component={MotherOffer} />
                 {/* <Route exact path="/banners" component={Banner} /> */}
                 <Route exact path="/flights-approve" component={FlightsApprovalPending} />
                 <Route exact path="/hotels-approve" component={HotelsApprovalPending} />
