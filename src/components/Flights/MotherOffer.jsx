@@ -149,9 +149,9 @@ class MotherOffer extends Component {
 							offer_heading: obj["offer_heading"] ? obj["offer_heading"] : "" ,
 							offer_text: obj["offer_text"] ? obj["offer_text"] : "",
 							offer_body: obj["offer_body"] ? obj["offer_body"] : "",
-							offer_code:obj["offer_code"] ? obj["offer_code"] : "",,
-							offer_validity:obj["offer_validity"] ? obj["offer_validity"] : "",,
-							offer_amount:obj["offer_amount"] ? obj["offer_amount"] : "",,
+							offer_code:obj["offer_code"] ? obj["offer_code"] : "",
+							offer_validity:obj["offer_validity"] ? obj["offer_validity"] : "",
+							offer_amount:obj["offer_amount"] ? obj["offer_amount"] : "",
 							id: obj["id"]
 						})
 					} else {
