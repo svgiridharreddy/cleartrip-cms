@@ -41,6 +41,9 @@ class MotherOffer extends Component {
 			offer_body: "",
 			offer_text: "",
 			offer_heading: "",
+			offer_code:"",
+			offer_validity:"",
+			offer_amount:"",
 			renderTables: false,
 			showForm: false,
 			loading: false,
@@ -61,6 +64,9 @@ class MotherOffer extends Component {
 			readOnlyValue:false,
 			showAddButton: false,
 			renderTables:false,
+			offer_code:"",
+			offer_validity:"",
+			offer_amount:"",
 			offer_body: "",
 			offer_text: "",
 			offer_heading: "",
@@ -99,7 +105,7 @@ class MotherOffer extends Component {
 		if(e.target.dataset.method  === "create"){
 			 postData = {pageType:pageType,domain:domain,language:language,subType:subType,section:section}
 		}else{
-		 postData = {pageType:pageType,domain:domain,language:language,subType:subType,section:section,offer_body:offer_body,offer_text:offer_text,offer_heading:offer_heading}
+		 postData = {pageType:pageType,domain:domain,language:language,subType:subType,section:section,offer_body:offer_body,offer_text:offer_text,offer_heading:offer_heading,offer_code:offer_code,offer_validity:offer_validity,offer_amount:offer_amount}
 		}
 		 axios.post(host() + "/add-offer", { data: postData }).then(resp => {
 			 if(method === "update"){
@@ -143,6 +149,9 @@ class MotherOffer extends Component {
 							offer_heading: obj["offer_heading"] ? obj["offer_heading"] : "" ,
 							offer_text: obj["offer_text"] ? obj["offer_text"] : "",
 							offer_body: obj["offer_body"] ? obj["offer_body"] : "",
+							offer_code:obj["offer_code"] ? obj["offer_code"] : "",,
+							offer_validity:obj["offer_validity"] ? obj["offer_validity"] : "",,
+							offer_amount:obj["offer_amount"] ? obj["offer_amount"] : "",,
 							id: obj["id"]
 						})
 					} else {
@@ -175,7 +184,7 @@ class MotherOffer extends Component {
 
 	render() {
 		loginHelpers.checkUser();
-		const { loading, language, pageType, domain, section, offer_text, offer_heading, offer_body } = this.state
+		const { loading, language, pageType, domain, section, offer_text, offer_heading, offer_body,offer_amount,offer_validity,offer_code } = this.state
 		return (
 			<div>
 				<div className={loading ? "loading" : ""}></div>
@@ -292,6 +301,42 @@ class MotherOffer extends Component {
 									value={offer_body}
 									config={this.config}
 									onChange={e => this.updateContent(e, "offer_body")}
+								/>
+							</li>
+							<li>
+								<label>Offer code</label>
+								<input
+									type="text"
+									placeholder="Offer code"
+									name="offer_code"
+									aria-label="Offer code"
+									value={offer_code}
+									required
+									onChange={e => this.handleMetaChange(e, "offer_code")}
+								/>
+							</li>
+							<li>
+								<label>Offer validity</label>
+								<input
+									type="text"
+									placeholder="Offer validity"
+									name="offer_validity"
+									aria-label="Offer text"
+									value={offer_validity}
+									required
+									onChange={e => this.handleMetaChange(e, "offer_validity")}
+								/>
+							</li>
+								<li>
+								<label>Offer amount</label>
+								<input
+									type="text"
+									placeholder="Offer amount"
+									name="offer_amount"
+									aria-label="Offer amount"
+									value={offer_amount}
+									required
+									onChange={e => this.handleMetaChange(e, "offer_amount")}
 								/>
 							</li>
 							<button className="edit-btn"
