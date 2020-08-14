@@ -101,7 +101,7 @@ class MotherOffer extends Component {
 		})
 		let method = e.target.dataset.method
 		let postData ={}
-		let {pageType,domain,language,subType,section,offer_body,offer_text,offer_heading} = _self.state
+		let {pageType,domain,language,subType,section,offer_body,offer_text,offer_heading,offer_code,offer_validity,offer_amount} = _self.state
 		if(e.target.dataset.method  === "create"){
 			 postData = {pageType:pageType,domain:domain,language:language,subType:subType,section:section}
 		}else{
